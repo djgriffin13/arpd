@@ -189,6 +189,10 @@ def main():
     ap.add_argument("--export", help="write the raw events in the window to this file (e.g. "
                                      "reports/sprints/SPRINT-NN-events.jsonl)")
     a = ap.parse_args()
+    if not os.path.exists(a.log):
+        print("No event log at %s (logs/ is not committed: on a fresh clone or another machine, use --log "
+              "with the last exported reports/sprints/SPRINT-NN-events.jsonl)." % a.log)
+        return
     events = load(a.log, _ts(a.since) if a.since else None, _ts(a.until) if a.until else None)
     if a.export:
         n = export(events, a.export)

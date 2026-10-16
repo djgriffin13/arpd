@@ -54,7 +54,7 @@ A decision the PI has deferred by ruling stays listed, marked "deferred (R-NN)",
 - **Practical limits:** time, compute, cost.
 - **In force until:** changed by the PI.
 
-<!-- Format for every later standing authorization (SA-02, ...), or a change to one:
+<!-- keep: format for every later standing authorization (SA-02, ...), or a change to one:
 ### SA-NN, YYYY-MM-DD: what it covers
 > "exact words"
 - **Given:** directly in session (id), or in ruling R-NN (an SA may cite the ruling that created it)
@@ -79,7 +79,7 @@ Never delegate what CLAUDE.md §6 reserves to the PI.
   PARADIGM-SPEC §1, verbatim.
 - **Changes:** CLAUDE.md v1.0, PARADIGM-SPEC.md v1.0, REQUIREMENTS.md v1.0
 
-<!-- Format for every ruling:
+<!-- keep: format for every ruling:
 ### R-NN, YYYY-MM-DD: subject
 > "exact words"
 - **Given:** directly in session (id) / relayed by (role), confirmed on (date)
@@ -91,7 +91,7 @@ Never delegate what CLAUDE.md §6 reserves to the PI.
 
 ## Decisions
 
-<!-- Format:
+<!-- keep: format for every decision:
 ### DEC-NN: title
 - **Scientific consequence:** what this changes about what the instrument measures, manipulates or licenses, or "none"
 - **Route:** routine / delegated (SA-NN) / consult (R-NN)

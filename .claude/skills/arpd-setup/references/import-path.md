@@ -64,49 +64,54 @@ Continue every ledger from where it stands: the next free DEC, R and SA numbers 
 
 ## Steps for a non-ARPD project (import or install)
 
-1. **Inventory before touching anything.**
+**Nothing is written before the read-back** (`SKILL.md`, ground rule 8). Steps 1–4 only read, and
+keep notes in the working context. Steps 6–9 write, in this order, after the PI has adopted the
+read-back.
+
+**Before the read-back (read only)**
+
+1. **Inventory.**
+   - From a git URL, `git clone` it into a temporary directory **outside** this repository and read
+     it there. From a local path, read it where it is.
    - List the top-level structure, languages and test commands.
    - Run the existing tests and keep the output **verbatim**. It is recorded once, as the baseline,
      in sprint S01's record (Part 1), and the import decision points to it. Never report it as better
      than it is.
    - Find existing instruction files: `CLAUDE.md`, `AGENTS.md`, `.cursorrules`,
      `.github/copilot-instructions.md`, and any README sections giving rules to contributors.
-2. **Bring the code in (import mode only).**
-   - From a git URL or a local git repo: `git clone` it into a temporary directory, then bring its
-     history in as a subdirectory, or at the root if the kit has no conflicting files. Ask the PI
-     which.
+2. **Read the science out of the code.** Draft PARADIGM-SPEC items from what the code does: rules,
+   parameters, outputs. Mark each one *"inferred from code: confirm"*.
+3. **Map the existing tests** to draft requirements.
+   - Passing tests are *Verified* evidence only where a test genuinely checks the requirement.
+   - Tests that cannot fail, or that assert current rather than correct behaviour, are defects.
+   - Known-answer tests are tagged as protected: never deleted or weakened.
+4. **Reconcile the prior instructions** (the project's own, never the kit's files or an ARPD
+   starter's charter). Classify each prior rule against the charter as *same* (drop it; the charter
+   covers it), *compatible addition* (propose it as a Part B project rule) or *conflict*.
+
+**The interview and the read-back**
+
+5. **Interview (Phases 1–8).** In Phase 2, the PI confirms or corrects each inferred spec item. Where
+   the code and the PI's intent differ, that is a finding: record it as a defect or an assumption,
+   and never quietly align either one to the other. Every reconciliation conflict and proposed
+   addition goes in the read-back, in plain language, for the PI to rule on. Nothing from the prior
+   instructions is silently adopted or discarded. The read-back ends with the adoption ruling (R-NN).
+
+**After the read-back (writes, in this order)**
+
+6. **Move the kit's own files** to `docs/arpd-kit/` in a move-only commit (above; fresh and import
+   modes only).
+7. **Bring the code in** (import mode only).
+   - From a git repo: bring its history in as a subdirectory, or at the root if the kit has no
+     conflicting files. Ask the PI which during the interview.
    - From plain files: copy them and commit with the message "Import <source> as baseline (no
      changes)".
-   - Record the source and commit as the next free DEC.
-3. **Preserve prior instructions.** This step applies only to a non-ARPD project's own instruction
-   files, never to the kit's files or to an ARPD starter's charter.
-   - Move each existing instruction file to `docs/prior-instructions/<original-name>`, unchanged, in
-     a move-only commit.
-   - Record the move as the next free DEC.
-   - The new `CLAUDE.md`, built from `kit/constitution/CORE.md`, is the charter.
-4. **Reconcile** (non-ARPD only).
-   - Compare each prior rule with the charter. Classify it as:
-     - *same* (drop it; the charter covers it);
-     - *compatible addition* (propose it as a Part B project rule);
-     - *conflict*.
-   - Put every conflict and every proposed addition in a **decision pack** in the read-back, in
-     plain language.
-   - The PI rules. Nothing from the prior instructions is silently adopted or discarded.
-5. **Read the science out of the code, then confirm it with the PI.**
-   - Draft PARADIGM-SPEC items from what the code does: rules, parameters, outputs. Mark each one
-     *"inferred from code: confirm"*.
-   - In Phase 2, the PI confirms or corrects each. Where the code and the PI's intent differ, that
-     is a finding: record it as a defect or an assumption. Never quietly align either one to the
-     other.
-6. **Existing tests become evidence.**
-   - Map passing tests to requirements as *Verified* evidence, but only where a test genuinely
-     checks the requirement.
-   - Tests that cannot fail, or that assert current rather than correct behaviour, are recorded as
-     defects.
-   - Known-answer tests are tagged as protected: never deleted or weakened.
-7. **Generate** the remaining documents per `generation-checklist.md`, never overwriting existing
+8. **Move the prior instruction files** to `docs/prior-instructions/<original-name>`, unchanged, in a
+   move-only commit. The new `CLAUDE.md`, built from `kit/constitution/CORE.md`, is the charter.
+9. **Generate** the remaining documents per `generation-checklist.md`, never overwriting existing
    content. When a prior file of the same name exists, write the new one beside it with a `.arpd`
-   suffix and ask. (This `.arpd` rule is only for a non-ARPD project's own files.)
+   suffix and ask. (This `.arpd` rule is only for a non-ARPD project's own files.) Record the source
+   and commit, the moves, and each reconciliation ruling as DECs (next free numbers).
 
 ---
 
@@ -127,19 +132,40 @@ Worked case: importing `examples/march-1991/` into this kit repository.
    - **Inherited pending decisions:** list them for the PI in plain language. They may be decided
      now, delegated (as a standing authorization), deferred by ruling, or left pending. They block
      only work that depends on them.
-3. **Move-only commits** (above): first the kit's files to `docs/arpd-kit/`; then the starter's
-   tracked files to the root. A loop that keeps dotfiles and nested folders:
+3. **Move-only commits** (above), at the start of Phase 9. Run these in Git Bash (or any POSIX
+   shell); `set -e` and `|| exit 1` stop at the first failure, so a half-done move is never
+   committed.
+
+   First list the collisions: every path the starter uses that already exists at the root. Each
+   one must move in commit 1.
 
    ```
-   git ls-files examples/march-1991 | while read -r f; do
-     t="${f#examples/march-1991/}"; mkdir -p "$(dirname "$t")"; git mv "$f" "$t"; done
+   S=examples/march-1991
+   git ls-files "$S" | sed "s#^$S/##" | while read -r t; do [ -e "$t" ] && echo "$t"; done
    ```
 
-   - **Collisions:** any kit file at a path the starter also uses (for example `.gitignore`) moves
-     to `docs/arpd-kit/` in commit 1, so commit 2 never overwrites. Folders that exist on both sides
-     (for example `docs/`, `.claude/`) are merged file by file.
-   - **The starter's old `START-HERE.md`** moves straight to `docs/arpd-kit/START-HERE-starter.md`
-     in commit 2. A new one is written for the PI in Phase 10.
+   For the March starter this lists `.gitignore`, `AGENTS.md`, `CLAUDE.md` and `README.md`.
+
+   ```
+   set -e
+   S=examples/march-1991
+   # Commit 1: the kit's own files, and every other colliding kit file
+   mkdir -p docs/arpd-kit
+   for f in README.md QUICKSTART.md CLAUDE.md AGENTS.md; do git mv "$f" docs/arpd-kit/; done
+   git mv .gitignore docs/arpd-kit/kit.gitignore
+   git commit -m "Move kit pre-setup files to docs/arpd-kit (no changes)"
+   # Commit 2: the starter's old START-HERE.md, separately, then everything else to the root
+   git mv "$S/START-HERE.md" docs/arpd-kit/START-HERE-starter.md
+   git ls-files "$S" | while read -r f; do
+     t="${f#$S/}"; mkdir -p "$(dirname "$t")"; git mv "$f" "$t" || exit 1
+   done
+   git commit -m "Move $S to the project root (no changes)"
+   ```
+
+   - **Collisions:** commit 1 moves every colliding kit file, so commit 2 never overwrites. Folders
+     that exist on both sides (for example `docs/`, `.claude/`) are merged file by file by the loop.
+   - **The starter's old `START-HERE.md`** goes straight to `docs/arpd-kit/START-HERE-starter.md`,
+     by its own `git mv`, before the loop. A new one is written for the PI in Phase 10.
    - Untracked or ignored files in the starter (`output/`, caches) are not moved; regenerate them.
    - The starter's `.claude/settings.json` and `.claude/agents/` arrive by this move. Claude Code may
      still ask the PI to approve changes under `.claude/`; if it is declined or blocked, follow
@@ -153,6 +179,18 @@ Worked case: importing `examples/march-1991/` into this kit repository.
      project examples. Nothing else changes without a ruling.
    - `DECISIONS.md`: fill the inherited adoption placeholder or use the next free R; add the new
      SA; record the import and the moves as the next free DEC, pointing to S01's baseline.
+   - **Inherited pending decisions the PI ruled on:** update each affected DEC entry's Status,
+     Authorized and Adopted lines to match the ruling:
+     - ratified: "**Authorized:** <date>, R-NN, ratified after adoption (incident I-NN)" when the
+       choice was already in use (as with the March starter's DEC-01 to DEC-07, incident I-01);
+       Status "adopted", and Adopted names the version;
+     - deferred: Status "deferred by R-NN (still to decide; dependent work stays blocked)"; it
+       stays in *Waiting on the PI* as "deferred (R-NN)";
+     - changed: a new DEC that supersedes the old one, which keeps its text and is marked
+       "Superseded by DEC-NN".
+
+     Log each one: `python tools/log_event.py authorized --actor lead --ref DEC-NN --note "R-NN"`,
+     and, for an adoption, `python tools/log_event.py adopted --actor lead --ref DEC-NN --note "<version>"`.
    - `STATUS.md`: rewrite it in the current template's format (base commit, the recovery block, a
      UTC time), for the new PI. The inherited content that still applies is carried over.
    - `.gitignore`: merge the kit's lines (now in `docs/arpd-kit/`) into the root file, keeping every

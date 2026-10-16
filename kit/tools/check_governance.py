@@ -46,19 +46,29 @@ The checks:
      yes / before, no / after, or pending). Not recorded makes the result INCOMPLETE (MISSING).
      Authorized after adoption is ADVISORY if ratified and recorded as an incident (I-NN), and a
      FAIL otherwise;
-   - a sprint row is a snapshot; DECISIONS.md is authoritative. For a row that is pending or late,
-     the decision's own entry (DEC-NN, its Authorized line) is consulted: authority given before
-     adoption makes it PASS; ratification after adoption with an incident (I-NN) makes it ADVISORY;
-     a pending decision whose entry says "Deferred by R-NN" (a given ruling) is ADVISORY, not
-     PENDING: still to decide, and work that depends on it stays blocked; otherwise the row's
-     status stands.
+   - a sprint row is a snapshot; DECISIONS.md is authoritative, but it can never excuse a late
+     authorization. The decision's own entry (DEC-NN: its Authorized and Adopted lines) is read:
+     - a row the sprint record shows as authorized late (timing no / after) never becomes PASS;
+       it is ADVISORY if the entry or the row records ratification with an incident (I-NN), and
+       FAIL otherwise;
+     - if the entry's Authorized and Adopted lines both carry dates (YYYY-MM-DD) and authorization
+       is the later one, it is late whatever the wording: ADVISORY with an I-NN, FAIL otherwise;
+     - a PENDING row becomes PASS if the entry cites authority given before adoption, and ADVISORY
+       if it records ratification after adoption with an I-NN;
+     - a PENDING decision that was never adopted, whose entry says "Deferred by R-NN" (a given
+       ruling), is ADVISORY: still to decide, and dependent work stays blocked. A deferral cannot
+       cover a decision that was already adopted: that is FAIL unless ratified with an incident.
+   A ruling or SA counts as given only if its section has a Given line that is not pending-like
+   (pending, awaiting, to be given, not yet, placeholder, TBD), or, with no Given line, a dated
+   heading (YYYY-MM-DD) with no pending-like word.
 6. INDEX.md mentions every top-level entry, and every path listed in its first column (in
    backticks) exists, unless its row says "pending:" or "git-ignored" (advisory).
-7. Event logging and agent roles installed: .claude/settings.json runs tools/hooks/log_hook.py, and,
-   for a "lead with subagents" or "peers" team arrangement, .claude/agents/implementer.md and
-   reviewer.md exist. Anything missing is MISSING, unless a decision in DECISIONS.md records it as
-   not installed ("event logging not installed" / "agent files not installed", citing R-NN or
-   "routine"), which is ADVISORY.
+7. Event logging and agent roles installed: .claude/settings.json runs tools/hooks/log_hook.py and
+   does not set "disableAllHooks": true; and, when the Team arrangement line mentions subagents or
+   peers (and is not solo), .claude/agents/implementer.md and reviewer.md exist. Anything missing is
+   MISSING, unless a decision in DECISIONS.md records it as not installed ("event logging not
+   installed" / "agent files not installed", citing R-NN or with a "Route: routine" line), which is
+   ADVISORY.
 """
 import io
 import os
@@ -146,6 +156,9 @@ def _version_status(known, pending_ids):
     if not m:
         return "MISSING", "CLAUDE.md: no Version line, so adoption cannot be checked"
     line = m.group(1)
+    adopted_by = re.search(r"adopted by\b[^.;]*?\b(R-\d+)\b", line, re.I)
+    if adopted_by and adopted_by.group(1) in known:
+        return "PASS", None
     sentences = re.split(r"(?<=[.;])\s+", line)
     chosen = next((x for x in sentences if re.search(r"adopt|\bR-\d+\b", x, re.I)), line)
     if re.search(r"\b(pending|awaiting|not yet adopted|proposal)\b", chosen, re.I):
@@ -291,6 +304,9 @@ def _timing(value):
     return {"yes": "timely", "before": "timely", "no": "late", "after": "late"}.get(m.group(1).lower(), "pending")
 
 
+PENDING_LIKE = r"(pending|awaiting|to be given|not yet|placeholder|tbd)\b"
+
+
 def decision_index():
     """What DECISIONS.md records, outside HTML comments.
 
@@ -326,10 +342,14 @@ def decision_index():
         if ident.startswith("DEC-"):
             continue
         given = re.search(r"\*\*Given:\*\*\s*(.*)", sections[ident])
-        if "(pending" in head.lower() or (given and re.match(r"^\W*pending\b", given.group(1), re.I)):
-            pending_ids.add(ident)
+        if given:
+            is_given = not re.match(r"^\W*" + PENDING_LIKE, _clean(given.group(1)), re.I)
         else:
-            known.add(ident)
+            is_given = (bool(re.search(r"\b\d{4}-\d{2}-\d{2}\b", head))
+                        and not re.search(r"\(?" + PENDING_LIKE, head, re.I))
+        if "(pending" in head.lower():
+            is_given = False
+        (known if is_given else pending_ids).add(ident)
     for ident, is_pending in table_pending.items():
         if ident in headings:
             continue
@@ -337,32 +357,72 @@ def decision_index():
     return known, pending_ids, sections
 
 
-def _reconcile(rid, needed, known, sections):
-    """The decision's own entry in DECISIONS.md, which outranks the sprint row's snapshot.
+def _entry_line(body, label):
+    m = re.search(r"^\s*-\s*\*\*%s:\*\*(.*?)(?=^\s*-\s*\*\*|^#|\Z)" % label, body, flags=re.S | re.M)
+    return " ".join(m.group(1).split()) if m else ""
 
-    Returns "PASS" (authorized before adoption), "ADVISORY" (ratified after adoption, with an
-    incident) or None (the entry does not settle it).
+
+def _entry(rid, needed, known, sections):
+    """What the decision's own entry in DECISIONS.md records."""
+    body = sections.get(rid, "")
+    auth, adopted = _entry_line(body, "Authorized"), _entry_line(body, "Adopted")
+    auth_date = re.search(r"\b(\d{4}-\d{2}-\d{2})\b", auth)
+    adopt_date = re.search(r"\b(\d{4}-\d{2}-\d{2})\b", adopted)
+    deferred = re.search(r"\bdeferred by (R-\d+)\b", _clean(body), re.I)
+    return {
+        "given": [x for x in re.findall(needed, auth) if x in known],
+        "ratified": bool(re.search(r"ratifi\w*\s+after\s+adoption|after\s+adoption", auth, re.I)
+                         and re.search(r"\bI-\d+\b", auth)),
+        "after_wording": bool(re.search(r"after\s+adoption", auth, re.I)),
+        "auth_pending": bool(re.search(r"\bpending\b", auth, re.I)),
+        "adopted": bool(adopted) and not re.match(r"^\W*(not yet|no\b|pending|none|n/a|—|-)", _clean(adopted), re.I),
+        "dates_late": bool(auth_date and adopt_date and auth_date.group(1) > adopt_date.group(1)),
+        "dates": (auth_date.group(1) if auth_date else None, adopt_date.group(1) if adopt_date else None),
+        "deferred_by": deferred.group(1) if deferred and deferred.group(1) in known else None,
+    }
+
+
+def _verdict(kind, msg, row_late, row_incident, e, name, rid):
+    """Combine the sprint row's verdict with the decision's own entry. Returns (kind, msg) or None for PASS.
+
+    kind is the row's own verdict: PENDING, ADVISORY (late, incident recorded), FAIL (late, no
+    incident) or TIMELY. A row the record shows as late never becomes PASS.
     """
-    body = sections.get(rid)
-    if not body:
+    incident = row_incident or e["ratified"]
+    if e["dates_late"]:
+        auth_d, adopt_d = e["dates"]
+        if incident:
+            return "ADVISORY", "%s: %s ratified after adoption (authorized %s, adopted %s; recorded incident)" % (
+                name, rid, auth_d, adopt_d)
+        return "FAIL", ("%s: %s authorized after adoption per DECISIONS.md (authorized %s, adopted %s), with no "
+                        "incident recorded" % (name, rid, auth_d, adopt_d))
+    if kind == "TIMELY":
         return None
-    m = re.search(r"^\s*-\s*\*\*Authorized:\*\*(.*?)(?=^\s*-\s*\*\*|\Z)", body, flags=re.S | re.M)
-    if not m:
-        return None
-    auth = " ".join(m.group(1).split())
-    if not [x for x in re.findall(needed, auth) if x in known]:
-        return None
-    if re.search(r"ratifi\w*\s+after\s+adoption|after\s+adoption", auth, re.I):
-        return "ADVISORY" if re.search(r"\bI-\d+\b", auth) else None
-    if re.search(r"\bpending\b", auth, re.I):
-        return None
-    return "PASS"
-
-
-def _deferred(rid, known, sections):
-    """The given ruling (R-NN) that deferred this decision, per its entry in DECISIONS.md, or None."""
-    m = re.search(r"\bdeferred by (R-\d+)\b", _clean(sections.get(rid, "")), re.I)
-    return m.group(1) if m and m.group(1) in known else None
+    if kind == "PENDING":
+        adopted = row_late or e["adopted"]
+        if e["deferred_by"] and not adopted:
+            return "ADVISORY", "%s: %s deferred by %s (still to decide; dependent work stays blocked)" % (
+                name, rid, e["deferred_by"])
+        if adopted and (e["deferred_by"] or row_late):
+            if e["given"] and incident:
+                return "ADVISORY", "%s: %s ratified after adoption (recorded incident; per its entry in DECISIONS.md)" % (
+                    name, rid)
+            if e["deferred_by"]:
+                return "FAIL", ("%s: consequential decision %s was adopted, so the deferral by %s cannot cover it: "
+                                "adopted without authority" % (name, rid, e["deferred_by"]))
+            if e["given"] and not e["auth_pending"]:
+                return "FAIL", "%s: %s authorized after adoption, with no incident recorded" % (name, rid)
+            return kind, msg
+        if e["given"] and e["ratified"]:
+            return "ADVISORY", "%s: %s ratified after adoption (recorded incident; per its entry in DECISIONS.md)" % (
+                name, rid)
+        if e["given"] and not e["after_wording"] and not e["auth_pending"]:
+            return None
+        return kind, msg
+    if kind == "FAIL" and e["given"] and e["ratified"]:
+        return "ADVISORY", "%s: %s ratified after adoption (recorded incident; per its entry in DECISIONS.md)" % (
+            name, rid)
+    return kind, msg
 
 
 def check_sprints():
@@ -450,19 +510,11 @@ def check_sprints():
                 else:
                     kind, msg = "FAIL", "%s: %s authorized after adoption, with no incident recorded" % (name, rid)
             else:
-                continue  # authorized before adoption
-            deferred = _deferred(rid, known, sections) if kind == "PENDING" else None
-            if deferred:
-                advisories.append("%s: %s deferred by %s (still to decide; dependent work stays blocked)"
-                                  % (name, rid, deferred))
-                continue
-            settled = _reconcile(rid, needed, known, sections)
-            if settled == "PASS":
-                continue
-            if settled == "ADVISORY":
-                kind, msg = "ADVISORY", ("%s: %s ratified after adoption (recorded incident; per its entry in "
-                                         "DECISIONS.md)" % (name, rid))
-            {"PENDING": pending, "ADVISORY": advisories, "FAIL": problems}[kind].append(msg)
+                kind, msg = "TIMELY", None
+            outcome = _verdict(kind, msg, when == "late", bool(re.search(r"\bI-\d+\b", timing_raw + " " + authority)),
+                               _entry(rid, needed, known, sections), name, rid)
+            if outcome:
+                {"PENDING": pending, "ADVISORY": advisories, "FAIL": problems}[outcome[0]].append(outcome[1])
     status = ("FAIL" if problems else "MISSING" if missing else "PENDING" if pending
               else "ADVISORY" if advisories else "PASS")
     step("Closed sprints: decision tracking and authorization", status,
@@ -494,7 +546,7 @@ def _not_installed_decision(phrase):
     _, _, sections = decision_index()
     for ident, body in sections.items():
         text = " ".join(_clean(body).split()).lower()
-        if ident.startswith("DEC-") and phrase in text and re.search(r"\br-\d+\b|\broutine\b", text):
+        if ident.startswith("DEC-") and phrase in text and re.search(r"\br-\d+\b|\broute:\s*routine\b", text):
             return ident
     return None
 
@@ -507,11 +559,13 @@ def check_logging():
         gaps.append(("event logging not installed", ".claude/settings.json is missing"))
     elif "tools/hooks/log_hook.py" not in read(settings).replace("\\", "/"):
         gaps.append(("event logging not installed", ".claude/settings.json does not run tools/hooks/log_hook.py"))
+    elif re.search(r'"disableAllHooks"\s*:\s*true', read(settings)):
+        gaps.append(("event logging not installed", ".claude/settings.json sets disableAllHooks: true"))
     team = ""
     if os.path.exists(os.path.join(ROOT, "CLAUDE.md")):
         m = re.search(r"\*\*Team arrangement:\*\*([^\n]*)", read("CLAUDE.md"))
         team = m.group(1).lower() if m else ""
-    if "lead with subagents" in team or "peer" in team:
+    if ("subagent" in team or "peer" in team) and "solo" not in team:
         for role in ("implementer", "reviewer"):
             if not os.path.exists(os.path.join(ROOT, ".claude", "agents", role + ".md")):
                 gaps.append(("agent files not installed", ".claude/agents/%s.md is missing (team arrangement "

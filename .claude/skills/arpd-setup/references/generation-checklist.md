@@ -16,7 +16,8 @@ cut the files' history (`import-path.md`, *Move-only commits*). The kit's files 
 instructions: never reconcile them or write `.arpd` files beside them.
 
 **Every generated file:** remove the template's HTML guidance comments (`<!-- … -->`) and fill every
-`{{…}}`. The governance check fails on an unfilled placeholder.
+`{{…}}`. The governance check fails on an unfilled placeholder. **Exception:** blocks that start
+`<!-- keep:` (the entry formats in `DECISIONS.md`) stay, unfilled, for later entries.
 
 | # | File | Source | How to fill it |
 |---|---|---|---|
@@ -62,7 +63,8 @@ If the PI declines, or the write is blocked (a non-interactive or scripted run c
 
 1. Run `python tools/check_governance.py` and fix any generation-caused FAIL.
 2. **Post-generation search** in the governing documents and `START-HERE.md`:
-   - `<!--`: no template guidance comment may remain;
+   - `<!--`: no template guidance comment may remain, except `<!-- keep:` blocks (for example
+     `grep -n "<!--" *.md | grep -v "<!-- keep:"` should print nothing);
    - `{{`: no placeholder may remain;
    - on import, phrases the adoption made stale, such as "pending R-01", "Pending adoption", "until
      R-01 is recorded" or "the importing PI": update each one.
