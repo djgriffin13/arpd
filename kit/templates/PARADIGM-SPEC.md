@@ -35,7 +35,10 @@ design; the construct is usually self-reported but should be observed.
 Each construct has a stable ID and a definition the PI accepts. Agents use these names exactly, in
 code, interfaces and reports. If a construct needs renaming, that is a ruling, not a refactor.
 
-| ID | Construct or mechanism | Definition (PI's wording) | Source |
+The *PI's wording* column quotes the PI exactly, as given ("Name: definition"), including
+capitalization. The short name is what agents use in code and reports.
+
+| ID | Short name | PI's wording (verbatim) | Source |
 |---|---|---|---|
 | CON-01 |  |  |  |
 

@@ -22,12 +22,12 @@ scientific decision**. Testing, review and explicit scientific validation are it
 |---|---|---|
 | **Team charter** (`kit/constitution/CORE.md` → the project's `CLAUDE.md`) | A short governing document every agent reads each session. It covers: authority by subject; the PI's rulings recorded verbatim; decision routes set by scientific consequence and by the authority the researcher has delegated, with an authority profile (consult first, bounded autonomy, or exploratory autonomy) agreed at setup; requirement states that separate *Implemented*, *Verified* (software evidence) and *Validated* (scientific evidence the researcher accepts); sprints with auditable close-outs; and a learning loop that adds and retires rules. | Built |
 | **Paradigm specification** (`kit/templates/PARADIGM-SPEC.md`) | Traces the research question → constructs → operationalizations → invariants → claims, and claims not to make → validation evidence. | Built |
-| **Setup and import interview** (`/arpd-setup`) | Asks about the science and proposes the engineering. Supports a fresh project, importing a codebase, or installing into an existing repository. Prior instructions are preserved and reconciled by decision, never silently merged. | Built |
+| **Setup and import interview** (`/arpd-setup`) | Asks about the science and proposes the engineering. Supports a fresh project, importing a codebase, or installing into an existing repository. Prior instructions are preserved and reconciled by decision, never silently merged. | Built; run end to end in two real scripted developer tests (import and fresh mode; `evaluation/developer-tests/`). The interactive interview has not yet been tested with a researcher. |
 | **Team and workspace arrangement** | The team (solo / lead with subagents / peers) and the workspace (shared checkout / worktrees) are chosen separately. Shared runtime resources (ports, output paths) are assigned per agent. | Built |
-| **Event logging** (hooks + `tools/`) | Records defined coordination events. It distinguishes elapsed, autonomous and summed-agent time from the researcher's self-reported active time. Hooks cannot measure the researcher's active time, and the tooling says so. | Built |
+| **Event logging** (hooks + `tools/`) | Records defined coordination events. It reports elapsed time, agent-working time (prompt to end of turn), subagent time and failed or interrupted turns, separately from the researcher's self-reported active time. Hooks cannot measure the researcher's active time, and the tooling says so. | Built |
 | **Governance checker** (`tools/check_governance.py`) | Checks links, requirement evidence and traceability, plan numbering, and whether consequential decisions were authorized before adoption. | Built |
 | **Modules** (`kit/constitution/modules/`) | Built: computational model; team arrangement. Drafts, untested: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data. | Partial |
-| **Worked example** (`examples/march-1991/`) | A checked implementation of March's (1991) mutual-learning model, kept as a complete ARPD project with its records. It is also the starter for the feasibility demonstration. | In progress |
+| **Worked example** (`examples/march-1991/`) | A checked implementation of March's (1991) mutual-learning model, kept as a complete ARPD project with its records. It is also the starter for the feasibility demonstration. | Built: software verification (48 tests) and directional replication (22 tests), with two independent review rounds. Its assumptions await the researcher's decision. |
 
 ## Why a team, and why a charter
 
@@ -69,7 +69,7 @@ points other agent tools to it, and adapters for other tools are planned.
 | `kit/settings/` | Hook configuration installed into projects |
 | `kit/docs/EVENTS.md` | What the event log captures, and what it cannot |
 | `examples/march-1991/` | The worked example |
-| `evaluation/` | Protocols for the feasibility demonstration and the planned studies |
+| `evaluation/` | Protocols for the feasibility demonstration and the planned studies; `developer-tests/` holds the labelled developer-test records (DT-01 to DT-03) and their scripted inputs |
 | `docs/` | Design rationale and guidance |
 
 ## Evidence status

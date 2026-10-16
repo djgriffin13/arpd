@@ -1,7 +1,10 @@
 # INDEX.md: map of the repository
 
 **Governs nothing.** This is a lightweight discovery map (`CLAUDE.md` §2), so a new session or a new
-person can find things. Update it in the same commit as the change it describes.
+person can find things. Update it in the same commit as the change it describes. List only paths that exist; for one that
+will exist later, add "pending: <reason>" to its row. Do not list empty directories: git does not keep
+them, so a listed path would not exist in a clone. The governance check reports listed paths that do
+not exist.
 
 | Path | What it is | Governing? |
 |---|---|---|

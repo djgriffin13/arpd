@@ -2,7 +2,8 @@
 
 Follow this order. Skip questions whose answers are already in existing files, and say what you
 found instead. The question wording below is a suggestion; adapt it to the PI. Defaults appear in
-**[brackets]**.
+**[brackets]**. The phase times add up to about 30 minutes; an import of an ARPD starter is usually
+shorter, because the science is confirmed rather than elicited.
 
 ---
 
@@ -16,7 +17,8 @@ found instead. The question wording below is a suggestion; adapt it to the PI. D
    - If the PI passed `import <path|url>` or `install <path>`, or if the project's own source code
      or instruction files (`CLAUDE.md`, `AGENTS.md`, `.cursorrules`, `README` with design notes)
      are present, follow `import-path.md`. A starter inside the kit (for example
-     `examples/march-1991/`) is an import.
+     `examples/march-1991/`) is an import of an ARPD project: in Phases 2–4, read its existing
+     specification to the PI in plain language and ask them to confirm or change it.
 2. **Tell the PI in three sentences** what will happen:
    - "I'll ask about your science, then propose how to build it. About 30 minutes."
    - "Nothing is written until you approve a summary."
@@ -48,9 +50,15 @@ do on its own. Say it in plain words, and use AskUserQuestion:
 
 Record the choice. The boundaries are filled in during Phase 6.
 
-## Phase 2: Science (about 10 minutes; the most important phase)
+## Phase 2: Science (about 8 minutes; the most important phase)
 
-Record the answers verbatim where marked (V).
+Record the answers verbatim where marked (V). Quote the PI exactly: no recapitalizing, splitting or
+tidying.
+
+**Draft wording.** On import, an item marked *"(draft wording, awaiting the PI's words)"* (often the
+research question) needs the PI's own words now. If the PI does not give them, the item stays
+explicitly pending and goes in *Waiting on the PI*. Adopting the specification "as it stands" does not
+clear the marker.
 
 1. **(V)** "In one or two sentences, what question do you want to be able to study?"
 2. "What stops you studying it now?"
@@ -82,7 +90,7 @@ Record the answers verbatim where marked (V).
    interpretations and record the PI's choice (ASM-NN).
 8. **Out of scope.** "What should this deliberately *not* do, at least for now?"
 
-## Phase 3: Instrument (about 5 minutes)
+## Phase 3: Instrument (about 4 minutes)
 
 1. "Walk me through how you (or a participant, or a co-author) would use it, from start to finish."
    - Draft 5–15 requirements, phrased as things the PI would observe.
@@ -92,8 +100,12 @@ Record the answers verbatim where marked (V).
 3. **Propose a platform** from `engineering-defaults.md`, with a one-line reason. Ask for
    confirmation. Note: choosing a platform that fits the PI's community (an R package for R users,
    for example) affects adoption. Treat it as a meaningful choice, not a technicality.
+4. **Input adequacy.** For each operationalization and invariant, check that the input data carry
+   every quantity it needs. For example, telling "present but silent" from "absent" needs a roster,
+   not only a message log. Ask the PI about each gap. A gap the PI cannot resolve now becomes an open
+   scientific question (`PARADIGM-SPEC.md` §9), and is read back in Phase 8.
 
-## Phase 4: Evidence (about 4 minutes)
+## Phase 4: Evidence (about 3 minutes)
 
 1. "What would convince you it works *as software*?" Propose this for the **Verified** state:
    - tests of each rule or feature;
@@ -128,7 +140,7 @@ Ask about the **task structure**, not about agents:
 Explain in one sentence: "You'll talk to one lead agent; it delegates and has work independently
 reviewed; you see decisions and evidence, not the internal coordination."
 
-## Phase 6: Authority and cadence (about 4 minutes)
+## Phase 6: Authority and cadence (about 3 minutes)
 
 Turn the Phase 1 profile into a concrete standing authorization (SA-01). Draft every field from what
 you have already heard, and ask the PI only to confirm or adjust it. Use plain words, not internal
@@ -150,7 +162,9 @@ labels.
 6. "Should the team ever run while you're away?" [No. This can be turned on later in words.]
 
 Read SA-01 back in two or three sentences. Record the PI's reply verbatim as SA-01 (on import, the
-next free SA number: see `import-path.md`, *Numbering*).
+next free SA number: see `import-path.md`, *Numbering*). If the reply is only an assent ("ok",
+"adopted"), record the read-back text that was assented to, labelled "(read back by the lead; PI
+assented: '<the PI's exact words>')". Never present your draft as the PI's words.
 
 ## Phase 7: Constraints (about 2 minutes)
 
@@ -173,7 +187,8 @@ Present a **plain-language summary** of at most one screen:
 - the team arrangement;
 - the authority arrangement (SA-01), in plain words, with this project's examples;
 - the cadence;
-- the first milestone.
+- the first milestone;
+- open scientific questions (including input gaps from Phase 3) and any item still in draft wording.
 
 Ask: "If this is right, please say so in your own words (for example 'Adopted' plus any changes).
 That sentence becomes ruling R-01" (on import: the inherited placeholder, or the next free R number).
@@ -188,7 +203,10 @@ Follow `generation-checklist.md` exactly.
 
 1. Write sprint S01: a **bounded first sprint**, one to three requirements, ideally a "walking
    skeleton". That is the thinnest end-to-end path, plus its first known-answer check.
-2. In `START-HERE.md`, give the exact first prompt. For example: *"Start sprint S01. Plan it per the
-   charter, brief the implementer, and stop for my check-in at the sprint boundary."*
+2. In `START-HERE.md`, give the exact first prompt, matching the team arrangement actually
+   installed. With the implementer role installed, for example: *"Start sprint S01. Plan it per the
+   charter, brief the implementer, and stop for my check-in at the sprint boundary."* Without it, do
+   not mention the implementer: *"Start sprint S01. Plan it per the charter, and stop for my check-in
+   at the sprint boundary."*
 3. Tell the PI how to check in (`/arpd-checkin`), how to rule (just say it; the lead agent records
    it verbatim), and how to amend the charter (`/arpd-amend`).

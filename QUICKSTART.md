@@ -27,6 +27,11 @@ constructs, what must never go wrong, and what would convince you it works. The 
 **engineering**, with reasons, and you confirm or correct. Nothing is written until you approve a
 plain-language summary.
 
+Near the end, Claude Code asks you to approve two writes into `.claude/`: the event-logging hooks
+(they record when things happen, never what you typed) and the implementer and reviewer roles. Approve
+them if you want logging and delegation. A scripted or non-interactive run cannot approve them; setup
+then records them as owed in `STATUS.md` and `START-HERE.md`, so you can add them later.
+
 At the end you have:
 
 - `CLAUDE.md`: the team charter your agents follow;

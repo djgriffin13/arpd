@@ -27,6 +27,7 @@ three ledgers:
 ## Waiting on the PI
 
 Keep this list short, and order it by what each item unblocks. Remove an entry once it is decided.
+A decision the PI has deferred by ruling stays listed, marked "deferred (R-NN)", until it is decided.
 
 | # | Decision requested (plain language) | Pack | Blocks | Recommendation |
 |---|---|---|---|---|
@@ -94,7 +95,7 @@ Never delegate what CLAUDE.md §6 reserves to the PI.
 ### DEC-NN: title
 - **Scientific consequence:** what this changes about what the instrument measures, manipulates or licenses, or "none"
 - **Route:** routine / delegated (SA-NN) / consult (R-NN)
-- **Status:** proposed / under investigation / adopted / superseded by DEC-NN / reopened by DEC-NN
+- **Status:** proposed / under investigation / deferred by R-NN (still to decide; dependent work stays blocked) / adopted / superseded by DEC-NN / reopened by DEC-NN
 - **Proposed:** date, by (role), with a pointer to the event-log entry or report
 - **Authorized:** date and authority (SA-NN for the delegated route, R-NN for the consult route), or "pending", or "ratified after adoption (incident I-NN)"
 - **Adopted:** date and version (commit or tag)

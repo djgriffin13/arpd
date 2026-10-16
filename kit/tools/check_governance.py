@@ -49,8 +49,16 @@ The checks:
    - a sprint row is a snapshot; DECISIONS.md is authoritative. For a row that is pending or late,
      the decision's own entry (DEC-NN, its Authorized line) is consulted: authority given before
      adoption makes it PASS; ratification after adoption with an incident (I-NN) makes it ADVISORY;
-     otherwise the row's status stands.
-6. INDEX.md mentions every top-level entry (advisory).
+     a pending decision whose entry says "Deferred by R-NN" (a given ruling) is ADVISORY, not
+     PENDING: still to decide, and work that depends on it stays blocked; otherwise the row's
+     status stands.
+6. INDEX.md mentions every top-level entry, and every path listed in its first column (in
+   backticks) exists, unless its row says "pending:" or "git-ignored" (advisory).
+7. Event logging and agent roles installed: .claude/settings.json runs tools/hooks/log_hook.py, and,
+   for a "lead with subagents" or "peers" team arrangement, .claude/agents/implementer.md and
+   reviewer.md exist. Anything missing is MISSING, unless a decision in DECISIONS.md records it as
+   not installed ("event logging not installed" / "agent files not installed", citing R-NN or
+   "routine"), which is ADVISORY.
 """
 import io
 import os
@@ -305,7 +313,7 @@ def decision_index():
             current = m.group(1) if m else None
             if current:
                 headings[current] = s
-                sections[current] = ""
+                sections[current] = s + "\n"
             continue
         if current:
             sections[current] += line + "\n"
@@ -349,6 +357,12 @@ def _reconcile(rid, needed, known, sections):
     if re.search(r"\bpending\b", auth, re.I):
         return None
     return "PASS"
+
+
+def _deferred(rid, known, sections):
+    """The given ruling (R-NN) that deferred this decision, per its entry in DECISIONS.md, or None."""
+    m = re.search(r"\bdeferred by (R-\d+)\b", _clean(sections.get(rid, "")), re.I)
+    return m.group(1) if m and m.group(1) in known else None
 
 
 def check_sprints():
@@ -437,6 +451,11 @@ def check_sprints():
                     kind, msg = "FAIL", "%s: %s authorized after adoption, with no incident recorded" % (name, rid)
             else:
                 continue  # authorized before adoption
+            deferred = _deferred(rid, known, sections) if kind == "PENDING" else None
+            if deferred:
+                advisories.append("%s: %s deferred by %s (still to decide; dependent work stays blocked)"
+                                  % (name, rid, deferred))
+                continue
             settled = _reconcile(rid, needed, known, sections)
             if settled == "PASS":
                 continue
@@ -452,17 +471,68 @@ def check_sprints():
 
 def check_index():
     if not os.path.exists(os.path.join(ROOT, "INDEX.md")):
-        step("INDEX covers top level (advisory)", "MISSING", ["INDEX.md absent"])
+        step("INDEX covers top level; listed paths exist (advisory)", "MISSING", ["INDEX.md absent"])
         return
     idx = read("INDEX.md")
-    missing = [e for e in sorted(os.listdir(ROOT))
-               if not e.startswith(".") and e not in SKIP_DIRS and e not in idx]
-    step("INDEX covers top level (advisory)", "PASS" if not missing else "ADVISORY",
-         ["not mentioned: " + m for m in missing])
+    notes = ["not mentioned: " + e for e in sorted(os.listdir(ROOT))
+             if not e.startswith(".") and e not in SKIP_DIRS and e not in idx]
+    for line in idx.splitlines():
+        if not line.strip().startswith("|") or re.search(r"pending:|git-ignored", line, re.I):
+            continue
+        for path in re.findall(r"`([^`]+)`", split_row(line)[0]):
+            path = path.strip()
+            if "{{" in path or "*" in path or "<" in path or re.match(r"^[a-z]+:", path):
+                continue
+            if not os.path.exists(os.path.join(ROOT, path.rstrip("/"))):
+                notes.append("listed but does not exist: " + path)
+    step("INDEX covers top level; listed paths exist (advisory)", "ADVISORY" if notes else "PASS", notes)
+
+
+def _not_installed_decision(phrase):
+    """A decision in DECISIONS.md recording `phrase` (e.g. "event logging not installed"), citing a
+    ruling (R-NN) or the routine route; or None."""
+    _, _, sections = decision_index()
+    for ident, body in sections.items():
+        text = " ".join(_clean(body).split()).lower()
+        if ident.startswith("DEC-") and phrase in text and re.search(r"\br-\d+\b|\broutine\b", text):
+            return ident
+    return None
+
+
+def check_logging():
+    name = "Event logging and agent roles installed"
+    gaps = []
+    settings = os.path.join(".claude", "settings.json")
+    if not os.path.exists(os.path.join(ROOT, settings)):
+        gaps.append(("event logging not installed", ".claude/settings.json is missing"))
+    elif "tools/hooks/log_hook.py" not in read(settings).replace("\\", "/"):
+        gaps.append(("event logging not installed", ".claude/settings.json does not run tools/hooks/log_hook.py"))
+    team = ""
+    if os.path.exists(os.path.join(ROOT, "CLAUDE.md")):
+        m = re.search(r"\*\*Team arrangement:\*\*([^\n]*)", read("CLAUDE.md"))
+        team = m.group(1).lower() if m else ""
+    if "lead with subagents" in team or "peer" in team:
+        for role in ("implementer", "reviewer"):
+            if not os.path.exists(os.path.join(ROOT, ".claude", "agents", role + ".md")):
+                gaps.append(("agent files not installed", ".claude/agents/%s.md is missing (team arrangement "
+                             "needs it)" % role))
+    if not gaps:
+        step(name, "PASS")
+        return
+    notes, unexplained = [], False
+    for phrase, what in gaps:
+        dec = _not_installed_decision(phrase)
+        if dec:
+            notes.append("%s; recorded as not installed in %s" % (what, dec))
+        else:
+            notes.append("%s; no decision records it as not installed" % what)
+            unexplained = True
+    step(name, "MISSING" if unexplained else "ADVISORY", notes)
 
 
 def main():
-    for fn in (check_exists, check_adoption, check_links, check_requirements, check_plans, check_sprints, check_index):
+    for fn in (check_exists, check_adoption, check_links, check_requirements, check_plans, check_sprints,
+               check_index, check_logging):
         try:
             fn()
         except Exception as exc:  # report, never hide

@@ -60,6 +60,13 @@ Read these before you start. They are in this skill's folder:
    Never rely on internal labels such as route names or IDs without a gloss.
 8. **Nothing is final until the read-back.** Write files only after the PI adopts the summary in
    words (Phase 8). Before that, keep notes in your own working context.
+9. **Attribute words honestly.**
+   - Quote the PI exactly: no recapitalizing, splitting or tidying.
+   - Anything you drafted is labelled as yours ("drafted by the lead"), never attributed to the PI
+     or to a script. If the PI assents to your read-back, record your text with the label "(read
+     back by the lead; PI assented: '<the PI's exact words>')".
+   - A question the PI did not answer is recorded as "not asked" or "no answer", never as "no
+     objection".
 
 ## Phases
 
@@ -81,6 +88,15 @@ Details for each phase are in `references/interview-guide.md`.
 
 ## After generation
 
+- **Permission prompts.** Claude Code asks the PI for an interactive approval before writing
+  `.claude/settings.json` (the event-logging hooks) and `.claude/agents/` (the implementer and
+  reviewer roles). Before those writes, tell the PI in plain words what each is for, and that the
+  logging records event times and types but no prompt text (`references/generation-checklist.md`,
+  *Permission prompts*). A non-interactive or scripted run cannot approve them. Never work around the
+  protection.
+- **Anything that could not be written is owed, not hidden.** Record it in a DEC (for example
+  "event logging not installed"), in `STATUS.md` §6 *Owed*, and under *Known gaps* in
+  `START-HERE.md`. Never write "Nothing owed" while an item is missing.
 - Run `python tools/check_governance.py`, and report its output verbatim. Fix any FAIL caused by
   generation. Explain any remaining INCOMPLETE.
 - Commit with a message naming the adoption ruling (R-01, unless the ledger was inherited).
@@ -98,7 +114,10 @@ Details for each phase are in `references/interview-guide.md`.
 - Never overwrite existing project files or instructions. In import or install mode, follow
   `references/import-path.md`. The kit's own `README.md`, `QUICKSTART.md`, `CLAUDE.md` and
   `AGENTS.md` are not project instructions: move them to `docs/arpd-kit/` in every mode that uses
-  this repository.
+  this repository. An imported ARPD starter's own `CLAUDE.md` and `AGENTS.md` are its charter: keep
+  them and update them in place.
+- Never combine a move with an edit. Moves get commits of their own, before any edit, so that the
+  files' history survives (`references/import-path.md`, *Move-only commits*).
 - Never hard-code IDs on import. Continue the existing ledgers (next free DEC, R and SA), and never
   reuse an ID that was already given.
 - Never add modules "just in case". Fewer, better-fitting rules work better than many generic ones.

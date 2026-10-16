@@ -47,14 +47,16 @@ it starts.
 
 ## 5. Waiting on the PI
 
-Do not decide these yourself. The open pack is `reports/DECISION-PACK-{{date, with -2, -3 ... for a second or later pack that day}}.md`.
+Do not decide these yourself. Deferred decisions stay listed here, marked "deferred (R-NN)". The open pack is `reports/DECISION-PACK-{{date, with -2, -3 ... for a second or later pack that day}}.md`.
 
 | # | Decision requested | Blocks | Recommendation (not adopted until decided) |
 |---|---|---|---|
 
 ## 6. Owed
 
-List checks not yet run, reports not yet received, and messages sent without an acknowledgement.
+List checks not yet run, reports not yet received, messages sent without an acknowledgement, and
+anything setup could not write (for example, `.claude/settings.json` when the permission prompt was
+declined). Write "Nothing owed" only when nothing is.
 
 ## 7. Team, workspace and runtime resources
 

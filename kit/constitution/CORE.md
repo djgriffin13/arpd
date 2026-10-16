@@ -179,7 +179,9 @@ not show when a scientific choice was made.
 
 **No silent acceptance.** A recommendation stays a recommendation until the PI adopts it, or a
 standing authorization covers it. Decision packs give a recommended default, so "accept all" is easy.
-But nothing consequential is adopted because the PI has not replied.
+But nothing consequential is adopted because the PI has not replied. The PI may also defer a
+decision by ruling: it is recorded as "deferred by R-NN", stays in *Waiting on the PI*, and work that
+depends on it stays blocked.
 
 ### Authority profiles and standing authorizations
 
