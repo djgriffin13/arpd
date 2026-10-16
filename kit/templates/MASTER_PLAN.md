@@ -71,8 +71,8 @@ a sprint only by a recorded decision that names the requirement it serves and wh
 ## 7. Incidents and process lessons
 
 These are coordination or governance failures, as opposed to code bugs. Examples: a false "done", a
-lost instruction, a drifting construct, two agents writing one file, or a decision taken at the wrong
-tier. A rule follows only by PI ruling, and it cites the incident (`CLAUDE.md` §10).
+lost instruction, a drifting construct, two agents writing one file, or a consequential decision
+adopted without authority. A rule follows only by PI ruling, and it cites the incident (`CLAUDE.md` §10).
 
 | ID | Date | What happened | Effect | Rule proposed | Ruling |
 |---|---|---|---|---|---|

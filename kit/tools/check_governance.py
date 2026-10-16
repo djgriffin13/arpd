@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Governance checks for an ARPD project.
+r"""Governance checks for an ARPD project.
 
     python tools/check_governance.py
 
@@ -17,6 +17,8 @@ Exit codes: 0 PASS, 1 FAIL, 2 INCOMPLETE.
 The checks:
 
 1. The governing documents exist.
+   Charter adopted; templates filled: an unfilled {{...}} placeholder outside HTML comments in a
+   governing document is a FAIL; a charter still marked "Pending adoption" is PENDING.
 2. Intra-repository Markdown links resolve.
 3. Requirements:
    - states are valid;
@@ -25,13 +27,19 @@ The checks:
    - sources point to items that exist in PARADIGM-SPEC.md or DECISIONS.md.
 4. Plans: unique numbers, valid status.
 5. Closed sprint records:
-   - have a decision-tracking table;
+   - have a decision-tracking table, every row of which can be read (a row whose cell count does
+     not match the header is a FAIL, never silently skipped; "\|" is a literal pipe inside a cell);
+   - every row has a recognized route (routine / delegated / consult). A missing or unrecognized
+     route is a FAIL, unless the record is a legacy one with a "Tier" column (Tier C is read as the
+     consult route). A routine row that states a scientific consequence is a FAIL;
    - every consequential decision cites its authority: a standing authorization (SA-NN) for the
-     delegated route, a ruling (R-NN) for the consult route. One still awaiting a decision makes
-     the result INCOMPLETE (PENDING);
-   - none was authorized after adoption, unless it was ratified and recorded as an incident
-     (I-NN), which is ADVISORY. Legacy records using "Tier C" columns are read as the consult
-     route.
+     delegated route (a delegation the PI gave in a ruling is recorded as an SA citing that ruling),
+     a ruling (R-NN) for the consult route. Every SA-NN and R-NN cited must exist in DECISIONS.md.
+     One still awaiting a decision makes the result INCOMPLETE (PENDING);
+   - each consequential decision records whether it was authorized before adoption (first word
+     yes / before, no / after, or pending). Not recorded makes the result INCOMPLETE (MISSING).
+     Authorized after adoption is ADVISORY if ratified and recorded as an incident (I-NN), and a
+     FAIL otherwise.
 6. INDEX.md mentions every top-level entry (advisory).
 """
 import io
@@ -66,24 +74,58 @@ def md_files():
                 yield os.path.relpath(os.path.join(d, f), ROOT)
 
 
+MALFORMED = "__malformed__"
+
+
+def split_row(line):
+    """Cells of one Markdown table line. A backslash-escaped pipe is a literal pipe in a cell."""
+    s = line.strip()
+    if s.startswith("|"):
+        s = s[1:]
+    if s.endswith("|") and not s.endswith("\\|"):
+        s = s[:-1]
+    return [c.strip().replace("\\|", "|") for c in re.split(r"(?<!\\)\|", s)]
+
+
 def table_rows(text, header_startswith):
-    """Yield dict rows of the first Markdown table whose header starts with header_startswith."""
+    """Yield dict rows of the first Markdown table whose header starts with header_startswith.
+
+    A row whose cell count does not match the header is yielded as {MALFORMED: line}, so that the
+    caller reports it rather than silently dropping it.
+    """
     lines = text.splitlines()
     for i, line in enumerate(lines):
         if line.strip().startswith("|") and line.strip("| ").lower().startswith(header_startswith.lower()):
-            headers = [h.strip() for h in line.strip().strip("|").split("|")]
+            headers = split_row(line)
             for row in lines[i + 2:]:
                 if not row.strip().startswith("|"):
                     return
-                cells = [c.strip() for c in row.strip().strip("|").split("|")]
+                cells = split_row(row)
                 if len(cells) == len(headers):
                     yield dict(zip(headers, cells))
+                else:
+                    yield {MALFORMED: row.strip()}
             return
 
 
 def check_exists():
     missing = [f for f in GOVERNING if not os.path.exists(os.path.join(ROOT, f))]
     step("Governing documents exist", "FAIL" if missing else "PASS", ["missing: " + m for m in missing])
+
+
+def check_adoption():
+    unfilled = []
+    for f in GOVERNING:
+        if not os.path.exists(os.path.join(ROOT, f)):
+            continue  # reported by check_exists
+        text = re.sub(r"<!--.*?-->", "", read(f), flags=re.S)
+        for ph in sorted(set(re.findall(r"\{\{[^{}]*\}\}", text))):
+            unfilled.append("%s: unfilled placeholder %s" % (f, ph[:60]))
+    pending = (os.path.exists(os.path.join(ROOT, "CLAUDE.md"))
+               and "pending adoption" in read("CLAUDE.md").lower())
+    notes = unfilled + (["CLAUDE.md: the charter is pending adoption (no adoption ruling recorded yet)"]
+                        if pending else [])
+    step("Charter adopted; templates filled", "FAIL" if unfilled else ("PENDING" if pending else "PASS"), notes)
 
 
 def check_links():
@@ -120,6 +162,9 @@ def check_requirements():
     ids = spec_ids()
     problems = []
     for r in rows:
+        if MALFORMED in r:
+            problems.append("malformed row (cell count does not match the header): %s" % r[MALFORMED][:80])
+            continue
         rid, state = r.get("ID", ""), r.get("State", "")
         ev, src = r.get("Evidence", ""), r.get("Source", "")
         if not rid or "{{" in rid:
@@ -165,12 +210,57 @@ def _col(row, *prefixes):
     return ""
 
 
+def _has_col(row, prefix):
+    return any(key.lower().startswith(prefix.lower()) for key in row)
+
+
+def _clean(value):
+    """A cell value without Markdown emphasis (*, **, backticks) or surrounding whitespace."""
+    return re.sub(r"[*`]", "", value or "").strip()
+
+
+def _states_none(consequence):
+    """True if a 'scientific consequence' cell says there is none (none / a dash / empty)."""
+    c = _clean(consequence).lower()
+    return c in ("", "\u2014", "\u2013", "-", "n/a") or bool(re.match(r"^none\b", c))
+
+
+def _timing(value):
+    """Classify the 'authorized before adoption?' cell by its first word.
+
+    Returns 'timely' (yes / before), 'late' (no / after), 'pending', or None (not recorded, or not
+    readable). "none" and "not applicable" are not read as "no".
+    """
+    m = re.match(r"^\W*(yes|no|pending|before|after)\b", _clean(value), re.I)
+    if not m:
+        return None
+    return {"yes": "timely", "before": "timely", "no": "late", "after": "late"}.get(m.group(1).lower(), "pending")
+
+
+def decision_ids():
+    """SA-NN and R-NN entries that exist in DECISIONS.md: as a heading, or as a table row's first cell."""
+    if not os.path.exists(os.path.join(ROOT, "DECISIONS.md")):
+        return set()
+    found = set()
+    for line in read("DECISIONS.md").splitlines():
+        s = line.strip()
+        m = None
+        if s.startswith("#"):
+            m = re.match(r"^#+\s*[*`]*((?:SA|R)-\d+)\b", s)
+        elif s.startswith("|"):
+            m = re.match(r"^[*`\s]*((?:SA|R)-\d+)\b", split_row(s)[0])
+        if m:
+            found.add(m.group(1))
+    return found
+
+
 def check_sprints():
     d = os.path.join(ROOT, "reports", "sprints")
     if not os.path.isdir(d):
         step("Closed sprints: decision tracking and authorization", "PASS", ["no sprint records yet"])
         return
-    problems, pending, advisories = [], [], []
+    problems, missing, pending, advisories = [], [], [], []
+    known = decision_ids()
     for name in sorted(os.listdir(d)):
         if not name.endswith(".md"):
             continue
@@ -182,37 +272,71 @@ def check_sprints():
             problems.append("%s: closed without a decision-tracking table" % name)
             continue
         for r in rows:
-            rid = r.get("ID", "?")
-            route = _col(r, "Route").strip().lower()
-            tier = _col(r, "Tier").strip().upper()
-            authority = _col(r, "Authority", "Decided by")
-            timing_raw = _col(r, "Authorized before adoption", "Before or after commit")
-            timing = timing_raw.lower()
-            if route:
-                consequential = route.startswith("delegated") or route.startswith("consult")
-                needed = r"\bSA-\d+\b" if route.startswith("delegated") else r"\bR-\d+\b"
-            else:  # legacy format (Tier A/B/C)
+            if MALFORMED in r:
+                problems.append("%s: malformed row (cell count does not match the header): %s"
+                                % (name, r[MALFORMED][:80]))
+                continue
+            rid = _clean(r.get("ID", "")) or "?"
+            route = _clean(_col(r, "Route")).lower()
+            tier = _clean(_col(r, "Tier")).upper()
+            authority = _clean(_col(r, "Authority", "Decided by"))
+            timing_raw = _clean(_col(r, "Authorized before adoption", "Before or after commit"))
+            consequence = _col(r, "Scientific consequence")
+            route_word = re.match(r"^(routine|delegated|consult)\b", route)
+            if route_word:
+                route = route_word.group(1)
+                consequential = route in ("delegated", "consult")
+                needed = r"\bSA-\d+\b" if route == "delegated" else r"\bR-\d+\b"
+                if route == "routine" and not _states_none(consequence):
+                    problems.append("%s: %s: routine route but a scientific consequence is stated (%s)"
+                                    % (name, rid, _clean(consequence)[:60]))
+                    continue
+            elif _has_col(r, "Tier") and not _has_col(r, "Route"):  # legacy format (Tier A/B/C)
+                if not re.match(r"^[ABC]\b", tier):
+                    problems.append("%s: %s: tier missing or unrecognized ('%s')" % (name, rid, tier))
+                    continue
                 consequential = tier.startswith("C")
                 needed = r"\bR-\d+\b"
+            else:
+                problems.append("%s: %s: route missing or unrecognized ('%s')" % (name, rid, route))
+                continue
+            authority_pending = "pending" in authority.lower()
+            if not authority_pending:
+                for ref in re.findall(r"\b(?:SA|R)-\d+\b", authority):
+                    if ref not in known:
+                        problems.append("%s: %s cites %s, which does not exist in DECISIONS.md"
+                                        % (name, rid, ref))
             if not consequential:
                 continue
-            is_pending = "pending" in authority.lower() or "pending" in timing
-            has_authority = bool(re.search(needed, authority)) and "pending" not in authority.lower()
-            if is_pending and not has_authority:
+            when = _timing(timing_raw)
+            has_authority = bool(re.search(needed, authority)) and not authority_pending
+            if (authority_pending or when == "pending") and not has_authority:
                 pending.append("%s: %s awaiting the PI's decision" % (name, rid))
                 continue
             if not has_authority:
+                if route == "delegated" and re.search(r"\bR-\d+\b", authority):
+                    why = ("the delegated route requires a standing authorization (SA-NN); a delegation "
+                           "given in a ruling is recorded as an SA that cites the ruling (charter section 6)")
+                elif route == "consult" and re.search(r"\bSA-\d+\b", authority):
+                    why = "the consult route requires a ruling (R-NN), not a standing authorization"
+                else:
+                    why = "standing authorization (SA-NN)" if "SA" in needed else "ruling (R-NN)"
                 problems.append("%s: consequential decision %s adopted without the required authority (%s)"
-                                % (name, rid, "standing authorization" if "SA" in needed else "ruling"))
+                                % (name, rid, why))
                 continue
-            late = timing.startswith("no") or "after" in timing
-            if late:
+            if when == "pending":
+                pending.append("%s: %s authorization timing pending" % (name, rid))
+            elif when is None:
+                missing.append("%s: %s authorization timing not recorded ('%s')" % (name, rid, timing_raw))
+            elif when == "late":
                 if re.search(r"\bI-\d+\b", timing_raw + " " + authority):
                     advisories.append("%s: %s ratified after adoption (recorded incident)" % (name, rid))
                 else:
                     problems.append("%s: %s authorized after adoption, with no incident recorded" % (name, rid))
-    status = "FAIL" if problems else ("PENDING" if pending else ("ADVISORY" if advisories else "PASS"))
-    step("Closed sprints: decision tracking and authorization", status, problems + pending + advisories)
+    status = ("FAIL" if problems else "MISSING" if missing else "PENDING" if pending
+              else "ADVISORY" if advisories else "PASS")
+    step("Closed sprints: decision tracking and authorization", status,
+         problems + missing + pending + advisories)
 
 
 def check_index():
@@ -227,7 +351,7 @@ def check_index():
 
 
 def main():
-    for fn in (check_exists, check_links, check_requirements, check_plans, check_sprints, check_index):
+    for fn in (check_exists, check_adoption, check_links, check_requirements, check_plans, check_sprints, check_index):
         try:
             fn()
         except Exception as exc:  # report, never hide

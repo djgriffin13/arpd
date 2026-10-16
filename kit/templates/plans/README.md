@@ -44,7 +44,7 @@ authoritative for executing its own scope. Priorities and order of work live in 
 1. [ ] ...
 ## Files expected to change
 ## Decisions made during execution
-<decisions with their tier; discoveries with their category 1-6, filed as Backlogged unless 1-3>
+<decisions with their route (routine / delegated, citing SA-NN / consult, citing R-NN); discoveries with their category 1-6, filed as Backlogged unless 1-3>
 ## Review (filled at close)
 <what changed, tests and checks with commit, requirement states proposed, follow-ups, risks, anything not checked>
 ```

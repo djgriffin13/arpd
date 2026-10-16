@@ -26,7 +26,9 @@ Look specifically for:
 - silent data transformations;
 - unknowns treated as zero;
 - deviations from the specification "because it was easier";
-- consequential choices adopted without a ruling or a standing authorization that covers them;
+- consequential choices adopted without the authority their route requires: a standing
+  authorization (SA-NN) that covers them for the delegated route, a ruling (R-NN) for the consult
+  route;
 - contested assumptions presented as settled.
 
 **Verdict:** PASS, FAIL or INCOMPLETE (something could not be checked). Send work back **only** for a

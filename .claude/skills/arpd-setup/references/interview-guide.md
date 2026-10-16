@@ -10,11 +10,13 @@ found instead. The question wording below is a suggestion; adapt it to the PI. D
 
 1. **Detect the mode.**
    - Run `git status` and list the top level.
-   - If the repository contains only the kit (`kit/`, `.claude/skills/arpd-*`, `README.md`,
-     `QUICKSTART.md`), the mode is **fresh**.
-   - If the PI passed `import <path|url>` or `install <path>`, or if source code or prior
-     instruction files (`CLAUDE.md`, `AGENTS.md`, `.cursorrules`, `README` with design notes) are
-     present, follow `import-path.md`.
+   - If the repository contains only the kit (`kit/`, `.claude/skills/arpd-*`, `docs/`,
+     `evaluation/`, `examples/`, and the kit's own `README.md`, `QUICKSTART.md`, `CLAUDE.md` and
+     `AGENTS.md`), the mode is **fresh**. The kit's own files are not prior instructions.
+   - If the PI passed `import <path|url>` or `install <path>`, or if the project's own source code
+     or instruction files (`CLAUDE.md`, `AGENTS.md`, `.cursorrules`, `README` with design notes)
+     are present, follow `import-path.md`. A starter inside the kit (for example
+     `examples/march-1991/`) is an import.
 2. **Tell the PI in three sentences** what will happen:
    - "I'll ask about your science, then propose how to build it. About 30 minutes."
    - "Nothing is written until you approve a summary."
@@ -147,7 +149,8 @@ labels.
 5. **Practical limits.** Time, compute and cost limits per sprint, if any.
 6. "Should the team ever run while you're away?" [No. This can be turned on later in words.]
 
-Read SA-01 back in two or three sentences. Record the PI's reply verbatim as SA-01.
+Read SA-01 back in two or three sentences. Record the PI's reply verbatim as SA-01 (on import, the
+next free SA number: see `import-path.md`, *Numbering*).
 
 ## Phase 7: Constraints (about 2 minutes)
 
@@ -173,7 +176,7 @@ Present a **plain-language summary** of at most one screen:
 - the first milestone.
 
 Ask: "If this is right, please say so in your own words (for example 'Adopted' plus any changes).
-That sentence becomes ruling R-01."
+That sentence becomes ruling R-01" (on import: the inherited placeholder, or the next free R number).
 
 Record the reply **verbatim**. If the PI asks for changes, revise and read back again.
 

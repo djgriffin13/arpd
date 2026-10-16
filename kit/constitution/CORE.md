@@ -105,8 +105,8 @@ Breaking any of these is a defect, whether or not the tests pass.
 
 ## 5. How work flows
 
-1. **Read.** Read this file, `PARADIGM-SPEC.md`, `STATUS.md`, the current sprint record, and the files you
-   will touch.
+1. **Read.** Every session starts by reading this file, `PARADIGM-SPEC.md`, `STATUS.md` and the
+   current sprint record. Before changing anything, also read the files you will touch.
 2. **Plan.** Any change beyond a trivial edit gets a plan in `plans/NNN-slug.md`, using
    `plans/README.md`. Claim the number with `python tools/next_plan_number.py`. Every plan names:
    - the requirements it serves and the paradigm-spec items it touches;
@@ -158,8 +158,9 @@ Two questions decide how a choice is handled:
 
    New dependencies with licence or cost implications also count, as does anything irreversible.
    Ease of reversal does not make a scientific choice routine.
-2. **Has the PI already delegated authority over it?** Delegation happens through a standing
-   authorization (SA-NN) or a ruling (R-NN).
+2. **Has the PI already delegated authority over it?** Delegation is recorded only as a standing
+   authorization (SA-NN). The PI can create or change one in any message. If the PI delegates in a
+   ruling, the lead agent records that delegation as an SA that cites the ruling.
 
 Together these give **three routes**. They are alternatives, not successive approval stages.
 
@@ -167,13 +168,14 @@ Together these give **three routes**. They are alternatives, not successive appr
 |---|---|---|
 | **Routine** | No scientific consequence | Proceed. Report in aggregate at the sprint close-out. |
 | **Delegated** | Consequential, but inside a standing authorization's scope | Proceed within that scope. Record the decision with the authorization it used (SA-NN). Report it individually at the next checkpoint. |
-| **Consult** | Consequential and not covered by any authorization; or it would change the research objective, exceed agreed scope or resource limits, or settle a contested interpretation the PI has not delegated | Do not *adopt* it. Bring a decision to the PI (`reports/DECISION-PACK-<date>.md`) explaining the process, the options and their consequences, a recommendation, and the decision requested, in plain language. Unrelated work continues. |
+| **Consult** | Consequential and not covered by any authorization; or it would change the research objective, exceed agreed scope or resource limits, or settle a contested interpretation the PI has not delegated | Do not *adopt* it. Bring a decision to the PI (`reports/DECISION-PACK-<date>.md`; a second pack on the same day adds `-2`, and so on) explaining the process, the options and their consequences, a recommendation, and the decision requested, in plain language. Adopt it only after the PI's ruling (R-NN), and record the ruling with the decision. Unrelated work continues. |
 
 **Investigating is not adopting.** Where an authorization allows it, agents may implement and
 compare alternatives before anything is adopted. A contested assumption is never presented as
 settled before the required ruling. Each decision record states when the choice was **proposed**,
-**authorized** (R-NN or SA-NN) and **adopted** (with the version), using the decision record and the
-event log as well as git. A commit time alone does not show when a scientific choice was made.
+**authorized** (SA-NN for the delegated route, R-NN for the consult route) and **adopted** (with
+the version), using the decision record and the event log as well as git. A commit time alone does
+not show when a scientific choice was made.
 
 **No silent acceptance.** A recommendation stays a recommendation until the PI adopts it, or a
 standing authorization covers it. Decision packs give a recommended default, so "accept all" is easy.
@@ -198,13 +200,15 @@ The profile and its specifics are recorded as standing authorization SA-01 in `D
 - reporting cadence;
 - practical limits (time, compute, cost).
 
-The PI can add narrower authorizations (SA-02, ...) for specific work at any time, in their own
-words. **Standing authorizations persist across sessions until the PI changes them.**
+The PI can add narrower authorizations (SA-02, ...) for specific work, or change any authorization,
+at any time and in any message, in their own words. The lead agent records each one verbatim in
+`DECISIONS.md`; one given in a ruling cites that ruling. **Standing authorizations persist across
+sessions until the PI changes them.**
 
 **Defaults, not questions.** For routine and delegated choices, take the most defensible option,
 record it and keep going. The PI's attention is the scarcest resource on the project.
 
-**Always reserved to the PI** (never delegated by default):
+**Always reserved to the PI.** No standing authorization can delegate these:
 
 - amending governing documents;
 - accepting requirement validations;
@@ -260,10 +264,8 @@ Each requirement moves through these states. The evidence for each state is reco
   are glossed in plain words.
 - **Report what matters.** Researcher-facing reports focus on material decisions and exceptions.
   Routine coordination may stay out of the PI's attention, never out of the record.
-- **Decision packs.** Consult-route items go in `reports/DECISION-PACK-<date>.md`. Each says what
-  is being decided and why it matters scientifically, and gives the options, a recommendation, and
-  the decision requested. "Accept all" is a valid answer; silence is not. Unrelated work continues
-  meanwhile.
+- **Decision packs** carry consult-route items to the PI, in the form §6 describes. "Accept all" is
+  a valid answer; silence is not.
 - **Walkthroughs close milestones.** The PI uses the instrument for its purpose and records PASS,
   FAIL or NOT RUN per step (`reports/WALKTHROUGH.md`). Agents rehearse it first.
 
@@ -275,19 +277,25 @@ Each requirement moves through these states. The evidence for each state is reco
   who has nothing else to go on.
 - **Recovery when the lead's session is gone.** The next session the PI starts becomes the lead.
   Before doing anything else, it:
-  1. reads `STATUS.md` and notes the commit it names;
-  2. reconciles that commit with `git log` (commits since), `logs/events.jsonl` (events since) and
-     the open sprint record;
-  3. records any difference in a `Recovered:` line at the top of `STATUS.md`;
+  1. reads `STATUS.md` and notes the base commit it names (the last commit before that rewrite;
+     the rewrite itself is committed after it, so at least one later commit is expected);
+  2. runs `git log --oneline <base commit>..HEAD` and
+     `python tools/summarize_events.py --since <the time STATUS.md was last rewritten>`, and reads
+     the open sprint record. It never describes the history or the log from memory. Events since
+     may include sessions that did no work, such as ones that failed at once: say which sessions
+     did work;
+  3. records any difference in a `Recovered:` line at the top of `STATUS.md`, quoting the output of
+     both commands;
   4. logs a `resume` event.
 
   Where the record and the repository disagree, the repository wins. Unfinished work by a lost
   session is treated as unreviewed.
-- **Every session** starts by reading this file, `PARADIGM-SPEC.md`, `STATUS.md` and the current
-  sprint record.
 - **Event log.** Hooks record the events listed in `docs/EVENTS.md`, and only those. Agents record
-  questions, handoffs, interruptions, reviews, resumptions and decision packs with
-  `python tools/log_event.py`. The log cannot measure the PI's active time.
+  questions, handoffs, interruptions, reviews, resumptions, decision packs, and when each
+  consequential decision was proposed, authorized and adopted, with
+  `python tools/log_event.py`. The log cannot measure the PI's active time. `logs/` is not
+  committed, so at each sprint close the lead exports the sprint's events to
+  `reports/sprints/SPRINT-NN-events.jsonl` (`tools/summarize_events.py --export`) and commits it.
 
 ## 10. Learning
 

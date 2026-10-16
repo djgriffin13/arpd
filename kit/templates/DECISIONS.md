@@ -3,8 +3,10 @@
 **Governs:** the PI's direction and the project's recorded decisions (`CLAUDE.md` §3, §6). It holds
 three ledgers:
 
-- **Standing authorizations (SA-NN):** what the PI has delegated, and its scope. They persist across
-  sessions until the PI changes them.
+- **Standing authorizations (SA-NN):** what the PI has delegated, and its scope. This is the only
+  place delegation is recorded. The PI can create or change one in any message; a delegation given
+  in a ruling is recorded here as an SA that cites the ruling. They persist across sessions until
+  the PI changes them.
 - **Rulings (R-NN):** the PI's own words, recorded verbatim when given.
 - **Decisions (DEC-NN):** choices the project has made, each with its route and the authority it
   used.
@@ -37,6 +39,7 @@ Keep this list short, and order it by what each item unblocks. Remove an entry o
 
 > "{{The PI's words from the setup interview, adopting or adjusting the proposed profile}}"
 
+- **Given:** in the setup interview
 - **Profile:** Consult first / Bounded autonomy / Exploratory autonomy
 - **Purpose:**
 - **Scientific boundaries** (what agents may decide within):
@@ -49,6 +52,18 @@ Keep this list short, and order it by what each item unblocks. Remove an entry o
 - **Reporting cadence:**
 - **Practical limits:** time, compute, cost.
 - **In force until:** changed by the PI.
+
+<!-- Format for every later standing authorization (SA-02, ...), or a change to one:
+### SA-NN, YYYY-MM-DD: what it covers
+> "exact words"
+- **Given:** directly in session (id), or in ruling R-NN (an SA may cite the ruling that created it)
+- **Supersedes:** SA-NN, or "none"
+- **Scope:** the work, assumptions or choices it covers, and its boundaries
+- **Consult the PI when:** triggers that still go to the PI
+- **Reporting cadence:** and **Practical limits:** if they differ from SA-01
+- **In force until:** changed by the PI, or a stated end
+Never delegate what CLAUDE.md §6 reserves to the PI.
+-->
 
 ---
 
@@ -81,7 +96,7 @@ Keep this list short, and order it by what each item unblocks. Remove an entry o
 - **Route:** routine / delegated (SA-NN) / consult (R-NN)
 - **Status:** proposed / under investigation / adopted / superseded by DEC-NN / reopened by DEC-NN
 - **Proposed:** date, by (role), with a pointer to the event-log entry or report
-- **Authorized:** date and authority (SA-NN or R-NN), or "pending", or "ratified after adoption (incident I-NN)"
+- **Authorized:** date and authority (SA-NN for the delegated route, R-NN for the consult route), or "pending", or "ratified after adoption (incident I-NN)"
 - **Adopted:** date and version (commit or tag)
 - **Context:** what prompted it, in plain language
 - **Options considered:** each with its consequences

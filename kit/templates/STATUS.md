@@ -12,7 +12,14 @@ It is written for a successor who starts with an empty context and nothing else 
 after this session has died (`CLAUDE.md` §9). When this file and the repository disagree, the
 repository wins.
 
-**Last rewritten:** {{date, time}} by {{role, session}} at commit {{SHA}}
+**Last rewritten:** {{date and time in UTC, e.g. 2026-10-20T14:05Z}} by {{role, session}}. **Base
+commit:** {{SHA of the last commit before this rewrite}}. This rewrite is committed after it, so it
+cannot name its own commit.
+
+**If you are recovering** (the session that wrote this is gone): run
+`git log --oneline <base commit>..HEAD` and
+`python tools/summarize_events.py --since <the Last rewritten time>`, and quote their output in a
+`Recovered:` line at the top of this file (`CLAUDE.md` §9). Never describe the log from memory.
 
 ---
 
@@ -38,7 +45,7 @@ it starts.
 
 ## 5. Waiting on the PI
 
-Do not decide these yourself. The open pack is `reports/DECISION-PACK-{{date}}.md`.
+Do not decide these yourself. The open pack is `reports/DECISION-PACK-{{date, with -2, -3 ... for a second or later pack that day}}.md`.
 
 | # | Decision requested | Blocks | Recommendation (not adopted until decided) |
 |---|---|---|---|

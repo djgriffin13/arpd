@@ -55,7 +55,20 @@ def _record(payload):
         rec["detail"] = payload.get("trigger")
     elif event == "Notification":
         rec["detail"] = payload.get("notification_type")
+    elif event == "StopFailure":
+        rec["detail"] = _error_type(payload)
     return rec
+
+
+def _error_type(payload):
+    """The error type of a turn that ended in an error, if the payload names one; otherwise None."""
+    for key in ("error_type", "error", "reason", "stop_reason"):
+        val = payload.get(key)
+        if isinstance(val, dict):
+            val = val.get("type") or val.get("name")
+        if val:
+            return str(val)[:80]
+    return None
 
 
 def main():

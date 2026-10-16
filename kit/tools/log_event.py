@@ -7,6 +7,7 @@ Agents (and the PI) append manual events to logs/events.jsonl, for example:
     python tools/log_event.py handoff  --actor lead --note "STATUS.md rewritten before context reset"
     python tools/log_event.py review   --actor reviewer --ref plan-004 --result PASS
     python tools/log_event.py pi_time  --actor pi --minutes 25 --note "reviewed decision pack, 2 rulings"
+    python tools/log_event.py adopted  --actor lead --ref DEC-04 --note "authorized by R-03; commit abc1234"
 
 Event types and their meanings are listed in docs/EVENTS.md.
 """
@@ -18,8 +19,11 @@ import os
 
 TYPES = [
     "question",      # agent asks the PI something
-    "decision_pack", # Tier C escalation sent
-    "ruling",        # PI ruling recorded
+    "decision_pack", # consult-route decision sent to the PI
+    "ruling",        # PI ruling, or a standing authorization (SA-NN), recorded
+    "proposed",      # a consequential decision was proposed (--ref DEC-NN)
+    "authorized",    # it was authorized (--ref DEC-NN; --note names the SA-NN or R-NN)
+    "adopted",       # it was adopted (--ref DEC-NN; --note names the version or commit)
     "handoff",       # STATUS.md rewritten for a successor
     "resume",        # a session resumed from STATUS.md after a reset
     "interruption",  # work interrupted (by PI, error, limit, outage)

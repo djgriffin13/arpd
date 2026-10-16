@@ -82,14 +82,18 @@ Record coordination or governance failures, with the rule proposed, if any.
 
 ### 2.7 Resource use
 
-Taken from `logs/events.jsonl` and the tooling.
+Taken from `python tools/summarize_events.py --since <start> --until <close>` and the tooling.
+Events exported to `reports/sprints/SPRINT-NN-events.jsonl` (same command, with `--export`), and
+committed with this record.
 
 | Measure | Value | Source |
 |---|---|---|
-| Elapsed sprint time |  | log |
-| Autonomous elapsed time (no human prompt pending) |  | log |
-| Summed agent session time |  | log |
-| Human prompts / interactions |  | log |
+| Elapsed sprint time (includes idle time) |  | log |
+| Agent-working time, main sessions (prompt to end of turn; idle excluded) |  | log |
+| Waiting after a turn (upper bound, not PI active time) |  | log |
+| Subagent time (summed; may overlap) |  | log |
+| Main sessions / with a failed or aborted turn / subagent runs |  | log |
+| Prompt submissions (all sources, including test or scripted prompts) |  | log |
 | Active human time | *not measurable from logs; from the PI's time note if kept* | PI note |
 | Tokens / cost |  | tooling |
 

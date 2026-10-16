@@ -57,7 +57,7 @@ Read these before you start. They are in this skill's folder:
    - your recommendation;
    - the decision you are asking for.
 
-   Never rely on internal labels such as tier names or IDs without a gloss.
+   Never rely on internal labels such as route names or IDs without a gloss.
 8. **Nothing is final until the read-back.** Write files only after the PI adopts the summary in
    words (Phase 8). Before that, keep notes in your own working context.
 
@@ -83,7 +83,7 @@ Details for each phase are in `references/interview-guide.md`.
 
 - Run `python tools/check_governance.py`, and report its output verbatim. Fix any FAIL caused by
   generation. Explain any remaining INCOMPLETE.
-- Commit with a message naming ruling R-01.
+- Commit with a message naming the adoption ruling (R-01, unless the ledger was inherited).
 - **Do not push** unless the PI authorizes it.
 - Tell the PI three things:
   1. where to start (`START-HERE.md`);
@@ -96,6 +96,10 @@ Details for each phase are in `references/interview-guide.md`.
 - Never invent the PI's words. If a ruling is needed and the PI has not given one, the item stays
   pending.
 - Never overwrite existing project files or instructions. In import or install mode, follow
-  `references/import-path.md`.
+  `references/import-path.md`. The kit's own `README.md`, `QUICKSTART.md`, `CLAUDE.md` and
+  `AGENTS.md` are not project instructions: move them to `docs/arpd-kit/` in every mode that uses
+  this repository.
+- Never hard-code IDs on import. Continue the existing ledgers (next free DEC, R and SA), and never
+  reuse an ID that was already given.
 - Never add modules "just in case". Fewer, better-fitting rules work better than many generic ones.
 - Never start building the instrument during setup. Setup ends with sprint S01 planned, not started.

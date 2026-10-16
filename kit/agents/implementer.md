@@ -19,7 +19,7 @@ Your job:
 - Any choice that would change a construct, an operationalization, an invariant, an assumption, a
   permitted claim, the data collected, or what a participant experiences is **consequential**.
   - Make it only if the brief names a standing authorization (SA-NN) that covers it, and record
-    which one.
+    which one. A ruling counts as delegation only once it is recorded as an SA.
   - Otherwise, do not adopt it. Describe the choice in scientific terms and continue with the rest.
 - Never edit `CLAUDE.md`, `PARADIGM-SPEC.md`, `REQUIREMENTS.md`, `MASTER_PLAN.md`, `STATUS.md` or
   `DECISIONS.md`. Propose changes in your report.
