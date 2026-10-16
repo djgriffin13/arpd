@@ -89,10 +89,11 @@ committed with this record.
 | Measure | Value | Source |
 |---|---|---|
 | Elapsed sprint time (includes idle time) |  | log |
-| Agent-working time, main sessions (prompt to end of turn; idle excluded) |  | log |
+| Agent-working time, main sessions (prompt to end of turn; summed over sessions; idle excluded) |  | log |
 | Waiting after a turn (upper bound, not PI active time) |  | log |
 | Subagent time (summed; may overlap) |  | log |
-| Main sessions / with a failed or aborted turn / subagent runs |  | log |
+| Main sessions / subagent runs |  | log |
+| Turns interrupted or ended without Stop |  | log |
 | Prompt submissions (all sources, including test or scripted prompts) |  | log |
 | Active human time | *not measurable from logs; from the PI's time note if kept* | PI note |
 | Tokens / cost |  | tooling |

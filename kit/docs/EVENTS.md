@@ -45,7 +45,7 @@ them with the sprint record and git.
 
 | Measure | From the log? |
 |---|---|
-| Elapsed time (includes idle time and gaps between sessions); agent-working time (each prompt to the end of its turn: `Stop`, `StopFailure` or `SessionEnd`, added up, with idle time excluded); summed subagent time; sessions with a failed or aborted turn; prompt submissions (any source); compactions | **Yes** (`tools/summarize_events.py`) |
+| Elapsed time (includes idle time and gaps between sessions); agent-working time (each prompt to the end of its turn: `Stop`, `StopFailure` or `SessionEnd`, summed over sessions, so it can exceed elapsed time when sessions overlap; idle time excluded; a turn interrupted by a new prompt is closed at its last event); summed subagent time; turns interrupted or ended without a `Stop`; prompt submissions (any source); compactions; per-session activity (`--sessions`) | **Yes** (`tools/summarize_events.py`) |
 | Time the team waited for the PI (`Stop` to the next prompt in the same session) | **Upper bound only.** The PI may have been away or doing other work. |
 | Whether a prompt came from the PI | **No.** Prompt submissions count every source, including test or scripted prompts. |
 | The PI's active time: thinking, reading, reviewing | **No.** Use the PI's `pi_time` entries and, in studies, coded screen recordings. |
@@ -61,13 +61,19 @@ At sprint close, the lead exports the sprint's window and commits it with the sp
 
     python tools/summarize_events.py --since <sprint start> --until <close> --export reports/sprints/SPRINT-NN-events.jsonl
 
-The export holds the raw log lines in the window, unchanged. It never overwrites an existing file.
+The export holds the raw log lines in the window, unchanged. It never overwrites an existing file,
+and an empty window writes nothing.
 The same command prints the measures for the sprint record's resource-use table (§2.7). Events
 outside any exported window stay only in the local, uncommitted log.
 
 ## Recovery after a lost session
 
 The recovering lead runs `python tools/summarize_events.py --since <the time STATUS.md was last
-rewritten>` and quotes its output in the `Recovered:` line of `STATUS.md` (`CLAUDE.md` §9). It never
-describes the log from memory. The session counts show sessions that did no work, such as ones whose
-only turn failed at once.
+rewritten> --sessions` and quotes its output in the `Recovered:` line of `STATUS.md` (`CLAUDE.md`
+§9). It never describes the log from memory. The `--sessions` table has one line per main session:
+start, end, prompts, tool calls, subagents, turns interrupted or ended without a `Stop`, and whether
+the session did work (at least one tool call). Sessions that failed at once show "no".
+
+If `logs/` is absent (a fresh clone, or another machine), the lead says so and runs the same command
+with `--log` pointing at the last exported `reports/sprints/SPRINT-NN-events.jsonl`, together with
+`git log`. Events after that export cannot be recovered.

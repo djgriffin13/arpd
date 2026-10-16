@@ -280,10 +280,10 @@ Each requirement moves through these states. The evidence for each state is reco
   1. reads `STATUS.md` and notes the base commit it names (the last commit before that rewrite;
      the rewrite itself is committed after it, so at least one later commit is expected);
   2. runs `git log --oneline <base commit>..HEAD` and
-     `python tools/summarize_events.py --since <the time STATUS.md was last rewritten>`, and reads
-     the open sprint record. It never describes the history or the log from memory. Events since
-     may include sessions that did no work, such as ones that failed at once: say which sessions
-     did work;
+     `python tools/summarize_events.py --since <the time STATUS.md was last rewritten> --sessions`
+     (which shows which sessions did work), and reads the open sprint record. It never describes the
+     history or the log from memory. If `logs/` is absent (a fresh clone or another machine), it
+     says so and uses the last exported sprint events file instead;
   3. records any difference in a `Recovered:` line at the top of `STATUS.md`, quoting the output of
      both commands;
   4. logs a `resume` event.

@@ -17,8 +17,13 @@ Exit codes: 0 PASS, 1 FAIL, 2 INCOMPLETE.
 The checks:
 
 1. The governing documents exist.
-   Charter adopted; templates filled: an unfilled {{...}} placeholder outside HTML comments in a
-   governing document is a FAIL; a charter still marked "Pending adoption" is PENDING.
+   Charter adopted; templates filled:
+   - an unfilled {{...}} placeholder in a governing document is a FAIL (placeholders inside HTML
+     comments, fenced code blocks and inline code are ignored);
+   - CLAUDE.md's Version line decides adoption: it must name an adoption ruling (R-NN) that exists
+     in DECISIONS.md and is not pending. Pending or awaiting adoption, or a pending or unrecorded
+     ruling, is PENDING; no Version line is MISSING;
+   - once adopted, no standing authorization (authority profile) in DECISIONS.md is ADVISORY.
 2. Intra-repository Markdown links resolve.
 3. Requirements:
    - states are valid;
@@ -34,12 +39,17 @@ The checks:
      consult route). A routine row that states a scientific consequence is a FAIL;
    - every consequential decision cites its authority: a standing authorization (SA-NN) for the
      delegated route (a delegation the PI gave in a ruling is recorded as an SA citing that ruling),
-     a ruling (R-NN) for the consult route. Every SA-NN and R-NN cited must exist in DECISIONS.md.
+     a ruling (R-NN) for the consult route. Every SA-NN and R-NN cited must exist in DECISIONS.md,
+     outside HTML comments; one whose entry is still pending counts as pending, not as authority.
      One still awaiting a decision makes the result INCOMPLETE (PENDING);
    - each consequential decision records whether it was authorized before adoption (first word
      yes / before, no / after, or pending). Not recorded makes the result INCOMPLETE (MISSING).
      Authorized after adoption is ADVISORY if ratified and recorded as an incident (I-NN), and a
-     FAIL otherwise.
+     FAIL otherwise;
+   - a sprint row is a snapshot; DECISIONS.md is authoritative. For a row that is pending or late,
+     the decision's own entry (DEC-NN, its Authorized line) is consulted: authority given before
+     adoption makes it PASS; ratification after adoption with an incident (I-NN) makes it ADVISORY;
+     otherwise the row's status stands.
 6. INDEX.md mentions every top-level entry (advisory).
 """
 import io
@@ -113,19 +123,55 @@ def check_exists():
     step("Governing documents exist", "FAIL" if missing else "PASS", ["missing: " + m for m in missing])
 
 
+def _strip_non_text(text):
+    """Text without HTML comments, fenced code blocks or inline code."""
+    text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+    text = re.sub(r"^(```|~~~).*?^\1[^\n]*$", "", text, flags=re.S | re.M)
+    return re.sub(r"`[^`\n]*`", "", text)
+
+
+def _version_status(known, pending_ids):
+    """(status, note) for CLAUDE.md's Version line: PASS, PENDING or MISSING."""
+    text = re.sub(r"<!--.*?-->", "", read("CLAUDE.md"), flags=re.S)
+    text = re.sub(r"^(```|~~~).*?^\1[^\n]*$", "", text, flags=re.S | re.M)
+    m = re.search(r"^[ \t]*(?:[-*][ \t]+)?\**Version\b:?\**:?(.*)$", text, flags=re.M | re.I)
+    if not m:
+        return "MISSING", "CLAUDE.md: no Version line, so adoption cannot be checked"
+    line = m.group(1)
+    sentences = re.split(r"(?<=[.;])\s+", line)
+    chosen = next((x for x in sentences if re.search(r"adopt|\bR-\d+\b", x, re.I)), line)
+    if re.search(r"\b(pending|awaiting|not yet adopted|proposal)\b", chosen, re.I):
+        return "PENDING", "CLAUDE.md: the charter is not yet adopted (%s)" % _clean(chosen)[:80]
+    refs = re.findall(r"\bR-\d+\b", chosen)
+    if any(r in known for r in refs):
+        return "PASS", None
+    if refs:
+        return "PENDING", ("CLAUDE.md: adoption ruling %s is %s in DECISIONS.md"
+                           % (refs[0], "still pending" if refs[0] in pending_ids else "not recorded"))
+    return "PENDING", "CLAUDE.md: the Version line names no adoption ruling (R-NN)"
+
+
 def check_adoption():
     unfilled = []
     for f in GOVERNING:
         if not os.path.exists(os.path.join(ROOT, f)):
             continue  # reported by check_exists
-        text = re.sub(r"<!--.*?-->", "", read(f), flags=re.S)
-        for ph in sorted(set(re.findall(r"\{\{[^{}]*\}\}", text))):
+        for ph in sorted(set(re.findall(r"\{\{[^{}]*\}\}", _strip_non_text(read(f))))):
             unfilled.append("%s: unfilled placeholder %s" % (f, ph[:60]))
-    pending = (os.path.exists(os.path.join(ROOT, "CLAUDE.md"))
-               and "pending adoption" in read("CLAUDE.md").lower())
-    notes = unfilled + (["CLAUDE.md: the charter is pending adoption (no adoption ruling recorded yet)"]
-                        if pending else [])
-    step("Charter adopted; templates filled", "FAIL" if unfilled else ("PENDING" if pending else "PASS"), notes)
+    notes = list(unfilled)
+    status = "FAIL" if unfilled else "PASS"
+    if os.path.exists(os.path.join(ROOT, "CLAUDE.md")):
+        known, pending_ids, _ = decision_index()
+        vstatus, note = _version_status(known, pending_ids)
+        if note:
+            notes.append(note)
+        if status == "PASS":
+            status = vstatus
+        if vstatus == "PASS" and not any(k.startswith("SA-") for k in known):
+            notes.append("DECISIONS.md: no standing authorization (authority profile) recorded")
+            if status == "PASS":
+                status = "ADVISORY"
+    step("Charter adopted; templates filled", status, notes)
 
 
 def check_links():
@@ -237,21 +283,72 @@ def _timing(value):
     return {"yes": "timely", "before": "timely", "no": "late", "after": "late"}.get(m.group(1).lower(), "pending")
 
 
-def decision_ids():
-    """SA-NN and R-NN entries that exist in DECISIONS.md: as a heading, or as a table row's first cell."""
+def decision_index():
+    """What DECISIONS.md records, outside HTML comments.
+
+    Returns (known, pending_ids, sections):
+    - known: SA-NN and R-NN entries that exist and are not pending (a heading, or a table row's first
+      cell). A heading containing "(pending", a section whose Given line says pending, or a table row
+      mentioning "pending" is pending;
+    - pending_ids: SA-NN and R-NN entries that exist but are still pending;
+    - sections: the text of every SA-NN, R-NN and DEC-NN section, by ID.
+    """
     if not os.path.exists(os.path.join(ROOT, "DECISIONS.md")):
-        return set()
-    found = set()
-    for line in read("DECISIONS.md").splitlines():
+        return set(), set(), {}
+    text = re.sub(r"<!--.*?-->", "", read("DECISIONS.md"), flags=re.S)
+    sections, headings, current = {}, {}, None
+    table_pending = {}
+    for line in text.splitlines():
         s = line.strip()
-        m = None
         if s.startswith("#"):
-            m = re.match(r"^#+\s*[*`]*((?:SA|R)-\d+)\b", s)
-        elif s.startswith("|"):
+            m = re.match(r"^#+\s*[*`]*((?:SA|R|DEC)-\d+)\b", s)
+            current = m.group(1) if m else None
+            if current:
+                headings[current] = s
+                sections[current] = ""
+            continue
+        if current:
+            sections[current] += line + "\n"
+        if s.startswith("|"):
             m = re.match(r"^[*`\s]*((?:SA|R)-\d+)\b", split_row(s)[0])
-        if m:
-            found.add(m.group(1))
-    return found
+            if m:
+                table_pending[m.group(1)] = table_pending.get(m.group(1), False) or "pending" in s.lower()
+    known, pending_ids = set(), set()
+    for ident, head in headings.items():
+        if ident.startswith("DEC-"):
+            continue
+        given = re.search(r"\*\*Given:\*\*\s*(.*)", sections[ident])
+        if "(pending" in head.lower() or (given and re.match(r"^\W*pending\b", given.group(1), re.I)):
+            pending_ids.add(ident)
+        else:
+            known.add(ident)
+    for ident, is_pending in table_pending.items():
+        if ident in headings:
+            continue
+        (pending_ids if is_pending else known).add(ident)
+    return known, pending_ids, sections
+
+
+def _reconcile(rid, needed, known, sections):
+    """The decision's own entry in DECISIONS.md, which outranks the sprint row's snapshot.
+
+    Returns "PASS" (authorized before adoption), "ADVISORY" (ratified after adoption, with an
+    incident) or None (the entry does not settle it).
+    """
+    body = sections.get(rid)
+    if not body:
+        return None
+    m = re.search(r"^\s*-\s*\*\*Authorized:\*\*(.*?)(?=^\s*-\s*\*\*|\Z)", body, flags=re.S | re.M)
+    if not m:
+        return None
+    auth = " ".join(m.group(1).split())
+    if not [x for x in re.findall(needed, auth) if x in known]:
+        return None
+    if re.search(r"ratifi\w*\s+after\s+adoption|after\s+adoption", auth, re.I):
+        return "ADVISORY" if re.search(r"\bI-\d+\b", auth) else None
+    if re.search(r"\bpending\b", auth, re.I):
+        return None
+    return "PASS"
 
 
 def check_sprints():
@@ -260,7 +357,7 @@ def check_sprints():
         step("Closed sprints: decision tracking and authorization", "PASS", ["no sprint records yet"])
         return
     problems, missing, pending, advisories = [], [], [], []
-    known = decision_ids()
+    known, pending_ids, sections = decision_index()
     for name in sorted(os.listdir(d)):
         if not name.endswith(".md"):
             continue
@@ -301,19 +398,23 @@ def check_sprints():
                 problems.append("%s: %s: route missing or unrecognized ('%s')" % (name, rid, route))
                 continue
             authority_pending = "pending" in authority.lower()
+            refs = re.findall(r"\b(?:SA|R)-\d+\b", authority)
             if not authority_pending:
-                for ref in re.findall(r"\b(?:SA|R)-\d+\b", authority):
-                    if ref not in known:
+                for ref in refs:
+                    if ref not in known and ref not in pending_ids:
                         problems.append("%s: %s cites %s, which does not exist in DECISIONS.md"
                                         % (name, rid, ref))
             if not consequential:
                 continue
             when = _timing(timing_raw)
-            has_authority = bool(re.search(needed, authority)) and not authority_pending
-            if (authority_pending or when == "pending") and not has_authority:
-                pending.append("%s: %s awaiting the PI's decision" % (name, rid))
-                continue
-            if not has_authority:
+            usable = [x for x in refs if re.match(needed, x) and x in known]
+            waiting = [x for x in refs if re.match(needed, x) and x in pending_ids]
+            has_authority = bool(usable) and not authority_pending
+            if (authority_pending or when == "pending" or waiting) and not has_authority:
+                kind, msg = "PENDING", "%s: %s awaiting the PI's decision" % (name, rid)
+                if waiting and not authority_pending:
+                    msg += " (cites %s, which is still pending in DECISIONS.md)" % waiting[0]
+            elif not has_authority:
                 if route == "delegated" and re.search(r"\bR-\d+\b", authority):
                     why = ("the delegated route requires a standing authorization (SA-NN); a delegation "
                            "given in a ruling is recorded as an SA that cites the ruling (charter section 6)")
@@ -324,15 +425,25 @@ def check_sprints():
                 problems.append("%s: consequential decision %s adopted without the required authority (%s)"
                                 % (name, rid, why))
                 continue
-            if when == "pending":
-                pending.append("%s: %s authorization timing pending" % (name, rid))
+            elif when == "pending":
+                kind, msg = "PENDING", "%s: %s authorization timing pending" % (name, rid)
             elif when is None:
                 missing.append("%s: %s authorization timing not recorded ('%s')" % (name, rid, timing_raw))
+                continue
             elif when == "late":
                 if re.search(r"\bI-\d+\b", timing_raw + " " + authority):
-                    advisories.append("%s: %s ratified after adoption (recorded incident)" % (name, rid))
+                    kind, msg = "ADVISORY", "%s: %s ratified after adoption (recorded incident)" % (name, rid)
                 else:
-                    problems.append("%s: %s authorized after adoption, with no incident recorded" % (name, rid))
+                    kind, msg = "FAIL", "%s: %s authorized after adoption, with no incident recorded" % (name, rid)
+            else:
+                continue  # authorized before adoption
+            settled = _reconcile(rid, needed, known, sections)
+            if settled == "PASS":
+                continue
+            if settled == "ADVISORY":
+                kind, msg = "ADVISORY", ("%s: %s ratified after adoption (recorded incident; per its entry in "
+                                         "DECISIONS.md)" % (name, rid))
+            {"PENDING": pending, "ADVISORY": advisories, "FAIL": problems}[kind].append(msg)
     status = ("FAIL" if problems else "MISSING" if missing else "PENDING" if pending
               else "ADVISORY" if advisories else "PASS")
     step("Closed sprints: decision tracking and authorization", status,
