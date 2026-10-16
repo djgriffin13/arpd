@@ -48,7 +48,7 @@ another, and never deletes output it did not create.
   - is the **only writer** of `STATUS.md`, `MASTER_PLAN.md` and requirement states;
   - records rulings;
   - writes the sprint record;
-  - brings Tier C decisions to the PI;
+  - brings consult-route decisions to the PI;
   - does not review its own work;
   - does not mark its own plans Verified.
 - **Implementer:** works one plan in its own scope. It runs targeted checks only, reports with

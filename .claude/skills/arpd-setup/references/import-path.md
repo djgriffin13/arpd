@@ -66,7 +66,10 @@ documents):
 
 - **keep** its records: rulings, decisions, sprint records;
 - **add** the new PI as the PI from now on, with a new ruling R-NN that adopts the inherited charter
-  and specification, with any changes;
+  and specification, with any changes, and a new standing authorization (SA-NN) for the new PI's
+  authority profile;
+- **inherited pending decisions:** list them for the new PI in plain language. They may be decided
+  now, delegated, or left pending. They block only work that depends on them;
 - **first sprint:** run the inherited checks and confirm they pass. Record the result in sprint
   S01 as the inherited baseline;
 - the new PI's extension gets new spec items, and its own checks in the extension-evidence slot;

@@ -40,7 +40,7 @@ it starts.
 
 Do not decide these yourself. The open pack is `reports/DECISION-PACK-{{date}}.md`.
 
-| # | Item | Blocks | Default if silent |
+| # | Decision requested | Blocks | Recommendation (not adopted until decided) |
 |---|---|---|---|
 
 ## 6. Owed

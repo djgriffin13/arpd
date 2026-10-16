@@ -53,14 +53,18 @@ the scope-change log.
 
 ### 2.3 Decision tracking
 
-Every decision taken in this sprint is listed here, at every tier, with its scientific consequence.
+Every decision taken in this sprint is listed here, with its scientific consequence and the
+authority it used (`CLAUDE.md` §6).
 
-| ID | Decision | Tier (A/B/C) | Scientific consequence, or "none" | Decided by (PI ruling R-NN / lead agent / implementer) | Before or after commit? | Reversible? | Where recorded |
+| ID | Decision | Scientific consequence, or "none" | Route (routine / delegated / consult) | Authority (SA-NN / R-NN / pending / none) | Authorized before adoption? (yes / pending / no: ratified, I-NN) | Reversible? | Where recorded |
 |---|---|---|---|---|---|---|---|
 
-- **Tier A** decisions are listed in summary, grouped.
-- **Tier B** decisions are listed individually and marked PROVISIONAL until the PI accepts them.
-- **Tier C** decisions must show a PI ruling taken *before* the commitment.
+- **Routine decisions** are listed together in one row ("routine, in aggregate").
+- **Delegated decisions** are listed individually, with the standing authorization they used.
+- **Consult decisions** show the ruling that authorized them. If they are still pending, they appear
+  in "Waiting on the PI".
+- **A consequential choice adopted before it was authorized** is an incident. Later ratification is
+  recorded as ratification, never as prior authorization.
 
 ### 2.4 Verification and review
 

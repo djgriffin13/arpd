@@ -1,36 +1,54 @@
-# DECISIONS.md: rulings and decisions
+# DECISIONS.md: authorizations, rulings and decisions
 
-**Governs:** the PI's direction and the project's recorded decisions (`CLAUDE.md` §2, §3).
+**Governs:** the PI's direction and the project's recorded decisions (`CLAUDE.md` §3, §6). It holds
+three ledgers:
 
-This file has two ledgers:
-
-- **Rulings (R-NN)** are the PI's own words, recorded verbatim the moment they are given. Only rulings
-  authorize.
-- **Decisions (DEC-NN)** are choices the project has made: proposed by an agent and accepted by a
-  ruling, or taken under Tier B and marked PROVISIONAL until the PI reviews them.
+- **Standing authorizations (SA-NN):** what the PI has delegated, and its scope. They persist across
+  sessions until the PI changes them.
+- **Rulings (R-NN):** the PI's own words, recorded verbatim when given.
+- **Decisions (DEC-NN):** choices the project has made, each with its route and the authority it
+  used.
 
 **Rules**
 
-- Rulings are quoted exactly, typos included. The lead agent's reading of a ruling goes on a separate
-  line and ranks below the quote.
-- A relayed ruling is recorded as *relayed*. It binds only once the PI confirms it directly.
-- Nothing in either ledger is ever edited after acceptance. A change is a new entry that supersedes
-  the old one, and the old one keeps its text.
-- Merging code is not accepting the decisions it depends on.
+- Rulings are quoted exactly. The lead agent's reading of a ruling goes on a separate line.
+- A message relayed by another agent binds only once the PI confirms it directly.
+- Nothing is edited after adoption. A change is a new entry that supersedes or reopens the old one,
+  and the old one keeps its text.
+- Every consequential decision records when it was **proposed**, **authorized** and **adopted**. The
+  evidence for each date is the decision record and the event log, with git commits as supporting
+  evidence. A commit time alone does not establish when a scientific choice was made.
+- Authorization given *after* adoption is recorded as ratification, never as prior authorization.
 
 ---
 
 ## Waiting on the PI
 
-Keep this list short and ordered by what each item unblocks. Remove entries when they are ruled on.
+Keep this list short, and order it by what each item unblocks. Remove an entry once it is decided.
 
-| # | Item | Pack | Blocks | Default if silent |
+| # | Decision requested (plain language) | Pack | Blocks | Recommendation |
 |---|---|---|---|---|
 
-## Provisional decisions awaiting review (Tier B)
+---
 
-| ID | Decision | Taken by, on | Easy to reverse? | PI review |
-|---|---|---|---|---|
+## Standing authorizations
+
+### SA-01, {{DATE}}: authority profile for this project
+
+> "{{The PI's words from the setup interview, adopting or adjusting the proposed profile}}"
+
+- **Profile:** Consult first / Bounded autonomy / Exploratory autonomy
+- **Purpose:**
+- **Scientific boundaries** (what agents may decide within):
+- **Permitted assumption changes:**
+- **Consult the PI when:**
+  - the research objective would change;
+  - work would exceed the agreed scope or resource limits;
+  - a contested interpretation would be settled;
+  - {{project-specific triggers}}.
+- **Reporting cadence:**
+- **Practical limits:** time, compute, cost.
+- **In force until:** changed by the PI.
 
 ---
 
@@ -59,12 +77,15 @@ Keep this list short and ordered by what each item unblocks. Remove entries when
 
 <!-- Format:
 ### DEC-NN: title
-- **State:** Proposed / Accepted (R-NN) / PROVISIONAL (Tier B) / Superseded by DEC-NN
-- **Tier:** A / B / C
+- **Scientific consequence:** what this changes about what the instrument measures, manipulates or licenses, or "none"
+- **Route:** routine / delegated (SA-NN) / consult (R-NN)
+- **Status:** proposed / under investigation / adopted / superseded by DEC-NN / reopened by DEC-NN
+- **Proposed:** date, by (role), with a pointer to the event-log entry or report
+- **Authorized:** date and authority (SA-NN or R-NN), or "pending", or "ratified after adoption (incident I-NN)"
+- **Adopted:** date and version (commit or tag)
 - **Context:** what prompted it, in plain language
 - **Options considered:** each with its consequences
 - **Decision:**
-- **Scientific consequence:** what this changes about what the instrument measures, manipulates or licenses, or "none"
-- **Reversibility:** how hard to undo
+- **Reversibility:**
 - **Evidence:**
 -->

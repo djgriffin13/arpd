@@ -26,10 +26,12 @@ The checks:
 4. Plans: unique numbers, valid status.
 5. Closed sprint records:
    - have a decision-tracking table;
-   - every Tier C decision cites a ruling (one still awaiting a ruling makes the result
-     INCOMPLETE);
-   - none was ruled after the commitment, unless it was ratified and recorded as an incident
-     (I-NN), which is ADVISORY.
+   - every consequential decision cites its authority: a standing authorization (SA-NN) for the
+     delegated route, a ruling (R-NN) for the consult route. One still awaiting a decision makes
+     the result INCOMPLETE (PENDING);
+   - none was authorized after adoption, unless it was ratified and recorded as an incident
+     (I-NN), which is ADVISORY. Legacy records using "Tier C" columns are read as the consult
+     route.
 6. INDEX.md mentions every top-level entry (advisory).
 """
 import io
@@ -154,10 +156,19 @@ def check_plans():
     step("Plans: unique numbers, valid status", "FAIL" if problems else "PASS", problems)
 
 
+def _col(row, *prefixes):
+    """Value of the first column whose header starts with any of the given prefixes."""
+    for key, val in row.items():
+        for p in prefixes:
+            if key.lower().startswith(p.lower()):
+                return val
+    return ""
+
+
 def check_sprints():
     d = os.path.join(ROOT, "reports", "sprints")
     if not os.path.isdir(d):
-        step("Sprint records", "PASS", ["no sprint records yet"])
+        step("Closed sprints: decision tracking and authorization", "PASS", ["no sprint records yet"])
         return
     problems, pending, advisories = [], [], []
     for name in sorted(os.listdir(d)):
@@ -171,24 +182,37 @@ def check_sprints():
             problems.append("%s: closed without a decision-tracking table" % name)
             continue
         for r in rows:
-            tier = r.get("Tier (A/B/C)", "")
-            by = r.get("Decided by (PI ruling R-NN / lead agent / implementer)", "")
-            when = r.get("Before or after commit?", "").lower()
-            if not tier.strip().upper().startswith("C"):
+            rid = r.get("ID", "?")
+            route = _col(r, "Route").strip().lower()
+            tier = _col(r, "Tier").strip().upper()
+            authority = _col(r, "Authority", "Decided by")
+            timing_raw = _col(r, "Authorized before adoption", "Before or after commit")
+            timing = timing_raw.lower()
+            if route:
+                consequential = route.startswith("delegated") or route.startswith("consult")
+                needed = r"\bSA-\d+\b" if route.startswith("delegated") else r"\bR-\d+\b"
+            else:  # legacy format (Tier A/B/C)
+                consequential = tier.startswith("C")
+                needed = r"\bR-\d+\b"
+            if not consequential:
                 continue
-            rid = r.get("ID")
-            ruled = re.search(r"R-\d+", by) and "pending" not in by.lower()
-            if not ruled and "pending" in by.lower():
-                pending.append("%s: Tier C decision %s awaiting the PI's ruling" % (name, rid))
-            elif not ruled:
-                problems.append("%s: Tier C decision %s without a ruling" % (name, rid))
-            elif "after" in when:
-                if re.search(r"I-\d+", when + " " + by):
-                    advisories.append("%s: Tier C decision %s ratified after commitment (recorded incident)" % (name, rid))
+            is_pending = "pending" in authority.lower() or "pending" in timing
+            has_authority = bool(re.search(needed, authority)) and "pending" not in authority.lower()
+            if is_pending and not has_authority:
+                pending.append("%s: %s awaiting the PI's decision" % (name, rid))
+                continue
+            if not has_authority:
+                problems.append("%s: consequential decision %s adopted without the required authority (%s)"
+                                % (name, rid, "standing authorization" if "SA" in needed else "ruling"))
+                continue
+            late = timing.startswith("no") or "after" in timing
+            if late:
+                if re.search(r"\bI-\d+\b", timing_raw + " " + authority):
+                    advisories.append("%s: %s ratified after adoption (recorded incident)" % (name, rid))
                 else:
-                    problems.append("%s: Tier C decision %s ruled after commitment, with no incident recorded" % (name, rid))
+                    problems.append("%s: %s authorized after adoption, with no incident recorded" % (name, rid))
     status = "FAIL" if problems else ("PENDING" if pending else ("ADVISORY" if advisories else "PASS"))
-    step("Closed sprints: decision tracking and Tier C authorization", status, problems + pending + advisories)
+    step("Closed sprints: decision tracking and authorization", status, problems + pending + advisories)
 
 
 def check_index():

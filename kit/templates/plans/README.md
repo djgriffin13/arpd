@@ -7,7 +7,8 @@ authoritative for executing its own scope. Priorities and order of work live in 
   script scans every branch, so parallel work never collides.
 - **Status:** Proposed → Approved → Active → Complete.
 - **Approval:**
-  - A plan that touches the science (`CLAUDE.md` §6 Tier C) needs the PI.
+  - A plan that makes a consequential choice (`CLAUDE.md` §6) needs the PI, unless a standing
+    authorization covers it.
   - Other plans are approved by the lead agent within the PI's standing direction, and the approval
     is recorded in the header.
 - **Completion:** only the lead agent sets Complete, after the plan's acceptance criteria have

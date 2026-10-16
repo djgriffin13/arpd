@@ -5,7 +5,8 @@
 
 - The lead agent proposes changes.
 - A change that affects a scientific invariant, the data that are collected, or what a participant
-  experiences is Tier C, and needs the PI's ruling.
+  experiences is consequential (charter §6). It needs the PI's ruling, unless a standing
+  authorization covers it.
 - Other design changes are recorded as decisions in `DECISIONS.md`.
 
 **Version:** v1.0, {{DATE}}.
@@ -46,8 +47,8 @@ promoted only with evidence.
 
 ## 5. Dependencies
 
-New dependencies need approval (Tier C if they carry licence, cost or data implications). Record why
-each was chosen.
+New dependencies need approval. They are consequential if they carry licence, cost or data
+implications. Record why each was chosen.
 
 | Dependency | Why | Licence | Approved by |
 |---|---|---|---|

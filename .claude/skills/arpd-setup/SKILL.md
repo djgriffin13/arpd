@@ -51,7 +51,14 @@ Read these before you start. They are in this skill's folder:
      result is scientifically meaningful.
 6. **Adapt to the PI (G6).** Record the PI's coding experience, AI-tool experience, available time,
    and preferred check-in style. Adjust how much explanation you give.
-7. **Nothing is final until the read-back.** Write files only after the PI adopts the summary in
+7. **Talk about decisions in plain language.** Anything you bring to the PI explains:
+   - the process involved;
+   - the options and their consequences;
+   - your recommendation;
+   - the decision you are asking for.
+
+   Never rely on internal labels such as tier names or IDs without a gloss.
+8. **Nothing is final until the read-back.** Write files only after the PI adopts the summary in
    words (Phase 8). Before that, keep notes in your own working context.
 
 ## Phases
@@ -59,12 +66,12 @@ Read these before you start. They are in this skill's folder:
 | Phase | Purpose | Output |
 |---|---|---|
 | 0. Orient | Detect the mode (fresh / import / install), inspect existing files, explain the process and its time | Mode; inventory of existing material |
-| 1. The PI | Profile and preferences (G5, G6) | `STATUS.md` §8 notes |
+| 1. The PI | Profile and preferences (G5, G6); **propose an authority profile** (bounded autonomy by default) | `STATUS.md` §8 notes; draft profile |
 | 2. Science | Question (verbatim), obstacle, constructs and mechanisms, candidate invariants, claims and claims not to make, validation evidence | `PARADIGM-SPEC.md` content |
 | 3. Instrument | What it does, who uses it, data in and out, platform (proposed defaults) | `ARCHITECTURE.md` §1–2; requirements draft |
 | 4. Evidence | What counts as Verified vs Validated for this instrument; known answers available | `PARADIGM-SPEC.md` §7; requirement evidence plan |
 | 5. Team and workspace | Task structure, then a recommended team and workspace arrangement | Module B.T-TEAM values |
-| 6. Decision rights and cadence | Project-specific Tier B and C examples; check-in cadence | Charter §6 examples; `MASTER_PLAN.md` cadence |
+| 6. Authority and cadence | Scientific boundaries, permitted assumption changes, when to come back, cadence, limits | Standing authorization SA-01 (verbatim); `MASTER_PLAN.md` cadence |
 | 7. Constraints | Budget and plan tier, data sensitivity and ethics, timeline, model access | Charter data rules; risks |
 | 8. Read-back | A plain-language summary of everything; the PI adopts it in words | Ruling R-01 (verbatim) |
 | 9. Generate | Write files per `references/generation-checklist.md`; run the checks; commit | The project |

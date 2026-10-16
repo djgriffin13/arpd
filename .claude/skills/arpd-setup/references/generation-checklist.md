@@ -6,11 +6,11 @@ existing file: see `import-path.md`.
 
 | # | File | Source | How to fill it |
 |---|---|---|---|
-| 1 | `CLAUDE.md` | `kit/constitution/CORE.md` | Fill every `{{…}}`. Remove the HTML guidance comments. Append the selected modules under Part B in this order: science modules, then `team/team-arrangement.md`, with its two arrangements filled in. Mark draft modules "(draft module, untested)". Replace the Tier B and C rows' generic examples with this project's examples from Phase 6. |
+| 1 | `CLAUDE.md` | `kit/constitution/CORE.md` | Fill every `{{…}}`, including `{{AUTHORITY_PROFILE}}`, which is the profile name plus "(SA-01)". Remove the HTML guidance comments. Append the selected modules under Part B in this order: science modules, then `team/team-arrangement.md`, with its two arrangements filled in. Mark draft modules "(draft module, untested)". Under §6, after the routes table, add "This project's examples": routine, delegated and consult choices drawn from Phase 6. |
 | 2 | `PARADIGM-SPEC.md` | `kit/templates/PARADIGM-SPEC.md` | All phase 2 and 4 content. The question goes in **verbatim** in §1. Every ID is stable. |
 | 3 | `REQUIREMENTS.md` | `kit/templates/REQUIREMENTS.md` | 5–15 requirements from Phase 3, each with a source ID. All start as Planned, except imported Verified evidence (import path, step 6). |
 | 4 | `MASTER_PLAN.md` | `kit/templates/MASTER_PLAN.md` | The objective; milestone M1 (its requirement set and walkthrough); the planned order of 3–6 sprints; the cadence from Phase 6; risks from Phase 7. |
-| 5 | `DECISIONS.md` | `kit/templates/DECISIONS.md` | R-01 verbatim. DEC entries for: the platform choice, the team and workspace arrangement, and any import and reconciliation decisions. |
+| 5 | `DECISIONS.md` | `kit/templates/DECISIONS.md` | SA-01 verbatim, with every field filled. R-01 verbatim. DEC entries for: the platform choice, the team and workspace arrangement, and any import and reconciliation decisions. |
 | 6 | `ARCHITECTURE.md` | `kit/templates/ARCHITECTURE.md` | Overview in plain language, the platform table, components. A-rules start as TARGET. |
 | 7 | `STATUS.md` | `kit/templates/STATUS.md` | Current state: setup complete; S01 on deck. Team, workspace and runtime-resource table. The PI's working style from Phase 1. |
 | 8 | `INDEX.md` | `kit/templates/INDEX.md` | All top-level paths, including the project's own. |

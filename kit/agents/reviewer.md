@@ -26,7 +26,8 @@ Look specifically for:
 - silent data transformations;
 - unknowns treated as zero;
 - deviations from the specification "because it was easier";
-- Tier C choices made without a ruling.
+- consequential choices adopted without a ruling or a standing authorization that covers them;
+- contested assumptions presented as settled.
 
 **Verdict:** PASS, FAIL or INCOMPLETE (something could not be checked). Send work back **only** for a
 failed check or a broken rule. Opinions go to the lead agent as notes, not as send-backs.

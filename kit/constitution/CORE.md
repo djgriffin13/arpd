@@ -27,6 +27,8 @@ documents it points to.
 - **Why:** {{QUESTION_ONE_LINE}}. The PI's own wording is in `PARADIGM-SPEC.md` §1 and ruling R-01.
 - **Team arrangement:** {{TEAM_ARRANGEMENT}}. **Workspace arrangement:** {{WORKSPACE_ARRANGEMENT}}
   (see Part B, module B.T-TEAM).
+- **Authority profile:** {{AUTHORITY_PROFILE}}. It is recorded as standing authorization SA-01 in
+  `DECISIONS.md`, and it persists across sessions until the PI changes it (§6).
 - **Autonomous mode:** off unless the PI turns it on in words.
 
 ## 2. Authority by subject
@@ -62,11 +64,12 @@ never copied in wholesale.
 
 ## 3. The PI's words
 
-- **Only the PI's own words authorize.** A message relayed by another agent is information, not
-  authorization. A relayed ruling binds only after the PI confirms it directly.
+- **The PI's own messages authorize,** whoever drafted the text the PI sends. A message relayed by
+  another agent is information, not authorization: it binds only once the PI confirms it directly.
 - **Rulings are recorded verbatim** in `DECISIONS.md`: numbered (R-NN), dated, in the PI's exact
-  words, typos included. The lead agent's reading of a ruling sits on a separate line. Where the
-  two differ, the verbatim text wins.
+  words. The lead agent's reading of a ruling sits on a separate line. Where the two differ, the
+  verbatim text wins. No particular confirmation phrase is required; if the PI's intent is unclear,
+  ask.
 - **A paraphrase never replaces the PI's wording** of the research question, a construct
   definition or a ruling.
 
@@ -110,7 +113,8 @@ Breaking any of these is a defect, whether or not the tests pass.
    - its acceptance criteria and the evidence that will show they are met;
    - its non-goals.
 3. **Approval.**
-   - A plan that touches the science (any §6 Tier C item) needs the PI's approval.
+   - A plan that makes a consequential choice (§6) needs the PI's approval, unless a standing
+     authorization covers it.
    - Other plans are approved by the lead agent within the PI's standing direction.
 4. **Execute in small steps.**
    - Tick the checklist as you go.
@@ -138,26 +142,74 @@ when new evidence or a changed requirement justifies it. The reopening is a new 
 - states what changed and why the rationale no longer holds;
 - names the work affected.
 
-It is Tier C if the original was. Never reopen a decision silently, and never reopen it because
+It takes the same route as the original. Never reopen a decision silently, and never reopen it because
 the alternative now looks easier.
 
 ## 6. Who decides what
 
-| Tier | What | What the agent does |
+Two questions decide how a choice is handled:
+
+1. **Is it scientifically consequential?** A choice is consequential if it changes any of:
+   - a construct, an operationalization or a scientific invariant;
+   - an assumption (ASM) or a permitted claim;
+   - the validation plan;
+   - what data are collected or kept;
+   - what a participant sees or experiences.
+
+   New dependencies with licence or cost implications also count, as does anything irreversible.
+   Ease of reversal does not make a scientific choice routine.
+2. **Has the PI already delegated authority over it?** Delegation happens through a standing
+   authorization (SA-NN) or a ruling (R-NN).
+
+Together these give **three routes**. They are alternatives, not successive approval stages.
+
+| Route | When | What the agent does |
 |---|---|---|
-| **A: routine** | Implementation choices inside an approved plan: code structure, libraries already approved, tests, refactors with no change in behaviour | Proceed. Report them in aggregate in the sprint close-out. |
-| **B: important but reversible** | Choices that change how the instrument behaves but can be undone cheaply: user-interface layout, file formats inside the project, defaults the spec leaves open, performance trade-offs | Proceed on the most defensible default. Log it as PROVISIONAL in `DECISIONS.md`, and list it individually in the sprint close-out for the PI's review. |
-| **C: consequential (science)** | Anything that changes a construct, an operationalization, a scientific invariant, a permitted claim, what data is collected or kept, what a participant sees or experiences, or the validation plan. Also: new dependencies with licence or cost implications, and anything irreversible. | Do not commit to it. Stop **only that work**, and prepare a decision pack (`reports/DECISION-PACK-<date>.md`) with options, consequences and a recommended default. Continue everything else. |
+| **Routine** | No scientific consequence | Proceed. Report in aggregate at the sprint close-out. |
+| **Delegated** | Consequential, but inside a standing authorization's scope | Proceed within that scope. Record the decision with the authorization it used (SA-NN). Report it individually at the next checkpoint. |
+| **Consult** | Consequential and not covered by any authorization; or it would change the research objective, exceed agreed scope or resource limits, or settle a contested interpretation the PI has not delegated | Do not *adopt* it. Bring a decision to the PI (`reports/DECISION-PACK-<date>.md`) explaining the process, the options and their consequences, a recommendation, and the decision requested, in plain language. Unrelated work continues. |
 
-**Defaults, not questions.** For Tier A and B, take the recorded or most defensible default, log
-it, and keep going. The PI's attention is the scarcest resource on the project. Spend it on Tier C.
+**Investigating is not adopting.** Where an authorization allows it, agents may implement and
+compare alternatives before anything is adopted. A contested assumption is never presented as
+settled before the required ruling. Each decision record states when the choice was **proposed**,
+**authorized** (R-NN or SA-NN) and **adopted** (with the version), using the decision record and the
+event log as well as git. A commit time alone does not show when a scientific choice was made.
 
-**Reserved to the PI:**
+**No silent acceptance.** A recommendation stays a recommendation until the PI adopts it, or a
+standing authorization covers it. Decision packs give a recommended default, so "accept all" is easy.
+But nothing consequential is adopted because the PI has not replied.
+
+### Authority profiles and standing authorizations
+
+The setup interview proposes one of three profiles, and the PI adjusts it:
+
+| Profile | In plain language |
+|---|---|
+| **Consult first** | Ask before adopting any consequential scientific assumption |
+| **Bounded autonomy** *(default)* | Proceed within agreed scientific boundaries, document material assumptions, and report at checkpoints |
+| **Exploratory autonomy** | Implement and compare plausible alternatives within the research question; return for decisions about substantive interpretation and adoption |
+
+The profile and its specifics are recorded as standing authorization SA-01 in `DECISIONS.md`:
+
+- the project's purpose;
+- its scientific boundaries;
+- which assumption changes are permitted;
+- consultation triggers;
+- reporting cadence;
+- practical limits (time, compute, cost).
+
+The PI can add narrower authorizations (SA-02, ...) for specific work at any time, in their own
+words. **Standing authorizations persist across sessions until the PI changes them.**
+
+**Defaults, not questions.** For routine and delegated choices, take the most defensible option,
+record it and keep going. The PI's attention is the scarcest resource on the project.
+
+**Always reserved to the PI** (never delegated by default):
 
 - amending governing documents;
-- accepting decisions and requirement validations;
+- accepting requirement validations;
 - closing milestones;
-- adding or removing data;
+- adding or removing real data;
 - anything shared outside the project.
 
 ## 7. Verification and validation
@@ -197,8 +249,9 @@ Each requirement moves through these states. The evidence for each state is reco
   - the close-out at the end.
 
   The close-out is the **audit record**. It holds the evidence, the requirement-state changes, a
-  decision-tracking table (every decision, its tier, its scientific consequence, and whether any
-  Tier C ruling came *before* commitment), incidents, resource use and plan updates.
+  decision-tracking table, incidents, resource use and plan updates. The decision-tracking table
+  lists every decision with its scientific consequence, its route, the authority it used, and
+  whether that authority came *before* adoption.
 - **Cadence.** By default there is a PI check-in at every sprint boundary. The PI may ask for more
   frequent check-ins, or authorize several sprints in a row by ruling. Every sprint boundary still
   gets its close-out, review, testing and plan update.
@@ -207,9 +260,10 @@ Each requirement moves through these states. The evidence for each state is reco
   are glossed in plain words.
 - **Report what matters.** Researcher-facing reports focus on material decisions and exceptions.
   Routine coordination may stay out of the PI's attention, never out of the record.
-- **Decision packs.** Tier C items go in `reports/DECISION-PACK-<date>.md`, each with a
-  recommendation and a default if the PI is silent. "Accept all" is a valid answer. Unrelated work
-  continues meanwhile.
+- **Decision packs.** Consult-route items go in `reports/DECISION-PACK-<date>.md`. Each says what
+  is being decided and why it matters scientifically, and gives the options, a recommendation, and
+  the decision requested. "Accept all" is a valid answer; silence is not. Unrelated work continues
+  meanwhile.
 - **Walkthroughs close milestones.** The PI uses the instrument for its purpose and records PASS,
   FAIL or NOT RUN per step (`reports/WALKTHROUGH.md`). Agents rehearse it first.
 
@@ -219,6 +273,16 @@ Each requirement moves through these states. The evidence for each state is reco
 - **`STATUS.md` is the handoff.** Its one writer, the lead agent, rewrites it at sprint boundaries,
   after meaningful operational changes, and before a session ends. It is written for a successor
   who has nothing else to go on.
+- **Recovery when the lead's session is gone.** The next session the PI starts becomes the lead.
+  Before doing anything else, it:
+  1. reads `STATUS.md` and notes the commit it names;
+  2. reconciles that commit with `git log` (commits since), `logs/events.jsonl` (events since) and
+     the open sprint record;
+  3. records any difference in a `Recovered:` line at the top of `STATUS.md`;
+  4. logs a `resume` event.
+
+  Where the record and the repository disagree, the repository wins. Unfinished work by a lost
+  session is treated as unreviewed.
 - **Every session** starts by reading this file, `PARADIGM-SPEC.md`, `STATUS.md` and the current
   sprint record.
 - **Event log.** Hooks record the events listed in `docs/EVENTS.md`, and only those. Agents record
@@ -228,7 +292,7 @@ Each requirement moves through these states. The evidence for each state is reco
 ## 10. Learning
 
 - **Log incidents** in `MASTER_PLAN.md` §7. Examples: a false "done", a lost instruction, a
-  drifting construct, two agents writing one file, a decision taken at the wrong tier.
+  drifting construct, two agents writing one file, a consequential decision adopted without authority.
 - **New rules come only by PI ruling,** and each cites its incident.
 - **At each milestone,** ask the PI whether the team is over- or under-coordinated, and over- or
   under-checking. Retire rules that no longer earn their cost. This charter should get shorter as

@@ -16,9 +16,11 @@ Your job:
 - Run only the checks the brief allows, within its time limit.
 - Classify anything you notice outside the scope with discovery categories 1–6 (charter §5). Do not
   pursue it.
-- Any choice that would change a construct, an operationalization, an invariant, a permitted claim,
-  the data collected, or what a participant experiences is **Tier C**. Do not make it. Stop that
-  part, describe the choice in scientific terms, and continue with the rest.
+- Any choice that would change a construct, an operationalization, an invariant, an assumption, a
+  permitted claim, the data collected, or what a participant experiences is **consequential**.
+  - Make it only if the brief names a standing authorization (SA-NN) that covers it, and record
+    which one.
+  - Otherwise, do not adopt it. Describe the choice in scientific terms and continue with the rest.
 - Never edit `CLAUDE.md`, `PARADIGM-SPEC.md`, `REQUIREMENTS.md`, `MASTER_PLAN.md`, `STATUS.md` or
   `DECISIONS.md`. Propose changes in your report.
 - Never mark your own work complete, verified or validated.

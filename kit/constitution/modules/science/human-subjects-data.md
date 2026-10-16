@@ -9,7 +9,7 @@
 3. **Pseudonymize at the boundary.** Outputs cite IDs, never names. Re-identification keys are kept
    outside the project.
 4. **The ethics approval {{IRB_REFERENCE}} governs** what is collected, kept and shared. Any change
-   to collection, retention or sharing is Tier C, and may need an amendment to the approval.
+   to collection, retention or sharing is consequential (charter §6), and may need an amendment to the approval.
 5. **Reproducibility without exposure.** Every analysis that runs on real data also runs on a
    synthetic dataset with the same structure, so reviewers and other researchers can reproduce the
    pipeline.

@@ -20,7 +20,7 @@ reason, and accept the PI's correction.
 - Outputs go to a git-ignored `output/` folder unless a ruling makes them part of the record.
 - No real participant data in the repository.
 - Dependencies: few, well-known, and permissively licensed. A new dependency with licence or cost
-  implications is Tier C.
+  implications is consequential (charter §6).
 
 Avoid proposing anything the PI would need a developer to maintain unless they asked for it:
 microservices, containers, GPU, cloud deployment.

@@ -35,6 +35,17 @@ Use AskUserQuestion. Record the answers in `STATUS.md` §8.
   [batched at sprint boundaries / as they arise / daily digest].
 - Name to use as PI in the records (can be a role, e.g. "PI").
 
+**Propose an authority profile.** Do this now, so the PI knows from the start how much the team will
+do on its own. Say it in plain words, and use AskUserQuestion:
+
+> "How much should the team decide on its own? I suggest **bounded autonomy**: it works within the
+> scientific boundaries we agree today, writes down any material assumption it makes, and reports
+> at each checkpoint. The alternatives are **consult first** (it asks you before adopting any
+> scientific assumption) and **exploratory autonomy** (it tries and compares plausible alternatives
+> on its own, then comes back to you to decide which to adopt). You can change this at any time."
+
+Record the choice. The boundaries are filled in during Phase 6.
+
 ## Phase 2: Science (about 10 minutes; the most important phase)
 
 Record the answers verbatim where marked (V).
@@ -115,19 +126,28 @@ Ask about the **task structure**, not about agents:
 Explain in one sentence: "You'll talk to one lead agent; it delegates and has work independently
 reviewed; you see decisions and evidence, not the internal coordination."
 
-## Phase 6: Decision rights and cadence (about 3 minutes)
+## Phase 6: Authority and cadence (about 4 minutes)
 
-1. Show the three tiers using **this project's** examples, drafted from Phases 2–3:
-   - **Tier C:** "changing how 'conflict' is coded"; "dropping a condition"; "changing the
-     stopping rule".
-   - **Tier B:** "the layout of the results table"; "the default number of replications in a quick
-     check".
+Turn the Phase 1 profile into a concrete standing authorization (SA-01). Draft every field from what
+you have already heard, and ask the PI only to confirm or adjust it. Use plain words, not internal
+labels.
 
-   Ask: "Anything you'd move up or down?"
-2. **Cadence:** [check in at every sprint boundary]. The PI can ask for more frequent check-ins, or
-   later authorize multi-sprint runs by ruling.
-3. "Should the team ever run while you're away?" [Autonomous mode off. It can be turned on later in
-   words.]
+1. **Scientific boundaries.** "The team may decide on its own: … (for example, the number of
+   replications in quick checks, the layout of outputs). It brings to you: … (for example, how
+   'conflict' is coded, dropping a condition, changing a stopping rule)." Use **this project's**
+   examples.
+2. **Permitted assumption changes.** Under bounded autonomy, list the assumptions the team may set
+   or change and must document. Under exploratory autonomy, describe the alternatives it may
+   implement and compare. Under consult first, say "none without asking".
+3. **When to come back.** Always include: a change to the research objective, exceeding agreed
+   scope or resource limits, and settling a contested interpretation. Then add any
+   project-specific triggers.
+4. **Cadence.** [Check in at every sprint boundary.] The PI can ask for more frequent check-ins, or
+   later authorize several sprints in a row.
+5. **Practical limits.** Time, compute and cost limits per sprint, if any.
+6. "Should the team ever run while you're away?" [No. This can be turned on later in words.]
+
+Read SA-01 back in two or three sentences. Record the PI's reply verbatim as SA-01.
 
 ## Phase 7: Constraints (about 2 minutes)
 
@@ -148,7 +168,7 @@ Present a **plain-language summary** of at most one screen:
 - the claims not to make;
 - what Verified and Validated will mean;
 - the team arrangement;
-- the decision tiers, with examples;
+- the authority arrangement (SA-01), in plain words, with this project's examples;
 - the cadence;
 - the first milestone.
 

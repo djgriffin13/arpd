@@ -1,27 +1,30 @@
-# Decision pack, {{date}}
+# Decisions for the PI, {{date}}
 
-*For the PI. Answer "accept all", or name the items you want changed. Work continues meanwhile on
-everything these items do not block (`CLAUDE.md` §6, §8). Items are ordered by what they unblock.*
+*These are consequential choices that no standing authorization covers (`CLAUDE.md` §6). Reply
+"accept all", or name the items you want handled differently. Nothing here is adopted until you
+answer. Work that these items do not affect continues meanwhile.*
 
-| # | Decision | Recommended default | Unblocks | Can work start before the answer? |
-|---|---|---|---|---|
-| 1 |  |  |  |  |
+| # | What you are deciding (plain language) | Recommendation | What it unblocks |
+|---|---|---|---|
+| 1 |  |  |  |
 
 ---
 
-## Item 1: {{title}}
+## 1. {{The decision, as a plain question}}
 
-- **The question in one sentence:**
-- **Why it is yours to decide:** which construct, invariant, claim, data or participant experience
-  it affects.
-- **Context:** two or three lines, in plain words.
+- **The process involved:** explain in ordinary language what the instrument does at this point,
+  without internal IDs.
+- **Why it is yours to decide:** what it changes about what the instrument measures, manipulates or
+  licenses.
 - **Options and their consequences:**
 
-  | Option | What it means for the science | Cost and effort | Reversible? |
+  | Option | Consequence for the science | Effort and cost | Easy to change later? |
   |---|---|---|---|
   | A |  |  |  |
   | B |  |  |  |
 
-- **Recommendation and why:**
-- **Default if you are silent:**
-- **Evidence:** what was read, run or checked; what was not.
+- **Recommendation, and why:**
+- **The decision requested:**
+- **Evidence:** what was read, run and checked, and what was **not** checked.
+- **If you'd rather delegate this kind of choice in future:** say so, and it is recorded as a
+  standing authorization.

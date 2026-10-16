@@ -6,7 +6,7 @@ partners to human participants, for example a lab game, a team task or a survey 
 1. **The manipulation is an invariant.**
    - Conditions differ only in what the paradigm spec says they differ in.
    - Instructions, timing, layout and feedback are otherwise identical, and a test checks this.
-   - Any change to what a participant sees or experiences is Tier C.
+   - Any change to what a participant sees or experiences is consequential (charter §6).
 2. **Every participant action is logged at the finest grain the paradigm spec names.** That means
    the event, the actor, the condition and a timestamp. Nothing is logged only in aggregate.
    Researchers can always aggregate later; they cannot disaggregate.

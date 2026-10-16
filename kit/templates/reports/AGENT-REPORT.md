@@ -20,7 +20,11 @@ Show failures with their output, and name any skipped steps.
 
 ## Decisions and ambiguities
 
-List each with its tier (A/B/C). Tier B items are logged as PROVISIONAL. Tier C items are not taken.
+List each with its scientific consequence and route:
+
+- routine;
+- delegated: name the SA-NN that covers it;
+- consult: not adopted; described for the PI.
 
 ## Discoveries
 
