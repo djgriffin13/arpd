@@ -1,6 +1,6 @@
 ## B.S-MEAS: Measurement pipeline
 
-*Module: measurement-pipeline v1.0. Select this when the instrument derives measures from existing
+*Module: measurement-pipeline v0.1 (**draft, untested**). Select this when the instrument derives measures from existing
 behavioural, trace, text, audio, video or telemetry data. One example is objective coordination
 measures computed from game or sensor logs.*
 

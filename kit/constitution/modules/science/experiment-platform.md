@@ -1,6 +1,6 @@
 ## B.S-EXP: Experiment platform
 
-*Module: experiment-platform v1.0. Select this when the instrument presents tasks, stimuli or
+*Module: experiment-platform v0.1 (**draft, untested**). Select this when the instrument presents tasks, stimuli or
 partners to human participants, for example a lab game, a team task or a survey experiment.*
 
 1. **The manipulation is an invariant.**

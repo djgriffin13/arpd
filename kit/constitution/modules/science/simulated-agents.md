@@ -1,6 +1,6 @@
 ## B.S-SIM: Agents inside the instrument
 
-*Module: simulated-agents v1.0. Select this when the instrument contains artificial actors, such as
+*Module: simulated-agents v0.1 (**draft, untested**). Select this when the instrument contains artificial actors, such as
 an AI partner, a confederate bot, or simulated team members or populations.*
 
 There are two kinds of agent in this project. Never confuse them:

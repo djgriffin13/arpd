@@ -25,7 +25,8 @@ documents it points to.
   decisions and final acceptance.
 - **What we are building:** {{INSTRUMENT_ONE_LINE}}
 - **Why:** {{QUESTION_ONE_LINE}}. The PI's own wording is in `PARADIGM-SPEC.md` §1 and ruling R-01.
-- **Team shape:** {{TEAM_SHAPE}} (see Part B).
+- **Team arrangement:** {{TEAM_ARRANGEMENT}}. **Workspace arrangement:** {{WORKSPACE_ARRANGEMENT}}
+  (see Part B, module B.T-TEAM).
 - **Autonomous mode:** off unless the PI turns it on in words.
 
 ## 2. Authority by subject
@@ -41,8 +42,8 @@ persuasive.
 | What the instrument must do, and each requirement's state | `REQUIREMENTS.md` | The lead agent, through accepted decisions |
 | Design: components, data flow, technical constraints | `ARCHITECTURE.md` | The lead agent proposes; the PI accepts consequential changes |
 | Objective, milestones, planned order of work, backlog, defects, risks, incidents | `MASTER_PLAN.md` | The lead agent; milestone changes by PI ruling |
-| What is happening right now, and how to pick up (live state and handoff) | `STATUS.md` | The lead agent; rewritten at each handoff and sprint boundary |
-| The record of each sprint (plan, close-out, decision tracking) | `reports/sprints/SPRINT-NN.md` | The lead agent; frozen after close |
+| What is happening right now, and how to pick up (live state and handoff) | `STATUS.md` | **One designated writer: the lead agent.** Rewritten after every meaningful operational change, at handoffs and at sprint boundaries. |
+| The record of each sprint (plan, scope changes, close-out, decision tracking) | `reports/sprints/SPRINT-NN.md` | The lead agent. The sprint plan is preserved as written; later scope changes are logged, not edited in; the record is frozen after close. |
 | Execution of one scoped piece of work | the approved plan in `plans/` | Its owner |
 | Nothing (navigation only) | `INDEX.md` | Anyone, in the same commit as the change |
 | Nothing (informative) | `START-HERE.md`, `docs/`, `reports/`, everything else | Anyone |
@@ -130,16 +131,23 @@ Breaking any of these is a defect, whether or not the tests pass.
 Only categories 1–3 widen the plan. The rest are filed in `MASTER_PLAN.md` as Backlogged. Filing does
 not schedule them. Interesting ideas are never lost, and never pursued without a decision.
 
-**Settled ground stays settled.** An accepted decision is reopened only when new evidence
-contradicts it, and then through a decision pack.
+**Settled ground stays settled, unless there is reason to reopen it.** An accepted decision may be reopened
+when new evidence or a changed requirement justifies it. The reopening is a new decision that:
+
+- quotes the original decision's rationale;
+- states what changed and why the rationale no longer holds;
+- names the work affected.
+
+It is Tier C if the original was. Never reopen a decision silently, and never reopen it because
+the alternative now looks easier.
 
 ## 6. Who decides what
 
 | Tier | What | What the agent does |
 |---|---|---|
-| **A: routine** | Implementation choices inside an approved plan: code structure, libraries already approved, tests, refactors with no change in behaviour | Proceed. |
-| **B: important but reversible** | Choices that change how the instrument behaves but can be undone cheaply: user-interface layout, file formats inside the project, defaults the spec leaves open, performance trade-offs | Proceed on the most defensible default. Log it as PROVISIONAL in `DECISIONS.md`, and list it in the next check-in for the PI's review. |
-| **C: consequential (science)** | Anything that changes a construct, an operationalization, a scientific invariant, a permitted claim, what data is collected or kept, what a participant sees or experiences, or the validation plan. Also: new dependencies with licence or cost implications, and anything irreversible. | Do not commit to it. Stop **only that work**, and prepare a decision pack (`reports/DECISION-PACK.md`) with options, consequences and a recommended default. Continue everything else. |
+| **A: routine** | Implementation choices inside an approved plan: code structure, libraries already approved, tests, refactors with no change in behaviour | Proceed. Report them in aggregate in the sprint close-out. |
+| **B: important but reversible** | Choices that change how the instrument behaves but can be undone cheaply: user-interface layout, file formats inside the project, defaults the spec leaves open, performance trade-offs | Proceed on the most defensible default. Log it as PROVISIONAL in `DECISIONS.md`, and list it individually in the sprint close-out for the PI's review. |
+| **C: consequential (science)** | Anything that changes a construct, an operationalization, a scientific invariant, a permitted claim, what data is collected or kept, what a participant sees or experiences, or the validation plan. Also: new dependencies with licence or cost implications, and anything irreversible. | Do not commit to it. Stop **only that work**, and prepare a decision pack (`reports/DECISION-PACK-<date>.md`) with options, consequences and a recommended default. Continue everything else. |
 
 **Defaults, not questions.** For Tier A and B, take the recorded or most defensible default, log
 it, and keep going. The PI's attention is the scarcest resource on the project. Spend it on Tier C.
@@ -224,10 +232,16 @@ Each requirement moves through these states. The evidence for each state is reco
   points to `MASTER_PLAN.md` and `REQUIREMENTS.md` for everything else.
 - **Every session** starts by reading this file, `PARADIGM-SPEC.md`, `STATUS.md` and the current
   sprint record.
-- **Every coordination event is recorded,** even when it is routine and kept out of the PI's
-  attention. This covers questions, handoffs, interruptions, reviews and resumptions. Hooks write
-  `logs/events.jsonl` where the tooling allows it. "Out of the PI's attention" never means "out of
-  the record".
+- **The event log, and what it covers.** Hooks append the events defined in `docs/EVENTS.md` to
+  `logs/events.jsonl`: session start and end, prompt submissions, tool use, subagent start and stop,
+  and compaction.
+  - Agents add the coordination events that hooks cannot see, using `python tools/log_event.py`:
+    questions to the PI, handoffs, interruptions, reviews, resumptions after a reset, and decision
+    packs.
+  - The log records **only** these events. It does not record the PI's thinking or reviewing time.
+- **Routine coordination may be kept out of the PI's attention, but never out of the record.**
+- **Researcher-facing reports focus on material decisions and exceptions.** The full detail stays
+  in the sprint record and the log.
 
 ## 10. Learning
 

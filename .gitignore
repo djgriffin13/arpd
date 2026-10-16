@@ -3,3 +3,5 @@ __pycache__/
 .DS_Store
 logs/
 .claude/settings.local.json
+output/
+.pytest_cache/

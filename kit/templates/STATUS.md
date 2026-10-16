@@ -3,8 +3,10 @@
 **Governs only what is happening right now.** It never states priorities, milestones or requirement
 states; it points to `MASTER_PLAN.md` and `REQUIREMENTS.md` for those (`CLAUDE.md` §2).
 
-The lead agent **rewrites** this file at every handoff and every sprint boundary. Its history lives in
-git and in the sprint records.
+**One designated writer: the lead agent.** Other agents report changes to it and never edit this file.
+The lead agent rewrites it after every meaningful operational change, at every handoff and at every
+sprint boundary. Meaningful changes include work starting or stopping, a session ending, a blocker,
+and a resource being assigned. Its history lives in git and in the sprint records.
 
 It is written for a successor who starts with an empty context and nothing else to go on, possibly
 after this session has died (`CLAUDE.md` §9). When this file and the repository disagree, the
@@ -45,11 +47,14 @@ Do not decide these yourself. The open pack is `reports/DECISION-PACK-{{date}}.m
 
 List checks not yet run, reports not yet received, and messages sent without an acknowledgement.
 
-## 7. Team and workspace
+## 7. Team, workspace and runtime resources
 
-- **Arrangement:**
-- **Active sessions and roles:**
+- **Team arrangement:** solo / lead with subagents / peers
+- **Workspace arrangement:** shared checkout / worktrees
 - **Model versions:**
+
+| Agent or session | Role | Worktree or branch | Port(s) | Output and scratch directory | Other shared resources |
+|---|---|---|---|---|---|
 
 ## 8. The PI's working style
 

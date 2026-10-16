@@ -1,6 +1,6 @@
 ## B.S-STAT: Statistical methods
 
-*Module: statistical-methods v1.0. Select this when the instrument estimates models, computes
+*Module: statistical-methods v0.1 (**draft, untested**). Select this when the instrument estimates models, computes
 statistics, or implements a method from the methodological literature.*
 
 1. **Only established methods ship under established names.**

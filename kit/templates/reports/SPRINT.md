@@ -24,6 +24,14 @@ Auditors reconcile this record against git, `DECISIONS.md`, `REQUIREMENTS.md` an
 | Authorized to continue into the next sprint without a check-in? | No / Yes, by R-NN |
 | Start | {{date, time, commit SHA}} |
 
+**Part 1 is preserved as written.** Do not edit it after the sprint starts. Record later changes in
+the scope-change log.
+
+### Scope-change log
+
+| When | Change (added, removed or re-scoped) | Why | Authorized by (lead agent within direction / PI ruling R-NN) |
+|---|---|---|---|
+
 ---
 
 ## Part 2: Close-out (written at end)
