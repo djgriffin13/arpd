@@ -65,6 +65,14 @@ The checks:
      - "Deferred by R-NN" is a deferral, never authorization. A PENDING decision not adopted and
        deferred by a given ruling is ADVISORY: still to decide, and dependent work stays blocked.
        A deferral cannot cover a decision that was adopted: FAIL unless ratified with an incident.
+       Once the entry cites given authority, earlier deferral history is ignored and the decision
+       is checked as authorized;
+     - a row marked authorized before adoption still fails if its entry records adoption (a date
+       or version, not "not yet") without given authority; if the entry records neither authority
+       nor adoption, it is PENDING;
+     - the authorization date is the ISO date next to the cited R-NN / SA-NN, or right after
+       "authorized"; several dates with none tied to the authority is MISSING (ambiguous);
+     - a consequential row with no entry in DECISIONS.md is ADVISORY: checked on the row alone.
    A ruling or SA counts as given only if its section has a Given line that is not pending-like
    (pending, awaiting, to be given, not yet, placeholder, TBD), or, with no Given line, a dated
    heading (YYYY-MM-DD) with no pending-like word.
@@ -376,23 +384,57 @@ _NON_ISO = (r"\b\d{1,2}/\d{1,2}/\d{2,4}\b|\b\d{1,2}\.\d{1,2}\.\d{4}\b|\b\d{1,2}\
 _ISO = r"\b(\d{4}-\d{2}-\d{2})(?:[T ](\d{2}:\d{2})(?::\d{2})?\s*(Z|[+-]\d{2}:?\d{2})?)?"
 
 
+def _moment(m):
+    """The aware datetime of an ISO match that has a time, or None."""
+    if not m.group(2):
+        return None
+    tz = (m.group(3) or "Z").replace("Z", "+00:00")
+    if re.match(r"^[+-]\d{4}$", tz):
+        tz = tz[:3] + ":" + tz[3:]
+    try:
+        return datetime.datetime.fromisoformat("%sT%s%s" % (m.group(1), m.group(2), tz))
+    except ValueError:
+        return None
+
+
 def _when(text):
-    """(kind, date, datetime-or-None) for the first date in a line: kind is "iso", "other" or None."""
+    """(kind, date, moment, shown) for the first date in a line: kind is "iso", "other" or None."""
     m = re.search(_ISO, text)
     if m:
-        moment = None
-        if m.group(2):
-            tz = (m.group(3) or "Z").replace("Z", "+00:00")
-            if re.match(r"^[+-]\d{4}$", tz):
-                tz = tz[:3] + ":" + tz[3:]
-            try:
-                moment = datetime.datetime.fromisoformat("%sT%s%s" % (m.group(1), m.group(2), tz))
-            except ValueError:
-                moment = None
-        return "iso", m.group(1), moment
+        return "iso", m.group(1), _moment(m), m.group(0).strip()
     if re.search(_NON_ISO, text, re.I):
-        return "other", None, None
-    return None, None, None
+        return "other", None, None, None
+    return None, None, None, None
+
+
+_TIE = r"^[\s,;:()\-\u2013\u2014]*(?:by|on|in|via|under)?[\s,;:()\-\u2013\u2014]*$"
+
+
+def _auth_when(auth):
+    """Like _when, for the Authorized line: the date tied to the authority.
+
+    With one ISO date, that date. With several, the one immediately before or after a cited R-NN /
+    SA-NN, or right after "authorized"; kind "ambiguous" if none (or more than one) is tied.
+    """
+    dates = list(re.finditer(_ISO, auth))
+    if len(dates) <= 1:
+        return _when(auth)
+    refs = list(re.finditer(r"\b(?:SA|R)-\d+\b", auth))
+    tied = []
+    for m in dates:
+        before, after = auth[:m.start()], auth[m.end():]
+        if re.search(r"authori[sz]ed\s*(?:on\s*)?$", before, re.I):
+            tied.append(m)
+            continue
+        for r in refs:
+            between = auth[m.end():r.start()] if r.start() >= m.end() else auth[r.end():m.start()]
+            if re.match(_TIE, between, re.I):
+                tied.append(m)
+                break
+    if len({t.group(0) for t in tied}) != 1:
+        return "ambiguous", None, None, None
+    t = tied[0]
+    return "iso", t.group(1), _moment(t), t.group(0).strip()
 
 
 def _entry(rid, needed, known, sections):
@@ -401,27 +443,31 @@ def _entry(rid, needed, known, sections):
     auth, adopted = _entry_line(body, "Authorized"), _entry_line(body, "Adopted")
     deferred = re.search(r"\bdeferred by (R-\d+)\b", _clean(body), re.I)
     auth_wo_deferral = re.sub(r"\bdeferred by R-\d+\b", "", auth, flags=re.I)  # a deferral is not authorization
-    a_kind, a_date, a_moment = _when(auth)
-    d_kind, d_date, d_moment = _when(adopted)
-    a_show = a_moment.strftime("%Y-%m-%dT%H:%MZ") if a_moment else a_date
-    d_show = d_moment.strftime("%Y-%m-%dT%H:%MZ") if d_moment else d_date
+    a_kind, a_date, a_moment, a_show = _auth_when(auth)
+    d_kind, d_date, d_moment, d_show = _when(adopted)
     both = bool(a_kind and d_kind)
+    iso_both = both and a_kind == d_kind == "iso"
     late = False
-    if both and a_kind == d_kind == "iso":
+    if iso_both:
         late = (a_moment > d_moment) if (a_moment and d_moment) else (a_date > d_date)
     not_adopted = bool(adopted) and re.match(r"^\W*(not yet|no\b|pending|none|n/a|—|-|$)", _clean(adopted), re.I)
+    given = [x for x in re.findall(needed, auth_wo_deferral) if x in known]
     return {
-        "given": [x for x in re.findall(needed, auth_wo_deferral) if x in known],
+        "exists": bool(body),
+        "has_auth_line": bool(auth),
+        "given": given,
         "incident": bool(re.search(r"\bI-\d+\b", auth)),
         "after_wording": bool(re.search(r"ratifi\w*\s+after\b|after\s+(?:the\s+)?adoption", auth, re.I)),
-        "auth_pending": bool(re.search(r"\bpending\b", auth_wo_deferral, re.I)),
+        "auth_pending": bool(re.match(r"^\W*" + PENDING_LIKE, _clean(auth_wo_deferral), re.I)),
         "has_adopted_line": bool(adopted),
         "adopted": bool(adopted) and not not_adopted,
-        "dates_bad": both and not (a_kind == d_kind == "iso"),
+        "date_ambiguous": a_kind == "ambiguous",
+        "dates_bad": both and a_kind != "ambiguous" and not iso_both,
         "dates_late": late,
-        "dates_in_order": both and a_kind == d_kind == "iso" and not late,
+        "dates_in_order": iso_both and not late,
         "dates": (a_show, d_show),
-        "deferred_by": deferred.group(1) if deferred and deferred.group(1) in known else None,
+        # a deferral counts only while the entry cites no given authority
+        "deferred_by": deferred.group(1) if deferred and deferred.group(1) in known and not given else None,
     }
 
 
@@ -431,6 +477,11 @@ def _verdict(kind, msg, row_late, row_incident, row_auth_pending, e, name, rid):
     kind is the row's own verdict: PENDING, ADVISORY (late, incident recorded), FAIL (late, no
     incident) or TIMELY.
     """
+    if not e["exists"]:
+        if kind == "TIMELY":
+            return "ADVISORY", "%s: %s has no decision entry in DECISIONS.md; checked on the sprint row alone" % (
+                name, rid)
+        return kind, msg
     incident = row_incident or e["incident"]
     ratified = "%s: %s ratified after adoption (recorded incident; per its entry in DECISIONS.md)" % (name, rid)
     # 1. The entry records ratification after adoption: late, whatever the row says.
@@ -439,7 +490,7 @@ def _verdict(kind, msg, row_late, row_incident, row_auth_pending, e, name, rid):
             return "ADVISORY", ratified
         return "FAIL", ("%s: %s: its entry in DECISIONS.md records ratification after adoption, with no incident "
                         "recorded" % (name, rid))
-    # 2. Dates: ISO 8601 only; authorization after adoption is late.
+    # 2. Dates: ISO 8601 only; the authorization date must be identifiable; authorization after adoption is late.
     if e["dates_late"]:
         auth_d, adopt_d = e["dates"]
         if incident:
@@ -447,23 +498,31 @@ def _verdict(kind, msg, row_late, row_incident, row_auth_pending, e, name, rid):
                 name, rid, auth_d, adopt_d)
         return "FAIL", ("%s: %s authorized after adoption per DECISIONS.md (authorized %s, adopted %s), with no "
                         "incident recorded" % (name, rid, auth_d, adopt_d))
-    bad_dates = ("MISSING", "%s: %s authorization/adoption dates not in ISO 8601; cannot check order" % (name, rid))
     if kind == "FAIL":
         return kind, msg
+    if e["date_ambiguous"]:
+        return "MISSING", ("%s: %s authorization date ambiguous: several dates on the Authorized line, none tied to "
+                           "the authority; cannot check order" % (name, rid))
     if e["dates_bad"]:
-        return bad_dates
+        return "MISSING", "%s: %s authorization/adoption dates not in ISO 8601; cannot check order" % (name, rid)
+    # 3. The row says authorized before adoption: the entry must agree.
     if kind == "TIMELY":
+        if e["given"] and not e["auth_pending"]:
+            return None
+        if e["adopted"]:
+            return "FAIL", ("%s: consequential decision %s: its entry in DECISIONS.md records adoption without "
+                            "authority" % (name, rid))
+        if e["has_auth_line"] or e["has_adopted_line"]:
+            return "PENDING", "%s: %s: its entry in DECISIONS.md records no authority yet" % (name, rid)
         return None
     if kind == "ADVISORY":
         return kind, msg
-    # 3. PENDING: the entry decides adoption, deferral and authority.
+    # 4. PENDING: the entry decides adoption, deferral and authority.
     adopted = e["adopted"] if e["has_adopted_line"] else row_late
     if e["deferred_by"] and not adopted:
         return "ADVISORY", "%s: %s deferred by %s (still to decide; dependent work stays blocked)" % (
             name, rid, e["deferred_by"])
     if e["deferred_by"] and adopted:
-        if e["given"] and incident:
-            return "ADVISORY", ratified
         return "FAIL", ("%s: consequential decision %s was adopted, so the deferral by %s cannot cover it: "
                         "adopted without authority" % (name, rid, e["deferred_by"]))
     if not e["given"] or e["auth_pending"]:

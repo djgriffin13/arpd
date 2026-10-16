@@ -92,8 +92,8 @@ Details for each phase are in `references/interview-guide.md`.
   `.claude/settings.json` (the event-logging hooks) and `.claude/agents/` (the implementer and
   reviewer roles). Before those writes, tell the PI in plain words what each is for, and that the
   logging records event times and types but no prompt text (`references/generation-checklist.md`,
-  *Permission prompts*). The same prompt guards a `git mv` into or out of `.claude/`. Do these steps
-  last and on their own, so a refusal stops nothing else. A non-interactive or scripted run cannot
+  *Permission prompts*). The same prompt guards a `git mv` into or out of `.claude/`. The `.claude/`
+  writes and moves come after the other moves, each on its own, so a refusal stops nothing else. A non-interactive or scripted run cannot
   approve them. Never work around the protection.
 - **Anything that could not be written is owed, not hidden.** Record it in a DEC (for example
   "event logging not installed"), in `STATUS.md` §6 *Owed*, and under *Known gaps* in
