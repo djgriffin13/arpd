@@ -3,7 +3,8 @@
 
     python tools/check_governance.py
 
-Each step reports PASS, FAIL or MISSING. The overall result is:
+Each step reports PASS, FAIL, MISSING (could not run), PENDING (awaiting
+the PI's ruling) or ADVISORY. The overall result is:
 
 - PASS only if every step passed;
 - INCOMPLETE if any step could not run;
@@ -25,8 +26,10 @@ The checks:
 4. Plans: unique numbers, valid status.
 5. Closed sprint records:
    - have a decision-tracking table;
-   - every Tier C decision cites a ruling;
-   - none is marked as decided after the commitment.
+   - every Tier C decision cites a ruling (one still awaiting a ruling makes the result
+     INCOMPLETE);
+   - none was ruled after the commitment, unless it was ratified and recorded as an incident
+     (I-NN), which is ADVISORY.
 6. INDEX.md mentions every top-level entry (advisory).
 """
 import io
@@ -156,7 +159,7 @@ def check_sprints():
     if not os.path.isdir(d):
         step("Sprint records", "PASS", ["no sprint records yet"])
         return
-    problems = []
+    problems, pending, advisories = [], [], []
     for name in sorted(os.listdir(d)):
         if not name.endswith(".md"):
             continue
@@ -171,12 +174,21 @@ def check_sprints():
             tier = r.get("Tier (A/B/C)", "")
             by = r.get("Decided by (PI ruling R-NN / lead agent / implementer)", "")
             when = r.get("Before or after commit?", "").lower()
-            if tier.strip().upper().startswith("C"):
-                if not re.search(r"\bR-\d+\b", by):
-                    problems.append("%s: Tier C decision %s without a ruling" % (name, r.get("ID")))
-                if "after" in when:
-                    problems.append("%s: Tier C decision %s ruled after commitment" % (name, r.get("ID")))
-    step("Closed sprints: decision tracking and Tier C authorization", "FAIL" if problems else "PASS", problems)
+            if not tier.strip().upper().startswith("C"):
+                continue
+            rid = r.get("ID")
+            ruled = re.search(r"R-\d+", by) and "pending" not in by.lower()
+            if not ruled and "pending" in by.lower():
+                pending.append("%s: Tier C decision %s awaiting the PI's ruling" % (name, rid))
+            elif not ruled:
+                problems.append("%s: Tier C decision %s without a ruling" % (name, rid))
+            elif "after" in when:
+                if re.search(r"I-\d+", when + " " + by):
+                    advisories.append("%s: Tier C decision %s ratified after commitment (recorded incident)" % (name, rid))
+                else:
+                    problems.append("%s: Tier C decision %s ruled after commitment, with no incident recorded" % (name, rid))
+    status = "FAIL" if problems else ("PENDING" if pending else ("ADVISORY" if advisories else "PASS"))
+    step("Closed sprints: decision tracking and Tier C authorization", status, problems + pending + advisories)
 
 
 def check_index():
@@ -202,7 +214,7 @@ def main():
         for d in details:
             print("    - " + d)
     statuses = {s for _, s, _ in results}
-    overall = "FAIL" if "FAIL" in statuses else ("INCOMPLETE" if "MISSING" in statuses else "PASS")
+    overall = "FAIL" if "FAIL" in statuses else ("INCOMPLETE" if statuses & {"MISSING", "PENDING"} else "PASS")
     print("\nOVERALL: " + overall)
     sys.exit({"PASS": 0, "FAIL": 1, "INCOMPLETE": 2}[overall])
 
