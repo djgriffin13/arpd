@@ -188,84 +188,51 @@ Each requirement moves through these states. The evidence for each state is reco
   reported in full. If it is expected to run for more than about an hour, it needs the PI's
   approval in words after a stated runtime estimate.
 
-## 8. Sprints, check-ins and keeping the PI informed
+## 8. Sprints and keeping the PI informed
 
-- **Work is organized in sprints.** A sprint targets requirements from a milestone in
-  `MASTER_PLAN.md`, and is sized to finish in one working block. The lead agent opens it by writing
-  Part 1 of `reports/sprints/SPRINT-NN.md` (from `templates/reports/SPRINT.md`). It closes it by
-  writing Part 2: the close-out.
-- **Every close-out is an auditable record.** It contains:
-  - what now works, with evidence;
-  - the requirement-state changes;
-  - a **decision-tracking table** of every decision in the sprint, with its tier, its scientific
-    consequence, who decided it, and whether the PI ruled before the commitment;
-  - incidents;
-  - resource use;
-  - plan updates.
+- **Sprints.** Each sprint targets requirements from a milestone in `MASTER_PLAN.md` and fits in
+  one working block. The lead agent writes `reports/sprints/SPRINT-NN.md` from the template:
+  - the plan at the start, preserved as written;
+  - scope changes as they happen;
+  - the close-out at the end.
 
-  It opens with a plain-language section for the PI, which glosses every internal ID.
-- **Cadence.** By default the team stops for a PI check-in at every sprint boundary. The PI may ask
-  for more frequent check-ins. The PI may also authorize, by ruling, a run of several sprints
-  without a check-in. Even then, every sprint boundary keeps its close-out, review, testing and plan
-  update before the next sprint starts.
-- **Explain decisions through science, not engineering.** Any decision brought to the PI states:
-  - what it changes about what the instrument measures, manipulates or licenses;
-  - the options and their consequences;
-  - a recommendation.
-
-  Engineering terms appear only with a plain gloss.
-- **Decision packs.** Tier C items are escalated *before* the commitment, in
-  `reports/DECISION-PACK-<date>.md`. Each item gives the context, the options, the consequences, a
-  recommendation and the default taken if the PI is silent. The PI can answer "accept all" or name
-  the exceptions. Unrelated authorized work continues meanwhile.
-- **Walkthroughs close milestones.** A milestone closes when the PI has used the instrument for its
-  purpose and recorded PASS, FAIL or NOT RUN for each step of `reports/WALKTHROUGH.md`. Agents
-  rehearse the walkthrough first, so the PI's time goes to judgement, not to finding broken buttons.
+  The close-out is the **audit record**. It holds the evidence, the requirement-state changes, a
+  decision-tracking table (every decision, its tier, its scientific consequence, and whether any
+  Tier C ruling came *before* commitment), incidents, resource use and plan updates.
+- **Cadence.** By default there is a PI check-in at every sprint boundary. The PI may ask for more
+  frequent check-ins, or authorize several sprints in a row by ruling. Every sprint boundary still
+  gets its close-out, review, testing and plan update.
+- **Explain through science.** Anything brought to the PI states what it changes about what the
+  instrument measures, manipulates or licenses, the options, and a recommendation. Engineering terms
+  are glossed in plain words.
+- **Report what matters.** Researcher-facing reports focus on material decisions and exceptions.
+  Routine coordination may stay out of the PI's attention, never out of the record.
+- **Decision packs.** Tier C items go in `reports/DECISION-PACK-<date>.md`, each with a
+  recommendation and a default if the PI is silent. "Accept all" is a valid answer. Unrelated work
+  continues meanwhile.
+- **Walkthroughs close milestones.** The PI uses the instrument for its purpose and records PASS,
+  FAIL or NOT RUN per step (`reports/WALKTHROUGH.md`). Agents rehearse it first.
 
 ## 9. Sessions, memory and handoff
 
-- **The repository is authoritative, not agent memory.** Nothing from memory enters a governing
-  document without being checked against the repository.
-- **`STATUS.md` is the handoff.** The lead agent rewrites it at every sprint boundary, and before a
-  session ends or its context runs low. It is written for a successor who has nothing else to go
-  on, and who may be starting after this session has died. It states only the present state, and
-  points to `MASTER_PLAN.md` and `REQUIREMENTS.md` for everything else.
+- **The repository is authoritative, not agent memory.**
+- **`STATUS.md` is the handoff.** Its one writer, the lead agent, rewrites it at sprint boundaries,
+  after meaningful operational changes, and before a session ends. It is written for a successor
+  who has nothing else to go on.
 - **Every session** starts by reading this file, `PARADIGM-SPEC.md`, `STATUS.md` and the current
   sprint record.
-- **The event log, and what it covers.** Hooks append the events defined in `docs/EVENTS.md` to
-  `logs/events.jsonl`: session start and end, prompt submissions, tool use, subagent start and stop,
-  and compaction.
-  - Agents add the coordination events that hooks cannot see, using `python tools/log_event.py`:
-    questions to the PI, handoffs, interruptions, reviews, resumptions after a reset, and decision
-    packs.
-  - The log records **only** these events. It does not record the PI's thinking or reviewing time.
-- **Routine coordination may be kept out of the PI's attention, but never out of the record.**
-- **Researcher-facing reports focus on material decisions and exceptions.** The full detail stays
-  in the sprint record and the log.
+- **Event log.** Hooks record the events listed in `docs/EVENTS.md`, and only those. Agents record
+  questions, handoffs, interruptions, reviews, resumptions and decision packs with
+  `python tools/log_event.py`. The log cannot measure the PI's active time.
 
 ## 10. Learning
 
-- **Log every incident** in `MASTER_PLAN.md` §7, for example:
-  - a false "done";
-  - a lost instruction;
-  - a drifting construct;
-  - two agents writing the same file;
-  - a decision taken at the wrong tier.
-- **New rules come only by PI ruling,** and each cites the incident that prompted it.
-- **At each milestone,** the lead agent asks the PI whether the team is over- or
-  under-coordinated, and over- or under-checking. Rules that no longer earn their cost are
-  retired by ruling. This charter should get shorter as well as longer.
-
-## 11. Failure modes to avoid
-
-- Building something other than what the paradigm specification says, because it was easier.
-- Reporting a requirement as Verified or Validated without recorded evidence.
-- Treating a relayed message, a newer file or a persuasive report as authority.
-- Writing a test that cannot fail, or one that asserts what the code currently does.
-- Producing a plausible number where the honest answer is "cannot compute".
-- Pursuing a discovery the plan did not ask for.
-- Bringing the PI a routine question, or failing to bring a scientific one.
-- Copying agent memory into a governing document without checking it.
+- **Log incidents** in `MASTER_PLAN.md` §7. Examples: a false "done", a lost instruction, a
+  drifting construct, two agents writing one file, a decision taken at the wrong tier.
+- **New rules come only by PI ruling,** and each cites its incident.
+- **At each milestone,** ask the PI whether the team is over- or under-coordinated, and over- or
+  under-checking. Retire rules that no longer earn their cost. This charter should get shorter as
+  well as longer.
 
 ---
 
