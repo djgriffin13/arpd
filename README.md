@@ -74,6 +74,8 @@ points other agent tools to it, and adapters for other tools are planned.
 
 ## Evidence status
 
+Known limitations are listed in [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
+
 The kit's rules come from practice: the governing records of three agent-built research instruments,
 reorganized around team-science theory. **Their benefits are proposed, not yet tested.** Testing them
 is what `evaluation/` is for.
