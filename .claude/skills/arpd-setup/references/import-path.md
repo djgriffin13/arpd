@@ -59,6 +59,9 @@ Continue every ledger from where it stands: the next free DEC, R and SA numbers 
   "**Given:** by the importing PI on <date>".
 - **Anything already given is never reused.** An ID that holds a real ruling, authorization or
   decision keeps it; the new entry takes the next free number.
+- **One PI utterance, one R-NN.** If an inherited placeholder bundles several purposes (for example
+  R-01 "adopt the charter and rule on the decision pack"), fill it with the adoption utterance only.
+  Any separate utterance, such as a deferral of the pack's items, gets the next free R-NN.
 
 ---
 
@@ -128,13 +131,15 @@ Worked case: importing `examples/march-1991/` into this kit repository.
    - **Draft wording.** Any item marked *"(draft wording, awaiting the PI's words)"*, such as the
      research question, either gets the importing PI's own words in the interview, or stays
      explicitly pending and is listed in *Waiting on the PI*. Adopting the charter and specification
-     "as they stand" does not clear a draft marker.
+     "as they stand" does not clear a draft marker. When the PI's own words replace the draft, keep
+     the draft under a "Superseded draft wording" note beside them; never delete it.
    - **Inherited pending decisions:** list them for the PI in plain language. They may be decided
      now, delegated (as a standing authorization), deferred by ruling, or left pending. They block
      only work that depends on them.
 3. **Move-only commits** (above), at the start of Phase 9. Run these in Git Bash (or any POSIX
    shell); `set -e` and `|| exit 1` stop at the first failure, so a half-done move is never
-   committed.
+   committed. Type the commands, or, if you save them as a script, save it **outside** the
+   repository (the OS temp directory or the session scratchpad), never in the project.
 
    First list the collisions: every path the starter uses that already exists at the root. Each
    one must move in commit 1.
@@ -154,22 +159,48 @@ Worked case: importing `examples/march-1991/` into this kit repository.
    for f in README.md QUICKSTART.md CLAUDE.md AGENTS.md; do git mv "$f" docs/arpd-kit/; done
    git mv .gitignore docs/arpd-kit/kit.gitignore
    git commit -m "Move kit pre-setup files to docs/arpd-kit (no changes)"
-   # Commit 2: the starter's old START-HERE.md, separately, then everything else to the root
+   # Commit 2: the starter's old START-HERE.md, separately, then everything except .claude/
    git mv "$S/START-HERE.md" docs/arpd-kit/START-HERE-starter.md
-   git ls-files "$S" | while read -r f; do
+   git ls-files "$S" | grep -v "^$S/\.claude/" | while read -r f; do
      t="${f#$S/}"; mkdir -p "$(dirname "$t")"; git mv "$f" "$t" || exit 1
    done
    git commit -m "Move $S to the project root (no changes)"
    ```
 
+   Then, **as a separate command**, the `.claude/` files. Claude Code asks the PI to approve any
+   change into or out of `.claude/`, including a `git mv`, so this step runs last and on its own: a
+   blocked approval cannot stop the other moves.
+
+   ```
+   set -e
+   S=examples/march-1991
+   # Commit 3: the starter's .claude/ (hooks settings, agent roles); needs the PI's approval
+   git ls-files "$S/.claude" | while read -r f; do
+     t="${f#$S/}"; mkdir -p "$(dirname "$t")"; git mv "$f" "$t" || exit 1
+   done
+   git commit -m "Move $S/.claude to the project root (no changes)"
+   ```
+
+   If the PI declines, or the run cannot ask (a scripted or non-interactive run), leave those files
+   where they are and continue. Record them as owed: a DEC "event logging not installed" and/or
+   "agent files not installed", `STATUS.md` §6, and *Known gaps* in `START-HERE.md`, which gives the
+   PI the exact commands to run later, for example:
+
+   ```
+   git mv examples/march-1991/.claude/settings.json .claude/settings.json
+   git mv examples/march-1991/.claude/agents/implementer.md .claude/agents/implementer.md
+   git mv examples/march-1991/.claude/agents/reviewer.md .claude/agents/reviewer.md
+   git commit -m "Move the starter's .claude files to the project root (no changes)"
+   ```
+
    - **Collisions:** commit 1 moves every colliding kit file, so commit 2 never overwrites. Folders
-     that exist on both sides (for example `docs/`, `.claude/`) are merged file by file by the loop.
+     that exist on both sides (for example `docs/`) are merged file by file by the loop.
+   - **`.gitignore`:** the kit's copy goes to `docs/arpd-kit/kit.gitignore` in commit 1; the
+     starter's `.gitignore` arrives at the root in commit 2; the kit's lines are then merged into it
+     in the first edit commit (step 4).
    - **The starter's old `START-HERE.md`** goes straight to `docs/arpd-kit/START-HERE-starter.md`,
      by its own `git mv`, before the loop. A new one is written for the PI in Phase 10.
    - Untracked or ignored files in the starter (`output/`, caches) are not moved; regenerate them.
-   - The starter's `.claude/settings.json` and `.claude/agents/` arrive by this move. Claude Code may
-     still ask the PI to approve changes under `.claude/`; if it is declined or blocked, follow
-     *Permission prompts* in `generation-checklist.md`.
    - Re-run the checks at the root and keep the output beside the first run.
 4. **Then edit, in place.** The starter's governing documents are updated through recorded rulings
    and standing authorizations, never replaced and never written beside as `.arpd`. Git keeps the
@@ -180,12 +211,18 @@ Worked case: importing `examples/march-1991/` into this kit repository.
    - `DECISIONS.md`: fill the inherited adoption placeholder or use the next free R; add the new
      SA; record the import and the moves as the next free DEC, pointing to S01's baseline.
    - **Inherited pending decisions the PI ruled on:** update each affected DEC entry's Status,
-     Authorized and Adopted lines to match the ruling:
-     - ratified: "**Authorized:** <date>, R-NN, ratified after adoption (incident I-NN)" when the
-       choice was already in use (as with the March starter's DEC-01 to DEC-07, incident I-01);
-       Status "adopted", and Adopted names the version;
-     - deferred: Status "deferred by R-NN (still to decide; dependent work stays blocked)"; it
-       stays in *Waiting on the PI* as "deferred (R-NN)";
+     Authorized and Adopted lines to match the ruling. Dates are ISO 8601 (`YYYY-MM-DD`, with a
+     time such as `2026-10-20T14:05Z` when both happen on the same day).
+     - **ratified, never adopted before:** a choice implemented as a code default but recorded as
+       "not adopted" (as with the March starter's DEC-01 to DEC-07) is a normal consult-route
+       adoption: "**Authorized:** <date>, R-NN" and "**Adopted:** <date>, <version>", with
+       authorization no later than adoption, and Status "adopted". Its earlier implementation
+       before the charter is already covered by the recorded incident (I-01); do not write
+       "ratified after adoption";
+     - **ratified, genuinely adopted before authority existed:** "**Authorized:** <date>, R-NN,
+       ratified after adoption (incident I-NN)", with Adopted giving the original adoption;
+     - **deferred:** Status "deferred by R-NN (still to decide; dependent work stays blocked)",
+       Adopted "not yet"; it stays in *Waiting on the PI* as "deferred (R-NN)";
      - changed: a new DEC that supersedes the old one, which keeps its text and is marked
        "Superseded by DEC-NN".
 
@@ -193,13 +230,14 @@ Worked case: importing `examples/march-1991/` into this kit repository.
      and, for an adoption, `python tools/log_event.py adopted --actor lead --ref DEC-NN --note "<version>"`.
    - `STATUS.md`: rewrite it in the current template's format (base commit, the recovery block, a
      UTC time), for the new PI. The inherited content that still applies is carried over.
-   - `.gitignore`: merge the kit's lines (now in `docs/arpd-kit/`) into the root file, keeping every
-     line of both.
+   - `.gitignore`: merge the kit's lines (from `docs/arpd-kit/kit.gitignore`) into the root file,
+     keeping every line of both.
    - `tools/`: if the starter's tools differ from `kit/tools/`, replace them with the kit's and say
      so in the import DEC.
 5. **Records are kept as they are:** rulings, decisions, sprint records, reviews and decision packs.
 6. **First sprint (S01):** its Part 1 records the inherited baseline once: the checks run in steps 1
-   and 3, verbatim. The new PI's extension gets new spec items, and its own checks in the
+   and 3, verbatim (the test and checker output). DEC entries may point to it, but never claim to
+   contain it. The new PI's extension gets new spec items, and its own checks in the
    extension-evidence slot. **Inherited checks must keep passing with the extension disabled.**
 7. **Post-generation check** (`generation-checklist.md`, *Then*): search the starter's governing
    documents for phrases that the adoption made stale, such as "pending R-01", "Pending adoption",

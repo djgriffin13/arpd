@@ -92,8 +92,9 @@ Details for each phase are in `references/interview-guide.md`.
   `.claude/settings.json` (the event-logging hooks) and `.claude/agents/` (the implementer and
   reviewer roles). Before those writes, tell the PI in plain words what each is for, and that the
   logging records event times and types but no prompt text (`references/generation-checklist.md`,
-  *Permission prompts*). A non-interactive or scripted run cannot approve them. Never work around the
-  protection.
+  *Permission prompts*). The same prompt guards a `git mv` into or out of `.claude/`. Do these steps
+  last and on their own, so a refusal stops nothing else. A non-interactive or scripted run cannot
+  approve them. Never work around the protection.
 - **Anything that could not be written is owed, not hidden.** Record it in a DEC (for example
   "event logging not installed"), in `STATUS.md` §6 *Owed*, and under *Known gaps* in
   `START-HERE.md`. Never write "Nothing owed" while an item is missing.
@@ -118,6 +119,10 @@ Details for each phase are in `references/interview-guide.md`.
   them and update them in place.
 - Never combine a move with an edit. Moves get commits of their own, before any edit, so that the
   files' history survives (`references/import-path.md`, *Move-only commits*).
+- Never write helper scripts, notes or commit-message files inside the project. They go in the OS
+  temp directory or the session scratchpad; commit with `git commit -m`. Never `git add -A` before
+  checking `git status --short` for stray files; list any stray file you cannot remove in
+  `STATUS.md` §6.
 - Never hard-code IDs on import. Continue the existing ledgers (next free DEC, R and SA), and never
   reuse an ID that was already given.
 - Never add modules "just in case". Fewer, better-fitting rules work better than many generic ones.

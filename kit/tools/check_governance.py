@@ -46,18 +46,25 @@ The checks:
      yes / before, no / after, or pending). Not recorded makes the result INCOMPLETE (MISSING).
      Authorized after adoption is ADVISORY if ratified and recorded as an incident (I-NN), and a
      FAIL otherwise;
-   - a sprint row is a snapshot; DECISIONS.md is authoritative, but it can never excuse a late
-     authorization. The decision's own entry (DEC-NN: its Authorized and Adopted lines) is read:
-     - a row the sprint record shows as authorized late (timing no / after) never becomes PASS;
-       it is ADVISORY if the entry or the row records ratification with an incident (I-NN), and
-       FAIL otherwise;
-     - if the entry's Authorized and Adopted lines both carry dates (YYYY-MM-DD) and authorization
-       is the later one, it is late whatever the wording: ADVISORY with an I-NN, FAIL otherwise;
-     - a PENDING row becomes PASS if the entry cites authority given before adoption, and ADVISORY
-       if it records ratification after adoption with an I-NN;
-     - a PENDING decision that was never adopted, whose entry says "Deferred by R-NN" (a given
-       ruling), is ADVISORY: still to decide, and dependent work stays blocked. A deferral cannot
-       cover a decision that was already adopted: that is FAIL unless ratified with an incident.
+   - a sprint row is a snapshot; the decision's own entry in DECISIONS.md (DEC-NN: its Authorized
+     and Adopted lines) is authoritative, but it can never excuse a late authorization:
+     - an entry whose Authorized line records ratification after adoption is late, even if the
+       row says "yes": ADVISORY with an incident (I-NN, in the row or the entry), FAIL otherwise;
+     - dates must be ISO 8601 (YYYY-MM-DD, or YYYY-MM-DDTHH:MMZ). If both lines carry dates and
+       either is in another format, the order cannot be checked: MISSING. If authorization is the
+       later one (full timestamps when both have times; the same day without times is in order),
+       it is late: ADVISORY with an I-NN, FAIL otherwise;
+     - a row that cites its own authority and is marked late (timing no / after) never becomes
+       PASS;
+     - the entry decides whether the decision was adopted: an Adopted line of "not yet", pending or
+       none means not adopted, whatever the row says;
+     - a PENDING row becomes PASS when the entry cites given authority with ISO dates in order
+       (authorized no later than adopted), and MISSING when those dates are not recorded. This
+       includes a frozen row marked "after" whose own authority cell was pending, such as a
+       pre-charter default the PI later ratified: the incident is already in the record;
+     - "Deferred by R-NN" is a deferral, never authorization. A PENDING decision not adopted and
+       deferred by a given ruling is ADVISORY: still to decide, and dependent work stays blocked.
+       A deferral cannot cover a decision that was adopted: FAIL unless ratified with an incident.
    A ruling or SA counts as given only if its section has a Given line that is not pending-like
    (pending, awaiting, to be given, not yet, placeholder, TBD), or, with no Given line, a dated
    heading (YYYY-MM-DD) with no pending-like word.
@@ -70,6 +77,7 @@ The checks:
    installed" / "agent files not installed", citing R-NN or with a "Route: routine" line), which is
    ADVISORY.
 """
+import datetime
 import io
 import os
 import re
@@ -362,33 +370,76 @@ def _entry_line(body, label):
     return " ".join(m.group(1).split()) if m else ""
 
 
+_MONTH = r"(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?"
+_NON_ISO = (r"\b\d{1,2}/\d{1,2}/\d{2,4}\b|\b\d{1,2}\.\d{1,2}\.\d{4}\b|\b\d{1,2}\s+" + _MONTH + r"\s+\d{4}\b|\b"
+            + _MONTH + r"\s+\d{1,2},?\s+\d{4}\b")
+_ISO = r"\b(\d{4}-\d{2}-\d{2})(?:[T ](\d{2}:\d{2})(?::\d{2})?\s*(Z|[+-]\d{2}:?\d{2})?)?"
+
+
+def _when(text):
+    """(kind, date, datetime-or-None) for the first date in a line: kind is "iso", "other" or None."""
+    m = re.search(_ISO, text)
+    if m:
+        moment = None
+        if m.group(2):
+            tz = (m.group(3) or "Z").replace("Z", "+00:00")
+            if re.match(r"^[+-]\d{4}$", tz):
+                tz = tz[:3] + ":" + tz[3:]
+            try:
+                moment = datetime.datetime.fromisoformat("%sT%s%s" % (m.group(1), m.group(2), tz))
+            except ValueError:
+                moment = None
+        return "iso", m.group(1), moment
+    if re.search(_NON_ISO, text, re.I):
+        return "other", None, None
+    return None, None, None
+
+
 def _entry(rid, needed, known, sections):
     """What the decision's own entry in DECISIONS.md records."""
     body = sections.get(rid, "")
     auth, adopted = _entry_line(body, "Authorized"), _entry_line(body, "Adopted")
-    auth_date = re.search(r"\b(\d{4}-\d{2}-\d{2})\b", auth)
-    adopt_date = re.search(r"\b(\d{4}-\d{2}-\d{2})\b", adopted)
     deferred = re.search(r"\bdeferred by (R-\d+)\b", _clean(body), re.I)
+    auth_wo_deferral = re.sub(r"\bdeferred by R-\d+\b", "", auth, flags=re.I)  # a deferral is not authorization
+    a_kind, a_date, a_moment = _when(auth)
+    d_kind, d_date, d_moment = _when(adopted)
+    a_show = a_moment.strftime("%Y-%m-%dT%H:%MZ") if a_moment else a_date
+    d_show = d_moment.strftime("%Y-%m-%dT%H:%MZ") if d_moment else d_date
+    both = bool(a_kind and d_kind)
+    late = False
+    if both and a_kind == d_kind == "iso":
+        late = (a_moment > d_moment) if (a_moment and d_moment) else (a_date > d_date)
+    not_adopted = bool(adopted) and re.match(r"^\W*(not yet|no\b|pending|none|n/a|—|-|$)", _clean(adopted), re.I)
     return {
-        "given": [x for x in re.findall(needed, auth) if x in known],
-        "ratified": bool(re.search(r"ratifi\w*\s+after\s+adoption|after\s+adoption", auth, re.I)
-                         and re.search(r"\bI-\d+\b", auth)),
-        "after_wording": bool(re.search(r"after\s+adoption", auth, re.I)),
-        "auth_pending": bool(re.search(r"\bpending\b", auth, re.I)),
-        "adopted": bool(adopted) and not re.match(r"^\W*(not yet|no\b|pending|none|n/a|—|-)", _clean(adopted), re.I),
-        "dates_late": bool(auth_date and adopt_date and auth_date.group(1) > adopt_date.group(1)),
-        "dates": (auth_date.group(1) if auth_date else None, adopt_date.group(1) if adopt_date else None),
+        "given": [x for x in re.findall(needed, auth_wo_deferral) if x in known],
+        "incident": bool(re.search(r"\bI-\d+\b", auth)),
+        "after_wording": bool(re.search(r"ratifi\w*\s+after\b|after\s+(?:the\s+)?adoption", auth, re.I)),
+        "auth_pending": bool(re.search(r"\bpending\b", auth_wo_deferral, re.I)),
+        "has_adopted_line": bool(adopted),
+        "adopted": bool(adopted) and not not_adopted,
+        "dates_bad": both and not (a_kind == d_kind == "iso"),
+        "dates_late": late,
+        "dates_in_order": both and a_kind == d_kind == "iso" and not late,
+        "dates": (a_show, d_show),
         "deferred_by": deferred.group(1) if deferred and deferred.group(1) in known else None,
     }
 
 
-def _verdict(kind, msg, row_late, row_incident, e, name, rid):
+def _verdict(kind, msg, row_late, row_incident, row_auth_pending, e, name, rid):
     """Combine the sprint row's verdict with the decision's own entry. Returns (kind, msg) or None for PASS.
 
     kind is the row's own verdict: PENDING, ADVISORY (late, incident recorded), FAIL (late, no
-    incident) or TIMELY. A row the record shows as late never becomes PASS.
+    incident) or TIMELY.
     """
-    incident = row_incident or e["ratified"]
+    incident = row_incident or e["incident"]
+    ratified = "%s: %s ratified after adoption (recorded incident; per its entry in DECISIONS.md)" % (name, rid)
+    # 1. The entry records ratification after adoption: late, whatever the row says.
+    if e["after_wording"] and (e["given"] or kind != "PENDING"):
+        if incident:
+            return "ADVISORY", ratified
+        return "FAIL", ("%s: %s: its entry in DECISIONS.md records ratification after adoption, with no incident "
+                        "recorded" % (name, rid))
+    # 2. Dates: ISO 8601 only; authorization after adoption is late.
     if e["dates_late"]:
         auth_d, adopt_d = e["dates"]
         if incident:
@@ -396,33 +447,35 @@ def _verdict(kind, msg, row_late, row_incident, e, name, rid):
                 name, rid, auth_d, adopt_d)
         return "FAIL", ("%s: %s authorized after adoption per DECISIONS.md (authorized %s, adopted %s), with no "
                         "incident recorded" % (name, rid, auth_d, adopt_d))
+    bad_dates = ("MISSING", "%s: %s authorization/adoption dates not in ISO 8601; cannot check order" % (name, rid))
+    if kind == "FAIL":
+        return kind, msg
+    if e["dates_bad"]:
+        return bad_dates
     if kind == "TIMELY":
         return None
-    if kind == "PENDING":
-        adopted = row_late or e["adopted"]
-        if e["deferred_by"] and not adopted:
-            return "ADVISORY", "%s: %s deferred by %s (still to decide; dependent work stays blocked)" % (
-                name, rid, e["deferred_by"])
-        if adopted and (e["deferred_by"] or row_late):
-            if e["given"] and incident:
-                return "ADVISORY", "%s: %s ratified after adoption (recorded incident; per its entry in DECISIONS.md)" % (
-                    name, rid)
-            if e["deferred_by"]:
-                return "FAIL", ("%s: consequential decision %s was adopted, so the deferral by %s cannot cover it: "
-                                "adopted without authority" % (name, rid, e["deferred_by"]))
-            if e["given"] and not e["auth_pending"]:
-                return "FAIL", "%s: %s authorized after adoption, with no incident recorded" % (name, rid)
-            return kind, msg
-        if e["given"] and e["ratified"]:
-            return "ADVISORY", "%s: %s ratified after adoption (recorded incident; per its entry in DECISIONS.md)" % (
-                name, rid)
-        if e["given"] and not e["after_wording"] and not e["auth_pending"]:
-            return None
+    if kind == "ADVISORY":
         return kind, msg
-    if kind == "FAIL" and e["given"] and e["ratified"]:
-        return "ADVISORY", "%s: %s ratified after adoption (recorded incident; per its entry in DECISIONS.md)" % (
-            name, rid)
-    return kind, msg
+    # 3. PENDING: the entry decides adoption, deferral and authority.
+    adopted = e["adopted"] if e["has_adopted_line"] else row_late
+    if e["deferred_by"] and not adopted:
+        return "ADVISORY", "%s: %s deferred by %s (still to decide; dependent work stays blocked)" % (
+            name, rid, e["deferred_by"])
+    if e["deferred_by"] and adopted:
+        if e["given"] and incident:
+            return "ADVISORY", ratified
+        return "FAIL", ("%s: consequential decision %s was adopted, so the deferral by %s cannot cover it: "
+                        "adopted without authority" % (name, rid, e["deferred_by"]))
+    if not e["given"] or e["auth_pending"]:
+        return kind, msg
+    if row_late and not row_auth_pending:
+        # the row itself cites authority and is marked late
+        return ("ADVISORY", ratified) if incident else (
+            "FAIL", "%s: %s authorized after adoption, with no incident recorded" % (name, rid))
+    if e["dates_in_order"]:
+        return None
+    return "MISSING", ("%s: %s: its entry cites %s, but the Authorized and Adopted dates (ISO 8601) are not both "
+                       "recorded; cannot check order" % (name, rid, e["given"][0]))
 
 
 def check_sprints():
@@ -512,9 +565,10 @@ def check_sprints():
             else:
                 kind, msg = "TIMELY", None
             outcome = _verdict(kind, msg, when == "late", bool(re.search(r"\bI-\d+\b", timing_raw + " " + authority)),
-                               _entry(rid, needed, known, sections), name, rid)
+                               authority_pending, _entry(rid, needed, known, sections), name, rid)
             if outcome:
-                {"PENDING": pending, "ADVISORY": advisories, "FAIL": problems}[outcome[0]].append(outcome[1])
+                {"PENDING": pending, "ADVISORY": advisories, "FAIL": problems,
+                 "MISSING": missing}[outcome[0]].append(outcome[1])
     status = ("FAIL" if problems else "MISSING" if missing else "PENDING" if pending
               else "ADVISORY" if advisories else "PASS")
     step("Closed sprints: decision tracking and authorization", status,

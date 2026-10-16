@@ -31,7 +31,7 @@ instructions: never reconcile them or write `.arpd` files beside them.
 | 8 | `INDEX.md` | `kit/templates/INDEX.md`, or the starter's own | All top-level paths, including the project's own. List only paths that exist; for one that will exist later, add "pending: <reason>". No empty directories. |
 | 9 | `plans/README.md` | `kit/templates/plans/README.md` | Copy as is. |
 | 10 | `reports/` | `kit/templates/reports/*` | Copy as templates into `reports/templates/`. Create `reports/sprints/`. |
-| 11 | `reports/sprints/SPRINT-01.md` | `reports/templates/SPRINT.md` | Part 1 only: the bounded first sprint from Phase 10. On import, Part 1 also records the inherited test baseline, verbatim; this is the only place it is recorded. |
+| 11 | `reports/sprints/SPRINT-01.md` | `reports/templates/SPRINT.md` | Part 1 only: the bounded first sprint from Phase 10. On import, Part 1 also records the inherited baseline (test and checker output), verbatim; this is the only place it is recorded. DEC entries may point to it, never claim to contain it. |
 | 12 | `tools/` | `kit/tools/*` | Copy `check_governance.py`, `next_plan_number.py`, `log_event.py`, `summarize_events.py` and `hooks/log_hook.py`. An imported starter's differing tools are replaced, and the import DEC says so. |
 | 13 | `.claude/settings.json` | `kit/settings/settings.json` | **Tell the PI first** (see *Permission prompts* below). If a settings file exists, merge only the `hooks` key and show the PI the diff. Check that `python` resolves on this machine (`python --version`). If it doesn't, use `python3` or the full path. |
 | 14 | `.claude/agents/` | `kit/agents/*` | **Tell the PI first** (below). Copy for lead-with-subagents and peer arrangements. |
@@ -43,7 +43,9 @@ instructions: never reconcile them or write `.arpd` files beside them.
 ## Permission prompts for `.claude/`
 
 Claude Code asks the PI for an interactive approval before any write to `.claude/settings.json` (the
-hooks) or `.claude/agents/`. Never try to get around this protection. Before those two writes, tell
+hooks) or `.claude/agents/`, and before a `git mv` into or out of `.claude/`. Never try to get around
+this protection. Do these writes **last**, each as its own step, so a blocked approval cannot stop
+anything else (in an import, the separate final move in `import-path.md`, step 3). Before them, tell
 the PI in plain words:
 
 - "Claude Code will ask your permission for two files. The first turns on event logging: a small
@@ -55,9 +57,15 @@ If the PI declines, or the write is blocked (a non-interactive or scripted run c
 
 - record a DEC titled "event logging not installed" or "agent files not installed", with the reason
   and the route (routine, or the PI's ruling);
-- list the item in `STATUS.md` §6 *Owed* and §7, and under *Known gaps* in `START-HERE.md`;
+- list the item in `STATUS.md` §6 *Owed* and §7, and under *Known gaps* in `START-HERE.md`, with the
+  exact commands the PI can run later (for a fresh project, copying `kit/settings/settings.json` and
+  `kit/agents/*`; for an import, the `git mv` commands in `import-path.md`, step 3);
 - continue. The governance check reports the gap as ADVISORY once the DEC exists, and as MISSING
   until then.
+
+**Working files.** Helper scripts and notes are written **outside** the repository (the OS temp
+directory or the session scratchpad), never in the project. Commit with `git commit -m "…"` (several
+`-m` for paragraphs), not with a message file.
 
 **Then:**
 
@@ -75,5 +83,11 @@ If the PI declines, or the write is blocked (a non-interactive or scripted run c
    (Use the actual IDs if the ledger was inherited.)
 4. Check that the kit's pre-setup files are in `docs/arpd-kit/`, so the project's own
    `START-HERE.md` is the entry point. `kit/` stays as the module library.
-5. `git add -A`, then commit: "Set up ARPD project (ruling R-NN)", naming the adoption ruling.
-6. Do not push without the PI's authorization.
+5. Run `python tools/check_governance.py` again **after the final edit**, and quote its actual
+   OVERALL line (and any non-PASS steps) in `STATUS.md` §4, in `START-HERE.md` and in S01 Part 1.
+   Never state a checker result from an earlier run.
+6. Run `git status --short` and look for stray untracked files (helper scripts, message files, test
+   output). Remove the ones you created; list any you cannot remove in `STATUS.md` §6. Only then
+   `git add -A` and commit: `git commit -m "Set up ARPD project (ruling R-NN)"`, naming the adoption
+   ruling.
+7. Do not push without the PI's authorization.

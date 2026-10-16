@@ -98,7 +98,9 @@ Never delegate what CLAUDE.md §6 reserves to the PI.
 - **Status:** proposed / under investigation / deferred by R-NN (still to decide; dependent work stays blocked) / adopted / superseded by DEC-NN / reopened by DEC-NN
 - **Proposed:** date, by (role), with a pointer to the event-log entry or report
 - **Authorized:** date and authority (SA-NN for the delegated route, R-NN for the consult route), or "pending", or "ratified after adoption (incident I-NN)"
-- **Adopted:** date and version (commit or tag)
+- **Adopted:** date and version (commit or tag), or "not yet"
+Dates are ISO 8601: YYYY-MM-DD, with a time (YYYY-MM-DDTHH:MMZ) when authorization and adoption fall
+on the same day. The governance check compares them, and cannot check other formats.
 - **Context:** what prompted it, in plain language
 - **Options considered:** each with its consequences
 - **Decision:**
