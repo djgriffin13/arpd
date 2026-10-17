@@ -576,7 +576,10 @@ def _verdict(kind, msg, row_late, row_incident, row_auth_pending, e, name, rid):
 
 def _is_open(text):
     """True if a sprint record has no completed **Closed:** field."""
-    return "**Closed:**" not in text or "{{date" in text.split("**Closed:**", 1)[1][:80]
+    if "**Closed:**" not in text:
+        return True
+    value = text.split("**Closed:**", 1)[1].split("\n", 1)[0]
+    return "{{date" in value or not re.search(r"\d{4}-\d{2}-\d{2}", value)  # only a dated field closes
 
 
 def check_sprints():
