@@ -250,7 +250,9 @@ Worked case: importing `examples/march-1991/` into this kit repository.
    - **Inherited decisions the starter already adopted** (by its own ruling, for example the March
      starter's R-01 adopting DEC-01 to DEC-07 as its working baseline) stay adopted. The importing
      PI's adoption of the starter carries them, so the read-back lists each one by ID and title, as
-     adopted by the starter's ruling. Do not mark them pending or deferred. If the PI wants
+     adopted by the starter's ruling. Do not mark them pending or deferred. If the PI's words would
+     reverse one (for example, "leave them pending"), say that they are already adopted and what
+     reversing them would block, and ask once before recording anything. If the PI wants
      to revisit one, that is a reopening (a new DEC quoting the original rationale, charter §5), on
      the consult route.
    - **Inherited pending decisions the PI ruled on:** update each affected DEC entry's Status,

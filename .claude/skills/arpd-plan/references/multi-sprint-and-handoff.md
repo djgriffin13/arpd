@@ -150,6 +150,8 @@ Log each ruling and SA: `python tools/log_event.py ruling --actor lead --ref R-N
 3. `Start`: the time from `date -u +%Y-%m-%dT%H:%MZ`, and the commit SHA Part 1 is written on.
 4. Rewrite `STATUS.md`: Readiness `Execution: in progress (S0N)` and `Next step: check in`; §2
    Current sprint. Set the sprint's `MASTER_PLAN.md` §3 row to In progress.
+   Rewrite `START-HERE.md`'s next step too: S0N is in progress, how to check in, and no start
+   prompt (remove the old one).
 5. Commit Part 1 with STATUS (and, at the first sprint, `INDEX.md` with "pending" removed from its
    `reports/sprints/` row); log
    `python tools/log_event.py sprint_start --actor lead --ref S0N --note "PLAN-… vN; R-NN"`.
@@ -197,5 +199,8 @@ prompt in `START-HERE.md`.
 ## 7. Handoff truth
 
 `STATUS.md`, `START-HERE.md`, `DECISIONS.md` and the planning and sprint records must agree on
-readiness and the next step. A passing checker does not mean "ready to execute". A project with an
+readiness and the next step. **Rewrite STATUS Readiness and START-HERE's next step together, in the same
+commit, at every change:** a draft, an approval, a revision after approval, a start, a pause at a
+boundary, and a close. The checker compares STATUS's Execution line with the sprint records; it
+cannot read START-HERE, so this is yours to keep true. A passing checker does not mean "ready to execute". A project with an
 adopted setup and no sprint plan is valid; its next step is `/arpd-plan`, not implementation.

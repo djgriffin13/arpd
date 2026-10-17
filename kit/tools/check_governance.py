@@ -967,9 +967,32 @@ def check_superseded():
     step(name, "ADVISORY" if notes else "PASS", notes)
 
 
+
+def check_readiness():
+    """Advisory: STATUS Readiness's Execution line against the sprint records. Nothing more."""
+    name = "Readiness agrees with the sprint records (advisory)"
+    if not os.path.exists(os.path.join(ROOT, "STATUS.md")):
+        return
+    status = read("STATUS.md")
+    m = re.search(r"^## Readiness\b(.*?)(?=^## )", status, re.S | re.M)
+    if not m:
+        step(name, "PASS", ["no Readiness block in STATUS.md (older format); not compared"])
+        return
+    ex = re.search(r"Execution:\**\s*(.+)", m.group(1))
+    execution = ex.group(1).strip().lower() if ex else ""
+    d = os.path.join(ROOT, "reports", "sprints")
+    open_records = [f for f in (sorted(os.listdir(d)) if os.path.isdir(d) else [])
+                    if f.endswith(".md") and _is_open(read(os.path.join("reports", "sprints", f)))]
+    notes = []
+    if open_records and "not started" in execution:
+        notes += ["%s is open, but STATUS Readiness says execution: not started" % f for f in open_records]
+    if not open_records and "in progress" in execution:
+        notes.append("STATUS Readiness says execution: in progress, but no sprint record is open")
+    step(name, "ADVISORY" if notes else "PASS", notes or ["Execution line consistent with the sprint records"])
+
 def main():
     for fn in (check_exists, check_adoption, check_links, check_requirements, check_plans, check_sprints,
-               check_open_sprints, check_index, check_logging, check_skills, check_superseded):
+               check_open_sprints, check_readiness, check_index, check_logging, check_skills, check_superseded):
         try:
             fn()
         except Exception as exc:  # report, never hide
@@ -984,7 +1007,7 @@ def main():
             "dates, rulings and authorizations are checked as recorded, not verified as true or as the PI's "
             "own words",
             "whether a plan approval or start direction was the PI's own words",
-            "STATUS readiness flags (setup, planning, execution, next step) are not checked against the records",
+            "STATUS readiness flags beyond the Execution line (setup, planning, next step) and START-HERE.md are not checked against the records",
             "installation checks look at files, not at whether the hooks actually fired",
             "the code itself: run the project's tests separately"]:
         print("    - " + d)

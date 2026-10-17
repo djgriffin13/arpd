@@ -272,7 +272,8 @@ Each requirement moves through these states. The evidence for each state is reco
   recorded as an SA naming the sprints, the transition conditions and when to consult the PI.
   Under it, work continues across boundaries without a new ruling. Every sprint boundary still
   gets its close-out, independent review, checks and plan update. Each sprint's Part 1 records its
-  approved plan, its execution authority and its transition policy.
+  approved plan, its execution authority and its transition policy, and is committed with `STATUS.md`
+  when the sprint starts.
 - **Dependencies.** At planning, review, close-out, check-in and the other points listed in
   `kit/docs/INTERACTION.md`, run its quick dependency screen. A pending decision blocks only the work that depends on it.
 - **Explain through science.** Anything brought to the PI states what it changes about what the
