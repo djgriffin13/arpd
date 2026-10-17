@@ -578,8 +578,11 @@ def _is_open(text):
     """True if a sprint record has no completed **Closed:** field."""
     if "**Closed:**" not in text:
         return True
-    value = text.split("**Closed:**", 1)[1].split("\n", 1)[0]
-    return "{{date" in value or not re.search(r"\d{4}-\d{2}-\d{2}", value)  # only a dated field closes
+    rest = text.split("**Closed:**", 1)[1]
+    value = rest.split("\n", 1)[0].strip() or rest.strip()[:80]  # the date may sit on the next line
+    value = value.strip("*_ ").lower()
+    # Open: the template placeholder, or nothing / a not-yet word. Any other value closes the record.
+    return "{{date" in value or not value or value.startswith(("not yet", "open", "—", "-", "n/a", "pending"))
 
 
 def check_sprints():

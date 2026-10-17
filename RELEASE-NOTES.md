@@ -146,11 +146,11 @@ the earlier interview only; the moves, history and owed-item handling they show 
 
 | Workflow | Evidence | What it shows | Status in this candidate |
 |---|---|---|---|
-| Adaptive fresh setup, ending with planning pending | (DT-09–DT-13: to be filled) | (to be filled) | New; scripted tests in progress |
-| `/arpd-plan`: one sprint, approved, started later | (DT-09–DT-13: to be filled) | (to be filled) | New; scripted tests in progress |
-| `/arpd-plan`: a series with a gated transition | (DT-09–DT-13: to be filled) | (to be filled) | New; scripted tests in progress |
-| Import of the March starter, with the import baseline report | (DT-09–DT-13: to be filled) | (to be filled) | Regression test in progress |
-| Setup interrupted before adoption, resumed from the working notes | (DT-09–DT-13: to be filled) | (to be filled) | New; scripted test in progress |
+| Adaptive fresh setup, ending with planning pending | DT-09 ([DT-09–13](evaluation/developer-tests/DT-09-13-report.md)) | 27 turns. Tutorial toggled; notes saved and non-governing; nothing governing before adoption; no SPRINT-01; Readiness and START-HERE point to `/arpd-plan`; checker PASS | Runs end to end (scripted) |
+| `/arpd-plan`: one sprint, approved, started later | DT-10, DT-10b ([DT-09–13](evaluation/developer-tests/DT-09-13-report.md)) | A versioned draft; approval names file, version and commit, planning only; a revision after approval reads as a draft; the start choice states its effect; Part 1 cites approval and start rulings | Runs end to end (scripted); DT-10b on the fixed kit |
+| `/arpd-plan`: a series with a gated transition, or continuation by SA | DT-11, DT-11b ([DT-09–13](evaluation/developer-tests/DT-09-13-report.md)) | Later sprints provisional; dependency recorded with Affects, Needed by and Can continue; Sprint 1 only, or an SA with scope and transition conditions | Runs end to end (scripted), on the kit before the round-8 fixes |
+| Import of the March starter, with the import baseline report | DT-12 ([DT-09–13](evaluation/developer-tests/DT-09-13-report.md)) | Pure-rename moves; baseline report cited by the import decision; no SPRINT-01; checker PASS. A stale scripted answer deferred adopted decisions (import guidance fixed) | Runs end to end (scripted) |
+| Setup interrupted before adoption, resumed from the working notes | DT-13 ([DT-09–13](evaluation/developer-tests/DT-09-13-report.md)) | A new session found the notes, adopted nothing, asked only what was open, re-did the read-back | Runs end to end (scripted) |
 | Fresh setup, v0.3 interview | [DT-03](evaluation/developer-tests/DT-03-report.md) | Interview through first sprint plan; governing documents generated; owed `.claude/` items recorded | Superseded flow; generation and owed-item handling unchanged |
 | Import, including the March starter | [DT-02](evaluation/developer-tests/DT-02-report.md), [DT-04](evaluation/developer-tests/DT-04-report.md) | Starter records and history kept through move-only commits; inherited decisions carried | Ran end to end on v0.3 |
 | Install into an existing repository | [DT-05](evaluation/developer-tests/DT-05-report.md), [DT-08](evaluation/developer-tests/DT-08-report.md) | Prior instructions kept and reconciled by decision; code, tests and data untouched; history kept. DT-05 found that the skills were not installed (fixed). DT-08: an install interrupted after the adoption ruling and resumed in a new session kept everything without duplicating it | Ran end to end on v0.3; resume tested at one interruption point. The consent prompt for working notes is new and untested |
@@ -163,7 +163,7 @@ the earlier interview only; the moves, history and owed-item handling they show 
 | Tested (with the evidence above) | Draft or untested |
 |---|---|
 | Charter, governing-document templates and the v0.3 skills, in scripted developer tests | Every workflow with a real researcher |
-| Governance checker and event summary: automated tests (95 at v0.3.0-rc.1; count for this candidate to be filled); seven independent review rounds on v0.3 | The adaptive setup, `/arpd-plan`, the interaction conventions and the v0.4 check-in and amendment changes: scripted tests in progress (DT-09–DT-13: to be filled); none tested by people |
+| Governance checker and event summary: automated tests (147: 128 for the kit tools and 19 for the turn checker); seven independent review rounds on v0.3, and rounds 8 and 8b on v0.4 | The adaptive setup, `/arpd-plan`, the interaction conventions and the v0.4 check-in and amendment changes: scripted developer tests DT-09 to DT-13 (75 turns, each checked for question placement); none tested by people |
 | Event-logging hooks and recovery, in real Claude Code sessions | Approving the `.claude/` writes interactively (scripted runs cannot approve them) |
 | Modules: computational model; team arrangement | Native choice widgets, and symbol rendering, in the Claude Code terminal and the Claude app |
 | The March (1991) worked example: 70 tests; two independent review rounds | Draft modules: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data |
@@ -247,9 +247,12 @@ New in this candidate:
   readiness block is not checked against the records.
 - **Planning:** resuming an interrupted plan review has not been tested.
 
+- **Fenced examples.** The skills show block layouts inside code fences, while the rule says a
+  real block is plain text; agents sometimes copy the fence. `check_turn.py` does not yet warn about
+  a fenced block.
+
 ## Before a public release
 
-- Fill in the DT-09 to DT-13 evidence above, and the automated test counts.
 - Tag `v0.4.0-rc.1`, then complete and record the manual tests in `docs/MANUAL-TESTING.md`.
 - Confirm copyright ownership, and the copyright holder named in `LICENSE`. During anonymous review
   it reads "The ARPD authors".

@@ -7,8 +7,9 @@ Most come from the independent review rounds and the developer tests in `evaluat
 
 - **No workflow has been run by a researcher.** Every developer test used scripted answers.
   DT-01 to DT-08 were run on v0.3.0-rc.1: real `/arpd-setup` runs in fresh, import and install modes,
-  and real `/arpd-checkin` and `/arpd-amend` sessions. The v0.4 developer tests (DT-09 to DT-13) are
-  in progress. None of this tests the interview's length, clarity or feel, or whether a researcher
+  and real `/arpd-checkin` and `/arpd-amend` sessions. The v0.4 developer tests (DT-09 to DT-13) ran the
+  adaptive setup and `/arpd-plan` with scripted answers; 3 of 67 waiting turns broke the
+  question-last rule, so placement still depends on the model following it. None of this tests the interview's length, clarity or feel, or whether a researcher
   can use the kit (`docs/MANUAL-TESTING.md`).
 - **The new parts are untested with people.** The adaptive setup interview, the guided tutorial,
   `/arpd-plan`, the interaction conventions (`kit/docs/INTERACTION.md`) and the v0.4 changes to
