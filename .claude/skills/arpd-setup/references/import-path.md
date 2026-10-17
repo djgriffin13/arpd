@@ -247,11 +247,16 @@ Worked case: importing `examples/march-1991/` into this kit repository.
    - `DECISIONS.md`: fill the inherited adoption placeholder or use the next free R; add the new
      SA; record the import and the moves as the next free DEC, citing
      `reports/IMPORT-BASELINE-YYYY-MM-DD.md`.
+   - **Inherited decisions the starter already adopted** (by its own ruling, for example the March
+     starter's R-01 adopting DEC-01 to DEC-07 as its working baseline) stay adopted. The importing
+     PI's adoption of the starter carries them; do not mark them pending or deferred. If the PI wants
+     to revisit one, that is a reopening (a new DEC quoting the original rationale, charter §5), on
+     the consult route.
    - **Inherited pending decisions the PI ruled on:** update each affected DEC entry's Status,
      Authorized and Adopted lines to match the ruling. Dates are ISO 8601 (`YYYY-MM-DD`, with a
      time such as `2026-10-20T14:05Z` when both happen on the same day).
      - **ratified, never adopted before:** a choice implemented as a code default but recorded as
-       "not adopted" (as with the March starter's DEC-01 to DEC-07) is a normal consult-route
+       "not adopted" is a normal consult-route
        adoption: "**Authorized:** <date>, R-NN" and "**Adopted:** <date>, <version>", with
        authorization no later than adoption, and Status "adopted". Its earlier implementation
        before the charter is already covered by the recorded incident (I-01); do not write
