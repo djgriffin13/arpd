@@ -150,8 +150,9 @@ Log each ruling and SA: `python tools/log_event.py ruling --actor lead --ref R-N
 3. `Start`: the time from `date -u +%Y-%m-%dT%H:%MZ`, and the commit SHA Part 1 is written on.
 4. Rewrite `STATUS.md`: Readiness `Execution: in progress (S0N)` and `Next step: check in`; §2
    Current sprint. Set the sprint's `MASTER_PLAN.md` §3 row to In progress.
-   Rewrite `START-HERE.md`'s next step too: S0N is in progress, how to check in, and no start
-   prompt (remove the old one).
+   Rewrite `START-HERE.md`'s *Next step* section too: S0N is in progress, how to check in, and
+   no start prompt (remove the old one). Correct any other sentence in it that states the old
+   state (for example "nothing has been planned yet").
 5. Commit Part 1 with STATUS (and, at the first sprint, `INDEX.md` with "pending" removed from its
    `reports/sprints/` row); log
    `python tools/log_event.py sprint_start --actor lead --ref S0N --note "PLAN-… vN; R-NN"`.
