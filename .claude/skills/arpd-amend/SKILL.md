@@ -14,9 +14,11 @@ and auditable.
    - the options;
    - a recommendation.
 
-   Wait for the PI's reply. Never write a ruling the PI did not give. If the PI has stated the change
-   clearly, that is the ruling: do not add a second confirmation step. Ask only if the words are
-   ambiguous.
+   Wait for the PI's reply. Never write a ruling the PI did not give. If the PI has stated the change,
+   that is the ruling and the authorization: do not add a second approval step. Ask before recording
+   only if the words could authorize materially different changes. Edge cases the words do not
+   settle are recorded in the *Reading* line as the lead's reading, labelled as such, and listed in
+   the read-back for the PI to correct; they do not hold up the change.
 2. **State the scientific consequence** of a consequential change, before or as you record it, even
    when the PI stated the change directly (for example, a new way of counting a construct). Say:
    - which constructs, operationalizations, invariants and claims change;

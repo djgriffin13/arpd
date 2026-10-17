@@ -20,7 +20,12 @@ Read these first:
 Then run both tools, every time:
 
 - `python tools/check_governance.py`. Keep its actual OVERALL line and every step that is not PASS.
-  Never state a checker result from memory or from an earlier run.
+  Never state a checker result from memory or from an earlier run. If the checker cannot be run (it
+  is missing, or it fails), say so plainly under "What needs you", with the error, and do not report
+  the project as complete.
+- **Reconcile the checker with `STATUS.md`.** If the checker reports a gap that STATUS does not list
+  (for example, STATUS says "Nothing owed" while a file is MISSING), say that STATUS is out of date,
+  and name each gap.
 - `python tools/summarize_events.py --since <sprint start>`. If it reports no event log, or no events
   in the window, say so in plain words. Never invent figures.
 
@@ -41,6 +46,9 @@ Cover:
    - the decision requested.
 
    Nothing consequential is adopted until the PI answers, or a standing authorization covers it.
+   Do not present as routine a change to an accepted specification item, a standing authorization in
+   force, or the charter: those change only by the PI's words (`/arpd-amend`). Installing `.claude/`
+   files needs the PI's approval of Claude Code's permission prompt; say so.
    **Never say nothing is needed** while the checker's OVERALL line is not PASS, or §6 lists
    anything owed.
 3. **What was decided without you.** List delegated decisions individually, each with the standing
