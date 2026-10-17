@@ -65,7 +65,8 @@ C. Close S03 first, then plan the next sprint.
 ────────────────────────────────
 ```
 
-The argument `one` or `multiple` answers Step B in advance; `resume` goes to 3 or 4.
+The argument `one` or `multiple` answers Step B in advance and nothing else: Steps A and C
+(the read-back and the priorities question) still run before any draft. `resume` goes to 3 or 4.
 
 ## The conversation
 

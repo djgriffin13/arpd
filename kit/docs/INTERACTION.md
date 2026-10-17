@@ -34,13 +34,22 @@ line, then the label alone on a line, then the question or choice, then a closin
 
 Rules:
 
-- **The block is last.** Nothing follows the closing divider. Explanation, progress, tool results
-  and tutorial notes all go above it.
+- **The block is last.** Nothing follows the closing divider: no extra request ("when you answer,
+  also tell me…"), no tip, no summary. Anything else you need goes inside the block or waits for the
+  next turn. Explanation, progress, tool results and tutorial notes all go above it. Write the block
+  as plain text, not inside a code fence (the examples here are fenced only to show the layout).
+- **A closing turn has no block.** When the skill ends and does not wait for the PI (for example,
+  after "later"), end with the next step and the exact prompt instead.
 - **One primary open question per pause.** A bounded choice may allow several answers.
 - **Restate the active question.** If tools ran after you asked (you saved notes, ran a check),
   repeat the question at the end, in a new block.
 - **The label does not change meaning.** A PI's direct instruction to change a rule is a ruling even
   if no approval block was shown.
+- **A reply to an approval that also adds something.** If the PI assents and in the same reply
+  raises a new consideration that could change what is being approved ("Yes. But the scale
+  definitions aren't final"), do not record the approval yet. Say how the new point affects the
+  draft, and ask once: approve as is, or revise first. A clear assent with nothing new is recorded
+  at once, without a second confirmation.
 
 ```text
 SETUP  ✓ Intake → ● Research & Problem → ○ Product & Engineering → ○ Governance & Handoff
