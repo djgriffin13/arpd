@@ -118,8 +118,8 @@ Details for each phase are in `references/interview-guide.md`.
 - Never invent the PI's words. If a ruling is needed and the PI has not given one, the item stays
   pending.
 - Never overwrite existing project files or instructions. In import or install mode, follow
-  `references/import-path.md`. The kit's own `README.md`, `QUICKSTART.md`, `CLAUDE.md` and
-  `AGENTS.md` are not project instructions: move them to `docs/arpd-kit/` in every mode that uses
+  `references/import-path.md`. The kit's own `README.md`, `QUICKSTART.md`, `CLAUDE.md`,
+  `AGENTS.md`, `LICENSE` and `CITATION.cff` are not project files: move them to `docs/arpd-kit/` in every mode that uses
   this repository. An imported ARPD starter's own `CLAUDE.md` and `AGENTS.md` are its charter: keep
   them and update them in place.
 - Never combine a move with an edit. Moves get commits of their own, before any edit, so that the

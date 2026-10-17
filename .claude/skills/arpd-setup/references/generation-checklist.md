@@ -9,8 +9,10 @@ has a `DECISIONS.md`, continue its numbering, and fill an inherited placeholder 
 given ID (`import-path.md`, *Numbering*).
 
 **Before writing (fresh and import modes): move-only commits.** Move the kit's own pre-setup files
-(`README.md`, `QUICKSTART.md`, `CLAUDE.md`, `AGENTS.md`) to `docs/arpd-kit/` with `git mv`, and commit
-that move alone. For a starter that lives inside the kit, then move the starter to the root and
+(`README.md`, `QUICKSTART.md`, `CLAUDE.md`, `AGENTS.md`, `LICENSE`, `CITATION.cff`) to `docs/arpd-kit/`
+with `git mv`, and commit that move alone. The kit's licence and citation file describe the kit, not
+the project: the PI chooses the project's own licence (`kit/LICENSE` and `tools/LICENSE` stay with
+the kit's materials). For a starter that lives inside the kit, then move the starter to the root and
 commit that move alone too. Edit nothing until both commits exist; a move combined with an edit can
 cut the files' history (`import-path.md`, *Move-only commits*). The kit's files are not project
 instructions: never reconcile them or write `.arpd` files beside them.

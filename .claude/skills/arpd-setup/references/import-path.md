@@ -33,7 +33,8 @@ Then decide which kind of project is coming in, because the steps differ:
 ## The kit's own files are not prior instructions
 
 In fresh and import modes, this repository's root holds the kit's own pre-setup files: `README.md`,
-`QUICKSTART.md`, `CLAUDE.md` and `AGENTS.md`. They describe the kit, not the project.
+`QUICKSTART.md`, `CLAUDE.md`, `AGENTS.md`, `LICENSE` and `CITATION.cff`. They describe the kit, not
+the project. The PI chooses the project's own licence.
 
 - **Move them** to `docs/arpd-kit/` with `git mv`, in a commit of their own (see *Move-only commits*).
 - **Never** treat them as project instructions: do not reconcile them, do not move them to
@@ -162,7 +163,7 @@ Worked case: importing `examples/march-1991/` into this kit repository.
    S=examples/march-1991
    # Commit 1: the kit's own files, and every other colliding kit file
    mkdir -p docs/arpd-kit
-   for f in README.md QUICKSTART.md CLAUDE.md AGENTS.md; do git mv "$f" docs/arpd-kit/; done
+   for f in README.md QUICKSTART.md CLAUDE.md AGENTS.md LICENSE CITATION.cff; do git mv "$f" docs/arpd-kit/; done
    git mv .gitignore docs/arpd-kit/kit.gitignore
    git commit -m "Move kit pre-setup files to docs/arpd-kit (no changes)"
    # Commit 2: the starter's old START-HERE.md, separately, then everything except .claude/
