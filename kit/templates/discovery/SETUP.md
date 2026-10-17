@@ -15,7 +15,7 @@ other repositories or folders the PI did not point to.
 - Update the notes after every useful answer.
 - Keep them short. They are a working aid, not a record of the whole conversation.
 
-**Last updated:** {{date and time in UTC}}
+**Last updated:** {{date and time in UTC, read from `date -u +%Y-%m-%dT%H:%MZ`, never estimated}}
 
 ---
 
