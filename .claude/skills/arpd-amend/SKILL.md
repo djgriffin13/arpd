@@ -27,8 +27,8 @@ and auditable.
      nothing has been built).
 
    This goes in the ruling's *Reading* line and in the read-back to the PI.
-3. **Record the ruling verbatim** in `DECISIONS.md`, under the existing *Rulings* heading (never a
-   new heading), as the next R-NN, typos included, with:
+3. **Record the ruling verbatim** in `DECISIONS.md`, under the existing *Rulings* section (never a
+   new `##` section; the ruling gets its own `### R-NN` heading there), as the next R-NN, typos included, with:
    - a *Given* line (directly in session, or relayed and confirmed on a date);
    - a *Reading* line, including the consequence from step 2;
    - a *Changes* line naming every file touched, with versions.
@@ -44,8 +44,10 @@ and auditable.
        you may update, and name it in the *Changes* line. List the ones you may not edit (an SA in
        force, an accepted item) in the read-back, for the PI. The governance check flags live items
        that still cite a superseded ID.
-   - **Open scientific question:** add it to `PARADIGM-SPEC.md` §9 *Open scientific questions*, as
-     the next Q-NN, with what it blocks and any default. `MASTER_PLAN.md` holds plans, backlog,
+   - **Open scientific question:** add it to the *Open scientific questions* section of
+     `PARADIGM-SPEC.md` (§9 in the kit's template), as the next Q-NN, with what it blocks and any
+     default. If the spec has no such section (an older starter), add it at the end, citing R-NN.
+     Other documents may refer to the Q-NN; the question itself lives only in the spec. `MASTER_PLAN.md` holds plans, backlog,
      risks and incidents, not open scientific questions.
    - **Module:** add it from `kit/constitution/modules/`, retire it (move its text to
      `docs/retired-rules.md`, citing R-NN), or change its arrangement values.
@@ -67,29 +69,33 @@ the ruling as above **and** record the delegation as an SA that cites it.
 
 1. **Get the PI's words.** If the scope is unclear, ask. Never widen a delegation beyond what the PI
    said, and never record as delegated anything §6 reserves to the PI.
-2. **Record it verbatim** in `DECISIONS.md`, under *Standing authorizations*, as the next SA-NN:
+2. **Record it verbatim** in `DECISIONS.md`, under *Standing authorizations*, as the next SA-NN,
+   in the template's format (`kit/templates/DECISIONS.md`):
    - the PI's exact words, quoted;
    - **Given:** the session, or the ruling R-NN that created it (an SA may cite the ruling that
      created it);
-   - **Profile:** consult first / bounded autonomy / exploratory autonomy (SA-01, or when the
-     profile changes);
-   - **Purpose;**
-   - **Scientific boundaries:** what agents may decide within;
-   - **Permitted assumption changes;**
+   - **Supersedes:** the SA it changes or replaces, or "none" (step 3);
+   - **Scope:** the work, assumptions or choices it covers, and its boundaries;
    - **Consult the PI when:** the triggers that still go to the PI;
-   - **Reporting cadence;**
-   - **Practical limits:** time, compute, cost;
-   - **Supersedes:** the SA it replaces, or "none";
+   - **Reporting cadence** and **Practical limits**, if they differ from SA-01;
    - **In force until:** changed by the PI, or a stated end.
-3. **Add, or replace?**
-   - **An additional or narrower delegation** (for example, "you may also choose the output file
-     names") is a new SA with "Supersedes: none". It is in force alongside the others, and SA-01's
-     authority profile stays in force.
-   - **Supersede an SA only** when the PI says the new one replaces it, or the profile itself
-     changes. Then the new SA carries the profile, and the charter's *Authority profile* line is
-     updated by the same route as any charter change.
-   - Either way, never edit an SA in force. A superseded SA is marked "Superseded by SA-NN" and
-     keeps its text.
+
+   An SA that sets or changes the authority profile (SA-01, or its replacement) uses SA-01's full
+   field set instead: profile, purpose, scientific boundaries, permitted assumption changes,
+   consultation triggers, reporting cadence and practical limits.
+3. **Add, or change?** Decide from the PI's words.
+   - **A new delegation that adds to those in force without changing any** (for example, "you may
+     also choose the output file names") is a new SA with "Supersedes: none". Every SA in force,
+     including SA-01's profile and its boundaries, stays in force unchanged.
+   - **The PI changes an SA in force:** replaces it, narrows it, widens it or withdraws it (for
+     example, "stop choosing column names without asking"). Record a new SA, or for a plain
+     withdrawal a short SA entry quoting the PI, that **supersedes the one it changes**, and only
+     that one. Carry over unchanged whatever the PI did not change. Never treat a new delegation as
+     withdrawing or narrowing an existing one unless the PI said so.
+   - **The profile changes** only when the PI changes it. The new SA supersedes SA-01 (or the SA
+     that carries the profile), and the charter's *Authority profile* line is updated by the same
+     route as any charter change.
+   - Never edit an SA in force. A superseded SA is marked "Superseded by SA-NN" and keeps its text.
 4. **Read it back** to the PI in two or three plain sentences: what agents may now decide without
    asking, what still comes to the PI, and every SA now in force.
 5. **Check, log and commit:** run `python tools/check_governance.py`; log

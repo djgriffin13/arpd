@@ -122,9 +122,13 @@ def read(path):
         return fh.read()
 
 
+KIT_ASIDE = os.path.join("docs", "arpd-kit")  # the kit's own pre-setup files, moved aside at setup
+
+
 def md_files():
     for d, dirs, files in os.walk(ROOT):
-        dirs[:] = [x for x in dirs if x not in SKIP_DIRS and not x.startswith(".")]
+        dirs[:] = [x for x in dirs if x not in SKIP_DIRS and not x.startswith(".")
+                   and os.path.relpath(os.path.join(d, x), ROOT) != KIT_ASIDE]
         for f in files:
             if f.endswith(".md"):
                 yield os.path.relpath(os.path.join(d, f), ROOT)
@@ -224,6 +228,9 @@ def check_adoption():
 
 
 def check_links():
+    if os.path.isdir(os.path.join(ROOT, KIT_ASIDE)):
+        not_checked.append("docs/arpd-kit/: the kit's own pre-setup files, moved aside at setup; their links "
+                           "describe the kit's layout and are not checked")
     bad = []
     for f in md_files():
         text = read(f)

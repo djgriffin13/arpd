@@ -1,6 +1,6 @@
 # Operating ARPD: installation, logging, recovery and checks
 
-This is the detail behind [QUICKSTART.md](../QUICKSTART.md). Commands are run from the project root.
+This is the detail behind the kit's `QUICKSTART.md` (at the kit's root, or in `docs/arpd-kit/` after setup). Commands are run from the project root.
 
 ## 1. Prerequisites
 

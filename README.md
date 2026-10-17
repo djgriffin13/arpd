@@ -27,7 +27,7 @@ scientific decision**. Testing, review and explicit scientific validation are it
 | **Event logging** (hooks + `tools/`) | Records defined coordination events. It reports elapsed time, agent-working time (prompt to end of turn), subagent time and failed or interrupted turns, separately from the researcher's self-reported active time. Hooks cannot measure the researcher's active time, and the tooling says so. | Built |
 | **Governance checker** (`tools/check_governance.py`) | Checks, from what is recorded: links, requirement evidence and traceability, plan numbering, charter adoption, installation files, and whether consequential decisions in closed sprints were authorized before adoption. Within the steps it lists, it does not report PASS for an item it could not check; each run prints what it did not check. It cannot show that the records themselves are true. | Built |
 | **Modules** (`kit/constitution/modules/`) | Built: computational model; team arrangement. Drafts, untested: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data. | Partial |
-| **Worked example** (`examples/march-1991/`) | A checked implementation of March's (1991) mutual-learning model, kept as a complete ARPD project with its records. It is also the starter for the feasibility demonstration. | Built: software verification (48 tests) and directional replication (22 tests), with two independent review rounds. Its assumptions await the researcher's decision. |
+| **Worked example** (`examples/march-1991/`) | A checked implementation of March's (1991) mutual-learning model, kept as a complete ARPD project with its records. It is also the starter for the feasibility demonstration. | Built: software verification (48 tests) and directional replication (22 tests), with two independent review rounds. Its assumptions were adopted as the working baseline by the PI's ruling R-01; whether they match March's own program remains open (backlog B-07 to B-09). |
 
 ## Why a team, and why a charter
 
@@ -110,7 +110,8 @@ is what `evaluation/` is for.
 
 The whole repository is released under the [MIT License](LICENSE): code, documentation, templates,
 skills, the governance framework and the worked example. `kit/LICENSE` is the same licence, kept
-with the kit so that copies of it carry the notice.
+with the kit so that copies of it carry the notice; `kit/README.md` repeats the permission below for
+generated documents, so it travels with every installed project.
 
 **Documents generated for your project.** The files that ARPD's setup and skills write for your own
 project are yours. This covers your team charter (`CLAUDE.md`), `PARADIGM-SPEC.md`,
@@ -123,5 +124,12 @@ even where they are adapted from ARPD's templates.
 (for example `kit/`, the skills in `.claude/skills/`, or the tools copied into a project's `tools/`),
 carries the normal MIT condition: keep the copyright and permission notice with them.
 
-**Citation.** If ARPD helps your research, please cite it ([CITATION.cff](CITATION.cff)) and, once it
-is available, the framework paper. Citation is encouraged, not a condition of use.
+**Exceptions: third-party material.** The repository includes no third-party code. Short quotations
+from published works, for example March (1991) and the other sources quoted in
+`examples/march-1991/SOURCES.md` and `docs/DESIGN-RATIONALE.md`, are quoted for
+scholarship and remain their owners'. The MIT License does not cover them. Dependencies such as
+numpy and pytest are installed separately, under their own licences, and are not distributed here.
+
+**Citation (a request, not a licence term).** If ARPD helps your research, please cite it
+([CITATION.cff](CITATION.cff)) and, once it is available, the framework paper. Citation is
+encouraged, not a condition of use.

@@ -59,7 +59,9 @@ Most come from the independent review rounds and the developer tests in `evaluat
   lower, by about 0.1 to 0.2 for equilibrium code knowledge, and higher in places. Several figure
   shapes differ.
 - One headline result, the R2 reversal, depends on an incompletely specified update-order choice.
-- Its nine assumptions are recorded but await a researcher's decision.
+- Its nine assumptions were adopted as the working baseline by the PI's ruling R-01, with their
+  discrepancies and limitations retained. Adoption permits use and extension; it does not establish
+  exact replication or scientific validation.
 - Comparisons with independent reconstructions and a systematic exploration of the assumptions are
   planned exploratory work (backlog B-07 to B-09).
 
