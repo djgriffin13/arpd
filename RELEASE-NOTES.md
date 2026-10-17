@@ -1,8 +1,7 @@
-# Release notes: ARPD v0.4.0-rc.1 (release candidate, in preparation)
+# Release notes: ARPD v0.4.0-rc.1 (release candidate)
 
-**Status: a release candidate in preparation. Once tagged, it is held for manual testing. This is
-not a final release.** The tag `v0.4.0-rc.1` will mark the exact commit described here; once it
-exists, `git rev-parse v0.4.0-rc.1^{commit}` prints it. A final release follows only after people
+**Status: a release candidate, held for manual testing. This is not a final release.** The tag
+`v0.4.0-rc.1` marks the exact commit described here; `git rev-parse v0.4.0-rc.1^{commit}` prints it. A final release follows only after people
 have completed the manual tests in [docs/MANUAL-TESTING.md](docs/MANUAL-TESTING.md) and any blockers
 they find are fixed.
 
