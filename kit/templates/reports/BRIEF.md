@@ -15,7 +15,7 @@ paradigm-spec items it touches.
 
 The plan path and the commit that contains it, the branch name, and the base commit to start from.
 
-## Scientific constraints
+## Scientific invariants this work must respect (INV IDs)
 
 The INV items this work must respect, quoted.
 

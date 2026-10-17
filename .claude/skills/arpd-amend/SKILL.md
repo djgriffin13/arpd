@@ -1,7 +1,7 @@
 ---
 name: arpd-amend
-description: Amend an ARPD project's governing documents under the PI's authority. Records a ruling verbatim; records or changes a standing authorization (SA-NN); amends the team charter or paradigm specification; adds, retires or changes a module; turns an incident into a rule; reopens a decision with its original rationale. Use when the PI types /arpd-amend or asks to change the rules, the science specification, the team arrangement, or what the agents may decide without asking.
-argument-hint: "[ruling | authorization [SA-id] | charter | spec | module <name> | incident <id> | reopen <DEC-id>]"
+description: Amend an ARPD project's governing documents under the PI's authority. Records a ruling verbatim; records or changes a standing authorization (SA-NN); amends the team charter or paradigm specification; sets a project default (review depth, sprint transition policy, planning cadence); changes roadmap milestones; adds, retires or changes a module; turns an incident into a rule; reopens a decision with its original rationale. Use when the PI types /arpd-amend or asks to change the rules, the science specification, the milestones, the team arrangement, a project default, or what the agents may decide without asking.
+argument-hint: "[ruling | authorization [SA-id] | charter | spec | default | roadmap | module <name> | incident <id> | reopen <DEC-id>]"
 ---
 
 # ARPD amendment
@@ -9,12 +9,25 @@ argument-hint: "[ruling | authorization [SA-id] | charter | spec | module <name>
 Governing documents change **only** by the PI's words (`CLAUDE.md` §3). This skill makes that easy
 and auditable.
 
+## What goes where
+
+| The PI asks for | Route |
+|---|---|
+| A **project default** raised in `/arpd-setup` or `/arpd-plan`: review depth, sprint transition policy, planning cadence ("from now on, …") | An amendment, applied directly from the PI's clear words: the charter (for example §8 *Cadence*) when it changes a charter rule, or an SA when it delegates (for example, continuing across sprint boundaries). A this-time-only preference is not an amendment: it stays in the plan draft or the notes |
+| A change to **milestones or the roadmap's direction** | `MASTER_PLAN.md` §2 (and §3 where the order follows), by ruling; the lead updates sprint rows in §3 on its own only as planning and close-outs record |
+| **Approval of a sprint plan**, or the **start of execution** | Recorded by `/arpd-plan` in its formats (plan-approval R-NN; execution R-NN; continuation SA). Use this skill only for a later change to them: a new ruling or SA that supersedes, narrows, widens or withdraws, never an edit |
+| **Continuing across several sprints** without a check-in at each boundary | An SA, under the add-versus-change rules below |
+| Everything else in this skill's description | The steps below |
+
 1. **Get the PI's words.** If the PI has not yet stated the change, draft it as a decision pack item:
    - the scientific consequence;
    - the options;
    - a recommendation.
 
-   Wait for the PI's reply. Never write a ruling the PI did not give. If the PI has stated the change,
+   Ask in a labelled block (`kit/docs/INTERACTION.md`): `APPROVAL REQUIRED` for the change itself,
+   saying what a yes changes and in which files; `QUESTION FOR YOU` or `CHOICE FOR YOU` only to
+   clarify. The block is last in the turn. Wait for the PI's reply. Never write a ruling the PI did
+   not give. If the PI has stated the change,
    that is the ruling and the authorization: do not add a second approval step. Ask before recording
    only if the words could authorize materially different changes. Edge cases the words do not
    settle are recorded in the *Reading* line as the lead's reading, labelled as such, and listed in
@@ -59,13 +72,22 @@ and auditable.
    - **Reopening a decision:** write a new DEC entry that quotes the original rationale, says what
      changed and why that rationale no longer holds, and names the affected work. Mark the old entry
      "Reopened by DEC-NN".
-5. **Update `STATUS.md`** (you are the lead, its one writer): the current state, *Waiting on the
-   PI* and *Owed*, so they reflect the change.
-6. **Read it back** to the PI in plain words: what changed, the consequence from step 2, and any
-   dependent item you could not update.
-7. **Check:** run `python tools/check_governance.py` and report the result verbatim.
-8. **Log:** `python tools/log_event.py ruling --actor lead --ref R-NN --note "<one line>"`.
-9. **Commit** with the ruling ID in the message.
+   - **Project default or milestone:** edit the charter line or `MASTER_PLAN.md` §2 row the PI's
+     words change, citing R-NN, and nothing else. If an approved plan or an open sprint depended on
+     the old default or milestone, name it in the read-back: an open sprint's Part 1 is never
+     edited; its scope-change log records the effect, and a plan not yet started may need
+     re-planning through `/arpd-plan`.
+5. **Update `STATUS.md`** (you are the lead, its one writer): the current state, its *Readiness*
+   block, *Waiting on the PI* and *Owed*, so they reflect the change.
+6. **Dependency screen** (`kit/docs/INTERACTION.md` §7): has the change introduced, changed,
+   resolved or exposed a dependency? If yes, trace only the affected requirements and work, and
+   update their rows in `DECISIONS.md` *Waiting on the PI* (*Affects*, *Needed by*, *Can continue
+   meanwhile*); remove a row the ruling decides. If no, say so in the read-back in one line.
+7. **Read it back** to the PI in plain words: what changed, the consequence from step 2, any
+   dependency it touched, and any dependent item you could not update.
+8. **Check:** run `python tools/check_governance.py` and report the result verbatim.
+9. **Log:** `python tools/log_event.py ruling --actor lead --ref R-NN --note "<one line>"`.
+10. **Commit** with the ruling ID in the message.
 
 ## Recording or changing a standing authorization (SA-NN)
 
@@ -102,9 +124,18 @@ the ruling as above **and** record the delegation as an SA that cites it.
      that carries the profile), and the charter's *Authority profile* line is updated by the same
      route as any charter change.
    - Never edit an SA in force. A superseded SA is marked "Superseded by SA-NN" and keeps its text.
+   - **Continuing across sprints.** An SA letting the team move past sprint boundaries without a
+     new ruling uses the continuation fields (*Scope:* sprints S0N–S0M of PLAN-… vN; *Transition
+     conditions*; *Consult the PI when*; `.claude/skills/arpd-plan/references/multi-sprint-and-handoff.md`
+     §3). A first one adds ("Supersedes: none"); extending, narrowing or ending one supersedes only
+     that SA. It never covers what `CLAUDE.md` §6 reserves to the PI, and it never changes the
+     review, tests and close-out every sprint boundary keeps. A **project default** for transitions
+     ("from now on, always continue after review") is either a charter §8 amendment or a standing
+     SA, as the PI's words say; ask only if they could mean either.
 4. **Read it back** to the PI in two or three plain sentences: what agents may now decide without
    asking, what still comes to the PI, and every SA now in force.
-5. **Update `STATUS.md`, check, log and commit:** refresh STATUS's current state; run
+5. **Dependency screen**, as in step 6 above.
+6. **Update `STATUS.md`, check, log and commit:** refresh STATUS's current state; run
    `python tools/check_governance.py`; log
    `python tools/log_event.py ruling --actor lead --ref SA-NN --note "<one line>"`; commit with the
    SA ID in the message.

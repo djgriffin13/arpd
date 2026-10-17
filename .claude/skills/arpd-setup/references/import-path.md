@@ -8,7 +8,7 @@ starter project. **Preserve existing work. Never silently merge or overwrite ins
 | Mode | Invocation | What happens |
 |---|---|---|
 | **Import into this repository** | `/arpd-setup import <path-or-git-url>` | The existing codebase is brought into this kit repository, keeping its history when it is a git repo. This repository becomes the project. |
-| **Install into an existing repository** | `/arpd-setup install <path>` | The charter, governing documents, tools, hooks and agents are installed **into** the existing repository at `<path>`. The kit's `kit/` folder is copied there whole, and the `arpd-*` skills go to the target's `.claude/skills/`, so later check-ins and amendments work. The skills are a `.claude/` write, done last with the PI's approval (`generation-checklist.md`, row 15); if it is blocked, they are owed. The kit repository is left unchanged. |
+| **Install into an existing repository** | `/arpd-setup install <path>` | The charter, governing documents, tools, hooks and agents are installed **into** the existing repository at `<path>`. The kit's `kit/` folder is copied there whole, and the `arpd-*` skills (`arpd-setup`, `arpd-plan`, `arpd-checkin`, `arpd-amend`, each with its `references/`) go to the target's `.claude/skills/`, so later planning, check-ins and amendments work. The skills are a `.claude/` write, done last with the PI's approval (`generation-checklist.md`, row 15); if it is blocked, they are owed. The kit repository is left unchanged. |
 
 - **Import** suits code that is small or not under the PI's control, such as a published model or a
   starter. A starter that already lives inside this kit (for example `examples/march-1991/`) is an
@@ -56,6 +56,27 @@ lose everything before the move. So:
 
 Do the moves at the start of Phase 9, after the PI has adopted the read-back. Check each move commit
 with `git show --stat --find-renames HEAD`: every line should be a rename with no content change.
+The discovery notes are untracked at this point: stage only the moves, so the notes never enter a
+move commit. They get their own commit after the adoption ruling (`generation-checklist.md`,
+*Commit order*).
+
+## Discovery notes in import and install modes
+
+The interview's working notes (`docs/discovery/SETUP.md`, from `kit/templates/discovery/SETUP.md`)
+are the one file written before the read-back. They are non-governing (`SKILL.md`, *Discovery
+notes*).
+
+- **Import:** the project root is this repository. Write the notes here, and tell the PI once.
+- **Install:** the target is the PI's own repository, which may be shared or public. In Intake,
+  before the first write, ask once for consent to save the notes there, and name the path
+  (`docs/discovery/SETUP.md` in the target). Record the answer in the notes' *Mode and consent*.
+  - With consent: write them there, uncommitted until adoption, then commit them alone.
+  - Without consent: keep them in the OS temp directory, tell the PI the path, and say that a later
+    session can resume from them only if the PI gives that path. They are never added to the
+    repository unless the PI later asks.
+- Never commit the notes with a move, never push them without the PI's authorization, and never
+  write secrets, participant data or content from unrelated repositories in them.
+- Writing notes authorizes nothing: no move, no installation and no governing file.
 
 ## Numbering: never hard-code IDs
 
@@ -75,9 +96,9 @@ Continue every ledger from where it stands: the next free DEC, R and SA numbers 
 
 ## Steps for a non-ARPD project (import or install)
 
-**Nothing is written before the read-back** (`SKILL.md`, ground rule 8). Steps 1–4 only read, and
-keep notes in the working context. Steps 6–9 write, in this order, after the PI has adopted the
-read-back.
+**Nothing governing is written before the read-back** (`SKILL.md`, ground rule 8). Steps 1–4 only
+read the project; the only file written is the discovery notes (above). Steps 6–9 write, in this
+order, after the PI has adopted the read-back.
 
 **Before the read-back (read only)**
 
@@ -85,9 +106,13 @@ read-back.
    - From a git URL, `git clone` it into a temporary directory **outside** this repository and read
      it there. From a local path, read it where it is.
    - List the top-level structure, languages and test commands.
-   - Run the existing tests and keep the output **verbatim**. It is recorded once, as the baseline,
-     in sprint S01's record (Part 1), and the import decision points to it. Never report it as better
-     than it is.
+   - Run the existing tests and keep each command, its working directory, exit code and output
+     **verbatim**, with the source's commit. Until generation, keep them in the OS temp directory or
+     the session scratchpad, not in the project and not in the discovery notes (the notes say only
+     that the baseline was run, and where it is kept). At generation they are written once to
+     `reports/IMPORT-BASELINE-YYYY-MM-DD.md`, from `kit/templates/reports/IMPORT-BASELINE.md`
+     (`generation-checklist.md`, row 11). The import decision cites that report; when the first
+     sprint starts, its Part 1 cites it too. Never report the baseline as better than it is.
    - Find existing instruction files: `CLAUDE.md`, `AGENTS.md`, `.cursorrules`,
      `.github/copilot-instructions.md`, and any README sections giving rules to contributors.
 2. **Read the science out of the code.** Draft PARADIGM-SPEC items from what the code does: rules,
@@ -102,7 +127,7 @@ read-back.
 
 **The interview and the read-back**
 
-5. **Interview (Phases 1–8).** In Phase 2, the PI confirms or corrects each inferred spec item. Where
+5. **Interview (the four phases; internal Phases 1–8).** In Research & Problem, the PI confirms or corrects each inferred spec item. Where
    the code and the PI's intent differ, that is a finding: record it as a defect or an assumption,
    and never quietly align either one to the other. Every reconciliation conflict and proposed
    addition goes in the read-back, in plain language, for the PI to rule on. Nothing from the prior
@@ -133,8 +158,9 @@ Worked case: importing `examples/march-1991/` into this kit repository.
 1. **Inventory before touching anything.** Read the starter's `START-HERE.md`, `STATUS.md`,
    `DECISIONS.md` (*Waiting on the PI*) and `PARADIGM-SPEC.md`. Run its checks where it stands (for
    the March starter: `cd examples/march-1991 && python -m pytest -m "not slow" -q` and
-   `python tools/check_governance.py`), and keep the output verbatim.
-2. **Interview (Phases 1–8), confirming rather than re-asking.** The science is already written
+   `python tools/check_governance.py`), and keep the commands and output verbatim, outside the
+   project, for the import baseline report.
+2. **Interview (the four phases; internal Phases 1–8), confirming rather than re-asking.** The science is already written
    down: read it to the PI in plain language and ask them to confirm or change it.
    - **Draft wording.** Any item marked *"(draft wording, awaiting the PI's words)"*, such as the
      research question, either gets the importing PI's own words in the interview, or stays
@@ -207,9 +233,11 @@ Worked case: importing `examples/march-1991/` into this kit repository.
      starter's `.gitignore` arrives at the root in commit 2; the kit's lines are then merged into it
      in the first edit commit (step 4).
    - **The starter's old `START-HERE.md`** goes straight to `docs/arpd-kit/START-HERE-starter.md`,
-     by its own `git mv`, before the loop. A new one is written for the PI in Phase 10.
+     by its own `git mv`, before the loop. A new one is written for the PI at generation
+     (`generation-checklist.md`, row 18).
    - Untracked or ignored files in the starter (`output/`, caches) are not moved; regenerate them.
-   - Re-run the checks at the root and keep the output beside the first run.
+   - Re-run the checks at the root and keep the output beside the first run. Both runs go in the
+     import baseline report.
 4. **Then edit, in place.** The starter's governing documents are updated through recorded rulings
    and standing authorizations, never replaced and never written beside as `.arpd`. Git keeps the
    history, and superseded entries keep their text.
@@ -217,7 +245,8 @@ Worked case: importing `examples/march-1991/` into this kit repository.
      R-NN), the *Authority profile* line (the profile, recorded as SA-NN), the PI line, and §6's
      project examples. Nothing else changes without a ruling.
    - `DECISIONS.md`: fill the inherited adoption placeholder or use the next free R; add the new
-     SA; record the import and the moves as the next free DEC, pointing to S01's baseline.
+     SA; record the import and the moves as the next free DEC, citing
+     `reports/IMPORT-BASELINE-YYYY-MM-DD.md`.
    - **Inherited pending decisions the PI ruled on:** update each affected DEC entry's Status,
      Authorized and Adopted lines to match the ruling. Dates are ISO 8601 (`YYYY-MM-DD`, with a
      time such as `2026-10-20T14:05Z` when both happen on the same day).
@@ -243,10 +272,54 @@ Worked case: importing `examples/march-1991/` into this kit repository.
    - `tools/`: if the starter's tools differ from `kit/tools/`, replace them with the kit's and say
      so in the import DEC.
 5. **Records are kept as they are:** rulings, decisions, sprint records, reviews and decision packs.
-6. **First sprint (S01):** its Part 1 records the inherited baseline once: the checks run in steps 1
-   and 3, verbatim (the test and checker output). DEC entries may point to it, but never claim to
-   contain it. The new PI's extension gets new spec items, and its own checks in the
-   extension-evidence slot. **Inherited checks must keep passing with the extension disabled.**
+6. **Import baseline:** write `reports/IMPORT-BASELINE-YYYY-MM-DD.md` from
+   `kit/templates/reports/IMPORT-BASELINE.md`, once: the provenance, and the checks run in steps 1
+   and 3, verbatim (each command, its working directory and exit code, the test and checker
+   output). This is the only place the baseline is recorded. DEC entries cite it, but never claim to
+   contain it. Setup writes no sprint record: when `/arpd-plan` starts the first sprint, its Part 1
+   cites this report. The new PI's extension gets new spec items, and its own checks in later
+   sprints. **Inherited checks must keep passing with the extension disabled.**
 7. **Post-generation check** (`generation-checklist.md`, *Then*): search the starter's governing
    documents for phrases that the adoption made stale, such as "pending R-01", "Pending adoption",
    "until R-01 is recorded" or "the importing PI", and update each one.
+
+---
+
+## Resuming an interrupted setup
+
+A setup can stop part-way: a lost session, an API error, a turn limit. The record decides what is
+authorized. At Phase 0, check the project root (in install mode, the target repository):
+
+- `git log --oneline -15` and `git status --short`;
+- `docs/discovery/SETUP.md`, tracked or untracked (in install mode without consent, the notes are
+  outside the repository: ask the PI for their path);
+- move-only commits already made (kit files to `docs/arpd-kit/`, prior instructions to
+  `docs/prior-instructions/`, a starter to the root);
+- the commit "Record adoption ruling R-NN (setup in progress)", and which checklist files exist.
+
+Then:
+
+1. **Tell the PI** what you found, in plain words.
+2. **If no adoption ruling is recorded,** nothing generated is authorized.
+   - If discovery notes exist, read them. Show the PI briefly what was gathered: the phase reached,
+     the topics covered, the PI's words, and the open questions. Restore the coverage map and the
+     interview mode, and continue from the next open topic.
+   - Nothing in the notes is adopted. The PI's earlier words are discovery; the lead's proposals
+     stay proposals. Never treat an earlier proposal as agreed, and never re-adopt it on resume.
+   - Without notes, re-run the interview from where the record leaves off. Earlier answers count
+     only if the PI confirms them now.
+   - Keep the committed moves and do not repeat them.
+   - Re-do the read-back. It must be adopted now, in the PI's words.
+   - Show the PI any uncommitted generated files, and ask before discarding them.
+3. **If the adoption ruling is recorded,** it and its read-back are the authority. Continue the
+   checklist from the first missing or incomplete row. If the discovery notes are in the project but
+   uncommitted, commit them alone. Never repeat a move, never renumber an ID, and never rewrite a
+   completed file. Check each existing file, committed or not, against its checklist row and against
+   the recorded read-back (for example, the question and construct wording, or an unfilled `{{…}}`).
+   Ask the PI only for what the record does not settle. **If the ruling does not contain the
+   read-back text**, say so: an uncommitted file cannot then be checked against what the PI adopted,
+   so show it to the PI and ask them to confirm it before you keep it.
+4. Record the recovery in `STATUS.md` (a `Recovered:` line naming what was found and what was
+   redone). If `tools/log_event.py` exists, log
+   `python tools/log_event.py resume --actor lead --note "setup resumed"`.
+5. Finish as usual: the final checker run, the stray-file check, the setup commit and the closeout.

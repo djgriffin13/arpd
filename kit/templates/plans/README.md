@@ -14,6 +14,16 @@ authoritative for executing its own scope. Priorities and order of work live in 
 - **Completion:** only the lead agent sets Complete, after the plan's acceptance criteria have
   evidence. Implementers never mark their own plan complete.
 - **Size:** a plan should be finishable in one working block. Split anything larger.
+- **Not a sprint plan.** A numbered plan is one scoped piece of work. A sprint plan, drafted with
+  `/arpd-plan` in `reports/planning/`, is approved by the PI and covers a whole sprint or series.
+
+**Invariant, requirement or acceptance criterion?** Three different things:
+
+| Term | What it says | Where it lives | How it works |
+|---|---|---|---|
+| Invariant (INV) | What must never break, or the results stop meaning what we intend | `PARADIGM-SPEC.md` §5 | The PI owns it. It holds for the life of the project. |
+| Requirement (REQ) | What the instrument must do | `REQUIREMENTS.md` | It traces to a spec item or a ruling. It has a state and evidence. |
+| Acceptance criterion | How one plan proves it delivered | Inside its plan, `plans/NNN-…` | It closes with the plan. Its evidence moves a requirement's state. |
 
 ## Template
 
@@ -33,7 +43,7 @@ authoritative for executing its own scope. Priorities and order of work live in 
 | Branch | `plan-NNN-<slug>` |
 
 ## Problem
-## Scientific constraints
+## Scientific invariants this work must respect (INV IDs)
 <the INV items this work must respect, and how; "none" is a valid answer, but an empty field is not>
 ## Design placement
 <which component(s); which A-NNN rules apply and why they are not violated>

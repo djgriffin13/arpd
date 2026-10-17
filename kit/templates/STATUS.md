@@ -25,11 +25,24 @@ memory. If `logs/` is absent (a fresh clone or another machine), say so, and use
 
 ---
 
+## Readiness
+
+Four lines, each with one value. Setup, planning and execution are separate: a project can be set up
+with no sprint planned, and an approved plan does not start work (`CLAUDE.md` §8). A passing
+governance check is not readiness to execute. `START-HERE.md` gives the PI the same next step.
+
+- **Setup:** {{in progress | adopted (R-NN)}}
+- **Planning:** {{not started | draft (PLAN-YYYY-MM-DD, vN) | approved (PLAN-YYYY-MM-DD, vN, R-NN)}}
+- **Execution:** {{not started | authorized (R-NN or SA-NN, scope) | in progress (S0N) | complete}}
+- **Next step:** {{finish setup | run /arpd-plan | review plan | begin implementation | check in | amend}}
+
 ## 1. Read first
 
 `CLAUDE.md` → `PARADIGM-SPEC.md` → this file → the current sprint record → the plans in flight.
 
 ## 2. Current sprint
+
+Write "No sprint open" when none is.
 
 - **Sprint:** S{{NN}}: {{objective}}. Record: `reports/sprints/SPRINT-{{NN}}.md`.
 - **Target requirements:**
@@ -42,14 +55,18 @@ memory. If `logs/` is absent (a fresh clone or another machine), say so, and use
 
 ## 4. On deck
 
-The next sprint is S{{NN+1}}, as planned in `MASTER_PLAN.md` §3. List anything that must happen before
-it starts.
+The next step from *Readiness*. If planning is pending, it is "run `/arpd-plan`". If a sprint is
+planned and approved, name it and its plan (`reports/planning/PLAN-…`, version). List anything that
+must happen before it starts.
 
 ## 5. Waiting on the PI
 
-Do not decide these yourself. Deferred decisions stay listed here, marked "deferred (R-NN)". The open pack is `reports/DECISION-PACK-{{date, with -2, -3 ... for a second or later pack that day}}.md`.
+A short summary of the decisions ahead. The canonical list, with what each decision affects and what
+can continue meanwhile, is `DECISIONS.md` *Waiting on the PI*; keep this table in step with it. Do not
+decide these yourself. Deferred decisions stay listed, marked "deferred (R-NN)". The open pack is
+`reports/DECISION-PACK-{{date, with -2, -3 ... for a second or later pack that day}}.md`.
 
-| # | Decision requested | Blocks | Recommendation (not adopted until decided) |
+| # | Decision | Affects | Needed by |
 |---|---|---|---|
 
 ## 6. Owed
@@ -69,4 +86,5 @@ declined). Write "Nothing owed" only when nothing is.
 
 ## 8. The PI's working style
 
-Record how the PI likes decisions brought, how often they want check-ins, and what to avoid.
+Record how the PI likes decisions brought, how often they want check-ins, and what to avoid. Record
+the interview mode too (standard interview or guided tutorial).

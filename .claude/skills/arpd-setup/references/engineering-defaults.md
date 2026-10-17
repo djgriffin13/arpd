@@ -1,5 +1,11 @@
 # Engineering defaults (propose these, with the reason, in plain language)
 
+**Propose only after the vision and constraints are known**: the full vision, the first useful
+version, who will use it, what it must plug into, and any data or resource limits (Product &
+Engineering, `interview-guide.md`). Never pick a platform from the first mention of the research,
+and never ask the PI to choose one cold. If the PI already has a platform, or existing code fixes
+it, start from that.
+
 Choose by **who will use the instrument**, and **what it must plug into**. Always give the one-line
 reason, and accept the PI's correction.
 

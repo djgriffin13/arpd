@@ -47,6 +47,8 @@ persuasive.
 | What is happening right now, and how to pick up (live state and handoff) | `STATUS.md` | **One designated writer: the lead agent.** Rewritten after every meaningful operational change, at handoffs and at sprint boundaries. |
 | The record of each sprint (plan, scope changes, close-out, decision tracking) | `reports/sprints/SPRINT-NN.md` | The lead agent. The sprint plan is preserved as written; later scope changes are logged, not edited in; the record is frozen after close. |
 | Execution of one scoped piece of work | the approved plan in `plans/` | Its owner |
+| Nothing (interview working notes; nothing in them is adopted) | `docs/discovery/` | The lead agent |
+| Nothing until approved (sprint-plan drafts; an approved version binds only through the ruling that cites it) | `reports/planning/` | The lead agent drafts; the PI approves a version by ruling |
 | Nothing (navigation only) | `INDEX.md` | Anyone, in the same commit as the change |
 | Nothing (informative) | `START-HERE.md`, `docs/`, `reports/`, everything else | Anyone |
 
@@ -116,6 +118,9 @@ Breaking any of these is a defect, whether or not the tests pass.
    - A plan that makes a consequential choice (§6) needs the PI's approval, unless a standing
      authorization covers it.
    - Other plans are approved by the lead agent within the PI's standing direction.
+   - A **sprint plan** is different. The PI approves it, for one sprint or a series, through
+     `/arpd-plan`. The approval is a ruling that cites the plan's file and version. Task plans
+     inside an approved sprint keep the two routes above.
 4. **Execute in small steps.**
    - Tick the checklist as you go.
    - Log decisions that deserve a review trail in the plan's *Decisions made during execution*.
@@ -258,9 +263,18 @@ Each requirement moves through these states. The evidence for each state is reco
   decision-tracking table, incidents, resource use and plan updates. The decision-tracking table
   lists every decision with its scientific consequence, its route, the authority it used, and
   whether that authority came *before* adoption.
+- **Planning is not starting.** Sprints are planned with `/arpd-plan`. Its drafts decide nothing.
+  Approving a plan does not start work. A sprint starts only on the PI's start direction (a
+  ruling, R-NN), or under a standing authorization that explicitly covers it. Setup may end with planning
+  pending.
 - **Cadence.** By default there is a PI check-in at every sprint boundary. The PI may ask for more
-  frequent check-ins, or authorize several sprints in a row by ruling. Every sprint boundary still
-  gets its close-out, review, testing and plan update.
+  frequent check-ins, or authorize several sprints in a row by ruling. That authorization is
+  recorded as an SA naming the sprints, the transition conditions and when to consult the PI.
+  Under it, work continues across boundaries without a new ruling. Every sprint boundary still
+  gets its close-out, independent review, checks and plan update. Each sprint's Part 1 records its
+  approved plan, its execution authority and its transition policy.
+- **Dependencies.** At planning, review, close-out, check-in and the other points listed in
+  `kit/docs/INTERACTION.md`, run its quick dependency screen. A pending decision blocks only the work that depends on it.
 - **Explain through science.** Anything brought to the PI states what it changes about what the
   instrument measures, manipulates or licenses, the options, and a recommendation. Engineering terms
   are glossed in plain words.
@@ -276,7 +290,8 @@ Each requirement moves through these states. The evidence for each state is reco
 - **The repository is authoritative, not agent memory.**
 - **`STATUS.md` is the handoff.** Its one writer, the lead agent, rewrites it at sprint boundaries,
   after meaningful operational changes, and before a session ends. It is written for a successor
-  who has nothing else to go on.
+  who has nothing else to go on. Its *Readiness* block says where setup, planning and execution
+  stand, and the next step. A passing governance check is not readiness to execute.
 - **Recovery when the lead's session is gone.** The next session the PI starts becomes the lead.
   Before doing anything else, it:
   1. reads `STATUS.md` and notes the base commit it names (the last commit before that rewrite;

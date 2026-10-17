@@ -79,6 +79,19 @@ The checks:
    A ruling or SA counts as given only if its section has a Given line that is not pending-like
    (pending, awaiting, to be given, not yet, placeholder, TBD), or, with no Given line, a dated
    heading (YYYY-MM-DD) with no pending-like word.
+   No sprint records (no reports/sprints/, or an empty one) passes: setup can be complete with
+   planning still to do.
+5b. Open sprint records (no completed **Closed:** field): their decision tracking is not checked
+   until close. Only Part 1's approval references are: in a record with the rows "Approved plan",
+   "Execution authorized by" or "Transition policy", every R-NN / SA-NN those rows cite must exist
+   in DECISIONS.md (FAIL otherwise) and must not be pending (PENDING); an "Approved plan" or
+   "Execution authorized by" row that cites none is MISSING. A cited SA that has been superseded is
+   ADVISORY (Part 1 is frozen at sprint start). The "Approved plan" row must name a plan and
+   version (PLAN-YYYY-MM-DD[-n] vN; MISSING otherwise) whose file is in reports/planning/ (FAIL
+   otherwise); a cited ruling's Approves line must name that file and version (FAIL otherwise; no
+   Approves line is ADVISORY). A record without these rows (the older format, including the old
+   "Authorized to continue..." row) is ADVISORY, never a FAIL. A plan in reports/planning/ marked
+   "approved by R-NN" where R-NN is not a given ruling is ADVISORY; a draft plan needs no ruling.
 6. INDEX.md mentions every top-level entry, and every path listed in its first column (in
    backticks) exists, unless its row says "pending:" or "git-ignored" (advisory).
 7. Event logging and agent roles installed: .claude/settings.json runs tools/hooks/log_hook.py and
@@ -87,10 +100,11 @@ The checks:
    MISSING, unless a decision in DECISIONS.md records it as not installed ("event logging not
    installed" / "agent files not installed", citing R-NN or with a "Route: routine" line), which is
    ADVISORY.
-8. Check-in and amend skills installed: .claude/skills/arpd-checkin/SKILL.md and
-   .claude/skills/arpd-amend/SKILL.md exist in the project root, or in a folder between it and the
-   root of the git repository that contains it (as for a worked example inside the kit). Anything
-   missing is MISSING, unless a decision records "skills not installed" as in step 7 (ADVISORY).
+8. ARPD skills installed: .claude/skills/arpd-checkin/SKILL.md, .claude/skills/arpd-amend/SKILL.md
+   and .claude/skills/arpd-plan/SKILL.md exist in the project root, or in a folder between it and
+   the root of the git repository that contains it (as for a worked example inside the kit).
+   Anything missing is MISSING, unless a decision records "skills not installed" as in step 7
+   (ADVISORY).
 9. Live items cite no superseded spec item (advisory): a requirement's source, an A-rule in
    ARCHITECTURE.md, a claim (CLM-NN) in PARADIGM-SPEC.md, or a standing authorization in force
    (one not "superseded by SA-NN") that cites a PARADIGM-SPEC.md item whose row says "Superseded
@@ -558,6 +572,11 @@ def _verdict(kind, msg, row_late, row_incident, row_auth_pending, e, name, rid):
                        "recorded; cannot check order" % (name, rid, e["given"][0]))
 
 
+def _is_open(text):
+    """True if a sprint record has no completed **Closed:** field."""
+    return "**Closed:**" not in text or "{{date" in text.split("**Closed:**", 1)[1][:80]
+
+
 def check_sprints():
     d = os.path.join(ROOT, "reports", "sprints")
     if not os.path.isdir(d):
@@ -569,9 +588,9 @@ def check_sprints():
         if not name.endswith(".md"):
             continue
         text = read(os.path.join("reports", "sprints", name))
-        if "**Closed:**" not in text or "{{date" in text.split("**Closed:**", 1)[1][:80]:
+        if _is_open(text):
             not_checked.append("reports/sprints/%s is open (not closed): decision tracking is checked only at "
-                               "close" % name)
+                               "close; only its Part 1 approval references are checked now" % name)
             continue  # open sprint
         rows = list(table_rows(text, "ID | Decision"))
         if not rows:
@@ -657,6 +676,124 @@ def check_sprints():
          problems + missing + pending + advisories)
 
 
+APPROVAL_ROWS = ("Approved plan", "Execution authorized by", "Transition policy")
+
+
+def _part1_rows(text):
+    """{row name: value} for Part 1's approval rows in a sprint record, outside HTML comments."""
+    found = {}
+    for line in re.sub(r"<!--.*?-->", "", text, flags=re.S).splitlines():
+        if not line.strip().startswith("|"):
+            continue
+        cells = split_row(line)
+        for label in APPROVAL_ROWS:
+            if len(cells) > 1 and _clean(cells[0]).lower() == label.lower() and label not in found:
+                found[label] = cells[1]
+    return found
+
+
+PLAN_NAME = r"\bPLAN-\d{4}-\d{2}-\d{2}(?:-\d+)?\b"
+
+
+def _plan_version(text):
+    """(plan name, version number) named in text, e.g. ("PLAN-2026-10-18", "2"); None where absent."""
+    m = re.search(PLAN_NAME, text)
+    if not m:
+        return None, None
+    v = re.search(r"\bv(\d+)\b|\bversion\s+(\d+)\b", text[m.end():], re.I)
+    return m.group(0), (v.group(1) or v.group(2)) if v else None
+
+
+def _superseded_sas(sections):
+    """{SA-NN: what supersedes it}, from its own "superseded by SA-NN" or another SA's Supersedes line."""
+    found = {}
+    for ident, body in sections.items():
+        if not ident.startswith("SA-"):
+            continue
+        by = re.search(r"superseded by\s+[*`]*(SA-\d+)", body, re.I)
+        if by:
+            found[ident] = by.group(1)
+        for old in re.findall(r"\bSA-\d+\b", _entry_line(body, "Supersedes")):
+            if old != ident:
+                found.setdefault(old, ident)
+    return found
+
+
+def _check_approved_plan(f, cell, known, sections, problems, missing, advisories):
+    """The plan named in Part 1's Approved plan row exists, and a cited ruling approves that version."""
+    plan, version = _plan_version(cell)
+    if not plan or not version:
+        missing.append("%s: Approved plan names no plan and version (PLAN-YYYY-MM-DD vN)" % f)
+        return
+    if not os.path.exists(os.path.join(ROOT, "reports", "planning", plan + ".md")):
+        problems.append("%s: Approved plan names %s, which is not in reports/planning/" % (f, plan))
+    rulings = [r for r in re.findall(r"\bR-\d+\b", cell) if r in known]
+    named = {}
+    for r in rulings:
+        approves = _entry_line(sections.get(r, ""), "Approves")
+        if approves:
+            named[r] = _plan_version(approves)
+        else:
+            advisories.append("%s: %s has no Approves line; the plan version it approves is not checked" % (f, r))
+    if named and (plan, version) not in named.values():
+        r, (p, v) = sorted(named.items())[0]
+        problems.append("%s: Approved plan is %s v%s, but %s approves %s v%s" % (f, plan, version, r, p, v))
+
+
+def check_open_sprints():
+    name = "Open sprints: plan approval and execution authority cited"
+    d = os.path.join(ROOT, "reports", "sprints")
+    names = sorted(os.listdir(d)) if os.path.isdir(d) else []
+    planning = os.path.join(ROOT, "reports", "planning")
+    problems, missing, pending, advisories, checked = [], [], [], [], 0
+    known, pending_ids, sections = decision_index()
+    superseded = _superseded_sas(sections)
+    for f in names:
+        if not f.endswith(".md"):
+            continue
+        text = read(os.path.join("reports", "sprints", f))
+        if not _is_open(text):
+            continue  # closed: checked by check_sprints
+        rows = _part1_rows(text)
+        if not rows:
+            advisories.append("%s: older format; plan approval not recorded in Part 1" % f)
+            continue
+        checked += 1
+        for label in APPROVAL_ROWS:
+            if label not in rows:
+                if label != "Transition policy":
+                    advisories.append("%s: no \"%s\" row in Part 1" % (f, label))
+                continue
+            refs = re.findall(r"\b(?:SA|R)-\d+\b", rows[label])
+            if not refs and label != "Transition policy":
+                missing.append("%s: %s cites no ruling or standing authorization (R-NN / SA-NN)" % (f, label))
+            for ref in refs:
+                if ref in pending_ids:
+                    pending.append("%s: %s cites %s, which is still pending in DECISIONS.md" % (f, label, ref))
+                elif ref not in known:
+                    problems.append("%s: %s cites %s, which does not exist in DECISIONS.md" % (f, label, ref))
+                elif ref in superseded:
+                    # Part 1 is frozen once the sprint starts, so this cannot be a FAIL
+                    advisories.append("%s: %s cites %s, which is superseded by %s; the newer SA governs"
+                                      % (f, label, ref, superseded[ref]))
+        if "Approved plan" in rows:
+            _check_approved_plan(f, rows["Approved plan"], known, sections, problems, missing, advisories)
+    for f in sorted(os.listdir(planning)) if os.path.isdir(planning) else []:
+        if f.endswith(".md"):
+            text = re.sub(r"<!--.*?-->", "", read(os.path.join("reports", "planning", f)), flags=re.S)
+            for ref in sorted(set(re.findall(r"approved by\s+[*`]*(R-\d+)\b", text, re.I))):
+                if ref not in known:
+                    advisories.append("reports/planning/%s: marked approved by %s, which %s in DECISIONS.md" % (
+                        f, ref, "is still pending" if ref in pending_ids else "does not exist"))
+    if checked:
+        not_checked.append("open sprints: whether the cited ruling or SA covers that sprint's scope, and "
+                           "whether the approved plan file still matches the commit its ruling names")
+    status = ("FAIL" if problems else "MISSING" if missing else "PENDING" if pending
+              else "ADVISORY" if advisories else "PASS")
+    details = problems + missing + pending + advisories
+    step(name, status, details or ["no open sprint records" if not checked else "cited authority exists"])
+
+
 def check_index():
     if not os.path.exists(os.path.join(ROOT, "INDEX.md")):
         step("INDEX covers top level; listed paths exist (advisory)", "MISSING", ["INDEX.md absent"])
@@ -720,7 +857,7 @@ def check_logging():
     step(name, "MISSING" if unexplained else "ADVISORY", notes)
 
 
-SKILLS = ("arpd-checkin", "arpd-amend")
+SKILLS = ("arpd-checkin", "arpd-amend", "arpd-plan")
 
 
 def _skill_roots():
@@ -738,7 +875,7 @@ def _skill_roots():
 
 
 def check_skills():
-    name = "Check-in and amend skills installed"
+    name = "ARPD skills installed"
     roots = _skill_roots()
     missing = []
     for skill in SKILLS:
@@ -817,7 +954,7 @@ def check_superseded():
 
 def main():
     for fn in (check_exists, check_adoption, check_links, check_requirements, check_plans, check_sprints,
-               check_index, check_logging, check_skills, check_superseded):
+               check_open_sprints, check_index, check_logging, check_skills, check_superseded):
         try:
             fn()
         except Exception as exc:  # report, never hide
@@ -831,6 +968,8 @@ def main():
     for d in not_checked + [
             "dates, rulings and authorizations are checked as recorded, not verified as true or as the PI's "
             "own words",
+            "whether a plan approval or start direction was the PI's own words",
+            "STATUS readiness flags (setup, planning, execution, next step) are not checked against the records",
             "installation checks look at files, not at whether the hooks actually fired",
             "the code itself: run the project's tests separately"]:
         print("    - " + d)

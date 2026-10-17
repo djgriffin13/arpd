@@ -4,6 +4,12 @@ Install the fewest modules that fit. Context files that state generic practice a
 benefit, while project-specific, non-standard rules are what help (Gloaguen et al., 2026). Turning on
 every teamwork module can hurt (Mishra et al., 2025).
 
+Select a module only when this project needs it: for the instrument actually requested, and for the
+scientific help the PI asked for. Never select one "just in case". For product-only work, the
+team-arrangement module may be the only one. A science module's candidate invariants are proposed
+only when the science is in scope (`interview-guide.md`, *Research & Problem*). Say in the read-back
+which modules were selected, and why.
+
 | Module | File (`kit/constitution/modules/`) | Status | Recommend when | Candidate invariants to propose (in scientific language) |
 |---|---|---|---|---|
 | **Team arrangement** | `team/team-arrangement.md` | **Built** | Always | none |

@@ -2,7 +2,8 @@
 
 **This record is the audit trail for one sprint.**
 
-- Part 1 is written at sprint start.
+- Part 1 is written at sprint start, from the approved plan in `reports/planning/`. A draft plan is
+  never copied in before it is approved and the sprint is authorized to start.
 - Part 2 is written at close.
 - After close the record is frozen. Corrections go in a later sprint's record.
 
@@ -21,11 +22,20 @@ Auditors reconcile this record against git, `DECISIONS.md`, `REQUIREMENTS.md` an
 | Plans | `plans/NNN-…` |
 | Exit | the sprint is done when … (observable) |
 | Team and workspace arrangement | {{e.g. lead with subagents, shared checkout}} |
-| Authorized to continue into the next sprint without a check-in? | No / Yes, by R-NN |
+| Approved plan | PLAN-YYYY-MM-DD vN, approved by R-NN |
+| Execution authorized by | R-NN or SA-NN |
+| Transition policy | PI check-in / light check-in at … / continue after review and close-out under SA-NN |
 | Start | {{date, time, commit SHA}} |
 
 **Part 1 is preserved as written.** Do not edit it after the sprint starts. Record later changes in
 the scope-change log.
+
+Older records may have the single row "Authorized to continue into the next sprint without a
+check-in?" in place of the rows *Approved plan*, *Execution authorized by* and *Transition policy*.
+Leave them as they are.
+
+In an imported project, the first sprint's Part 1 cites the import baseline
+(`reports/IMPORT-BASELINE-YYYY-MM-DD.md`) below the table. It does not copy it.
 
 ### Scope-change log
 

@@ -22,6 +22,14 @@ by the lead agent, and only on recorded evidence. *Validated* also needs the PI'
 - A requirement with an open defect against it is never reported as Verified or Validated.
 - A requirement's wording is changed only in this file, and the change is recorded as a decision.
 
+**Invariant, requirement or acceptance criterion?** Three different things:
+
+| Term | What it says | Where it lives | How it works |
+|---|---|---|---|
+| Invariant (INV) | What must never break, or the results stop meaning what we intend | `PARADIGM-SPEC.md` §5 | The PI owns it. It holds for the life of the project. |
+| Requirement (REQ) | What the instrument must do | `REQUIREMENTS.md` | It traces to a spec item or a ruling. It has a state and evidence. |
+| Acceptance criterion | How one plan proves it delivered | Inside its plan, `plans/NNN-…` | It closes with the plan. Its evidence moves a requirement's state. |
+
 ---
 
 ## Requirements

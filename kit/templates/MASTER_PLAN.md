@@ -28,17 +28,21 @@ closes a milestone.
 
 ## 3. Planned order of development
 
-This is the roadmap: the sprints expected next, in order. Each sprint is sized to finish in one
-working block. The order is revised at each sprint close-out, and the revision is recorded in the
-sprint record.
+This is the broad roadmap: the main stretches of work expected, in order, and what each depends on.
+It is not a sprint plan. Use as many rows as the project needs; a small project may have one.
+Sprints are planned with `/arpd-plan`, and the PI approves each plan by ruling (`CLAUDE.md` §8).
+Until a sprint is planned, its row says "planning pending". This is a valid state. Each sprint is
+sized to finish in one working block. The order is revised at sprint planning and at each sprint
+close-out. The revision is recorded in the plan or in the sprint record.
 
 | Sprint | Objective (one sentence) | Target requirements | Depends on | State |
 |---|---|---|---|---|
-| S01 | {{first bounded task from setup}} |  |  | Planned |
+| {{S01, or "next"}} | {{the first stretch of work from setup}} |  |  | {{planning pending / planned (PLAN-YYYY-MM-DD vN, R-NN) / in progress / done}} |
 
 **Cadence** (`CLAUDE.md` §8): {{check-in after every sprint (default) / after every N sprints, as
-authorized by ruling R-NN}}. Even when several sprints run without a check-in, each sprint boundary
-keeps its planning, review, testing and plan-update steps.
+authorized by ruling R-NN / continue across sprints S0N–S0M under SA-NN}}. Even when several
+sprints run without a check-in, each sprint boundary keeps its planning, close-out, independent review,
+testing and plan-update steps.
 
 ## 4. Backlog
 

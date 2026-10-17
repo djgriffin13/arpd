@@ -26,11 +26,19 @@ three ledgers:
 
 ## Waiting on the PI
 
-Keep this list short, and order it by what each item unblocks. Remove an entry once it is decided.
-A decision the PI has deferred by ruling stays listed, marked "deferred (R-NN)", until it is decided.
+This is the canonical list of open decisions. `STATUS.md` §5 summarizes it and points here; keep no
+other tracker. Keep it short, and order it by what each item unblocks. Remove an entry once it is
+decided. A decision the PI has deferred by ruling stays listed, marked "deferred (R-NN)", until it is
+decided.
 
-| # | Decision requested (plain language) | Pack | Blocks | Recommendation |
-|---|---|---|---|---|
+- **Affects:** the requirements and work that depend on the decision.
+- **Needed by:** the point where the dependent work cannot go on without it (a sprint, a plan, a
+  design step).
+- **Can continue meanwhile:** the work that does not depend on it. A pending decision blocks only
+  the work that depends on it (`kit/docs/INTERACTION.md`, *Dependency screen*).
+
+| # | Decision requested (plain language) | Pack | Affects (requirements, work) | Needed by | Can continue meanwhile | Recommendation |
+|---|---|---|---|---|---|---|
 
 ---
 
@@ -67,6 +75,19 @@ A decision the PI has deferred by ruling stays listed, marked "deferred (R-NN)",
 Never delegate what CLAUDE.md §6 reserves to the PI.
 -->
 
+<!-- keep: format for an SA that lets execution continue across several sprints:
+### SA-NN, YYYY-MM-DD: execution of sprints S0N–S0M
+> "exact words"
+- **Given:** directly in session (id), or in ruling R-NN
+- **Supersedes:** the SA-NN it changes, or "none"
+- **Scope:** sprints S0N–S0M of PLAN-YYYY-MM-DD vN
+- **Transition conditions:** the sprint's independent review and close-out are done; no new
+  scientific, scope or PI-reserved decision has arisen; any others the PI names
+- **Consult the PI when:** a transition condition fails, or on any trigger the PI names
+- **In force until:** sprint S0M closes, or the PI changes it
+Every sprint boundary still gets its close-out, independent review and checks (CLAUDE.md §8).
+-->
+
 ---
 
 ## Rulings
@@ -86,6 +107,21 @@ Never delegate what CLAUDE.md §6 reserves to the PI.
 - **Given:** directly in session (id) / relayed by (role), confirmed on (date)
 - **Reading:** how it will be applied
 - **Changes:** documents and versions changed, or "none"
+-->
+
+<!-- keep: format for the approval of a sprint plan (from /arpd-plan):
+### R-NN, YYYY-MM-DD: approval of PLAN-YYYY-MM-DD vN
+> "exact words"
+- **Given:** directly in session (id)
+- **Approves:** `reports/planning/PLAN-YYYY-MM-DD[-n].md`, version vN, commit <SHA>
+- **Scope of approval:** planning only / S0N / series S0N–S0M
+- **Execution authorized:** no / S0N / series under SA-NN
+- **Reading:** how it will be applied, including any decision still in *Waiting on the PI* that
+  blocks part of the plan, and which part
+- **Changes:** documents and versions changed, or "none"
+Approving a plan does not start work. When the PI gives no start direction, Execution authorized is
+"no" and the scope is planning only. The PI's later "begin now" is its own ruling (R-NN), unless it
+came in the same message as the approval.
 -->
 
 ---
