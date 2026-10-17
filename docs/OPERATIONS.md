@@ -1,4 +1,4 @@
-# Operating ARPD: installation, logging, recovery and checks
+# Operating ARPD: installation, planning, logging, recovery and checks
 
 This is the detail behind the kit's `QUICKSTART.md` (at the kit's root, or in `docs/arpd-kit/` after setup). Commands are run from the project root.
 
@@ -21,31 +21,98 @@ The skills live in this repository's `.claude/skills/`. Opening the cloned kit f
 
 | Command | What it does |
 |---|---|
-| `/arpd-setup` | Fresh project: the interview, then the governing documents, tools and first sprint, in this repository |
+| `/arpd-setup` | Fresh project: the interview, then the governing documents and tools, in this repository. Ends with planning pending; writes no sprint and builds nothing |
 | `/arpd-setup import <path or git URL>` | Brings existing code into this repository, and sets it up |
-| `/arpd-setup install <path>` | Installs the charter, governing documents, tools, hooks and agents into your existing repository at `<path>`. It also copies the `arpd-*` skills and the `kit/` folder there, so check-ins and amendments work from that repository |
-| `/arpd-checkin` | A plain-language check-in: what works, what needs you, what was decided without you |
-| `/arpd-amend` | Records a ruling or a standing authorization verbatim, or amends the charter or the specification |
+| `/arpd-setup install <path>` | Installs the charter, governing documents, tools, hooks and agents into your existing repository at `<path>`. It also copies the `arpd-*` skills and the `kit/` folder there, so planning, check-ins and amendments work from that repository |
+| `/arpd-plan` | Plans the next sprint, or a series, with you: review, priorities, a versioned draft, your approval of one version, then begin now or later. Arguments: `one`, `multiple`, `resume` |
+| `/arpd-checkin` | A plain-language check-in: readiness, what works, what needs you, decisions ahead, what was decided without you |
+| `/arpd-amend` | Records a ruling or a standing authorization verbatim; amends the charter, the specification, a project default or the milestones |
+
+All four follow the same conventions for turns that wait for you (`kit/docs/INTERACTION.md`): one
+labelled block (`QUESTION FOR YOU`, `CHOICE FOR YOU`, `APPROVAL REQUIRED`) last in the turn, choice
+options printed as text before any widget, and a progress line in setup and planning. Where Unicode
+does not render, an ASCII form is used (`[x]`, `[>]`, `[ ]`, `->`, a line of `-`).
 
 ## 3. Your authority, and your words
 
 - **Authority profile.** At setup you choose how much the team decides on its own: *consult first*
   (it asks before adopting any consequential scientific assumption), *bounded autonomy* (the
-  default: it works within agreed boundaries and reports at checkpoints) or *exploratory autonomy*
+  suggested default: it works within agreed boundaries and reports at checkpoints) or *exploratory autonomy*
   (it tries and compares alternatives, then brings you the decision to adopt). It is recorded as a
   standing authorization (SA-01) and you can change it at any time, in any message.
 - **Your own words authorize.** No fixed phrase is needed. The lead agent records your words
   verbatim as a ruling (R-NN), with its reading on a separate line. A message relayed by another
   agent binds only once you confirm it yourself.
+- **Five kinds of thing you might say** (`kit/docs/INTERACTION.md` §1):
 
-## 4. Hook permissions: what is logged, and why you are asked
+| Kind | Example | Effect |
+|---|---|---|
+| An interview answer | "I want a chat window for two players." | Informs the lead; decides nothing. Saved in working notes |
+| A proposal or draft | A requirement the lead suggests; a plan draft | Nothing adopted, scheduled or authorized |
+| A ruling or standing authorization | "Make light-touch review the default." | Binds within its scope. `/arpd-amend` records it with no second approval |
+| An approved plan | "I approve PLAN-2026-10-20 v3." | Approves that version's scope. Starts nothing |
+| An execution authorization | "Begin sprint 1 now." | Starts the work it names |
+
+  Silence, "sounds good" about a nearby draft, or a choice that only moves the interview on is never
+  a ruling, an approval or a start. When you approve a plan without saying more, only planning
+  approval is recorded.
+
+## 4. Readiness: where setup, planning and execution stand
+
+`STATUS.md` has a *Readiness* block above its numbered sections:
+
+- **Setup:** in progress, or adopted (R-NN);
+- **Planning:** not started, draft (PLAN-…, vN), or approved (PLAN-…, vN, R-NN);
+- **Execution:** not started, authorized (R-NN or SA-NN, scope), in progress (S0N), or complete;
+- **Next step:** finish setup, run `/arpd-plan`, review plan, begin implementation, check in, or
+  amend.
+
+`START-HERE.md` gives you the same next step, with the exact prompt. Right after setup, readiness is
+"Setup: adopted, Planning: not started, Execution: not started, Next step: run /arpd-plan".
+
+`/arpd-checkin` cross-checks these lines against the records: the adoption ruling, the plan files
+and their approval rulings, the sprint records. When they disagree, the records win and the check-in
+says STATUS is out of date.
+
+**A checker PASS is not authorization to execute.** The governance check does not read the
+readiness block; it lists it under *Not checked*. Work starts only from an approved plan and an
+execution authorization (section 5).
+
+## 5. Plan approval, execution authority and multi-sprint authorizations
+
+Three things are kept apart:
+
+| Thing | What it is | Recorded as |
+|---|---|---|
+| **Plan approval** | You approve an exact version of a sprint plan (`reports/planning/PLAN-…md`, vN) | A ruling, R-NN, citing the file, version and commit, with *Scope of approval* and *Execution authorized* lines |
+| **Execution authority** | Your direction to start: one sprint, or a series | A ruling, R-NN (it can be the same ruling, if you approve and start in one message). For a series, also a standing authorization (SA-NN) |
+| **Task-plan approval** | A scoped `plans/NNN` plan inside a sprint | The plan's own status. Routine ones are approved by the lead (`CLAUDE.md` §5) |
+
+- **A draft decides nothing.** Plan drafts live in `reports/planning/`, marked DRAFT, with a
+  version. Each version is committed. After approval, the only edit a plan gets is its status
+  marker; a change is a new version and needs a new approval.
+- **Sprint start.** When a sprint starts, its record `reports/sprints/SPRINT-NN.md` gets Part 1,
+  written from the approved plan, with three rows: *Approved plan* (PLAN-… vN, approved by R-NN),
+  *Execution authorized by* (R-NN or SA-NN) and *Transition policy*. Part 1 is then preserved.
+- **Several sprints.** By default (`CLAUDE.md` §8) there is a check-in with you at every sprint
+  boundary. To let the team continue across boundaries without a new ruling each time, your words
+  are recorded as an SA naming the sprints, the transition conditions (independent review and
+  close-out done; no new scientific, scope or PI-reserved decision) and when to consult you. Every
+  boundary still gets its close-out, independent review and checks. A continuation SA never covers
+  what the charter reserves to you, such as closing a milestone or accepting a validation.
+- **Project defaults.** "From now on, always …" about review depth, transition policy or planning
+  cadence is a governing change. `/arpd-amend` applies it from your clear words, without asking you
+  to approve them again. A this-time-only preference stays in the plan draft.
+
+## 6. Hook permissions: what is logged, and why you are asked
 
 Setup installs two things into `.claude/`:
 
 - **`.claude/settings.json`**: hooks that run `tools/hooks/log_hook.py` on each Claude Code event.
 - **`.claude/agents/`**: the implementer and reviewer roles the lead agent delegates to.
 
-In install mode it also copies the `arpd-*` skills into the target repository's `.claude/skills/`.
+In install mode it also copies the `arpd-*` skills (setup, plan, check-in, amend) into the target
+repository's `.claude/skills/`.
 
 **What the logging records** (`logs/events.jsonl`, one line per event): the time; the event type (a
 session started or ended, a prompt was submitted, a tool call finished, a subagent started or
@@ -60,12 +127,13 @@ project), tool inputs and outputs, file contents, and model reasoning. The full 
 **Why you are asked.** Claude Code asks for your approval before any write to `.claude/`, and before
 any `git mv` into or out of it, because files there can run commands (hooks) and define agents.
 Approve if you want event logging and delegation. Setup never works around this prompt. A scripted or
-non-interactive run cannot approve it; the items are then recorded as owed (section 6).
+non-interactive run cannot approve it; the items are then recorded as owed (section 8).
 
-## 5. Confirming that installation and logging worked
+## 7. Confirming that installation and logging worked
 
 1. Run `python tools/check_governance.py`. The steps **"Event logging and agent roles installed"**
-   and **"Check-in and amend skills installed"** should be **PASS**.
+   and **"ARPD skills installed"** should be **PASS**. The skills step looks for
+   `arpd-checkin`, `arpd-amend` and `arpd-plan`.
 2. Start a Claude Code session in the project, do one small thing (for example, ask
    "Where are we?"), and end the turn.
 3. Run `python tools/summarize_events.py --sessions`. The session table should show a row for that
@@ -73,7 +141,7 @@ non-interactive run cannot approve it; the items are then recorded as owed (sect
 
 The checker looks at files only. Step 3 is what shows that the hooks actually fired.
 
-## 6. When installation is incomplete
+## 8. When installation is incomplete
 
 Anything setup could not write (usually the `.claude/` items) is recorded in three places:
 
@@ -82,13 +150,15 @@ Anything setup could not write (usually the `.claude/` items) is recorded in thr
 - `STATUS.md` §6 *Owed*;
 - *Known gaps* in `START-HERE.md`, with the exact commands to finish. These copy, never move:
   `kit/settings/settings.json` to `.claude/settings.json`, `kit/agents/*.md` to `.claude/agents/`
-  and, in install mode, the kit repository's `.claude/skills/arpd-*` to `.claude/skills/`. Only for
-  an imported starter whose own `.claude/` files stayed behind are they `git mv` commands.
+  and, in install mode, the kit repository's `.claude/skills/arpd-*` (each folder whole, with its
+  `references/`) to `.claude/skills/`. Only for an imported starter whose own `.claude/` files stayed
+  behind are they `git mv` commands.
 
 Until a decision records the gap, the checker reports it as MISSING; once recorded, as ADVISORY.
-After you run the commands, confirm as in section 5.
+While `/arpd-plan` is owed, `START-HERE.md` still names planning as the next step and says to run the
+commands first. After you run them, confirm as in section 7.
 
-## 7. Resuming after a lost session
+## 9. Resuming after a lost session
 
 If a session ends unexpectedly (a crash, a lost connection, a context reset), start a new session in
 the project and say:
@@ -108,14 +178,40 @@ The new session becomes the lead. Following the charter (§9), it:
 
 Unfinished work from the lost session is treated as unreviewed.
 
-**If setup itself was interrupted** (before `STATUS.md` exists), run the same `/arpd-setup` command
-again and say the earlier session was lost. Setup commits your adoption ruling before writing the
-other governing documents. A new session checks what was already done and keeps the committed moves.
-It then continues from the first missing file under your recorded ruling, without renumbering or
-rewriting completed work. If no ruling was recorded, it re-does the read-back with you; earlier
-answers count only if you confirm them.
+**If setup itself was interrupted**, run the same `/arpd-setup` command again and say the earlier
+session was lost. The new session checks `git log`, `git status`, the working notes in
+`docs/discovery/SETUP.md`, any move-only commits, and the commit
+"Record adoption ruling R-NN (setup in progress)". Then:
 
-## 8. Reading the governance check
+- **Before you adopted the read-back** (no adoption ruling): nothing generated is authorized. If the
+  working notes exist, it shows you what they gathered (the phase reached, the topics, your words,
+  the open questions), restores the topic list and the interview mode, and continues from the next
+  open topic. Nothing in the notes counts as adopted: you adopt a fresh read-back. Without notes,
+  earlier answers count only if you confirm them. Committed moves are kept, not repeated. In install
+  mode without consent, the notes are outside the repository, and the new session needs their path
+  from you.
+- **After you adopted it:** your ruling and its read-back are the authority. Setup continues from
+  the first missing file, without repeating moves, renumbering IDs or rewriting completed work.
+
+**If a plan draft was interrupted**, run `/arpd-plan` (or `/arpd-plan resume`). A file in
+`reports/planning/` without an "Approved by R-NN" marker is shown to you as a draft, **not
+approved**, with its version and open points, and the review continues from the last committed
+version. An approved plan that has not started stays approved; it is never treated as a start. To
+start it, send the prompt `START-HERE.md` gives.
+
+## 10. The import baseline report
+
+When you import or install into existing code, setup runs the project's own tests (and its
+governance check, if it has one) before changing anything. After you adopt the read-back, it records
+the results **verbatim** in `reports/IMPORT-BASELINE-<date>.md`: the source and commit, each command with its working directory,
+exit code and output, the test counts, and what was not run, and why. It is written once and then
+frozen. Failures are recorded as they are.
+
+It is informative evidence, not a governing document. The import decision in `DECISIONS.md` cites it,
+and so does the first sprint's Part 1 when that sprint starts. Neither copies it. Later test runs go
+in sprint records.
+
+## 11. Reading the governance check
 
 `python tools/check_governance.py` prints one line per step, a *Not checked* block, and an overall
 result.
@@ -131,8 +227,16 @@ result.
 Overall: **FAIL** if any step failed; otherwise **INCOMPLETE** if any step is MISSING or PENDING;
 otherwise **PASS**.
 
+- **No sprint yet is fine.** A project with setup adopted and no sprint record passes the sprint
+  step: planning pending is a valid state.
+- **Open sprints.** The step "Open sprints: plan approval and execution authority cited" checks only
+  the Part 1 rows *Approved plan*, *Execution authorized by* and *Transition policy*: each ruling or
+  SA they cite must exist and must not be pending, and the plan file and version must exist. Older
+  records without these rows get an ADVISORY ("older format"), never a FAIL. Decision tracking is
+  still checked only in closed sprint records.
+
 Within the steps it lists, the checker does not report PASS for an item it could not check. It
-checks what is **recorded**: it cannot show that a recorded date is true or that a ruling is in your
-own words, it checks decision tracking only in closed sprint records, and it does not run the
-project's tests. The *Not checked* block lists these limits for each run; `docs/LIMITATIONS.md` in
-the kit lists them in full.
+checks what is **recorded**: it cannot show that a recorded date is true, that a ruling, plan
+approval or start direction is in your own words, or that the readiness block is right; and it does
+not run the project's tests. The *Not checked* block lists these limits for each run;
+`docs/LIMITATIONS.md` in the kit lists them in full.

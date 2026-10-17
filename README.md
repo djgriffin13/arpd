@@ -1,7 +1,9 @@
 # ARPD: Agentic Research Paradigm Development
 
-**A team-based framework for expanding organizational inquiry.** This is a release candidate (v0.3.0-rc.1,
-October 2026), held for manual testing ([RELEASE-NOTES.md](RELEASE-NOTES.md)), and the research artifact for a proposal to the *Organization Science* special issue
+**A team-based framework for expanding organizational inquiry.** This is release candidate
+v0.4.0-rc.1 (October 2026), **in development**: it will be held for manual testing once tagged
+([RELEASE-NOTES.md](RELEASE-NOTES.md)). The previous candidate, v0.3.0-rc.1, is preserved under its
+tag. ARPD is the research artifact for a proposal to the *Organization Science* special issue
 "AI-Enabled Frontiers in Organizational Science."
 
 ## What it is for
@@ -22,10 +24,12 @@ scientific decision**. Testing, review and explicit scientific validation are it
 |---|---|---|
 | **Team charter** (`kit/constitution/CORE.md` → the project's `CLAUDE.md`) | A short governing document every agent reads each session. It covers: authority by subject; the PI's rulings recorded verbatim; decision routes set by scientific consequence and by the authority the researcher has delegated, with an authority profile (consult first, bounded autonomy, or exploratory autonomy) agreed at setup; requirement states that separate *Implemented*, *Verified* (software evidence) and *Validated* (scientific evidence the researcher accepts); sprints with auditable close-outs; and a learning loop that adds and retires rules. | Built |
 | **Paradigm specification** (`kit/templates/PARADIGM-SPEC.md`) | Traces the research question → constructs → operationalizations → invariants → claims, and claims not to make → validation evidence. | Built |
-| **Setup and import interview** (`/arpd-setup`) | Asks about the science and proposes the engineering. Supports a fresh project, importing a codebase, or installing into an existing repository. Prior instructions are preserved and reconciled by decision, never silently merged. | Built; run end to end in real scripted developer tests of fresh mode (DT-03), import mode (DT-02, DT-04) and install mode (DT-05, and DT-08 for an interrupted install). The interactive interview has not yet been tested with a researcher. |
+| **Setup and import interview** (`/arpd-setup`) | An adaptive interview in four visible phases (Intake, Research & Problem, Product & Engineering, Governance & Handoff), as a standard interview or a guided tutorial. It asks what the researcher wants to study and what they want built, gives as much scientific help as they ask for, and proposes the engineering. Working notes are saved as it goes, in non-governing `docs/discovery/SETUP.md`. Nothing governing is written before the researcher adopts a read-back. It ends with planning pending: no sprint, no implementation. Supports a fresh project, importing a codebase, or installing into an existing repository. Prior instructions are preserved and reconciled by decision, never silently merged. | Built. The v0.3 interview ran end to end in scripted developer tests of fresh mode (DT-03), import mode (DT-02, DT-04) and install mode (DT-05, DT-08). The adaptive v0.4 interview: DT-09 to DT-13 (in progress). Not yet tested with a researcher. |
+| **Sprint planning** (`/arpd-plan`) | Plans the next sprint or a series with the researcher: a review of where the project stands, one sprint or several, priorities, a versioned draft in `reports/planning/`, approval of an exact version, then begin now or later. Plan approval, execution authority and task-plan approval stay separate; continuing across several sprints without a check-in at each boundary needs a standing authorization. | New in v0.4. DT-09 to DT-13 (in progress). Not yet tested with a researcher. |
+| **Interaction conventions** (`kit/docs/INTERACTION.md`) | Shared by the four skills: one labelled block (`QUESTION FOR YOU`, `CHOICE FOR YOU`, `APPROVAL REQUIRED`) last in every turn that waits for the researcher; choice options printed as text before any widget; progress lines; the tutorial overlay; the five kinds of information and action (an answer is not an authorization); a quick dependency screen. | New in v0.4. Not yet tested with people. |
 | **Team and workspace arrangement** | The team (solo / lead with subagents / peers) and the workspace (shared checkout / worktrees) are chosen separately. Shared runtime resources (ports, output paths) are assigned per agent. | Built |
 | **Event logging** (hooks + `tools/`) | Records defined coordination events. It reports elapsed time, agent-working time (prompt to end of turn), subagent time and failed or interrupted turns, separately from the researcher's self-reported active time. Hooks cannot measure the researcher's active time, and the tooling says so. | Built |
-| **Governance checker** (`tools/check_governance.py`) | Checks, from what is recorded: links, requirement evidence and traceability, plan numbering, charter adoption, installation files, and whether consequential decisions in closed sprints were authorized before adoption. Within the steps it lists, it does not report PASS for an item it could not check; each run prints what it did not check. It cannot show that the records themselves are true. | Built |
+| **Governance checker** (`tools/check_governance.py`) | Checks, from what is recorded: links, requirement evidence and traceability, plan numbering, charter adoption, installation files (including the planning, check-in and amend skills), whether consequential decisions in closed sprints were authorized before adoption, and whether an open sprint's Part 1 cites a plan approval and execution authority that exist. A project with setup adopted and no sprint passes. Within the steps it lists, it does not report PASS for an item it could not check; each run prints what it did not check. It cannot show that the records themselves are true. | Built |
 | **Modules** (`kit/constitution/modules/`) | Built: computational model; team arrangement. Drafts, untested: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data. | Partial |
 | **Worked example** (`examples/march-1991/`) | A checked implementation of March's (1991) mutual-learning model, kept as a complete ARPD project with its records. It is also the starter for the feasibility demonstration. | Built: software verification (48 tests) and directional replication (22 tests), with two independent review rounds. Its assumptions were adopted as the working baseline by the PI's ruling R-01; whether they match March's own program remains open (backlog B-07 to B-09). |
 
@@ -53,6 +57,7 @@ without the charter, and with lean or full configurations. See `evaluation/`.
 ## Quick start
 
 See [QUICKSTART.md](QUICKSTART.md). In short: clone, open in Claude Code, and type `/arpd-setup`.
+When setup is done, type `/arpd-plan` to plan the first sprint.
 Installation, hook permissions, confirming that logging works, recovery after a lost session, and how
 to read the governance check are in [docs/OPERATIONS.md](docs/OPERATIONS.md).
 
@@ -65,9 +70,16 @@ other agent tools to it, and adapters for other tools are planned.
 The developer tests are labelled developer evidence with scripted inputs, not demonstrations with a
 researcher. Records are in [`evaluation/developer-tests/`](evaluation/developer-tests/).
 
+DT-01 to DT-08 were run on v0.3.0-rc.1. They remain the evidence for what v0.4 did not change: moves
+and history on import and install, owed `.claude/` items, logging, the basics of check-in and
+amendment, and recovery. The setup interview and its handoff changed in v0.4, so DT-03's interview is
+evidence for the earlier flow only.
+
 | Workflow | Evidence | Status |
 |---|---|---|
-| Fresh setup (`/arpd-setup`) | DT-03 | Run end to end; `.claude/` writes needed an interactive approval and were recorded as owed |
+| Adaptive setup: four phases, tutorial toggle, discovery notes, ends with planning pending | DT-09 to DT-13 (in progress) | New in v0.4; evidence to be recorded |
+| Sprint planning (`/arpd-plan`): one sprint or a series, approval of a version, begin now or later | DT-09 to DT-13 (in progress) | New in v0.4; evidence to be recorded |
+| Fresh setup (`/arpd-setup`), v0.3 flow | DT-03 | Run end to end; `.claude/` writes needed an interactive approval and were recorded as owed |
 | Import (`/arpd-setup import`), including a starter inside the kit | DT-02, DT-04 | Run end to end |
 | Install into an existing repository (`/arpd-setup install`) | DT-05, DT-08 | Run end to end; DT-05's missing-skills defect fixed; DT-08 resumed an interrupted install in a new session |
 | Check-in and amendment (`/arpd-checkin`, `/arpd-amend`) | DT-06, DT-07 | DT-06's defects fixed and re-run in DT-07 |
@@ -77,8 +89,8 @@ researcher. Records are in [`evaluation/developer-tests/`](evaluation/developer-
 
 | Tested | Draft or untested |
 |---|---|
-| Charter, governing-document templates and the three skills (setup in all three modes, check-in, amendment), in scripted developer tests | Every workflow with a real researcher, and approving the `.claude/` writes interactively |
-| Governance checker and event summary: 95 automated tests in `kit/tools/`, and seven independent review rounds | The interactive interview with a real researcher |
+| Charter, governing-document templates and the v0.3 skills (setup in all three modes, check-in, amendment), in scripted developer tests | Every workflow with a real researcher, and approving the `.claude/` writes interactively |
+| Governance checker and event summary: automated tests in `kit/tools/` (95 at v0.3.0-rc.1; v0.4 adds tests for the new checks), and seven independent review rounds | The adaptive setup interview, `/arpd-plan`, the interaction conventions, and the v0.4 changes to check-in and amendment: scripted developer tests in progress (DT-09 to DT-13); none tested by people |
 | Event-logging hooks and recovery, in real Claude Code sessions | Draft modules: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data |
 | Modules: computational model; team arrangement | Other agent harnesses than Claude Code |
 | The March (1991) worked example: 70 tests, two independent review rounds | The `StopFailure` hook's payload fields, against a real failure |
@@ -89,16 +101,24 @@ Known limitations are listed in [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
 
 | Path | Contents |
 |---|---|
-| `.claude/skills/` | `arpd-setup` (interview and import), `arpd-checkin`, `arpd-amend` |
+| `.claude/skills/` | `arpd-setup` (interview and import), `arpd-plan` (sprint planning), `arpd-checkin`, `arpd-amend` |
 | `kit/constitution/` | `CORE.md` (charter template) and `modules/` |
-| `kit/templates/` | Governing-document and report templates |
+| `kit/templates/` | Governing-document and report templates, including the setup working notes (`discovery/SETUP.md`), the sprint-plan draft (`planning/PLAN.md`) and the import baseline (`reports/IMPORT-BASELINE.md`) |
 | `kit/agents/` | Implementer and reviewer role definitions |
 | `kit/tools/` | Governance checker, plan numbering, event logging and summary, hook script |
 | `kit/settings/` | Hook configuration installed into projects |
 | `kit/docs/EVENTS.md` | What the event log captures, and what it cannot |
+| `kit/docs/INTERACTION.md` | The interaction conventions shared by the four skills |
 | `examples/march-1991/` | The worked example |
 | `evaluation/` | Protocols for the feasibility demonstration and the planned studies; `developer-tests/` holds the labelled developer-test records and their scripted inputs |
 | `docs/` | Operations guide (`OPERATIONS.md`), manual-testing guide (`MANUAL-TESTING.md`), known limitations (`LIMITATIONS.md`), design rationale and references |
+
+In a project after setup, two more folders appear. Both are informative and decide nothing:
+
+| Project path | Contents |
+|---|---|
+| `docs/discovery/SETUP.md` | The setup interview's working notes. Written as the interview goes; nothing in them is adopted except through the read-back ruling. In install mode, saved in your repository only with your consent |
+| `reports/planning/PLAN-<date>.md` | Sprint-plan drafts, one file per planning effort, with a version for each revision. A version binds only through the ruling that approves it |
 
 ## Evidence status
 
