@@ -108,4 +108,20 @@ is what `evaluation/` is for.
 
 ## Licence
 
-To be decided before public release.
+The whole repository is released under the [MIT License](LICENSE): code, documentation, templates,
+skills, the governance framework and the worked example. `kit/LICENSE` is the same licence, kept
+with the kit so that copies of it carry the notice.
+
+**Documents generated for your project.** The files that ARPD's setup and skills write for your own
+project are yours. This covers your team charter (`CLAUDE.md`), `PARADIGM-SPEC.md`,
+`REQUIREMENTS.md`, `MASTER_PLAN.md`, `DECISIONS.md`, `ARCHITECTURE.md`, `STATUS.md`, `INDEX.md`,
+`START-HERE.md`, your sprint records and reports, and your research instrument. You may use, modify,
+distribute or keep them private, under any terms, without having to credit ARPD. They are covered
+even where they are adapted from ARPD's templates.
+
+**The framework itself.** Redistributing ARPD, or substantial portions of its own source materials
+(for example `kit/`, the skills in `.claude/skills/`, or the tools copied into a project's `tools/`),
+carries the normal MIT condition: keep the copyright and permission notice with them.
+
+**Citation.** If ARPD helps your research, please cite it ([CITATION.cff](CITATION.cff)) and, once it
+is available, the framework paper. Citation is encouraged, not a condition of use.

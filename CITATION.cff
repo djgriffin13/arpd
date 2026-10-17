@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: >-
+  If you use ARPD in your research, please cite it. Citation is encouraged,
+  not required: the MIT licence places no citation condition on use.
+  A framework paper is in preparation; this entry will point to it once
+  it is available.
+title: "ARPD: Agentic Research Paradigm Development"
+abstract: >-
+  A team-charter kit and Claude Code skills that let a domain researcher
+  direct a team of AI coding agents to build research instruments while
+  keeping authority over consequential scientific decisions.
+type: software
+authors:
+  - name: "The ARPD authors"
+version: 0.3.0-rc.1
+license: MIT
+keywords:
+  - organizational research
+  - research instruments
+  - AI coding agents
+  - team charter
+  - research governance
