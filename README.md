@@ -90,7 +90,7 @@ evidence for the earlier flow only.
 | Tested | Draft or untested |
 |---|---|
 | Charter, governing-document templates and the v0.3 skills (setup in all three modes, check-in, amendment), in scripted developer tests | Every workflow with a real researcher, and approving the `.claude/` writes interactively |
-| Governance checker and event summary: automated tests in `kit/tools/` (128 for the kit tools, plus 19 for the turn checker), and independent review rounds 1 to 8b | The adaptive setup interview, `/arpd-plan`, the interaction conventions, and the v0.4 changes to check-in and amendment: scripted developer tests DT-09 to DT-13; none tested by people |
+| Governance checker and event summary: automated tests in `kit/tools/` (131 for the kit tools, plus 19 for the turn checker), and independent review rounds 1 to 8b | The adaptive setup interview, `/arpd-plan`, the interaction conventions, and the v0.4 changes to check-in and amendment: scripted developer tests DT-09 to DT-13; none tested by people |
 | Event-logging hooks and recovery, in real Claude Code sessions | Draft modules: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data |
 | Modules: computational model; team arrangement | Other agent harnesses than Claude Code |
 | The March (1991) worked example: 70 tests, two independent review rounds | The `StopFailure` hook's payload fields, against a real failure |

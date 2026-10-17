@@ -162,7 +162,7 @@ the earlier interview only; the moves, history and owed-item handling they show 
 | Tested (with the evidence above) | Draft or untested |
 |---|---|
 | Charter, governing-document templates and the v0.3 skills, in scripted developer tests | Every workflow with a real researcher |
-| Governance checker and event summary: automated tests (147: 128 for the kit tools and 19 for the turn checker); seven independent review rounds on v0.3, and rounds 8 and 8b on v0.4 | The adaptive setup, `/arpd-plan`, the interaction conventions and the v0.4 check-in and amendment changes: scripted developer tests DT-09 to DT-13 (75 turns, each checked for question placement); none tested by people |
+| Governance checker and event summary: automated tests (150: 131 for the kit tools and 19 for the turn checker); seven independent review rounds on v0.3, and rounds 8 and 8b on v0.4 | The adaptive setup, `/arpd-plan`, the interaction conventions and the v0.4 check-in and amendment changes: scripted developer tests DT-09 to DT-13 (75 turns, each checked for question placement); none tested by people |
 | Event-logging hooks and recovery, in real Claude Code sessions | Approving the `.claude/` writes interactively (scripted runs cannot approve them) |
 | Modules: computational model; team arrangement | Native choice widgets, and symbol rendering, in the Claude Code terminal and the Claude app |
 | The March (1991) worked example: 70 tests; two independent review rounds | Draft modules: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data |
