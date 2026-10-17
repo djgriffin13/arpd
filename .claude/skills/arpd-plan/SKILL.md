@@ -23,6 +23,16 @@ Three levels of plan, never merged:
 Approving a sprint plan is a planning gate for the sprint as a package. It does not make every task
 plan or technical edit need the PI.
 
+**Every turn that waits for the PI** (`kit/docs/INTERACTION.md` §2–§4, in short):
+
+- Start with the progress line `PLAN  ✓ Review → ● Priorities → ○ Draft → ○ Approval → ○ Handoff`
+  (two spaces after `PLAN`; ✓ done, ● current, ○ to come; keep every arrow).
+- End with exactly one labelled block, written as plain text, never inside a code fence.
+  **Nothing follows its closing divider**: not even a sentence about other options. Offers such as
+  "you can also edit it or ask for a review" go inside the block or above it.
+- A closing turn that does not wait for the PI ends with the next step and its exact prompt, and no
+  block.
+
 Read before you start:
 
 - `kit/docs/INTERACTION.md`: the labelled blocks, choices printed before any widget, the progress

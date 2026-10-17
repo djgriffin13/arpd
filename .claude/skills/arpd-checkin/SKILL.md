@@ -104,3 +104,6 @@ If the PI answers with a ruling, the lead agent records it **verbatim** in `DECI
 the ruling asks for goes through `/arpd-amend`; plan approvals and execution starts go through
 `/arpd-plan`. Offer to log the PI's active minutes for this check-in:
 `python tools/log_event.py pi_time --actor pi --minutes N`.
+
+**When you wait for the PI:** end with exactly one labelled block (`kit/docs/INTERACTION.md` §2), as
+plain text, not in a code fence. Nothing follows its closing divider.

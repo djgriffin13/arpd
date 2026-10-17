@@ -142,3 +142,6 @@ the ruling as above **and** record the delegation as an SA that cites it.
 
 **Pruning is welcome.** Ask the PI whether any rule no longer earns its cost. A charter should get
 shorter as well as longer.
+
+**When you wait for the PI:** end with exactly one labelled block (`kit/docs/INTERACTION.md` §2), as
+plain text, not in a code fence. Nothing follows its closing divider.

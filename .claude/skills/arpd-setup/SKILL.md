@@ -48,6 +48,9 @@ Follow `kit/docs/INTERACTION.md`. In short:
   ✓ addressed, ◉ current focus, ○ open, with "(partial)" in text. With more than about six, the
   counts line `N complete | N partial | N open; next: <topic>`, and "Full phase plan on request."
   Other phases stay collapsed. Never show a percentage.
+- End with exactly one labelled block, as plain text, never inside a code fence. **Nothing follows
+  its closing divider.** A closing turn that does not wait for the PI ends with the next step and
+  its exact prompt, and no block.
 - Tutorial hints, tool results and summaries go **above** the labelled block. If tools ran after
   you asked (for example, saving notes), restate the question in a new block at the end.
 - End with **one** labelled block between two divider lines: `QUESTION FOR YOU`,
