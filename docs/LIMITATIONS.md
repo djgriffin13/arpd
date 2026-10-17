@@ -1,17 +1,21 @@
-# Known limitations (as of 2026-10-16)
+# Known limitations (release candidate v0.3.0-rc.1, 2026-10-16)
 
 These are stated openly so that users and reviewers know what the kit does and does not establish.
 Most come from the independent review rounds and the developer tests in `evaluation/developer-tests/`.
 
 ## Setup and use
 
-- **The interactive interview has not been run with a person.** The four developer tests used
-  scripted answers. Two real `/arpd-setup` runs (DT-02 to DT-04) exercised the skill end to end, but
-  not the interview's length, clarity or feel.
+- **No workflow has been run by a researcher.** Every developer test (DT-01 to DT-08) used scripted
+  answers. Real `/arpd-setup` runs exercised fresh, import and install modes end to end, and real
+  `/arpd-checkin` and `/arpd-amend` sessions exercised the other two skills. None of this tests the
+  interview's length, clarity or feel, or whether a researcher can use the kit
+  (`docs/MANUAL-TESTING.md`).
 - **`.claude/` writes need an interactive approval.** Installing the event-logging hooks and the
   implementer and reviewer roles requires a click on Claude Code's permission prompt. A scripted run
   cannot give it; setup then records the gap as owed and gives the researcher the exact commands to
   run. The approval flow itself has not been exercised live.
+- **Resuming an interrupted setup** was tested once, with the interruption chosen just after the
+  adoption ruling was committed (DT-08). Other interruption points are untested.
 - **One harness.** The kit targets Claude Code. The charter is plain Markdown and `AGENTS.md` points
   other tools to it, but other harnesses are untested.
 - **Draft modules.** Only the computational-model and team-arrangement modules have been used. The

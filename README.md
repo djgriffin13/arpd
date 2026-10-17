@@ -1,7 +1,7 @@
 # ARPD: Agentic Research Paradigm Development
 
-**A team-based framework for expanding organizational inquiry.** This is a prototype (v0.2, October
-2026), and the research artifact for a proposal to the *Organization Science* special issue
+**A team-based framework for expanding organizational inquiry.** This is a release candidate (v0.3.0-rc.1,
+October 2026), held for manual testing ([RELEASE-NOTES.md](RELEASE-NOTES.md)), and the research artifact for a proposal to the *Organization Science* special issue
 "AI-Enabled Frontiers in Organizational Science."
 
 ## What it is for
@@ -22,7 +22,7 @@ scientific decision**. Testing, review and explicit scientific validation are it
 |---|---|---|
 | **Team charter** (`kit/constitution/CORE.md` → the project's `CLAUDE.md`) | A short governing document every agent reads each session. It covers: authority by subject; the PI's rulings recorded verbatim; decision routes set by scientific consequence and by the authority the researcher has delegated, with an authority profile (consult first, bounded autonomy, or exploratory autonomy) agreed at setup; requirement states that separate *Implemented*, *Verified* (software evidence) and *Validated* (scientific evidence the researcher accepts); sprints with auditable close-outs; and a learning loop that adds and retires rules. | Built |
 | **Paradigm specification** (`kit/templates/PARADIGM-SPEC.md`) | Traces the research question → constructs → operationalizations → invariants → claims, and claims not to make → validation evidence. | Built |
-| **Setup and import interview** (`/arpd-setup`) | Asks about the science and proposes the engineering. Supports a fresh project, importing a codebase, or installing into an existing repository. Prior instructions are preserved and reconciled by decision, never silently merged. | Built; run end to end in real scripted developer tests of fresh mode (DT-03) and import mode (DT-02, DT-04). Install mode is being tested (DT-05). The interactive interview has not yet been tested with a researcher. |
+| **Setup and import interview** (`/arpd-setup`) | Asks about the science and proposes the engineering. Supports a fresh project, importing a codebase, or installing into an existing repository. Prior instructions are preserved and reconciled by decision, never silently merged. | Built; run end to end in real scripted developer tests of fresh mode (DT-03), import mode (DT-02, DT-04) and install mode (DT-05, and DT-08 for an interrupted install). The interactive interview has not yet been tested with a researcher. |
 | **Team and workspace arrangement** | The team (solo / lead with subagents / peers) and the workspace (shared checkout / worktrees) are chosen separately. Shared runtime resources (ports, output paths) are assigned per agent. | Built |
 | **Event logging** (hooks + `tools/`) | Records defined coordination events. It reports elapsed time, agent-working time (prompt to end of turn), subagent time and failed or interrupted turns, separately from the researcher's self-reported active time. Hooks cannot measure the researcher's active time, and the tooling says so. | Built |
 | **Governance checker** (`tools/check_governance.py`) | Checks, from what is recorded: links, requirement evidence and traceability, plan numbering, charter adoption, installation files, and whether consequential decisions in closed sprints were authorized before adoption. Within the steps it lists, it does not report PASS for an item it could not check; each run prints what it did not check. It cannot show that the records themselves are true. | Built |
@@ -69,16 +69,16 @@ researcher. Records are in [`evaluation/developer-tests/`](evaluation/developer-
 |---|---|---|
 | Fresh setup (`/arpd-setup`) | DT-03 | Run end to end; `.claude/` writes needed an interactive approval and were recorded as owed |
 | Import (`/arpd-setup import`), including a starter inside the kit | DT-02, DT-04 | Run end to end |
-| Install into an existing repository (`/arpd-setup install`) | DT-05 | In progress |
-| Check-in and amendment (`/arpd-checkin`, `/arpd-amend`) | DT-06 | In progress |
+| Install into an existing repository (`/arpd-setup install`) | DT-05, DT-08 | Run end to end; DT-05's missing-skills defect fixed; DT-08 resumed an interrupted install in a new session |
+| Check-in and amendment (`/arpd-checkin`, `/arpd-amend`) | DT-06, DT-07 | DT-06's defects fixed and re-run in DT-07 |
 | Event logging and recovery after a lost session | DT-01, addendum 2 | Real sessions; hook capture and recovery checked |
 
 ## Tested and draft components
 
 | Tested | Draft or untested |
 |---|---|
-| Charter, governing-document templates and the setup skill (fresh and import modes) | Install mode and the check-in and amendment skills (tests in progress) |
-| Governance checker and event summary: automated tests in `kit/tools/`, and five independent review rounds | The interactive interview with a real researcher |
+| Charter, governing-document templates and the three skills (setup in all three modes, check-in, amendment), in scripted developer tests | Every workflow with a real researcher, and approving the `.claude/` writes interactively |
+| Governance checker and event summary: 95 automated tests in `kit/tools/`, and seven independent review rounds | The interactive interview with a real researcher |
 | Event-logging hooks and recovery, in real Claude Code sessions | Draft modules: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data |
 | Modules: computational model; team arrangement | Other agent harnesses than Claude Code |
 | The March (1991) worked example: 70 tests, two independent review rounds | The `StopFailure` hook's payload fields, against a real failure |
@@ -98,7 +98,7 @@ Known limitations are listed in [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
 | `kit/docs/EVENTS.md` | What the event log captures, and what it cannot |
 | `examples/march-1991/` | The worked example |
 | `evaluation/` | Protocols for the feasibility demonstration and the planned studies; `developer-tests/` holds the labelled developer-test records and their scripted inputs |
-| `docs/` | Operations guide (`OPERATIONS.md`), known limitations (`LIMITATIONS.md`), design rationale and references |
+| `docs/` | Operations guide (`OPERATIONS.md`), manual-testing guide (`MANUAL-TESTING.md`), known limitations (`LIMITATIONS.md`), design rationale and references |
 
 ## Evidence status
 

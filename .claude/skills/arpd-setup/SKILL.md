@@ -106,8 +106,11 @@ Then:
    generated files, and ask before discarding them.
 3. **If the adoption ruling is recorded,** it and its read-back are the authority. Continue the
    checklist from the first missing or incomplete row. Never repeat a move, never renumber an ID,
-   and never rewrite a completed file. Check each existing file against its checklist row, for
-   example for an unfilled `{{…}}`. Ask the PI only for what the record does not settle.
+   and never rewrite a completed file. Check each existing file, committed or not, against its
+   checklist row and against the recorded read-back (for example, the question and construct
+   wording, or an unfilled `{{…}}`). Ask the PI only for what the record does not settle. **If the
+   ruling does not contain the read-back text**, say so: an uncommitted file cannot then be checked
+   against what the PI adopted, so show it to the PI and ask them to confirm it before you keep it.
 4. Record the recovery in `STATUS.md` (a `Recovered:` line naming what was found and what was
    redone). If `tools/log_event.py` exists, log
    `python tools/log_event.py resume --actor lead --note "setup resumed"`.
