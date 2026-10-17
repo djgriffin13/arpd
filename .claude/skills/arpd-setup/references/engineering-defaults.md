@@ -15,7 +15,7 @@ reason, and accept the PI's correction.
 **Always, regardless of platform:**
 
 - Git from day one, with small commits that explain *why*.
-- One command runs all checks. Name it in `START-HERE.md`, e.g. `python -m pytest`.
+- One command runs the test suite. Name it in `START-HERE.md`, e.g. `python -m pytest`.
 - Seeds recorded for anything random.
 - Outputs go to a git-ignored `output/` folder unless a ruling makes them part of the record.
 - No real participant data in the repository.

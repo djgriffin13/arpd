@@ -4,13 +4,16 @@ r"""Governance checks for an ARPD project.
     python tools/check_governance.py
 
 Each step reports PASS, FAIL, MISSING (could not run), PENDING (awaiting
-the PI's ruling) or ADVISORY. The overall result is:
+the PI's ruling) or ADVISORY (a note that does not change the result). The overall result is:
 
-- PASS only if every step passed;
-- INCOMPLETE if any step could not run;
-- FAIL otherwise.
+- FAIL if any step failed;
+- otherwise INCOMPLETE if any step could not run (MISSING) or awaits the PI (PENDING);
+- otherwise PASS.
 
-It never reports PASS for something it did not check.
+Within the steps listed below, it does not report PASS for an item it could not check. What it does
+not check is printed in a "Not checked" block after the steps. It relies on what is recorded in
+DECISIONS.md, the sprint records, REQUIREMENTS.md and INDEX.md; it cannot show that those records are
+true.
 
 Exit codes: 0 PASS, 1 FAIL, 2 INCOMPLETE.
 
@@ -99,6 +102,7 @@ PLAN_STATES = {"Proposed", "Approved", "Active", "Complete"}
 SKIP_DIRS = {".git", "node_modules", "__pycache__", "logs", "output", ".venv", "venv", "kit"}
 
 results = []
+not_checked = []   # exclusions found while checking, printed after the steps
 
 
 def step(name, status, details=()):
@@ -251,6 +255,8 @@ def check_requirements():
         rid, state = r.get("ID", ""), r.get("State", "")
         ev, src = r.get("Evidence", ""), r.get("Source", "")
         if not rid or "{{" in rid:
+            not_checked.append("REQUIREMENTS.md: a row with %s was skipped (template or blank row)"
+                               % ("a placeholder ID" if rid else "no ID"))
             continue
         if state not in REQ_STATES:
             problems.append("%s: invalid state '%s'" % (rid, state))
@@ -549,6 +555,8 @@ def check_sprints():
             continue
         text = read(os.path.join("reports", "sprints", name))
         if "**Closed:**" not in text or "{{date" in text.split("**Closed:**", 1)[1][:80]:
+            not_checked.append("reports/sprints/%s is open (not closed): decision tracking is checked only at "
+                               "close" % name)
             continue  # open sprint
         rows = list(table_rows(text, "ID | Decision"))
         if not rows:
@@ -709,6 +717,14 @@ def main():
         print("%-*s  %s" % (width, name, status))
         for d in details:
             print("    - " + d)
+    print("\nNot checked:")
+    for d in not_checked + [
+            "dates, rulings and authorizations are checked as recorded, not verified as true or as the PI's "
+            "own words",
+            "installation checks look at files, not at whether the hooks actually fired",
+            "the code itself: run the project's tests separately"]:
+        print("    - " + d)
+    print("Relies on recorded information in DECISIONS.md, sprint records, REQUIREMENTS.md and INDEX.md.")
     statuses = {s for _, s, _ in results}
     overall = "FAIL" if "FAIL" in statuses else ("INCOMPLETE" if statuses & {"MISSING", "PENDING"} else "PASS")
     print("\nOVERALL: " + overall)

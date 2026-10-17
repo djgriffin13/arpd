@@ -22,10 +22,10 @@ scientific decision**. Testing, review and explicit scientific validation are it
 |---|---|---|
 | **Team charter** (`kit/constitution/CORE.md` → the project's `CLAUDE.md`) | A short governing document every agent reads each session. It covers: authority by subject; the PI's rulings recorded verbatim; decision routes set by scientific consequence and by the authority the researcher has delegated, with an authority profile (consult first, bounded autonomy, or exploratory autonomy) agreed at setup; requirement states that separate *Implemented*, *Verified* (software evidence) and *Validated* (scientific evidence the researcher accepts); sprints with auditable close-outs; and a learning loop that adds and retires rules. | Built |
 | **Paradigm specification** (`kit/templates/PARADIGM-SPEC.md`) | Traces the research question → constructs → operationalizations → invariants → claims, and claims not to make → validation evidence. | Built |
-| **Setup and import interview** (`/arpd-setup`) | Asks about the science and proposes the engineering. Supports a fresh project, importing a codebase, or installing into an existing repository. Prior instructions are preserved and reconciled by decision, never silently merged. | Built; run end to end in two real scripted developer tests (import and fresh mode; `evaluation/developer-tests/`). The interactive interview has not yet been tested with a researcher. |
+| **Setup and import interview** (`/arpd-setup`) | Asks about the science and proposes the engineering. Supports a fresh project, importing a codebase, or installing into an existing repository. Prior instructions are preserved and reconciled by decision, never silently merged. | Built; run end to end in real scripted developer tests of fresh mode (DT-03) and import mode (DT-02, DT-04). Install mode is being tested (DT-05). The interactive interview has not yet been tested with a researcher. |
 | **Team and workspace arrangement** | The team (solo / lead with subagents / peers) and the workspace (shared checkout / worktrees) are chosen separately. Shared runtime resources (ports, output paths) are assigned per agent. | Built |
 | **Event logging** (hooks + `tools/`) | Records defined coordination events. It reports elapsed time, agent-working time (prompt to end of turn), subagent time and failed or interrupted turns, separately from the researcher's self-reported active time. Hooks cannot measure the researcher's active time, and the tooling says so. | Built |
-| **Governance checker** (`tools/check_governance.py`) | Checks links, requirement evidence and traceability, plan numbering, and whether consequential decisions were authorized before adoption. | Built |
+| **Governance checker** (`tools/check_governance.py`) | Checks, from what is recorded: links, requirement evidence and traceability, plan numbering, charter adoption, installation files, and whether consequential decisions in closed sprints were authorized before adoption. Within the steps it lists, it does not report PASS for an item it could not check; each run prints what it did not check. It cannot show that the records themselves are true. | Built |
 | **Modules** (`kit/constitution/modules/`) | Built: computational model; team arrangement. Drafts, untested: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data. | Partial |
 | **Worked example** (`examples/march-1991/`) | A checked implementation of March's (1991) mutual-learning model, kept as a complete ARPD project with its records. It is also the starter for the feasibility demonstration. | Built: software verification (48 tests) and directional replication (22 tests), with two independent review rounds. Its assumptions await the researcher's decision. |
 
@@ -53,9 +53,37 @@ without the charter, and with lean or full configurations. See `evaluation/`.
 ## Quick start
 
 See [QUICKSTART.md](QUICKSTART.md). In short: clone, open in Claude Code, and type `/arpd-setup`.
+Installation, hook permissions, confirming that logging works, recovery after a lost session, and how
+to read the governance check are in [docs/OPERATIONS.md](docs/OPERATIONS.md).
 
-**Requirements:** Claude Code, Git and Python 3.8+. The charter is plain Markdown. `AGENTS.md`
-points other agent tools to it, and adapters for other tools are planned.
+**Requirements:** Claude Code (tested with 2.1.220), Git, and Python 3.8+ on the PATH as `python`.
+The March example also needs numpy and pytest. The charter is plain Markdown. `AGENTS.md` points
+other agent tools to it, and adapters for other tools are planned.
+
+## Supported workflows and evidence
+
+The developer tests are labelled developer evidence with scripted inputs, not demonstrations with a
+researcher. Records are in [`evaluation/developer-tests/`](evaluation/developer-tests/).
+
+| Workflow | Evidence | Status |
+|---|---|---|
+| Fresh setup (`/arpd-setup`) | DT-03 | Run end to end; `.claude/` writes needed an interactive approval and were recorded as owed |
+| Import (`/arpd-setup import`), including a starter inside the kit | DT-02, DT-04 | Run end to end |
+| Install into an existing repository (`/arpd-setup install`) | DT-05 | In progress |
+| Check-in and amendment (`/arpd-checkin`, `/arpd-amend`) | DT-06 | In progress |
+| Event logging and recovery after a lost session | DT-01, addendum 2 | Real sessions; hook capture and recovery checked |
+
+## Tested and draft components
+
+| Tested | Draft or untested |
+|---|---|
+| Charter, governing-document templates and the setup skill (fresh and import modes) | Install mode and the check-in and amendment skills (tests in progress) |
+| Governance checker and event summary: automated tests in `kit/tools/`, and five independent review rounds | The interactive interview with a real researcher |
+| Event-logging hooks and recovery, in real Claude Code sessions | Draft modules: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data |
+| Modules: computational model; team arrangement | Other agent harnesses than Claude Code |
+| The March (1991) worked example: 70 tests, two independent review rounds | The `StopFailure` hook's payload fields, against a real failure |
+
+Known limitations are listed in [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
 
 ## Layout
 
@@ -69,12 +97,10 @@ points other agent tools to it, and adapters for other tools are planned.
 | `kit/settings/` | Hook configuration installed into projects |
 | `kit/docs/EVENTS.md` | What the event log captures, and what it cannot |
 | `examples/march-1991/` | The worked example |
-| `evaluation/` | Protocols for the feasibility demonstration and the planned studies; `developer-tests/` holds the labelled developer-test records (DT-01 to DT-03) and their scripted inputs |
-| `docs/` | Design rationale and guidance |
+| `evaluation/` | Protocols for the feasibility demonstration and the planned studies; `developer-tests/` holds the labelled developer-test records and their scripted inputs |
+| `docs/` | Operations guide (`OPERATIONS.md`), known limitations (`LIMITATIONS.md`), design rationale and references |
 
 ## Evidence status
-
-Known limitations are listed in [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
 
 The kit's rules come from practice: the governing records of three agent-built research instruments,
 reorganized around team-science theory. **Their benefits are proposed, not yet tested.** Testing them

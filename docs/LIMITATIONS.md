@@ -35,7 +35,12 @@ Most come from the independent review rounds and the developer tests in `evaluat
   A missing entry is reported as ADVISORY.
 - **Several cited authorities.** One given ruling or standing authorization is enough, even if
   another one cited alongside it is still pending.
-- **Open sprints are not checked.** Only closed sprint records are audited.
+- **Open sprints are not checked.** Decision tracking is checked only in closed sprint records. Each
+  run lists the open sprint records it found under *Not checked*.
+- **Records, not facts.** The checker relies on what is recorded in DECISIONS.md, the sprint
+  records, REQUIREMENTS.md and INDEX.md. Within the steps it lists, it does not report PASS for an
+  item it could not check; it cannot show that the records are true. It does not run the project's
+  tests.
 - **Installation checks** look at file presence and content. They do not show that the hooks
   actually fired.
 - **Charter adoption** is read from the charter's Version line and the existence of the ruling it
