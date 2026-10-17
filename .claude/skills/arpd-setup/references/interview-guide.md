@@ -13,7 +13,7 @@ shorter, because the science is confirmed rather than elicited.
    - Run `git status` and list the top level.
    - If the repository contains only the kit (`kit/`, `.claude/skills/arpd-*`, `docs/`,
      `evaluation/`, `examples/`, and the kit's own `README.md`, `QUICKSTART.md`, `CLAUDE.md`,
-     `AGENTS.md`, `LICENSE`, `CITATION.cff` and dotfiles), the mode is **fresh**. The kit's own files are not prior instructions.
+     `AGENTS.md`, `LICENSE`, `CITATION.cff`, `RELEASE-NOTES.md` and dotfiles), the mode is **fresh**. The kit's own files are not prior instructions.
    - If the PI passed `import <path|url>` or `install <path>`, or if the project's own source code
      or instruction files (`CLAUDE.md`, `AGENTS.md`, `.cursorrules`, `README` with design notes)
      are present, follow `import-path.md`. A starter inside the kit (for example

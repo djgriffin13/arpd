@@ -44,7 +44,8 @@ and auditable.
        `REQUIREMENTS.md`, the charter's examples, standing authorizations in force, plans, code
        comments and tests. Update each dependent item you may update, and name it in the *Changes*
        line. **Text that records the PI's words (rulings and standing authorizations) is never
-       edited**, even to fix a citation; list those, and any accepted item you may not edit, in the
+       edited**, even to fix a citation (the only addition ever made to such an entry is a status
+       marker, such as "Superseded by SA-NN"); list those, and any accepted item you may not edit, in the
        read-back for the PI. The governance check flags live items that still cite a superseded ID,
        but not prose without the ID.
    - **Open scientific question:** add it to the *Open scientific questions* section of
