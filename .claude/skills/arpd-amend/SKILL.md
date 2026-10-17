@@ -35,15 +35,18 @@ and auditable.
 4. **Apply the change.**
    - **Charter:** edit `CLAUDE.md`, and add a version line naming R-NN.
    - **Paradigm spec:** never edit an accepted item. Add the new version, and mark the old one
-     "Superseded by <ID> (R-NN)". Update the spec's Version line to name R-NN.
+     "Superseded by <ID> (R-NN)". Add to the spec's Version line a new version naming R-NN, keeping the earlier versions listed.
      - A new item's *PI's wording* column holds the PI's exact words. Any restatement of yours is
        labelled "(restated by the lead)", never put in the PI's mouth.
-     - **Then follow the old ID through the repository.** Search for the superseded ID and its
-       wording: claims in `PARADIGM-SPEC.md` §6, A-rules in `ARCHITECTURE.md`, `REQUIREMENTS.md`,
-       standing authorizations in force, plans, code comments and tests. Update each dependent item
-       you may update, and name it in the *Changes* line. List the ones you may not edit (an SA in
-       force, an accepted item) in the read-back, for the PI. The governance check flags live items
-       that still cite a superseded ID.
+     - **Then follow the old ID through the repository.** Search for the superseded ID **and** for
+       key phrases of the old rule's wording (prose often states a rule without its ID): claims in
+       `PARADIGM-SPEC.md` §6, `ARCHITECTURE.md` (its overview as well as its A-rules),
+       `REQUIREMENTS.md`, the charter's examples, standing authorizations in force, plans, code
+       comments and tests. Update each dependent item you may update, and name it in the *Changes*
+       line. **Text that records the PI's words (rulings and standing authorizations) is never
+       edited**, even to fix a citation; list those, and any accepted item you may not edit, in the
+       read-back for the PI. The governance check flags live items that still cite a superseded ID,
+       but not prose without the ID.
    - **Open scientific question:** add it to the *Open scientific questions* section of
      `PARADIGM-SPEC.md` (§9 in the kit's template), as the next Q-NN, with what it blocks and any
      default. If the spec has no such section (an older starter), add it at the end, citing R-NN.
@@ -55,11 +58,13 @@ and auditable.
    - **Reopening a decision:** write a new DEC entry that quotes the original rationale, says what
      changed and why that rationale no longer holds, and names the affected work. Mark the old entry
      "Reopened by DEC-NN".
-5. **Read it back** to the PI in plain words: what changed, the consequence from step 2, and any
+5. **Update `STATUS.md`** (you are the lead, its one writer): the current state, *Waiting on the
+   PI* and *Owed*, so they reflect the change.
+6. **Read it back** to the PI in plain words: what changed, the consequence from step 2, and any
    dependent item you could not update.
-6. **Check:** run `python tools/check_governance.py` and report the result verbatim.
-7. **Log:** `python tools/log_event.py ruling --actor lead --ref R-NN --note "<one line>"`.
-8. **Commit** with the ruling ID in the message.
+7. **Check:** run `python tools/check_governance.py` and report the result verbatim.
+8. **Log:** `python tools/log_event.py ruling --actor lead --ref R-NN --note "<one line>"`.
+9. **Commit** with the ruling ID in the message.
 
 ## Recording or changing a standing authorization (SA-NN)
 
@@ -98,7 +103,8 @@ the ruling as above **and** record the delegation as an SA that cites it.
    - Never edit an SA in force. A superseded SA is marked "Superseded by SA-NN" and keeps its text.
 4. **Read it back** to the PI in two or three plain sentences: what agents may now decide without
    asking, what still comes to the PI, and every SA now in force.
-5. **Check, log and commit:** run `python tools/check_governance.py`; log
+5. **Update `STATUS.md`, check, log and commit:** refresh STATUS's current state; run
+   `python tools/check_governance.py`; log
    `python tools/log_event.py ruling --actor lead --ref SA-NN --note "<one line>"`; commit with the
    SA ID in the message.
 

@@ -27,7 +27,8 @@ Then run both tools, every time:
   (for example, STATUS says "Nothing owed" while a file is MISSING), say that STATUS is out of date,
   and name each gap.
 - `python tools/summarize_events.py --since <sprint start>`. If it reports no event log, or no events
-  in the window, say so in plain words. Never invent figures.
+  in the window, say so in plain words. Never invent figures. The `ruling` count includes standing
+  authorizations (SA-NN), which are logged as rulings too.
 
 Cover:
 

@@ -108,6 +108,13 @@ The new session becomes the lead. Following the charter (§9), it:
 
 Unfinished work from the lost session is treated as unreviewed.
 
+**If setup itself was interrupted** (before `STATUS.md` exists), run the same `/arpd-setup` command
+again and say the earlier session was lost. Setup commits your adoption ruling before writing the
+other governing documents. A new session checks what was already done and keeps the committed moves.
+It then continues from the first missing file under your recorded ruling, without renumbering or
+rewriting completed work. If no ruling was recorded, it re-does the read-back with you; earlier
+answers count only if you confirm them.
+
 ## 8. Reading the governance check
 
 `python tools/check_governance.py` prints one line per step, a *Not checked* block, and an overall
