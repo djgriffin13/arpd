@@ -32,7 +32,10 @@ given ID (`import-path.md`, *Numbering*).
    then `git add docs/discovery/SETUP.md` and
    `git commit -m "Add setup discovery notes (non-governing)"`. Never combine them with a move or
    with any other file. Skip this in install mode without consent: those notes stay outside the
-   repository.
+   repository. **From this commit on, the notes are frozen for the rest of setup.** Record anything
+   new in the governing documents or `STATUS.md` instead. If the notes must change (for example, a
+   factual error), commit that change alone, before the final commit:
+   `git add docs/discovery/SETUP.md && git commit -m "Correct setup discovery notes (non-governing)"`.
 4. **The import baseline** (row 11, import and install), then the remaining files. Commit the rest at
    the end, as usual.
 5. **`.claude/` writes last,** each as its own step (*Permission prompts*, below).
@@ -65,7 +68,7 @@ line such as "None yet", rather than leaving a blank ID.
 | 17 | `AGENTS.md` | (write; an ARPD starter's is kept) | One line: "Read CLAUDE.md in full before doing anything else; it is this project's team charter." |
 | 18 | `START-HERE.md` | (write; for an imported ARPD starter, a new one, with the old one moved to `docs/arpd-kit/START-HERE-starter.md`) | For the PI, one screen, with **all** of these: (a) what each governing file is for, in one line each; (b) the invariant / requirement / acceptance-criterion distinction, one line each, worded as in `PARADIGM-SPEC.md` §5; (c) the commands that run the project's tests and the governance check (*The project's test command*); (d) **the next step**: planning the first sprint, with the exact prompt `/arpd-plan`; (e) how the skills work, one line each: `/arpd-plan` drafts a sprint plan with the PI and records the PI's approval, and work starts only when the PI says so; `/arpd-checkin` gives a plain-language check-in; `/arpd-amend` records a ruling or changes the rules. Name a skill only if `.claude/skills/<name>/SKILL.md` exists; otherwise say it is owed and point to *Known gaps*; (f) **what to expect at a sprint boundary**, as a bullet list (close-out record, independent review, checks, a check-in with the PI unless a standing authorization says otherwise, decisions waiting); (g) **Known gaps**: every checklist item that could not be written, with the exact commands from *Commands for owed `.claude/` items*, or "none". |
 | 19 | `.gitignore` | (append; merge with an imported project's) | `logs/`, `output/`, `__pycache__/`, `.claude/settings.local.json`. `logs/` stays uncommitted: each sprint's events are exported to `reports/sprints/` at close (`docs/EVENTS.md`). |
-| 20 | `docs/discovery/SETUP.md` | written during the interview from `kit/templates/discovery/SETUP.md` | Already exists. Final update: mark the read-back as adopted by R-NN, and say that the ruling, not these notes, is the authority. Committed alone (*Commit order*, step 3). Non-governing. Never in install mode without consent. |
+| 20 | `docs/discovery/SETUP.md` | written during the interview from `kit/templates/discovery/SETUP.md` | Already exists. Final update: mark the read-back as adopted by R-NN, and say that the ruling, not these notes, is the authority. Committed alone (*Commit order*, step 3), then frozen for the rest of setup; any later change gets its own commit before the final commit. Non-governing. Never in install mode without consent. |
 
 ## Permission prompts for `.claude/`
 
@@ -150,9 +153,11 @@ exception. Commit with `git commit -m "…"` (several `-m` for paragraphs), not 
    checker result from an earlier run. With no sprint yet, the sprint step passes: no sprint record
    is expected.
 6. Run `git status --short` and look for stray untracked files (helper scripts, message files, test
-   output). Remove the ones you created; list any you cannot remove in `STATUS.md` §6. Only then
+   output). Remove the ones you created; list any you cannot remove in `STATUS.md` §6.
+   `docs/discovery/` must not appear: the notes were committed alone and are frozen. If it does
+   appear, commit that change alone first (*Commit order*, step 3), and check again. Only then
    `git add -A` and commit: `git commit -m "Set up ARPD project (ruling R-NN)"`, naming the adoption
-   ruling. In install mode without consent, the discovery notes are outside the repository and are
-   not affected.
+   ruling. The final commit never contains the discovery notes. In install mode without consent,
+   the notes are outside the repository and are not affected.
 7. Do not push without the PI's authorization.
 8. Close out per `SKILL.md`, *Closeout and handoff*.

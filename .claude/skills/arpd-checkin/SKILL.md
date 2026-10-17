@@ -17,7 +17,9 @@ Read these first:
   *Affects*, when it is *Needed by*, and what *Can continue meanwhile*); the decisions and rulings
   recorded since the last check-in; and the standing authorizations in force;
 - the current or most recent sprint record in `reports/sprints/`;
-- plans in `reports/planning/`: drafts (no "Approved by R-NN" marker) and approved plans;
+- plans in `reports/planning/`. A plan is approved only if its current Version line is the version
+  an existing approval ruling names (its *Approves:* line); otherwise report it as a draft, saying
+  which earlier version, if any, was approved and by which ruling;
 - open decision packs in `reports/`.
 
 Then run both tools, every time:

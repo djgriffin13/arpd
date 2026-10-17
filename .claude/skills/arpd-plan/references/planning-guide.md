@@ -42,12 +42,13 @@ numbers until each sprint starts.
 
 Copy `kit/templates/planning/PLAN.md` to `reports/planning/PLAN-YYYY-MM-DD.md`. Use the date the
 draft is first written. A second planning effort on the same day is `PLAN-YYYY-MM-DD-2.md`, and so
-on. One file holds one planning effort through all its versions.
+on. One file holds one planning effort through all its versions, including any revision after
+approval.
 
 The header carries, as the template sets out:
 
-- the DRAFT banner and `Status: Draft` (after approval, the approved marker the template gives:
-  the only post-approval edit);
+- the DRAFT banner and `Status: Draft` (after approval, the approved marker the template gives;
+  the approved version's text is never edited);
 - the *Version* line, and a *Change history* row for each version;
 - the sprint(s) covered and the authorization sought (planning only / S0N / a series), in
   *Identity*.
@@ -61,7 +62,7 @@ Content per sprint. Write each heading even when the answer is short; "none" is 
 | Traceability | Milestone; requirement IDs and target states; paradigm-spec items, if any |
 | Scope | Work packages in order, each with the task plans it expects (`plans/NNN` are written at execution, not now) |
 | Dependencies | What must exist first; *Waiting on the PI* rows it relies on (cite the row number); work that is unaffected and can proceed |
-| Exit | Observable acceptance criteria, each with the test or check that will show it |
+| Exit | Observable exit criteria (when the sprint is done), each with the test or check that will show it. Acceptance criteria belong to the task plans (`plans/NNN`) |
 | Boundaries | Non-goals; risks; constraints; time, compute or cost limits where relevant |
 | Workflow | Team arrangement; independent review and test gates; resources |
 | Authority | Decisions reserved to the PI; choices delegated by an SA in force (name it); execution authority sought |
@@ -110,8 +111,16 @@ blocks.
   since the last version.
 - The approval ruling, not the plan, is the authoritative record of the approved commit: a file
   cannot name the commit it is part of.
+- **A revision after approval** stays in the same file. Bump the Version, add a *Change history*
+  row, set the Status line to `Draft vN (vK approved by R-NN; vN not approved)`, and restore the
+  DRAFT banner. The earlier approval stays valid only for vK (its cited commit); vN needs its own
+  approval ruling. The ruling for vK is never edited.
+- **When is a plan approved?** Only when its current Version line is the version an existing
+  approval ruling names in its *Approves:* line. Otherwise it is a draft, even if an earlier
+  version was approved; say which version was approved, and by which ruling.
 - Commit only the plan file and the records Step D updates (`DECISIONS.md` *Waiting on the PI*
-  rows, `STATUS.md`). Check `git status --short` first. Never push.
+  rows, `STATUS.md`, and `INDEX.md`, which gains a `reports/planning/` row with the first draft).
+  Check `git status --short` first. Never push.
 - No governing change happens during review. If review shows the charter, spec or roadmap
   milestones must change, that is an `/arpd-amend` item for the PI.
 

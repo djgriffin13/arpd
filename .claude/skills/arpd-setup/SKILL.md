@@ -96,9 +96,9 @@ charter**. No governing document and no implementation comes before adoption.
   uncommitted. Without it, keep them in the OS temp directory, tell the PI the path, and say that
   recovery after an interruption is then limited. Never add them to the repository unless the PI
   later asks.
-- **At adoption**, notes in the project are committed in **their own commit**, never with a move-only commit or any
-  other file (`references/generation-checklist.md`, *Commit order*). **Never push** without the PI's
-  authorization.
+- **At adoption**, notes in the project are committed in **their own commit**, never with a move or
+  any other file, and are then frozen; a later change gets its own commit before the final commit
+  (`references/generation-checklist.md`, *Commit order*). **Never push** without authorization.
 - An idea, a preference or "sounds good" is discovery, not a ruling. A clear, direct PI instruction
   is a ruling (`kit/docs/INTERACTION.md`, the five kinds of information and action).
 

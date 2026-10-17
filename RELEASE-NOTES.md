@@ -35,6 +35,15 @@ type `/arpd-plan` to plan the first sprint. Details, hook permissions, readiness
 logging works, owed items and recovery: [QUICKSTART.md](QUICKSTART.md) and
 [docs/OPERATIONS.md](docs/OPERATIONS.md).
 
+## Upgrading a project set up with v0.3
+
+A project set up with an earlier version keeps working. If you copy in the new
+`tools/check_governance.py`, its "ARPD skills installed" step reports `arpd-plan` as MISSING until
+you copy the kit's `.claude/skills/arpd-plan/` folder (with its `references/`) into the project's
+`.claude/skills/`, or record a "skills not installed" decision. Older sprint records without the new
+Part 1 rows are reported as ADVISORY, never FAIL. The charter (`CLAUDE.md`) changes only by your
+ruling (`/arpd-amend`).
+
 ## What changed since v0.3.0-rc.1
 
 **Setup (`/arpd-setup`) is adaptive, and ends before any sprint.**

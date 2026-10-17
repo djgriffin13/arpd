@@ -82,6 +82,28 @@ If the start comes in a later message, record it as its own R-NN:
 
 The approval ruling is never edited to show the later start; the execution ruling cites it.
 
+The now-or-later block is a `CHOICE FOR YOU` that **says it is an authorization**
+(`kit/docs/INTERACTION.md` §2): the start option states what it authorizes (one sprint, or the
+series and its transition conditions) and which records it creates (R-NN, and SA-NN for a series).
+Without that statement a letter reply authorizes nothing; ask again. For a series under policy B
+or C, offer a first-sprint-only option alongside one like:
+
+```text
+A. Now: start the series S04–S06 under PLAN-2026-10-20 v3. Choosing A authorizes S04 now, and
+   S05–S06 after each independent review and close-out under the plan's transition conditions;
+   I will record your answer as ruling R-08 and standing authorization SA-03.
+```
+
+A bare letter is recorded as:
+
+```text
+> "A"
+- **Given:** directly in session (read back by the lead; PI chose: 'A'): "<the option's full text,
+  including its stated effect>"
+```
+
+The continuation SA, if the option created one, quotes the same choice and read-back.
+
 ### Continuation across a series (SA)
 
 Only when the PI's words authorize the team to move past at least one boundary without a new ruling
@@ -111,7 +133,9 @@ Log each ruling and SA: `python tools/log_event.py ruling --actor lead --ref R-N
 ## 4. Starting a sprint (Step G "now", and each later sprint in a series)
 
 1. Confirm that an execution ruling or a continuation SA covers this sprint, and that the plan
-   version is the approved one.
+   version is the approved one. If the file has since moved to a later, unapproved version, work
+   from the approved version's commit (`git show <sha>:reports/planning/PLAN-….md`), or stop and
+   ask the PI to approve the new version first.
 2. Create `reports/sprints/` if it does not exist yet (setup does not create it). Copy
    `reports/templates/SPRINT.md` to `reports/sprints/SPRINT-NN.md`. Fill Part 1 from the
    approved plan: milestone, objective, target requirements, selected items, plans (the task plans
@@ -126,7 +150,8 @@ Log each ruling and SA: `python tools/log_event.py ruling --actor lead --ref R-N
 3. `Start`: the time from `date -u +%Y-%m-%dT%H:%MZ`, and the commit SHA Part 1 is written on.
 4. Rewrite `STATUS.md`: Readiness `Execution: in progress (S0N)` and `Next step: check in`; §2
    Current sprint. Set the sprint's `MASTER_PLAN.md` §3 row to In progress.
-5. Commit Part 1 with STATUS; log
+5. Commit Part 1 with STATUS (and, at the first sprint, `INDEX.md` with "pending" removed from its
+   `reports/sprints/` row); log
    `python tools/log_event.py sprint_start --actor lead --ref S0N --note "PLAN-… vN; R-NN"`.
 6. **Part 1 is now preserved.** Later changes go in its scope-change log.
 7. Work proceeds by the charter: `plans/NNN` per `CLAUDE.md` §5, an implementer and a reviewer who
@@ -165,7 +190,9 @@ Log each ruling and SA: `python tools/log_event.py ruling --actor lead --ref R-N
   commit, and stop. Do not start anything.
 
 When the prompt arrives, `/arpd-plan` (Entry step 4) records the PI's words as the execution ruling
-and starts the sprint (§4).
+and starts the sprint (§4). If the plan was revised after approval, the prompt is stale: set
+Readiness back to `Planning: draft (PLAN-…, vN)` and `Next step: review plan`, and replace the
+prompt in `START-HERE.md`.
 
 ## 7. Handoff truth
 

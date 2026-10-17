@@ -43,9 +43,11 @@ Read before you start:
    evidence; existing `plans/` and open decision packs; `START-HERE.md` (orientation only); notes in
    `reports/planning/` and `docs/discovery/` (context only, never authority). Do not re-ask a
    preference that is already recorded.
-3. **A draft in progress?** A `reports/planning/PLAN-*.md` without an "Approved by R-NN" marker is a
-   draft. Show its file and Version, say plainly that it is **not approved**, list its open points,
-   and offer to continue it (Step E). Log
+3. **A draft in progress?** A `reports/planning/PLAN-*.md` is approved only if its current Version
+   line is the version an existing approval ruling names (*Approves:* line). Otherwise it is a
+   draft: show its file and Version, say plainly that this version is **not approved** (naming any
+   earlier version that was, and its ruling), list its open points, and offer to continue it
+   (Step E). Log
    `python tools/log_event.py resume --actor lead --ref PLAN-… --note "planning resumed"`.
 4. **An approved plan not yet started?** Do not re-plan it by default. If the PI's message gives the
    start (the prompt left in `START-HERE.md`), record it as the execution ruling and go to Step G
@@ -170,9 +172,10 @@ WP3 only).
 Name what a yes covers: planning only, S0N's execution, or a series. Record the PI's words verbatim
 as the next R-NN, in the plan-approval format (`references/multi-sprint-and-handoff.md`). When the
 PI does not clearly say more, record **planning approval only**. Clear words need no second
-confirmation; ask once only if they could mean materially different things. Then set the plan's
-status marker as its template says ("Approved by R-NN (vN, commit …)"; the only edit an approved
-plan ever gets), set its `MASTER_PLAN.md` §3 rows to "planned (PLAN-… vN, R-NN)" and §4 items to
+confirmation; ask once only if they could mean materially different things. A bare "yes" is
+recorded with the block's text as read back: "(read back by the lead; PI assented: '<words>')".
+Then set the plan's status marker as its template says ("Approved by R-NN (vN, commit …)"; the
+approved version's text is never edited), set its `MASTER_PLAN.md` §3 rows to "planned (PLAN-… vN, R-NN)" and §4 items to
 Selected (milestone changes go to `/arpd-amend`),
 set Readiness `Planning: approved (PLAN-…, vN, R-NN)`, run the checker, log
 `python tools/log_event.py ruling --actor lead --ref R-NN --note "approval of PLAN-… vN"`, and commit
@@ -185,15 +188,22 @@ Unless the approval already authorized execution:
 ```text
 ────────────────────────────────
 CHOICE FOR YOU (select one)
-Would you like to begin implementation now or later?
-A. Now: start S04 under PLAN-2026-10-20 v3.
-B. Later: I record the plan as ready and give you the exact prompt to start it.
+Would you like to begin implementation now or later? This choice is an authorization: choosing A
+starts work.
+A. Now: start S04 only, under PLAN-2026-10-20 v3. Choosing A authorizes S04 and nothing after it;
+   I will record your answer as ruling R-08.
+B. Later: nothing starts. I record the plan as ready and give you the exact prompt to start it.
 ────────────────────────────────
 ```
 
+The start option always says what it authorizes and which record it creates; for a series it
+names the series and the SA (`references/multi-sprint-and-handoff.md` §3).
+
 - **Now.** The PI's words are the execution authorization: record them verbatim as an R-NN (the
-  approval ruling, if given in the same message). For a series continuing without a new ruling at
-  each boundary, also record the continuation SA. Then, at sprint start, write
+  approval ruling, if given in the same message). A bare letter is recorded as "(read back by the
+  lead; PI chose: 'A')" followed by the chosen option's full text and its stated effect. For a
+  series continuing without a new ruling at each boundary, also record the continuation SA, with
+  the same read-back. Then, at sprint start, write
   `reports/sprints/SPRINT-NN.md` Part 1 from the approved plan, with the rows *Approved plan*,
   *Execution authorized by* and *Transition policy*, the start time (`date -u +%Y-%m-%dT%H:%MZ`)
   and commit; log `sprint_start`; rewrite `STATUS.md`. From there follow the charter: task plans
@@ -223,8 +233,10 @@ accepting a validation, real data, sharing outside the project, amending governi
 - **Interrupted review:** recover the last committed version; it is not approved; continue Step E.
 - **Approved, not started:** keep the approval as recorded. Never treat it as a start without a start
   direction or an SA that covers it.
-- **Change after approval, before start:** a new version, and a new approval. The old approval
-  ruling is never edited.
+- **Change after approval:** revise in the same file. Bump the Version, set the Status line to
+  "Draft vN (vK approved by R-NN; vN not approved)" and restore the DRAFT banner. The approval
+  stays valid only for vK; vN needs a new approval. The old ruling is never edited. A sprint
+  already started under vK changes only through its scope-change log.
 - **Change after start:** classify it: within task discretion (routine); a sprint scope change
   (the scope-change log, authorized as the log says); or a governing change (`/arpd-amend`).
 - **New technical options:** compare them if an SA allows; adopt nothing consequential without

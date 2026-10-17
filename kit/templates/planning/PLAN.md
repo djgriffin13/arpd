@@ -9,10 +9,15 @@ file cannot name its own commit: the approval ruling records the commit.
 
 **Status:** Draft
 
-<!-- After approval, the only edit is the status marker. Set the Status line to "Approved by R-NN
-(vN, commit <SHA>)", taking the SHA from the ruling. Replace the banner with "APPROVED by R-NN
-(vN). Execution still needs the PI's start direction or a standing authorization." Do not edit the
-approved text. A change after approval is a new version, approved by a new ruling. -->
+<!-- After approval, the only edit to the approved version is the status marker. Set the Status
+line to "Approved by R-NN (vN, commit <SHA>)", taking the SHA from the ruling. Replace the banner
+with "APPROVED by R-NN (vN). Execution still needs the PI's start direction or a standing
+authorization."
+A revision after approval stays in this file. Bump the Version, add a Change history row, set the
+Status line to "Draft vN (vK approved by R-NN; vN not approved)", and restore the DRAFT banner. The
+earlier approval stays valid only for vK (its commit, cited in the ruling); vN needs a new approval
+ruling. The plan counts as approved only when its current Version is the version an approval
+ruling names. -->
 
 ## Change history
 
@@ -38,7 +43,7 @@ Keep it minimal but sufficient. A simple sprint needs no long task list or specu
 | Traceability | Milestone; requirement IDs; paradigm-spec items, if any |
 | Scope | Work packages, in order, with the expected task plans (`plans/NNN-…`) |
 | Dependencies | What must exist first; pending decisions (`DECISIONS.md` *Waiting on the PI*); blockers; work that can go ahead regardless |
-| Exit | Acceptance criteria, each with the evidence or test expected |
+| Exit | Exit criteria (when the sprint is done), each with the evidence or test expected. Acceptance criteria belong to the task plans (`plans/NNN`) |
 | Boundaries | Non-goals; risks; constraints; time, compute or cost limits where relevant |
 | Workflow | Team arrangement; independent review and test gates; resources |
 | Authority | Decisions reserved to the PI; choices delegated; the execution authority requested |

@@ -17,8 +17,12 @@ not exist.
 | `STATUS.md` | Right now: current sprint, in flight, on deck, handoff | Yes, for the present state only |
 | `START-HERE.md` | How to work with the team on this project | No |
 | `plans/` | One plan per scoped piece of work | Each for its own scope |
-| `reports/sprints/` | One audit record per sprint | No (record) |
+| `reports/sprints/` | One audit record per sprint (pending: created when the first sprint starts) | No (record) |
 | `reports/` | Decision packs, walkthroughs, agent reports | No |
 | `logs/events.jsonl` | Event log written by hooks and agents (git-ignored by default) | No (data) |
 | `tools/` | Governance checker, plan numbering, event logger | No |
 | {{project paths}} | {{source, tests, data, outputs}} |  |
+
+<!-- Add `reports/planning/` (sprint-plan drafts and approved plans; informative until a ruling
+approves a version) only once it exists: `/arpd-plan` adds the row when it writes the first draft.
+When the first sprint starts, remove "pending: ..." from the `reports/sprints/` row. -->

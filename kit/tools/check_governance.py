@@ -86,7 +86,9 @@ The checks:
    "Execution authorized by" or "Transition policy", every R-NN / SA-NN those rows cite must exist
    in DECISIONS.md (FAIL otherwise) and must not be pending (PENDING); an "Approved plan" or
    "Execution authorized by" row that cites none is MISSING. A cited SA that has been superseded is
-   ADVISORY (Part 1 is frozen at sprint start). The "Approved plan" row must name a plan and
+   ADVISORY (Part 1 is frozen at sprint start). A ruling cited in "Execution authorized by" whose
+   own "Execution authorized:" line says no is a FAIL: a planning-only approval is not a start. An
+   "Approved plan" row that cites no ruling (only an SA) is ADVISORY: plan approval is a ruling. The "Approved plan" row must name a plan and
    version (PLAN-YYYY-MM-DD[-n] vN; MISSING otherwise) whose file is in reports/planning/ (FAIL
    otherwise); a cited ruling's Approves line must name that file and version (FAIL otherwise; no
    Approves line is ADVISORY). A record without these rows (the older format, including the old
@@ -727,6 +729,8 @@ def _check_approved_plan(f, cell, known, sections, problems, missing, advisories
         return
     if not os.path.exists(os.path.join(ROOT, "reports", "planning", plan + ".md")):
         problems.append("%s: Approved plan names %s, which is not in reports/planning/" % (f, plan))
+    if not re.search(r"\bR-\d+\b", cell):
+        advisories.append("%s: Approved plan cites no ruling (R-NN); plan approval is a ruling (CORE section 5)" % f)
     rulings = [r for r in re.findall(r"\bR-\d+\b", cell) if r in known]
     named = {}
     for r in rulings:
@@ -774,8 +778,13 @@ def check_open_sprints():
                     problems.append("%s: %s cites %s, which does not exist in DECISIONS.md" % (f, label, ref))
                 elif ref in superseded:
                     # Part 1 is frozen once the sprint starts, so this cannot be a FAIL
-                    advisories.append("%s: %s cites %s, which is superseded by %s; the newer SA governs"
+                    advisories.append("%s: %s cites %s, which is superseded by %s; check whether continuation is "
+                                      "still authorized (the SA was changed or withdrawn)"
                                       % (f, label, ref, superseded[ref]))
+                elif label == "Execution authorized by" and ref.startswith("R-") and re.match(
+                        r"^\W*no\b", _clean(_entry_line(sections.get(ref, ""), "Execution authorized")), re.I):
+                    problems.append("%s: %s cites %s, whose Execution authorized line says no: a planning-only "
+                                    "approval does not start work" % (f, label, ref))
         if "Approved plan" in rows:
             _check_approved_plan(f, rows["Approved plan"], known, sections, problems, missing, advisories)
     for f in sorted(os.listdir(planning)) if os.path.isdir(planning) else []:
