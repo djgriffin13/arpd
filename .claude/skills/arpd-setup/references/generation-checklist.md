@@ -17,6 +17,11 @@ commit that move alone too. Edit nothing until both commits exist; a move combin
 cut the files' history (`import-path.md`, *Move-only commits*). The kit's files are not project
 instructions: never reconcile them or write `.arpd` files beside them.
 
+**Then, in every mode, record the authority first.** Write `DECISIONS.md` (row 5) with SA-01 and the adoption ruling
+before any other governing file, and commit it alone: `git commit -m "Record adoption ruling R-NN
+(setup in progress)"`. If the setup is interrupted, a new session resumes from this record
+(`SKILL.md`, *Resuming an interrupted setup*). Commit the rest at the end, as usual.
+
 **Every generated file:** remove the template's HTML guidance comments (`<!-- … -->`) and fill every
 `{{…}}`. The governance check fails on an unfilled placeholder. **Exception:** blocks that start
 `<!-- keep:` (the entry formats in `DECISIONS.md`) stay, unfilled, for later entries.

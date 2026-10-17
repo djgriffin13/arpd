@@ -86,6 +86,33 @@ Read these before you start. They are in this skill's folder:
 
 Details for each phase are in `references/interview-guide.md`.
 
+## Resuming an interrupted setup
+
+A setup can stop part-way: a lost session, an API error, a turn limit. The PI's interview answers
+live only in the lost conversation, so the record decides what is authorized. At Phase 0, check for
+a partial setup in the project root (in install mode, the target repository):
+
+- `git log --oneline -15` and `git status --short`;
+- move-only commits already made (kit files to `docs/arpd-kit/`, prior instructions to
+  `docs/prior-instructions/`, a starter to the root);
+- the commit "Record adoption ruling R-NN (setup in progress)", and which checklist files exist.
+
+Then:
+
+1. **Tell the PI** what you found, in plain words.
+2. **If no adoption ruling is recorded,** nothing generated is authorized. Keep the committed moves
+   and do not repeat them. Re-run the interview from where the record leaves off, and re-do the
+   read-back. Earlier answers count only if the PI confirms them now. Show the PI any uncommitted
+   generated files, and ask before discarding them.
+3. **If the adoption ruling is recorded,** it and its read-back are the authority. Continue the
+   checklist from the first missing or incomplete row. Never repeat a move, never renumber an ID,
+   and never rewrite a completed file. Check each existing file against its checklist row, for
+   example for an unfilled `{{…}}`. Ask the PI only for what the record does not settle.
+4. Record the recovery in `STATUS.md` (a `Recovered:` line naming what was found and what was
+   redone). If `tools/log_event.py` exists, log
+   `python tools/log_event.py resume --actor lead --note "setup resumed"`.
+5. Finish as usual: the final checker run, the stray-file check and the setup commit.
+
 ## After generation
 
 - **Permission prompts.** Claude Code asks the PI for an interactive approval before writing
