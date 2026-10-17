@@ -15,7 +15,9 @@ reason, and accept the PI's correction.
 **Always, regardless of platform:**
 
 - Git from day one, with small commits that explain *why*.
-- One command runs the test suite. Name it in `START-HERE.md`, e.g. `python -m pytest`.
+- One command runs the test suite. Name it in `START-HERE.md`, e.g.
+  `python -m pytest --ignore=kit --ignore=examples`: the kit's own tests are not project tests
+  (`generation-checklist.md`, *The project's test command*).
 - Seeds recorded for anything random.
 - Outputs go to a git-ignored `output/` folder unless a ruling makes them part of the record.
 - No real participant data in the repository.

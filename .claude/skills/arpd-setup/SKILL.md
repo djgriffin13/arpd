@@ -89,15 +89,19 @@ Details for each phase are in `references/interview-guide.md`.
 ## After generation
 
 - **Permission prompts.** Claude Code asks the PI for an interactive approval before writing
-  `.claude/settings.json` (the event-logging hooks) and `.claude/agents/` (the implementer and
-  reviewer roles). Before those writes, tell the PI in plain words what each is for, and that the
+  `.claude/settings.json` (the event-logging hooks), `.claude/agents/` (the implementer and
+  reviewer roles) and, in install mode, `.claude/skills/` (the `arpd-*` skills). Before those
+  writes, tell the PI in plain words what each is for, and that the
   logging records event times and types but no prompt text (`references/generation-checklist.md`,
   *Permission prompts*). The same prompt guards a `git mv` into or out of `.claude/`. The `.claude/`
   writes and moves come after the other moves, each on its own, so a refusal stops nothing else. A non-interactive or scripted run cannot
   approve them. Never work around the protection.
 - **Anything that could not be written is owed, not hidden.** Record it in a DEC (for example
   "event logging not installed"), in `STATUS.md` §6 *Owed*, and under *Known gaps* in
-  `START-HERE.md`. Never write "Nothing owed" while an item is missing.
+  `START-HERE.md`, with the exact commands from `references/generation-checklist.md` (*Commands for
+  owed `.claude/` items*). Never write "Nothing owed" while an item is missing.
+- **Times are read, not estimated.** Take every UTC time you write (for example `STATUS.md`'s *Last
+  rewritten*) from `date -u +%Y-%m-%dT%H:%MZ` or the Python equivalent.
 - Run `python tools/check_governance.py`, and report its output verbatim. Fix any FAIL caused by
   generation. Explain any remaining INCOMPLETE.
 - Commit with a message naming the adoption ruling (R-01, unless the ledger was inherited).
@@ -106,7 +110,8 @@ Details for each phase are in `references/interview-guide.md`.
   1. where to start (`START-HERE.md`);
   2. how to begin sprint S01 (the exact first prompt);
   3. how to check in (`/arpd-checkin`) and how to record a ruling or amend the charter
-     (`/arpd-amend`).
+     (`/arpd-amend`), if those skills are installed in the project; if not, that they are owed, and
+     the command that installs them.
 
 ## Never
 

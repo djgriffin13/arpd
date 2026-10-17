@@ -5,34 +5,56 @@ description: Give the PI a plain-language check-in on an ARPD project. Covers wh
 
 # ARPD check-in
 
-Write a short, plain-language check-in for the PI. It should fit on one screen. Read these first:
+Write a short, plain-language check-in for the PI. It should fit on one screen.
 
-- `STATUS.md`;
+**A check-in changes no governing file.** It only reads, runs the two tools below, and records a
+ruling verbatim if the PI gives one (last section).
+
+Read these first:
+
+- `STATUS.md`, including §5 *Waiting on the PI* and §6 *Owed*;
 - the current or most recent sprint record in `reports/sprints/`;
 - open decision packs in `reports/`;
 - decisions recorded in `DECISIONS.md` since the last check-in, and the standing authorizations in force.
 
-Then run `python tools/summarize_events.py --since <sprint start>`.
+Then run both tools, every time:
+
+- `python tools/check_governance.py`. Keep its actual OVERALL line and every step that is not PASS.
+  Never state a checker result from memory or from an earlier run.
+- `python tools/summarize_events.py --since <sprint start>`. If it reports no event log, or no events
+  in the window, say so in plain words. Never invent figures.
 
 Cover:
 
 1. **What now works**, as the PI would observe it, with the evidence in brackets (test name or check).
-2. **What needs you**, ordered by what it unblocks. For each item, give:
+2. **What needs you**, ordered by what it unblocks. It includes:
+   - every open item in *Waiting on the PI*;
+   - everything listed in `STATUS.md` §6 *Owed*;
+   - every checker step that is not PASS, in plain words, with what the PI can do about it (for
+     example, approve a file write, or run the commands listed under *Known gaps* in
+     `START-HERE.md`).
+
+   For each decision, give:
    - the scientific consequence;
    - the options;
    - a recommendation;
    - the decision requested.
 
    Nothing consequential is adopted until the PI answers, or a standing authorization covers it.
+   **Never say nothing is needed** while the checker's OVERALL line is not PASS, or §6 lists
+   anything owed.
 3. **What was decided without you.** List delegated decisions individually, each with the standing
    authorization it used, and routine ones as a count. The PI may question or reverse any of them.
 4. **Known problems and things not checked.** Also list any claims the PI should not make yet.
-5. **Resource use.** Paste the summary table, keeping its labels. Never call log-derived time "your
-   time": only the PI's own `pi_time` entries measure that.
+5. **Checks.** Quote the checker's OVERALL line exactly, and each step that is not PASS.
+6. **Resource use.** Paste the summary table, keeping its labels, or the tool's own "no log" or "no
+   events" line. Never call log-derived time "your time": only the PI's own `pi_time` entries
+   measure that.
 
 **Focus on material decisions and exceptions.** Gloss every internal ID in plain words. Do not
 re-explain routine coordination.
 
 If the PI answers with a ruling, the lead agent records it **verbatim** in `DECISIONS.md` and logs
-`python tools/log_event.py ruling --actor lead --ref R-NN`. Offer to log the PI's active minutes for
-this check-in: `python tools/log_event.py pi_time --actor pi --minutes N`.
+`python tools/log_event.py ruling --actor lead --ref R-NN`. Any change to a governing document that
+the ruling asks for goes through `/arpd-amend`. Offer to log the PI's active minutes for this
+check-in: `python tools/log_event.py pi_time --actor pi --minutes N`.

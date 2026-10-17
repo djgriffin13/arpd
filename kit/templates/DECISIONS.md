@@ -58,7 +58,8 @@ A decision the PI has deferred by ruling stays listed, marked "deferred (R-NN)",
 ### SA-NN, YYYY-MM-DD: what it covers
 > "exact words"
 - **Given:** directly in session (id), or in ruling R-NN (an SA may cite the ruling that created it)
-- **Supersedes:** SA-NN, or "none"
+- **Supersedes:** SA-NN only if this one replaces it; "none" for an additional or narrower
+  delegation, which stays in force alongside the others
 - **Scope:** the work, assumptions or choices it covers, and its boundaries
 - **Consult the PI when:** triggers that still go to the PI
 - **Reporting cadence:** and **Practical limits:** if they differ from SA-01

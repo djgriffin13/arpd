@@ -87,6 +87,14 @@ The checks:
    MISSING, unless a decision in DECISIONS.md records it as not installed ("event logging not
    installed" / "agent files not installed", citing R-NN or with a "Route: routine" line), which is
    ADVISORY.
+8. Check-in and amend skills installed: .claude/skills/arpd-checkin/SKILL.md and
+   .claude/skills/arpd-amend/SKILL.md exist in the project root, or in a folder between it and the
+   root of the git repository that contains it (as for a worked example inside the kit). Anything
+   missing is MISSING, unless a decision records "skills not installed" as in step 7 (ADVISORY).
+9. Live items cite no superseded spec item (advisory): a requirement's source, an A-rule in
+   ARCHITECTURE.md, a claim (CLM-NN) in PARADIGM-SPEC.md, or a standing authorization in force
+   (one not "superseded by SA-NN") that cites a PARADIGM-SPEC.md item whose row says "Superseded
+   by" is ADVISORY. Retired requirements and A-rules are ignored.
 """
 import datetime
 import io
@@ -705,9 +713,104 @@ def check_logging():
     step(name, "MISSING" if unexplained else "ADVISORY", notes)
 
 
+SKILLS = ("arpd-checkin", "arpd-amend")
+
+
+def _skill_roots():
+    """The project root, then each folder above it up to the root of the git repository that holds
+    it. With no enclosing git repository, the project root only."""
+    here = os.path.abspath(ROOT)
+    chain = [here]
+    while not os.path.exists(os.path.join(here, ".git")):
+        parent = os.path.dirname(here)
+        if parent == here:
+            return chain[:1]
+        here = parent
+        chain.append(here)
+    return chain
+
+
+def check_skills():
+    name = "Check-in and amend skills installed"
+    roots = _skill_roots()
+    missing = []
+    for skill in SKILLS:
+        rel = os.path.join(".claude", "skills", skill, "SKILL.md")
+        if not any(os.path.exists(os.path.join(r, rel)) for r in roots):
+            missing.append(".claude/skills/%s/SKILL.md is missing" % skill)
+    if not missing:
+        step(name, "PASS")
+        return
+    dec = _not_installed_decision("skills not installed")
+    if dec:
+        step(name, "ADVISORY", ["%s; recorded as not installed in %s" % (m, dec) for m in missing])
+    else:
+        step(name, "MISSING", ["%s; no decision records it as not installed" % m for m in missing])
+
+
+SPEC_ID = r"\b(?:CON|OP|INV|CLM|NCL|VAL|ASM|Q)-\d+\b"
+
+
+def _superseded_items():
+    """{spec ID: what supersedes it} for PARADIGM-SPEC.md table rows that say "Superseded by"."""
+    if not os.path.exists(os.path.join(ROOT, "PARADIGM-SPEC.md")):
+        return {}
+    text = re.sub(r"<!--.*?-->", "", read("PARADIGM-SPEC.md"), flags=re.S)
+    found = {}
+    for line in text.splitlines():
+        if not line.strip().startswith("|"):
+            continue
+        m = re.match(r"^[*`\s]*(" + SPEC_ID + ")", split_row(line)[0])
+        by = re.search(r"superseded by\s+[*`]*([A-Z]+-\d+)", line, re.I)
+        if m and by:
+            found[m.group(1)] = by.group(1)
+    return found
+
+
+def _table_items(path, id_pattern):
+    """(ID, cells) for each table row in `path` whose first cell is an ID; retired rows are left out."""
+    if not os.path.exists(os.path.join(ROOT, path)):
+        return
+    text = re.sub(r"<!--.*?-->", "", read(path), flags=re.S)
+    for line in text.splitlines():
+        if not line.strip().startswith("|"):
+            continue
+        cells = split_row(line)
+        m = re.match(r"^[*`\s]*(" + id_pattern + r")\b", cells[0])
+        if m and not any(_clean(c).lower() == "retired" for c in cells):
+            yield m.group(1), cells
+
+
+def check_superseded():
+    name = "Live items cite no superseded spec item (advisory)"
+    old = _superseded_items()
+    if not old:
+        step(name, "PASS")
+        return
+    cites = []   # (file, item ID, the text that may cite a superseded item)
+    if os.path.exists(os.path.join(ROOT, "REQUIREMENTS.md")):
+        for r in table_rows(read("REQUIREMENTS.md"), "ID"):
+            if MALFORMED not in r and r.get("ID") and r.get("State") != "Retired":
+                cites.append(("REQUIREMENTS.md", r["ID"], r.get("Source", "")))
+    for aid, cells in _table_items("ARCHITECTURE.md", r"A-\d+"):
+        cites.append(("ARCHITECTURE.md", aid, " ".join(cells[1:])))
+    for cid, cells in _table_items("PARADIGM-SPEC.md", r"CLM-\d+"):
+        cites.append(("PARADIGM-SPEC.md", cid, " ".join(cells[1:])))
+    _, _, sections = decision_index()
+    for ident, body in sections.items():
+        if ident.startswith("SA-") and not re.search(r"superseded by\s+[*`]*SA-\d+", body, re.I):
+            cites.append(("DECISIONS.md", ident, body))
+    notes = []
+    for where, item, text in cites:
+        for ref in sorted(set(re.findall(SPEC_ID, text))):
+            if ref in old and item not in old:
+                notes.append("%s %s cites %s, which is superseded by %s" % (where, item, ref, old[ref]))
+    step(name, "ADVISORY" if notes else "PASS", notes)
+
+
 def main():
     for fn in (check_exists, check_adoption, check_links, check_requirements, check_plans, check_sprints,
-               check_index, check_logging):
+               check_index, check_logging, check_skills, check_superseded):
         try:
             fn()
         except Exception as exc:  # report, never hide

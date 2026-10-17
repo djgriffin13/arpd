@@ -58,8 +58,8 @@ a decision, never merged silently.
 
 ## C. Confirm it worked
 
-1. `python tools/check_governance.py`: the step "Event logging and agent roles installed" should be
-   **PASS**. Anything still owed is listed in `STATUS.md` §6 and in *Known gaps* in `START-HERE.md`.
+1. `python tools/check_governance.py`: the steps "Event logging and agent roles installed" and
+   "Check-in and amend skills installed" should be **PASS**. Anything still owed is listed in `STATUS.md` §6 and in *Known gaps* in `START-HERE.md`.
 2. Start a session, do one small thing, then run `python tools/summarize_events.py --sessions`: you
    should see a row for that session.
 

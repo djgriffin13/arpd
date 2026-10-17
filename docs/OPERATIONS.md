@@ -45,6 +45,8 @@ Setup installs two things into `.claude/`:
 - **`.claude/settings.json`**: hooks that run `tools/hooks/log_hook.py` on each Claude Code event.
 - **`.claude/agents/`**: the implementer and reviewer roles the lead agent delegates to.
 
+In install mode it also copies the `arpd-*` skills into the target repository's `.claude/skills/`.
+
 **What the logging records** (`logs/events.jsonl`, one line per event): the time; the event type (a
 session started or ended, a prompt was submitted, a tool call finished, a subagent started or
 stopped, a turn ended or failed, context was compacted, a notification); the session and subagent
@@ -62,8 +64,8 @@ non-interactive run cannot approve it; the items are then recorded as owed (sect
 
 ## 5. Confirming that installation and logging worked
 
-1. Run `python tools/check_governance.py`. The step **"Event logging and agent roles installed"**
-   should be **PASS**.
+1. Run `python tools/check_governance.py`. The steps **"Event logging and agent roles installed"**
+   and **"Check-in and amend skills installed"** should be **PASS**.
 2. Start a Claude Code session in the project, do one small thing (for example, ask
    "Where are we?"), and end the turn.
 3. Run `python tools/summarize_events.py --sessions`. The session table should show a row for that
@@ -73,14 +75,15 @@ The checker looks at files only. Step 3 is what shows that the hooks actually fi
 
 ## 6. When installation is incomplete
 
-Anything setup could not write (usually the two `.claude/` items) is recorded in three places:
+Anything setup could not write (usually the `.claude/` items) is recorded in three places:
 
-- a decision in `DECISIONS.md`, titled "event logging not installed" or "agent files not
-  installed";
+- a decision in `DECISIONS.md`, titled "event logging not installed", "agent files not
+  installed" or "skills not installed";
 - `STATUS.md` §6 *Owed*;
-- *Known gaps* in `START-HERE.md`, with the exact commands to finish. For a fresh project these copy
-  `kit/settings/settings.json` to `.claude/settings.json` and `kit/agents/*` to `.claude/agents/`; for
-  an import they are `git mv` commands for the starter's `.claude/` files.
+- *Known gaps* in `START-HERE.md`, with the exact commands to finish. These copy, never move:
+  `kit/settings/settings.json` to `.claude/settings.json`, `kit/agents/*.md` to `.claude/agents/`
+  and, in install mode, the kit repository's `.claude/skills/arpd-*` to `.claude/skills/`. Only for
+  an imported starter whose own `.claude/` files stayed behind are they `git mv` commands.
 
 Until a decision records the gap, the checker reports it as MISSING; once recorded, as ADVISORY.
 After you run the commands, confirm as in section 5.

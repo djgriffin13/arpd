@@ -8,12 +8,18 @@ starter project. **Preserve existing work. Never silently merge or overwrite ins
 | Mode | Invocation | What happens |
 |---|---|---|
 | **Import into this repository** | `/arpd-setup import <path-or-git-url>` | The existing codebase is brought into this kit repository, keeping its history when it is a git repo. This repository becomes the project. |
-| **Install into an existing repository** | `/arpd-setup install <path>` | The charter, governing documents, tools, hooks and agents are installed **into** the existing repository at `<path>`. The kit's `kit/` folder and the `arpd-*` skills are copied there, so later amendments work. The kit repository is left unchanged. |
+| **Install into an existing repository** | `/arpd-setup install <path>` | The charter, governing documents, tools, hooks and agents are installed **into** the existing repository at `<path>`. The kit's `kit/` folder is copied there whole, and the `arpd-*` skills go to the target's `.claude/skills/`, so later check-ins and amendments work. The skills are a `.claude/` write, done last with the PI's approval (`generation-checklist.md`, row 15); if it is blocked, they are owed. The kit repository is left unchanged. |
 
 - **Import** suits code that is small or not under the PI's control, such as a published model or a
   starter. A starter that already lives inside this kit (for example `examples/march-1991/`) is an
   import.
 - **Install** suits the PI's own ongoing repository.
+  - The copied `kit/` folder holds the kit's own tests (`kit/tools/test_*.py`). They are not project
+    tests: after the copy, run the project's tests as `python -m pytest --ignore=kit` (with pytest),
+    and check the count matches the baseline (`generation-checklist.md`, *The project's test
+    command*).
+  - Never `git mv` anything out of the copied `kit/`: owed `.claude/` items are copied from it, with
+    the commands in `generation-checklist.md`, *Commands for owed `.claude/` items*.
 - **Ask the PI which mode, if it is unclear.**
 
 Then decide which kind of project is coming in, because the steps differ:
