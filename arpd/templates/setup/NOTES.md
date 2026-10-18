@@ -31,7 +31,7 @@ other repositories or folders the PI did not point to.
 - **Setup mode:** {{new / import <source> / install <repository>}}
 - **Project folder:** {{absolute path}}; kit clone used: {{absolute path}}
 - **Consent to save these notes in the project:** {{not needed (new or import) / given, PI's words
-  and date / declined: kept outside the repository (OS temp), so recovery is limited}}
+  and date / declined: kept at <parent of the target>/.arpd-setup-notes/<target name>/}}
 - **Commit status:** {{not committed / committed in their own commit <SHA>}}. Never pushed without the
   PI's authorization.
 

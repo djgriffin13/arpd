@@ -69,8 +69,10 @@ follow it into the project folder. Details: [arpd/docs/GUIDE.md](arpd/docs/GUIDE
   `python <kit>/arpd/tools/install.py install <project>` (it reports the older skills as conflicts;
   add `--force` to replace them; later refreshes use `update`), run
   `python arpd/tools/install.py owed .` to point the hooks at `arpd/tools/`, then use `/arpd-amend`
-  to change the paths the charter names. The charter changes only by your ruling. Commit, then remove
-  the old `tools/` copies (and any copied kit folder) when nothing cites them.
+  to change the paths the charter names. The charter changes only by your ruling. Commit, then
+  remove the old kit leftovers (`docs/arpd-kit/`, `examples/`, `evaluation/`, root `kit/`, `tools/`,
+  `reports/templates/`, `docs/EVENTS.md`) in one remove-only commit, recorded by a DEC under your
+  upgrade instruction.
 
 ## Known limitations
 

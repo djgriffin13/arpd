@@ -3,7 +3,7 @@
 
     python arpd/tools/install.py new <path>                      (run from the kit clone)
     python arpd/tools/install.py import <source> <path> [--yes]  (run from the kit clone)
-    python arpd/tools/install.py install <path> [--force]        (run from the kit clone)
+    python arpd/tools/install.py install <path> [--force] [--notes <path>]  (run from the kit clone)
     python arpd/tools/install.py update <path> [--kit <kit>] [--prune]
     python arpd/tools/install.py owed <path> [--kit <kit>] [--force]
 
@@ -20,16 +20,20 @@ import   Start a new project from existing code. A git source (a path or URL) is
          history and submodules; its origin remote is renamed "upstream" and its push URL disabled,
          so the project can fetch from it but never pushes back. A plain folder is listed first
          (large files, environments, data-like files) and copied only with --yes; environments
-         (.venv, node_modules, ...) are not copied, and files of 50 MB or more are git-ignored.
-         Then as for new (the stub CLAUDE.md only if the source has none), committed.
+         (.venv, node_modules, ...) are not copied, and files of 50 MB or more are git-ignored. The
+         copied code is committed alone ("Import <source> (no changes)"). Then as for new (the stub
+         CLAUDE.md only if the source has none), committed.
 install  Add ARPD to an existing repository in place. An existing file that differs is never
-         overwritten without --force (it is reported as a conflict). Nothing is committed.
+         overwritten without --force (it is reported as a conflict). --notes names where the setup
+         notes are kept (outside the repository) in the stub CLAUDE.md, or prints the line when a
+         CLAUDE.md exists. Nothing is committed.
 update   Refresh arpd/ (keeping arpd/logs/) and .claude/skills/arpd-* from the kit, and print what
          changed. Files no longer in the kit are listed, and removed only with --prune. Nothing is
          committed.
 owed     Install what setup owes: arpd/settings/settings.json as .claude/settings.json (into an
          existing one, only its "hooks" key is merged, replacing earlier ARPD log-hook entries),
-         arpd/agents/*.md into .claude/agents/, and any missing ARPD skill (needs the kit).
+         arpd/agents/*.md into .claude/agents/, and any missing ARPD skill (needs the kit). The hook
+         commands use "python" if it is on the PATH, else "python3", else this interpreter's path.
 
 The kit is the folder that holds this script's arpd/ when that folder has the .arpd-kit marker
 (running the kit clone's copy); a project's own copy needs --kit <path to the kit clone>.
@@ -54,8 +58,15 @@ FALLBACK_VERSION = "v0.6.0-rc.1"  # used when the kit's RELEASE-NOTES.md names n
 PAYLOAD_SKIP_DIRS = {"logs", "__pycache__", ".pytest_cache"}
 PAYLOAD_SKIP_ROOT_FILES = {"VERSION"}
 GITIGNORE_LINES = ["arpd/logs/", "output/", "__pycache__/", ".claude/settings.local.json"]
-STUB_CLAUDE = ("# Setup in progress\nThis project is being set up with ARPD. Run /arpd-setup to continue; the "
-               "working notes are in reports/setup/NOTES.md. Do not build anything until setup is complete.\n")
+NOTES = "reports/setup/NOTES.md"
+
+
+def stub_claude(notes=NOTES):
+    return ("# Setup in progress\nThis project is being set up with ARPD. Run /arpd-setup to continue; the "
+            "working notes are in %s. Do not build anything until setup is complete.\n" % notes)
+
+
+STUB_CLAUDE = stub_claude()
 DEFAULT_SKILLS = ("arpd-setup", "arpd-plan", "arpd-checkin", "arpd-amend")
 ENV_DIRS = {".venv", "venv", "node_modules", "__pycache__", ".pytest_cache", ".mypy_cache", ".ipynb_checkpoints"}
 DATA_EXT = {".csv", ".tsv", ".xlsx", ".xls", ".parquet", ".feather", ".h5", ".hdf5", ".sav", ".dta", ".rds",
@@ -149,9 +160,18 @@ def git_init(path):
         git(["symbolic-ref", "HEAD", "refs/heads/main"], path)
 
 
-def commit_all(path, message):
-    git(["add", "-A"], path)
-    git(["commit", "-q", "-m", message], path)
+def commit_all(path, message, exclude=(), force_add=False):
+    """Stage everything (minus `exclude`) and commit. force_add also stages arpd/ and the ARPD skills
+    even if a .gitignore excludes them."""
+    git(["add", "-A", "--", "."] + [":(exclude,literal)" + x for x in exclude], path)
+    if force_add:
+        skills = [".claude/skills/" + x for x in kit_skills(path)]
+        git(["add", "-f", "--", PAYLOAD] + skills + [":(exclude)arpd/logs", ":(exclude)**/__pycache__"], path)
+    p = git(["commit", "-q", "--allow-empty", "-m", message], path, check=False)
+    if p.returncode != 0:
+        raise Refused("git commit failed in %s: %s\nThe files are in place but not committed. To recover, either "
+                      "delete the folder %s and rerun, or fix the signing or identity problem git reports and "
+                      "run  git commit -m \"%s\"  in %s." % (path, (p.stderr or p.stdout).strip(), path, message, path))
     return git(["rev-parse", "--short", "HEAD"], path).stdout.strip()
 
 
@@ -297,12 +317,12 @@ def ensure_gitignore(project, extra=()):
     return add
 
 
-def write_stub_claude(project):
+def write_stub_claude(project, notes=None):
     path = os.path.join(project, "CLAUDE.md")
     if os.path.exists(path):
         return False
     with io.open(path, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(STUB_CLAUDE)
+        fh.write(stub_claude(notes or NOTES))
     return True
 
 
@@ -342,6 +362,7 @@ def relaunch(path):
     say("Next, in a new terminal:")
     say('    cd "%s"' % path)
     say("    claude")
+    say("(or open the folder in the Claude Code desktop app; accept the folder-trust prompt),")
     say("then type /arpd-setup to continue setup there.")
 
 
@@ -420,7 +441,7 @@ def cmd_new(a):
     ensure_gitignore(path)
     write_stub_claude(path)
     write_version(path, kit, "new")
-    sha = commit_all(path, "Bootstrap ARPD project (setup in progress)")
+    sha = commit_all(path, "Bootstrap ARPD project (setup in progress)", force_add=True)
     report(result)
     say("Created a git repository (branch main) and committed %s: Bootstrap ARPD project (setup in progress)." % sha)
     relaunch(path)
@@ -456,17 +477,18 @@ def cmd_import(a):
         inv = inventory(src)
         print_inventory(src, inv)
         if not a.yes:
-            say("\nNothing copied. Review the list above, then rerun with --yes to copy the folder.")
-            return 1
+            say("\nReview the list above: nothing copied yet; rerun with --yes to copy the folder.")
+            return 0
         copy_folder(src, dest)
         git_init(dest)
         extra = [r for r, _ in inv["ignore"]]
+        commit_all(dest, "Import %s (no changes)" % src, exclude=extra)
         imported = "%s (a folder, copied %s)" % (src, datetime.date.today().isoformat())
     result = install_payload(kit, dest, force=a.force)
     ensure_gitignore(dest, extra)
     stub = write_stub_claude(dest)
     write_version(dest, kit, "import", imported=imported)
-    sha = commit_all(dest, "Bootstrap ARPD (setup in progress)")
+    sha = commit_all(dest, "Bootstrap ARPD (setup in progress)", force_add=True)
     report(result)
     if not stub:
         say("The source's own CLAUDE.md was kept; setup will fold it into the charter.")
@@ -487,12 +509,16 @@ def cmd_install(a):
     location_warnings(path)
     result = install_payload(kit, path, force=a.force)
     added = ensure_gitignore(path)
-    stub = write_stub_claude(path)
+    stub = write_stub_claude(path, a.notes)
     write_version(path, kit, "install")
     report(result)
     if added:
         say("Added to .gitignore: " + ", ".join(added))
-    say("Wrote a stub CLAUDE.md (setup in progress)." if stub else "Kept the existing CLAUDE.md.")
+    if stub:
+        say("Wrote a stub CLAUDE.md (setup in progress).")
+    else:
+        say("Kept the existing CLAUDE.md. For the PI to add to it while setup runs:")
+        say("    " + stub_claude(a.notes or NOTES).splitlines()[1])
     say("Nothing was committed.")
     return 2 if result["conflicts"] else 0
 
@@ -570,6 +596,22 @@ def _merge_hooks(existing, ours):
     return merged
 
 
+def interpreter():
+    """The command the hooks run: "python" if on the PATH, else "python3", else this interpreter."""
+    return "python" if shutil.which("python") else ("python3" if shutil.which("python3") else sys.executable)
+
+
+def with_interpreter(settings, command):
+    """settings with every log-hook entry's command set to `command`."""
+    out = json.loads(json.dumps(settings))
+    for entries in (out.get("hooks") or {}).values():
+        for entry in entries:
+            for h in entry.get("hooks", []):
+                if "log_hook.py" in json.dumps(h.get("args", [])):
+                    h["command"] = command
+    return out
+
+
 def cmd_owed(a):
     path = os.path.abspath(a.path)
     payload = os.path.join(path, PAYLOAD)
@@ -583,8 +625,10 @@ def cmd_owed(a):
         problems.append("arpd/settings/settings.json is missing; event logging not installed")
     elif not os.path.exists(dst):
         os.makedirs(os.path.dirname(dst), exist_ok=True)
-        shutil.copyfile(src, dst)
-        say("Installed .claude/settings.json (event-logging hooks).")
+        ours = with_interpreter(json.loads(io.open(src, encoding="utf-8").read()), interpreter())
+        with io.open(dst, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(ours, indent=2) + "\n")
+        say("Installed .claude/settings.json (event-logging hooks, run with %s)." % interpreter())
     else:
         try:
             existing = json.loads(io.open(dst, encoding="utf-8").read())
@@ -594,7 +638,8 @@ def cmd_owed(a):
             existing = None
             problems.append(".claude/settings.json is not valid JSON (%s); not changed" % exc)
         if existing is not None:
-            merged = _merge_hooks(existing, json.loads(io.open(src, encoding="utf-8").read()))
+            merged = _merge_hooks(existing, with_interpreter(json.loads(io.open(src, encoding="utf-8").read()),
+                                                             interpreter()))
             if merged == existing:
                 say(".claude/settings.json already runs the ARPD hooks.")
             else:
@@ -654,6 +699,7 @@ def main(argv=None):
     p = sub.add_parser("install", help="add ARPD to an existing repository in place (no commit)")
     p.add_argument("path")
     p.add_argument("--force", action="store_true", help="overwrite existing files that differ")
+    p.add_argument("--notes", help="where the setup notes are kept, named in the stub CLAUDE.md")
     p = sub.add_parser("update", help="refresh arpd/ and the skills from the kit (no commit)")
     p.add_argument("path")
     p.add_argument("--prune", action="store_true", help="remove files no longer in the kit")

@@ -1,8 +1,8 @@
 <!--
 ARPD template: START-HERE.md, the one-screen orientation for a project (written at setup).
 Governs nothing (CLAUDE.md §2), except that its "## Map" section is the project's navigation map.
-Setup fills the {{...}} fields and removes these comments. /arpd-plan rewrites only "## Next step";
-anyone updates "## Map" in the same commit as the change it describes.
+Setup fills the {{...}} fields and removes these comments. /arpd-plan rewrites "## Next step" and
+updates "## Map"; anyone updates "## Map" in the same commit as the change it describes.
 -->
 # Start here: {{PROJECT_NAME}}
 

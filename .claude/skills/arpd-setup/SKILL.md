@@ -42,22 +42,28 @@ and continues in a new Claude Code session opened in the project.
    *Modes*), and propose a short project name and an **absolute** path, by default a sibling of the
    kit clone (`<kit parent>/<slug>`), as a `CHOICE FOR YOU (select one)` showing the path in full:
    A. create it there (recommended); B. another name or folder. Name the source for an import.
+   **Install mode:** next, before writing anything, ask the notes-consent question
+   (`import-path.md`, *Working files*).
 4. **Create it,** from the kit clone, with one of:
    `python arpd/tools/install.py new "<path>"`;
    `python arpd/tools/install.py import <source> "<path>"` (existing code: a git path or URL, or a
    folder, whose inventory you show the PI before rerunning with `--yes`);
-   `python arpd/tools/install.py install "<path>"` (a repository the PI keeps working in).
-   Quote every `WARNING:` and `REFUSED:` line and help the PI act on it (`import-path.md`,
-   *Warnings*).
+   `python arpd/tools/install.py install "<path>"` (a repository the PI keeps working in; without
+   consent add `--notes "<notes path>"`). Show the PI any `CONFLICTS:` list; `--force` only on the
+   PI's yes. Quote every `WARNING:` and `REFUSED:` line (a failed commit's includes how to recover)
+   and help the PI act on it (`import-path.md`, *Warnings*).
 5. **Notes, then hand over.** Copy `arpd/templates/setup/NOTES.md` to
    `<path>/reports/setup/NOTES.md` with the mode, the folder and the PI's opening answer
    **verbatim** (UTC time), then
    `git -C "<path>" add reports/setup/NOTES.md && git -C "<path>" commit -m "Setup notes (non-governing)"`
-   (install mode: only with consent, uncommitted; `import-path.md`, *Working files*). End as a
+   (install mode: uncommitted, and without consent at the notes path instead). End as a
    closing turn, no block, telling the PI exactly: in a new terminal, `cd "<absolute path>"`, then
-   `claude`, then `/arpd-setup`; the interview continues there from the notes. Install mode may
-   continue in this session only when its working folder is the target. From then on every command
-   is project-relative (`python arpd/tools/...`).
+   `claude`, then `/arpd-setup` (or open the folder in the Claude Code desktop app; accept the
+   folder-trust prompt); the interview continues there from the notes; print the notes path if it
+   is outside the project. If the PI replies here after that turn, repeat the relaunch commands;
+   never continue the interview in the kit session. Install mode may continue in this session only
+   when its working folder is the target. From then on every command is project-relative
+   (`python arpd/tools/...`).
 
 ## Every turn that waits for the PI
 

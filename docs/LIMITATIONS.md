@@ -44,8 +44,9 @@ The evidence behind them is indexed in [evaluation/README.md](../evaluation/READ
 - Resuming an interrupted setup has been tested at a few points (just after adoption; before
   adoption from the notes, in three phases, with a draft report and with notes from an older kit).
   Other interruption points, and resuming an interrupted plan review, are untested.
-- In install mode without consent to save notes in the repository, a later session can resume from
-  them only if the PI gives their path.
+- In install mode without consent to save notes in the repository, they are kept beside it, in
+  `../.arpd-setup-notes/<name>/`, which the stub `CLAUDE.md` names; a later session resumes from there.
+- The setup interview itself is not logged: the hooks are installed at the end of setup.
 - Under a continuation standing authorization, the lead checks the transition conditions at each
   sprint boundary. The governance checker does not.
 

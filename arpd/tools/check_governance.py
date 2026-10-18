@@ -30,7 +30,9 @@ The checks:
      in DECISIONS.md and is not pending. Pending or awaiting adoption, or a pending or unrecorded
      ruling, is PENDING; no Version line is MISSING;
    - once adopted, no standing authorization (authority profile) in DECISIONS.md is ADVISORY.
-2. Intra-repository Markdown links resolve.
+2. Intra-repository Markdown links resolve (older kit copies a v0.5 project may still hold,
+   docs/arpd-kit/ and, with arpd/VERSION or kit/, examples/ and evaluation/, are listed under
+   "Not checked").
 3. Requirements:
    - states are valid;
    - Verified and Validated rows carry evidence;
@@ -320,9 +322,25 @@ def check_adopted_report():
     step(name, "ADVISORY" if notes else "PASS", notes or ok)
 
 
+def _legacy_kit_folders():
+    """Old kit copies a v0.5 project may still hold after moving to arpd/ (removed by a remove-only
+    commit): docs/arpd-kit/ always; examples/ and evaluation/ only when arpd/VERSION or kit/ marks
+    the project as set up from the kit."""
+    found = ["docs/arpd-kit/"] if os.path.isdir(os.path.join(ROOT, "docs", "arpd-kit")) else []
+    if os.path.isfile(os.path.join(ROOT, "arpd", "VERSION")) or os.path.isdir(os.path.join(ROOT, "kit")):
+        found += [d + "/" for d in ("examples", "evaluation") if os.path.isdir(os.path.join(ROOT, d))]
+    return found
+
+
 def check_links():
     bad = []
+    legacy = _legacy_kit_folders()
+    if legacy:
+        not_checked.append("links in older kit copies (%s); remove them in one remove-only commit"
+                           % ", ".join(legacy))
     for f in md_files():
+        if any(f.replace(os.sep, "/").startswith(d) for d in legacy):
+            continue
         text = read(f)
         text = re.sub(r"```.*?```", "", text, flags=re.S)  # ignore code blocks
         for target in re.findall(r"\]\(([^)\s]+)\)", text):

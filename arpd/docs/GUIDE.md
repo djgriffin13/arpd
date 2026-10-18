@@ -13,8 +13,8 @@ step says otherwise.
 | Python 3.8 or later, on the PATH as `python` | The tools and the logging hooks are Python (standard library only) | `python --version` |
 
 If git does not know your name and email, setup stops and prints the two `git config --global`
-commands to run. If `python` does not resolve, setup uses `python3` or the full path in
-`.claude/settings.json` instead.
+commands to run. If `python` does not resolve, `install.py owed` writes `python3`, or else the full
+path of the Python that ran it, into the hooks in `.claude/settings.json`.
 
 **On Windows:** keep projects outside OneDrive or other synced folders where you can; syncing can
 lock or duplicate files while git and the agents work. Put quotes around paths with spaces.
@@ -55,7 +55,8 @@ cd "<project folder>"
 claude
 ```
 
-Type `/arpd-setup` again. The interview continues there, from your first answer. Everything from
+(Or open the folder in the Claude Code desktop app; accept the folder-trust prompt.) Type
+`/arpd-setup` again. The interview continues there, from your first answer. Everything from
 here on is written in the project, never in the kit clone.
 
 **Importing existing code.** A git source (a path or a URL) is cloned into the new folder with its
@@ -121,7 +122,8 @@ by letter. Where symbols do not render, an ASCII form is used (`[x]`, `[>]`, `[ 
 **Working notes are saved as you go,** in `reports/setup/NOTES.md`. They are **not governing**: they
 record what you said so that an interrupted setup can resume, and nothing in them is adopted. They
 never hold secrets or participant data, and are never pushed without your say-so. In install mode,
-setup asks your consent before saving them in your repository.
+setup asks your consent before saving them in your repository; without it they are kept beside
+it, in `../.arpd-setup-notes/<repository name>/`.
 
 **Data semantics stay yours.** What a blank answer means, missing versus zero, duplicates and
 repeated submissions, what an identifier means, aggregation, numerical precision, changes to

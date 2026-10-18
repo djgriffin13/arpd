@@ -13,8 +13,8 @@ with the first task plan, `reports/sprints/` with the first sprint.
 
 Write `reports/setup/PROJECT-DEFINITION.md` from `arpd/templates/reports/PROJECT-DEFINITION.md`,
 using the notes. Set the version line (v1), the Status line (`Draft v1`), the DRAFT banner, and a
-date read from `date -u +%Y-%m-%dT%H:%MZ`, marked UTC. Install mode without consent: write it in the
-OS temp directory, beside the notes.
+date read from `date -u +%Y-%m-%dT%H:%MZ`, marked UTC. Install mode without consent: write it beside the
+notes, outside the repository.
 
 **Quality over length:** the full specification, proportional to complexity and risk (the
 template's guidance says what each section holds). Also:

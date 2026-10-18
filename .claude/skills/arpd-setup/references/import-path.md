@@ -17,7 +17,10 @@ existing work. Never silently merge or overwrite instructions.**
   only on their yes.
 - **A project set up with an earlier kit** (no `arpd/`; `update` refuses it) is not set up again:
   `python arpd/tools/install.py install "<project>" --force` from the kit, then, in the project,
-  `python arpd/tools/install.py owed .` and `/arpd-amend` for the charter's paths.
+  `python arpd/tools/install.py owed .` and `/arpd-amend` for the charter's paths. Then
+  remove the old kit leftovers (`docs/arpd-kit/`, `examples/`, `evaluation/`, root `kit/`, `tools/`,
+  `reports/templates/`, `docs/EVENTS.md`) in one remove-only commit, recorded by a DEC under the
+  PI's upgrade instruction.
 - **Non-ARPD project** (no `PARADIGM-SPEC.md` or governing documents): *Steps for a non-ARPD
   project*. **ARPD starter:** *Steps for an ARPD starter*; its `CLAUDE.md` and `AGENTS.md` **are its
   charter**, updated in place, never treated as prior instructions.
@@ -40,12 +43,13 @@ them authorizes nothing.
 
 - **New and import:** the notes go into the new project at bootstrap, committed alone ("Setup notes
   (non-governing)"); later updates and the draft report stay uncommitted until adoption.
-- **Install:** the PI's repository may be shared or public. After `install.py` runs, ask once
+- **Install:** the PI's repository may be shared or public. Before `install.py` runs, ask once
   (`CHOICE FOR YOU (select one)`) for consent to save both files in `reports/setup/`, and record
   the answer in the notes' *Mode and consent*. With consent: there, uncommitted until adoption.
-  Without: in the OS temp directory, path given to the PI (a later session resumes only from that
-  path); at adoption the adopted report is written into the target, and the notes only if the PI
-  asks.
+  Without: in `<parent of the target>/.arpd-setup-notes/<target name>/` (`NOTES.md` and the draft;
+  never the session scratchpad), passed to `install.py install --notes` so the stub `CLAUDE.md`
+  names it (if a `CLAUDE.md` exists, give the PI the printed line); at adoption the adopted report
+  is written into the target, and the notes only if the PI asks.
 
 ## Existing repository review
 
@@ -158,8 +162,8 @@ Worked case: the March example, from its own repository (`/arpd-setup import <it
 
 A relaunched session resumes; so does one after a lost session or an error. The record decides what
 is authorized. Check `git log --oneline -15`, `git status --short`, `reports/setup/NOTES.md` and
-`reports/setup/PROJECT-DEFINITION.md` (tracked or not; install mode without consent: ask for the
-path), any move- or remove-only commits, the commit "Record adoption ruling R-NN (setup in
+`reports/setup/PROJECT-DEFINITION.md` (tracked or not; install mode without consent: the path the
+stub `CLAUDE.md` names), any move- or remove-only commits, the commit "Record adoption ruling R-NN (setup in
 progress)", and which checklist files exist. Then:
 
 1. **Tell the PI** what you found (on a first relaunch, one line).
