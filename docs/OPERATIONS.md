@@ -93,9 +93,11 @@ does not render, an ASCII form is used (`[x]`, `[>]`, `[ ]`, `->`, a line of `-`
 and their approval rulings, the sprint records. When they disagree, the records win and the check-in
 says STATUS is out of date.
 
-**A checker PASS is not authorization to execute.** The governance check does not read the
-readiness block; it lists it under *Not checked*. Work starts only from an approved plan and an
-execution authorization (section 5).
+**A checker PASS is not authorization to execute.** The governance check compares only the
+readiness block's *Execution* line with the sprint records, as an advisory step ("Readiness agrees
+with the sprint records"): an open sprint record while it says "not started", or "in progress" with
+no open record. The *Setup*, *Planning* and *Next step* lines are listed under *Not checked*. Work
+starts only from an approved plan and an execution authorization (section 5).
 
 ## 5. Plan approval, execution authority and multi-sprint authorizations
 
@@ -262,6 +264,8 @@ otherwise **PASS**.
 
 Within the steps it lists, the checker does not report PASS for an item it could not check. It
 checks what is **recorded**: it cannot show that a recorded date is true, that a ruling, plan
-approval or start direction is in your own words, or that the readiness block is right; and it does
-not run the project's tests. The *Not checked* block lists these limits for each run;
-`docs/LIMITATIONS.md` in the kit lists them in full.
+approval or start direction is in your own words, or that the readiness block is right beyond its
+Execution line; and it does not run the project's tests. Run those separately with the project's
+test command, `python -m pytest --ignore=kit --ignore=examples --ignore=evaluation`, which leaves out
+the kit's own tests, the worked example and the evaluation materials. The *Not checked* block lists
+these limits for each run; `docs/LIMITATIONS.md` in the kit lists them in full.

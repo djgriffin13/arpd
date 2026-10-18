@@ -56,13 +56,7 @@ An invariant is a property that must hold for the instrument to mean what we int
 pass while an invariant is broken: plausible code can be silently wrong here. Breaking an invariant
 is a defect even if every test passes (`CLAUDE.md` §4).
 
-**Invariant, requirement or acceptance criterion?** Three different things:
-
-| Term | What it says | Where it lives | How it works |
-|---|---|---|---|
-| Invariant (INV) | What must never break, or the results stop meaning what we intend | `PARADIGM-SPEC.md` §5 | The PI owns it. It holds for the life of the project. |
-| Requirement (REQ) | What the instrument must do | `REQUIREMENTS.md` | It traces to a spec item or a ruling. It has a state and evidence. |
-| Acceptance criterion | An observable check that something was delivered | A requirement's criteria: `REQUIREMENTS.md` *Requirement details*. A plan's: inside the plan, `plans/NNN-…` | A plan's criteria come from its requirements' criteria and close with the plan. Their evidence moves a requirement's state. |
+How an invariant differs from a requirement and an acceptance criterion: `REQUIREMENTS.md`.
 
 | ID | Invariant | Why it matters scientifically | How it is checked |
 |---|---|---|---|
@@ -92,8 +86,8 @@ support.
 |---|---|---|
 | NCL-01 |  |  |
 
-<!-- Example: "That selection and influence estimates are causal effects. The model separates them
-statistically, but does not identify them causally without further assumptions." -->
+<!-- Example: "That responses are anonymous. The tool stores no names, but a study code linked to a
+roster kept elsewhere can identify a participant." -->
 
 ## 7. Validation plan
 

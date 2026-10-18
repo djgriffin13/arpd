@@ -151,9 +151,12 @@ A passing check is not permission to start work. Where setup, planning and execu
 
 ## E. Look at the worked example first
 
-`examples/march-1991/` is a complete ARPD project: a checked implementation of March's (1991)
-organizational-learning model, with its charter, specification, sprint records, decisions and
-evidence.
+`examples/march-1991/` is a complete ARPD project with v0.3-format records (its ruling R-01 was
+given for v0.3.0-rc.1, and the records are carried unchanged): a checked implementation of March's
+(1991) organizational-learning model, with its charter, specification, sprint records, decisions and
+evidence. Because of the older format, the governance check reports some steps as "older format" and
+does not compare them. To extend it, run `/arpd-setup import examples/march-1991` from the kit's
+root, then `/arpd-plan`.
 
 ```bash
 pip install -r examples/march-1991/requirements.txt
@@ -164,13 +167,11 @@ python tools/check_governance.py
 
 ## Words that are easy to mix up
 
-| Term | What it says | Where it lives |
-|---|---|---|
-| **Invariant** (INV) | What must never break, or the results stop meaning what you intend. You own it, for the life of the project. | `PARADIGM-SPEC.md` §5 |
-| **Requirement** (REQ) | What the instrument must do. It traces to a spec item or a ruling, and has a state and evidence. | `REQUIREMENTS.md` |
-| **Acceptance criterion** | An observable check that something was delivered. Each requirement has its own; a task plan's are drawn from them and close with the plan. Their evidence moves a requirement's state. | `REQUIREMENTS.md` *Requirement details*; inside the plan, `plans/NNN-…` |
+Your project's `START-HERE.md` explains, one line each, how an **invariant** (`PARADIGM-SPEC.md`), a
+**requirement** (`REQUIREMENTS.md`) and an **acceptance criterion** (its *Requirement details*)
+differ.
 
-There are also three levels of plan:
+There are three levels of plan:
 
 | Level | What it is | Where it lives |
 |---|---|---|

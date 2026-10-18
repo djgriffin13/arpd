@@ -104,8 +104,10 @@ Every sprint boundary still gets its close-out, independent review and checks (C
 - **Given:** in the setup session
 - **Adopts:** `reports/PROJECT-DEFINITION.md` v{{N}}. The report is committed with this ruling, in
   the adoption-first commit; a ruling cannot name its own commit, so `STATUS.md` records the SHA.
-- **Reading:** the report's Adopted-on-adoption items are adopted; its Delegated, Provisional, Open
-  and Excluded items are recorded as such, and Proposed items are not adopted. CLAUDE.md v1.0 and
+- **Reading:** the report's Adopted-on-adoption items are adopted, with any proposals this ruling
+  accepts ({{IDs, and how: "choice A" or named}}); its Delegated, Provisional, Open and Excluded items
+  are recorded as such (open items O-NN become *Waiting on the PI* #N: {{mapping}}), and other
+  Proposed items are not adopted. CLAUDE.md v1.0 and
   PARADIGM-SPEC.md v1.0 are written from it and are in force. The research question is PARADIGM-SPEC
   §1, verbatim. Adoption authorizes the governing documents only, not implementation.
 - **Changes:** CLAUDE.md v1.0, PARADIGM-SPEC.md v1.0, REQUIREMENTS.md v1.0

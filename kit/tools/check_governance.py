@@ -115,6 +115,14 @@ The checks:
    a requirement in the table (not Retired) with no details entry ("### REQ-...:") holding
    "Acceptance criteria" with at least one bullet is ADVISORY. Without that section (the older
    format) the step passes and says it was not compared.
+11. Adopted report traced (advisory): for each given ruling whose Adopts line names a file and version
+   (e.g. "`reports/PROJECT-DEFINITION.md` v2"), that file exists and its Status line reads
+   "Adopted by R-NN (vN)" with the same ruling and version; otherwise ADVISORY. With no Adopts line
+   (the older format) the step passes and says it was not compared. The report's content is not
+   compared with the governing documents.
+
+A file the checks read that is not UTF-8 (for example saved as UTF-16) is a FAIL in the step that read
+it: "<file>: not UTF-8 (save as UTF-8)".
 """
 import datetime
 import io
@@ -137,9 +145,20 @@ def step(name, status, details=()):
     results.append((name, status, list(details)))
 
 
+class NotUTF8(Exception):
+    """A file the checks read is not UTF-8; the step that read it FAILs."""
+
+    def __init__(self, path):
+        Exception.__init__(self, path)
+        self.path = path.replace(os.sep, "/")
+
+
 def read(path):
-    with io.open(os.path.join(ROOT, path), encoding="utf-8") as fh:
-        return fh.read()
+    try:
+        with io.open(os.path.join(ROOT, path), encoding="utf-8") as fh:
+            return fh.read()
+    except UnicodeDecodeError:
+        raise NotUTF8(path)
 
 
 KIT_ASIDE = os.path.join("docs", "arpd-kit")  # the kit's own pre-setup files, moved aside at setup
@@ -245,6 +264,48 @@ def check_adoption():
             if status == "PASS":
                 status = "ADVISORY"
     step("Charter adopted; templates filled", status, notes)
+
+
+def check_adopted_report():
+    """Advisory: the report a ruling's Adopts line names exists and its Status names that ruling and version."""
+    name = "Adopted report traced (advisory)"
+    known, _, sections = decision_index()
+    traced = [(r, _entry_line(body, "Adopts")) for r, body in sorted(sections.items()) if r.startswith("R-")]
+    traced = [(r, line) for r, line in traced if line]
+    if not traced:
+        step(name, "PASS", ["no ruling in DECISIONS.md has an Adopts line: older format; not compared"])
+        return
+    notes, ok = [], []
+    for rid, adopts in traced:
+        if rid not in known:
+            ok.append("%s is still pending; its Adopts line is not compared" % rid)
+            continue
+        m = re.search(r"`([^`]+)`", adopts) or re.search(r"(\S+\.md)\b", adopts)
+        if not m:
+            notes.append("%s: its Adopts line names no file" % rid)
+            continue
+        path = m.group(1).strip()
+        v = re.search(r"\bv(\d+)\b", adopts[m.end():])
+        if not v:
+            notes.append("%s: its Adopts line names %s but no version (vN)" % (rid, path))
+            continue
+        want = "Adopted by %s (v%s)" % (rid, v.group(1))
+        if not os.path.isfile(os.path.join(ROOT, path)):
+            notes.append("%s, named by %s's Adopts line, does not exist" % (path, rid))
+            continue
+        text = re.sub(r"<!--.*?-->", "", read(path), flags=re.S)
+        header = re.split(r"^## ", text, maxsplit=1, flags=re.M)[0]
+        st = re.search(r"^\s*(?:[-*]\s+)?\**\s*Status\s*\**\s*:(.*)$", header, re.M | re.I)
+        if not st:
+            notes.append("%s: no Status line in its header; cannot check that it reads '%s'" % (path, want))
+            continue
+        status = _clean(st.group(1))
+        am = re.search(r"adopted\s+by\s+(R-\d+)\s*\(\s*v(\d+)\s*\)", status, re.I)
+        if not am or (am.group(1), am.group(2)) != (rid, v.group(1)):
+            notes.append("%s: Status line does not read '%s' (it reads: %s)" % (path, want, status[:80]))
+        else:
+            ok.append("%s: %s" % (path, want))
+    step(name, "ADVISORY" if notes else "PASS", notes or ok)
 
 
 def check_links():
@@ -1019,13 +1080,32 @@ def check_readiness():
         notes.append("STATUS Readiness says execution: in progress, but no sprint record is open")
     step(name, "ADVISORY" if notes else "PASS", notes or ["Execution line consistent with the sprint records"])
 
+STEPS = (
+    (check_exists, "Governing documents exist"),
+    (check_adoption, "Charter adopted; templates filled"),
+    (check_adopted_report, "Adopted report traced (advisory)"),
+    (check_links, "Intra-repo links resolve"),
+    (check_requirements, "Requirements: states, evidence, traceability"),
+    (check_requirement_details, "Requirement details: acceptance criteria (advisory)"),
+    (check_plans, "Plans: unique numbers, valid status"),
+    (check_sprints, "Closed sprints: decision tracking and authorization"),
+    (check_open_sprints, "Open sprints: plan approval and execution authority cited"),
+    (check_readiness, "Readiness agrees with the sprint records (advisory)"),
+    (check_index, "INDEX covers top level; listed paths exist (advisory)"),
+    (check_logging, "Event logging and agent roles installed"),
+    (check_skills, "ARPD skills installed"),
+    (check_superseded, "Live items cite no superseded spec item (advisory)"),
+)
+
+
 def main():
-    for fn in (check_exists, check_adoption, check_links, check_requirements, check_requirement_details, check_plans, check_sprints,
-               check_open_sprints, check_readiness, check_index, check_logging, check_skills, check_superseded):
+    for fn, title in STEPS:
         try:
             fn()
+        except NotUTF8 as exc:  # a file the step read is not UTF-8: say which, never crash
+            step(title, "FAIL", ["%s: not UTF-8 (save as UTF-8)" % exc.path])
         except Exception as exc:  # report, never hide
-            step(fn.__name__, "MISSING", ["check could not run: %r" % exc])
+            step(title, "MISSING", ["check could not run: %r" % exc])
     width = max(len(n) for n, _, _ in results)
     for name, status, details in results:
         print("%-*s  %s" % (width, name, status))
@@ -1038,6 +1118,8 @@ def main():
             "whether a plan approval or start direction was the PI's own words",
             "STATUS readiness flags beyond the Execution line (setup, planning, next step) and START-HERE.md are not checked against the records",
             "installation checks look at files, not at whether the hooks actually fired",
+            "that the adopted report's content matches the governing documents (only its ruling and version are "
+            "traced)",
             "the code itself: run the project's tests separately"]:
         print("    - " + d)
     print("Relies on recorded information in DECISIONS.md, sprint records, REQUIREMENTS.md and INDEX.md.")

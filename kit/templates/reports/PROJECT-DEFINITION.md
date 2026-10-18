@@ -7,21 +7,16 @@
 
 **Status:** Draft v{{N}}
 
-<!-- Guidance for the lead (remove every guidance comment when filling the report).
-- Proportionality first. Detail scales with the project's complexity and risk. A section that does
-  not apply is one line: "Not applicable: <reason>". The bullets under each heading are prompts for
-  what to cover when it matters, not fields to fill: drop any that do not apply. No boilerplate.
-- Write it from the setup notes (docs/discovery/SETUP.md) and present it before anything governing
-  is written. It must stand on its own as a specification: turn answers into implementable,
-  testable requirements; do not just restate them.
-- Never manufacture detail to look complete. A gap is stated as a gap, with a gate (section 12).
-- Each revision shown to the PI bumps the Version and adds a Change history row.
-- At adoption, in the adoption-first commit, and with no other edit: set the Status line to
-  "Adopted by R-NN (vN)", and replace the banner with: "ADOPTED by R-NN (vN). This is the record of
-  what was adopted. It is informative: the governing documents carry its content, and where they
-  differ the governing document wins and the difference is recorded (CLAUDE.md §2)."
-  The adopted text is then frozen. Later changes go through rulings on the governing documents
-  (/arpd-amend), never through edits here. -->
+<!-- Guidance (remove every guidance comment when filling the report).
+- Proportionality first: short and sharp for a simple tool, deep for an estimator. A section that
+  does not apply is one line, "Not applicable: <reason>". Bullets are prompts, not fields.
+- The full specification the PI reviews, from the notes: testable requirements, not restated
+  answers. Never manufacture detail; state a gap, with a gate (section 12).
+- Each version shown to the PI bumps the Version and adds a Change history row.
+- At adoption (the adoption-first commit, no other edit): Status "Adopted by R-NN (vN)", and the
+  banner becomes: "ADOPTED by R-NN (vN). This is the record of what was adopted. It is
+  informative: the governing documents carry its content, and where they differ the governing
+  document wins and the difference is recorded (CLAUDE.md §2)." Frozen afterwards (/arpd-amend). -->
 
 ## Change history
 
@@ -29,26 +24,23 @@
 |---|---|---|---|
 | v1 | {{date}} | First draft |  |
 
-## Status legend
+## Statuses and where they go at adoption
 
-Every requirement, decision and open item carries one of these statuses. They map onto the kit's
-existing mechanisms; they are not a second authority model.
+Each requirement, decision and open item has one status, mapped onto the kit's existing records.
 
-| Status | Meaning | Where it goes when this report is adopted |
-|---|---|---|
-| **Adopted-on-adoption** | The PI stated it, or accepted it in words (quoted in *Source*). It is adopted when R-NN adopts this version, not before. | The governing documents: `REQUIREMENTS.md` (Planned, source R-NN or a spec item), `ARCHITECTURE.md` *Architecture decisions*, `PARADIGM-SPEC.md`, `DECISIONS.md` |
-| **Proposed** | The lead recommends it; the PI has not accepted it. | Nothing is adopted. Before adoption the PI accepts, changes or drops it. One left at adoption is filed as Backlogged in `MASTER_PLAN.md` §4 |
-| **Provisional** | A working assumption or design preference awaiting confirmation or evaluation. Says what would confirm it. | `ARCHITECTURE.md` *Architecture decisions*, labelled Provisional, with its gate in `DECISIONS.md` *Waiting on the PI*. Never the source of a requirement |
-| **Delegated (SA-NN)** | The PI authorized the agents to decide it, within stated bounds. | The standing authorization (SA-01, or a narrower SA-NN) with its bounds; labelled Delegated where it appears |
-| **Open (gate)** | Unresolved; needs a decision by a stated gate: before planning, before implementing <what>, or before deployment. | `DECISIONS.md` *Waiting on the PI*, with *Needed by* = the gate |
-| **Excluded** | Explicitly outside the agreed scope. | The out-of-scope list (`PARADIGM-SPEC.md` §8); later or wishlist items to the backlog |
+| Status | At adoption it goes to |
+|---|---|
+| **Adopted-on-adoption** (the PI stated or accepted it, quoted in *Source*) | `REQUIREMENTS.md` (table and *Requirement details*), `ARCHITECTURE.md` *Architecture decisions*, or `PARADIGM-SPEC.md` / `DECISIONS.md` |
+| **Adopted (inherited, R-NN)** (an imported project's own ruling) | Unchanged, cited by ID |
+| **Delegated (SA-NN)** (agents decide within its bounds) | That SA; listed as delegated in `ARCHITECTURE.md` or `REQUIREMENTS.md` |
+| **Provisional** (says what confirms it) | `ARCHITECTURE.md` *Architecture decisions*, labelled, or *Waiting on the PI* with its gate; never a requirement's source |
+| **Open (gate)** | `DECISIONS.md` *Waiting on the PI*, *Needed by* = the gate |
+| **Proposed** (the lead's; not accepted) | Not adopted, unless the adoption ruling names it: `MASTER_PLAN.md` §4 backlog |
+| **Excluded** | The out-of-scope list (`PARADIGM-SPEC.md` §8) |
+| Priority **future**, any status | `MASTER_PLAN.md` roadmap or backlog only, not `REQUIREMENTS.md` |
 
-## Provenance
-
-The PI's words are quoted verbatim ("PI: ..."). The lead's tidied wording is "Normalized" (the
-original stays in the setup notes), an inference is "Lead's derivation", a proposal is "Lead's
-recommendation", and a proposal the PI accepted quotes their words ("PI accepted: '...'"). The
-research question, construct definitions and the adoption ruling are always verbatim.
+**Provenance:** the PI's words verbatim ("PI: ..."); otherwise Normalized, Lead's derivation, Lead's
+recommendation, or "PI accepted: '...'".
 
 ---
 
@@ -61,34 +53,26 @@ research question, construct definitions and the adoption ruling are always verb
 | Problem being solved |  |
 | Intended users |  |
 | Target outcome |  |
-| Scope | Minimum usable version → ideal version → nice-to-have (section 2) |
 | Project classification | {{e.g. new project, broad idea / data collection / statistical method / existing repository to extend}} |
 | Theory context | {{A. guide implementation without evaluating / B. identify concerns / C. help develop / D. leave aside / not relevant}}, PI's words |
 
 ## 2. Product vision and workflows
 
-<!-- As relevant: primary use cases, user roles, inputs and outputs, the interaction model (GUI,
-command line, API, browser, batch...). -->
-
-- **Scope**, in the PI's three tiers (quote the PI):
-  - **Minimum usable version:** its requirements have Priority required; the initial release
-    delivers at least this.
-  - **Ideal version and features of interest:** what differs from the minimum, each feature named;
-    Priority desired, or future if beyond the initial release.
-  - **Nice-to-have, not in the initial release:** later; not requirement entries. Filed as
-    Backlogged at adoption.
-  - **Excluded** (with the PI's words):
-- **End-to-end workflows:** one numbered sequence per main workflow, from start to result.
+- **Scope**, in the PI's three tiers (quoted):
+  - **Minimum usable version** (Priority required; the initial release delivers at least this):
+  - **Ideal version and features of interest** (Priority desired, or future if beyond the initial
+    release):
+  - **Nice-to-have, not in the initial release** (backlog, not requirements):
+  - **Excluded** (the PI's words):
+- **End-to-end workflows:** one numbered sequence per main workflow, from start to result. As
+  relevant: user roles, inputs and outputs, the interaction model.
 
 ## 3. Functional requirements
 
-<!-- One entry per requirement, in this exact format. IDs are REQ-<AREA>-NN (areas set here, e.g.
-CORE, DATA, UI, EXPORT); the same IDs move one to one into REQUIREMENTS.md. Every requirement has
-at least one acceptance criterion that an independent tester could check, and a Status from the
-legend. A requirement whose Source is only the lead's (derivation or recommendation) is Proposed or
-Provisional, never Adopted-on-adoption, unless the PI's acceptance is quoted. A simple requirement
-keeps to a line per field and omits Behaviour, Inputs/outputs and Constraints when they add
-nothing; Acceptance criteria, Priority, Source and Status are always present. -->
+<!-- IDs REQ-<AREA>-NN, the same in REQUIREMENTS.md. Drop Behaviour, Inputs/outputs and Constraints
+when they add nothing; Acceptance criteria (checks an independent tester could run), Priority,
+Source and Status are always present. A requirement sourced only by the lead is Proposed or
+Provisional. -->
 
 #### REQ-{{AREA}}-01: {{name}}
 
@@ -98,23 +82,20 @@ nothing; Acceptance criteria, Priority, Source and Status are always present. --
 - **Constraints:**
 - **Acceptance criteria:**
   - {{an observable check}}
-- **Priority:** {{required (minimum usable version) / desired (ideal version) / future (ideal, beyond the initial release)}}
-- **Dependencies:** {{REQ IDs, decisions (D-NN, section 6), open items (O-NN, section 12), or "none"}}
+- **Priority:** {{required / desired / future}}
+- **Dependencies:** {{REQ IDs, D-NN (section 6), O-NN (section 12), or "none"}}
 - **Source:** {{PI: "<verbatim>" / Lead's derivation from <what> / Lead's recommendation; PI accepted: "<words>"}}
-- **Status:** {{Adopted-on-adoption / Proposed / Provisional / Delegated (SA-NN) / Open (gate) / Excluded}}
+- **Status:** {{a status from the table above}}
 
 ## 4. Nonfunctional requirements
 
-<!-- Same format as section 3, with IDs REQ-NFR-NN, plus a Target line. Cover only what is relevant:
-performance, reliability, portability, usability, security and privacy, reproducibility,
-maintainability, extensibility, distribution and deployment. List the others on one line as
-"Not applicable: <reason>". Never demand a number the PI has no basis for: propose a default and
-say how it will be measured. -->
+<!-- As section 3, IDs REQ-NFR-NN, plus a Target. Only what is relevant; the rest on one line, "Not
+applicable: <reason>". No number the PI has no basis for: propose a default and its measure. -->
 
 #### REQ-NFR-01: {{name}}
 
 - **Description:**
-- **Target:** {{stated target (PI: "<words>") / proposed default (lead's recommendation)}}; measured by {{how}}
+- **Target:** {{stated (PI: "<words>") / proposed default (lead's recommendation)}}; measured by {{how}}
 - **Acceptance criteria:**
   - {{an observable check}}
 - **Priority:** {{required / desired / future}}
@@ -124,19 +105,14 @@ say how it will be measured. -->
 
 ## 5. Proposed architecture
 
-<!-- A substantive recommendation, plain language first: what runs where, what the user sees, where
-data go, how results come out. Then, as relevant: components and their responsibilities, stack,
-persistence, interfaces and dependencies (licence, cost), deployment, principal trade-offs. A claim
-that a technology supports something is marked "checked in <documentation>, <date>" or "not
-verified". -->
+<!-- Plain language first: what runs where, what the user sees, where data go, how results come
+out. Then components, stack, persistence, dependencies (licence, cost), deployment, as relevant. A
+technology claim says "checked in <documentation>, <date>" or "not verified". -->
 
 ## 6. Alternatives and design decisions
 
-<!-- One row per material decision; trivial ones are delegated or resolved by a stated default and
-listed briefly at the end. Start the Decision cell with an ID (D-NN). Alternatives considered names
-each credible alternative with its main advantage and disadvantage, and why a rejected one was
-rejected. Status from the legend. Rows that are Adopted-on-adoption, Delegated or Provisional move to
-ARCHITECTURE.md "Architecture decisions" at adoption, labelled; Open rows go to Waiting on the PI. -->
+<!-- One row per material decision (D-NN); trivial ones listed briefly after the table. Each
+credible alternative with its main advantage and disadvantage, and why it was rejected. -->
 
 | Decision | Alternatives considered | Recommendation | Rationale | Status | Consequences |
 |---|---|---|---|---|---|
@@ -144,34 +120,26 @@ ARCHITECTURE.md "Architecture decisions" at adoption, labelled; Open rows go to 
 
 ## 7. Data and interface contracts
 
-<!-- As relevant: entities and relationships, inputs, outputs, storage, versioning, external
-integrations. Do not invent a schema that has not been resolved: write "Schema provisional: <what
-remains to decide>" with an open item and its gate. Data semantics are the PI's (CLAUDE.md §6): for
-each, record who decided it (the PI's words, R-NN, a named SA policy) or mark it Open. -->
+<!-- As relevant: entities, inputs, outputs, storage, versioning, integrations. An unresolved schema
+is "Schema provisional: <what remains>", with an O-NN. Data semantics are the PI's (CLAUDE.md §6):
+for each, who decided it (the PI's words, or a named SA policy), or Open. Include a concrete example
+the PI can check: an output row, a file excerpt, a screen outline. -->
 
 - **Missing-data behaviour:** for each field that can be absent, what blank, missing, zero and "not
   shown" mean, and who decided it.
-- **Duplicates, repeats and identifiers:** what an identifier means; what happens to a repeated
-  submission or observation.
+- **Duplicates, repeats and identifiers:** what an identifier means; what a repeated submission does.
 
 ## 8. Verification and acceptance
 
-<!-- As relevant: unit, integration and regression tests; independent review; the PI's manual
-walkthrough; when the first version is ready. -->
-
-- **Implementation correctness (Verified):** the software does what the requirements say.
-- **Scientific or computational validity (Validated):** the instrument does what the science needs,
-  with the evidence the PI will accept (known-answer recovery, reference calculations, a pilot). For
-  a data-collection tool this may be "Not applicable: <reason>"; accurate capture, persistence,
-  export, recovery and integrity still need verification.
+- **Implementation correctness (Verified):** the tests, review and walkthrough that show the
+  software does what the requirements say.
+- **Scientific validity (Validated):** the evidence the PI will accept, or "Not applicable: <reason>".
 
 ## 9. Proposed development roadmap
 
-<!-- Direction, not a sprint plan: /arpd-plan writes the executable plan. Follow the scope tiers:
-M1 (the initial release) delivers at least the minimum usable version; later milestones the
-ideal-version features; nice-to-have features are deferred. This becomes MASTER_PLAN.md §2 (milestones), §3 (order
-of work, "planning pending") and §4 (deferred features, Backlogged). Add, as relevant: dependencies
-between workstreams and a provisional sprint sequence. -->
+<!-- Direction, not a sprint plan (/arpd-plan writes that). M1 delivers at least the minimum usable
+version; later milestones the ideal-version features; nice-to-haves are deferred. Becomes
+MASTER_PLAN.md §2-4. -->
 
 | Milestone | What the PI will be able to do | Requirements | Walkthrough |
 |---|---|---|---|
@@ -179,10 +147,8 @@ between workstreams and a provisional sprint sequence. -->
 
 ## 10. Agent team arrangement
 
-<!-- Proportionate to the project, and respecting the PI's stated preference. A single agent with an
-independent reviewer is often enough; parallel implementers or separate testers only when the work
-justifies them. Say who leads, implements, reviews, tests and integrates; shared checkout or
-worktrees; and why this suits the project. -->
+<!-- Proportionate, respecting the PI's preference: who leads, implements, reviews, tests and
+integrates; shared checkout or worktrees; why it suits the task structure. -->
 
 ## 11. Authority and governance
 
@@ -191,14 +157,14 @@ worktrees; and why this suits the project. -->
 - **Data semantics:** never delegated unless the PI names a policy: {{"no policy named" / the PI's
   policy, verbatim}}. Agents choose implementation mechanisms only.
 - **Decisions requiring the PI:**
-- **Review, cadence and limits:** the review depth and scientific critique wanted (the theory-context
-  choice), check-ins, and limits on autonomous work (time, compute, cost).
+- **Review, cadence and limits:** review depth, the theory-context choice, check-ins, limits on
+  autonomous work (time, compute, cost). Modules selected, and why.
 
 ## 12. Risks, assumptions and open decisions
 
-<!-- Every item has a gate. An open decision is never "non-blocking" without one. Gates: before
-planning / before implementing <what> / before deployment. Open decisions move to DECISIONS.md
-Waiting on the PI at adoption, with Needed by = the gate. -->
+Every item has a gate: before planning, before implementing <what>, or before deployment. At
+adoption each open O-NN becomes a row of `DECISIONS.md` *Waiting on the PI* (O-01 → #1, and so on,
+in this order), with *Needed by* = its gate; the adoption ruling's *Reading* records the mapping.
 
 | ID | Item | Kind | Affects | Gate | Can continue meanwhile | Recommendation |
 |---|---|---|---|---|---|---|
@@ -206,32 +172,19 @@ Waiting on the PI at adoption, with Needed by = the gate. -->
 
 ## 13. What adoption authorizes
 
-Adopting this version, by the PI's ruling (R-NN, in the PI's words), authorizes **the governing
-documents only**: writing `CLAUDE.md`, `PARADIGM-SPEC.md`, `REQUIREMENTS.md`, `ARCHITECTURE.md`,
-`MASTER_PLAN.md`, `DECISIONS.md`, `STATUS.md`, `INDEX.md` and `START-HERE.md` from it. It adopts the
-items marked Adopted-on-adoption and records the Delegated, Provisional, Open and Excluded items as
-such.
+Adopting this version, by the PI's ruling (R-NN, in the PI's words), authorizes writing the
+governing documents from it (`CLAUDE.md`, `PARADIGM-SPEC.md`, `REQUIREMENTS.md`, `ARCHITECTURE.md`,
+`MASTER_PLAN.md`, `DECISIONS.md`, and `STATUS.md` for the present state), and the non-governing
+orientation files `START-HERE.md` and `INDEX.md`. It adopts the items marked Adopted-on-adoption, and
+any proposal the ruling names as accepted, and records the other items as their status says.
 
-It does **not** adopt Proposed items, settle Open items, approve a sprint plan, or authorize any
-implementation. Implementation needs an approved plan and the PI's start direction, through
+It does **not** adopt other Proposed items, settle Open items, approve a sprint plan, or authorize
+any implementation. Implementation needs an approved plan and the PI's start direction, through
 `/arpd-plan`.
 
 ---
 
-## Completeness check (before presenting)
+## Completeness check: gaps found
 
-<!-- Fill this in before showing any version to the PI. Report each material gap plainly, with
-where it is handled; do not hide one behind a status. -->
-
-| Check | Result | Where handled |
-|---|---|---|
-| Ambiguous functionality |  |  |
-| Inconsistent requirements |  |  |
-| Missing inputs or outputs |  |  |
-| Unclear data semantics |  |  |
-| Unresolved architectural dependencies |  |  |
-| Unsupported assumptions |  |  |
-| Requirements lacking meaningful verification criteria |  |  |
-| Conflicts with exclusions |  |  |
-| Missing user decisions |  |  |
-| Decisions prematurely recorded as adopted |  |  |
+<!-- Two to four lines: the material gaps the check found (docs/discovery/SETUP.md §10 lists what is
+checked), and where each is handled; or "None found". Never hide a gap behind a status. -->

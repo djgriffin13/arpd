@@ -31,7 +31,7 @@ scientific decision**. Testing, review and explicit scientific validation are it
 | **Event logging** (hooks + `tools/`) | Records defined coordination events. It reports elapsed time, agent-working time (prompt to end of turn), subagent time and failed or interrupted turns, separately from the researcher's self-reported active time. Hooks cannot measure the researcher's active time, and the tooling says so. | Built |
 | **Governance checker** (`tools/check_governance.py`) | Checks, from what is recorded: links, requirement evidence and traceability, plan numbering, charter adoption, installation files (including the planning, check-in and amend skills), whether consequential decisions in closed sprints were authorized before adoption, and whether an open sprint's Part 1 cites a plan approval and execution authority that exist. A project with setup adopted and no sprint passes. Within the steps it lists, it does not report PASS for an item it could not check; each run prints what it did not check. It cannot show that the records themselves are true. | Built |
 | **Modules** (`kit/constitution/modules/`) | Built: computational model; team arrangement. Drafts, untested: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data. | Partial |
-| **Worked example** (`examples/march-1991/`) | A checked implementation of March's (1991) mutual-learning model, kept as a complete ARPD project with its records. It is also the starter for the feasibility demonstration. | Built: software verification (48 tests) and directional replication (22 tests), with two independent review rounds. Its assumptions were adopted as the working baseline by the PI's ruling R-01; whether they match March's own program remains open (backlog B-07 to B-09). |
+| **Worked example** (`examples/march-1991/`) | A checked implementation of March's (1991) mutual-learning model, kept as a complete ARPD project with v0.3-format records (its ruling R-01 was given for v0.3.0-rc.1; the records are carried unchanged, so the checker reports some steps as "older format"). It is also the starter for the feasibility demonstration. | Built: software verification (48 tests) and directional replication (22 tests), with two independent review rounds. Its assumptions were adopted as the working baseline by the PI's ruling R-01; whether they match March's own program remains open (backlog B-07 to B-09). |
 
 ## Why a team, and why a charter
 
@@ -138,9 +138,10 @@ generated documents, so it travels with every installed project.
 **Documents generated for your project.** The files that ARPD's setup and skills write for your own
 project are yours. This covers your team charter (`CLAUDE.md`), `PARADIGM-SPEC.md`,
 `REQUIREMENTS.md`, `MASTER_PLAN.md`, `DECISIONS.md`, `ARCHITECTURE.md`, `STATUS.md`, `INDEX.md`,
-`START-HERE.md`, your sprint records and reports, and your research instrument. You may use, modify,
-distribute or keep them private, under any terms, without having to credit ARPD. They are covered
-even where they are adapted from ARPD's templates.
+`START-HERE.md`, the setup notes (`docs/discovery/SETUP.md`), the Project Definition Report
+(`reports/PROJECT-DEFINITION.md`), your sprint records and other reports, and your research
+instrument. You may use, modify, distribute or keep them private, under any terms, without having to
+credit ARPD. They are covered even where they are adapted from ARPD's templates.
 
 **The framework itself.** Redistributing ARPD, or substantial portions of its own source materials
 (for example `kit/`, the skills in `.claude/skills/`, or the tools copied into a project's `tools/`),

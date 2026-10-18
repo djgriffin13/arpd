@@ -40,9 +40,9 @@ by the lead agent, and only on recorded evidence. *Validated* also needs the PI'
 |---|---|---|---|---|
 | REQ-CORE-01 |  | OP-01 | Planned |  |
 
-<!-- The setup skill writes the adopted requirements from the adopted Project Definition Report
-(reports/PROJECT-DEFINITION.md, sections 3 and 4), with the same IDs; only Adopted-on-adoption
-requirements go in. Each is phrased as what the PI would observe, e.g. "A participant can play a
+<!-- The setup skill writes the requirements that the adopted Project Definition Report
+(reports/PROJECT-DEFINITION.md, sections 3 and 4) sends here under its status table, with the same
+IDs. Each is phrased as what the PI would observe, e.g. "A participant can play a
 full game against the partner agent and the game log records every action with its timestamp", not
 as an implementation task. -->
 
@@ -56,7 +56,7 @@ like a change to the requirement's wording.
 ### REQ-AREA-NN: short name
 - **Acceptance criteria:**
   - an observable check an independent tester could run
-- **Priority:** required / desired / future
+- **Priority:** required / desired (a future-priority item is in MASTER_PLAN.md, not here)
 - **Dependencies:** REQ IDs, architecture decisions (D-NN), Waiting on the PI rows, or "none"
 -->
 
@@ -64,7 +64,7 @@ like a change to the requirement's wording.
 
 - **Acceptance criteria:**
   - {{an observable check}}
-- **Priority:** {{required / desired / future}}
+- **Priority:** {{required / desired}}
 - **Dependencies:** {{REQ IDs, D-NN, Waiting on the PI rows, or "none"}}
 
 Milestones (sets of requirements with a walkthrough exit) are defined in `MASTER_PLAN.md` §2, not

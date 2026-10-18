@@ -162,9 +162,8 @@ maintenance.
 These are routine. State them in the report §4 or §5; do not ask about them.
 
 - Git from day one, with small commits that explain *why*.
-- One command runs the project's tests, and it excludes the kit's own tests (for example
-  `python -m pytest --ignore=kit --ignore=examples`; `generation-checklist.md`, *The project's test
-  command*).
+- One command runs the project's tests, and it excludes the kit's own tests
+  (`generation-checklist.md`, *The project's test command*).
 - Seeds are recorded for anything random.
 - Outputs go to a git-ignored `output/` folder, unless a ruling makes them part of the record.
 - No real participant data in the repository.

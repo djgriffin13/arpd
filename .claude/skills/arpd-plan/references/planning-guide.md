@@ -131,15 +131,11 @@ Offer it; require it only if the PI asks. For a small plan, say it is optional a
 unnecessary.
 
 When the PI wants one, brief a reviewer who did not write the plan (a fresh subagent or another
-agent the PI names), read-only, with the plan file and version, the governing documents, and these
-questions:
-
-- Does it serve the stated milestone and requirements, and the PI's priorities?
-- Is anything missing that the exit criteria need?
-- Are the dependencies and their timing right? Is any work blocked that need not be?
-- Is the verification strategy adequate: tests, known answers, independent review?
-- Are the instructions to the agents clear enough to execute?
-- What are the main risks, and are they bounded?
+agent the PI names), read-only, with the plan file and version and the governing documents. Ask:
+does it serve the milestone, requirements and the PI's priorities; is anything missing that the
+exit criteria need; are the dependencies and their timing right, and is any work blocked that need
+not be; is verification adequate (tests, known answers, independent review); are the instructions
+clear enough to execute; what are the main risks, and are they bounded?
 
 Enter each finding in the plan's *Review notes* table, with the version reviewed and your response.
 A long report may also be saved as `reports/planning/PLAN-YYYY-MM-DD-review-N.md` (informative).
@@ -150,14 +146,8 @@ and why. The PI may also bring a review from elsewhere: treat it the same way.
 
 ## 8. Worth explaining when it first matters
 
-If the PI seems not to know these, say them once, above the block, in one or two sentences
-(`INTERACTION.md` §6). Do not repeat them.
-
-- "This draft is for you to examine. You can ask me to revise it, or have another agent review it.
-  Nothing is approved until you say so."
-- "Planning several sprints helps when they share dependencies. You choose how the team moves
-  between them."
-- "Every sprint has an independent review and a close-out record, even when the team may move on
-  without checking in with you."
-- "Approving the plan does not start work. Next I will ask whether to begin now or later."
-- "If you choose later, I will leave you a prompt to copy when you are ready."
+If the PI seems not to know them, say these once, above the block (`INTERACTION.md` §6): the draft
+is theirs to examine, revise or have reviewed, and nothing is approved until they say so; several
+sprints help when they share dependencies, and the PI chooses how the team moves between them;
+every sprint has an independent review and a close-out record; approving the plan does not start
+work; choosing "later" leaves a prompt to copy.

@@ -39,8 +39,8 @@ Read before you start:
   line, explaining when needed, the dependency screen. Follow it on every turn that waits for the PI.
 - `references/planning-guide.md` (this folder): the read-back, sizing, the draft's content,
   versions, review, the dependency screen.
-- `references/multi-sprint-and-handoff.md` (this folder): transition policies, the ruling and SA
-  formats, sprint start, the boundary procedure, the start prompt.
+- `references/multi-sprint-and-handoff.md` (this folder): transition policies, recording approvals
+  and starts, sprint start, the boundary procedure, the start prompt.
 
 ## Entry
 
@@ -85,16 +85,12 @@ The argument `one` or `multiple` answers Step B in advance and nothing else: Ste
 
 ## The conversation
 
-Show `PLAN  ✓ Review → ● Priorities → ○ Draft → ○ Approval → ○ Handoff` above the block on every
-turn that waits for the PI (✓ done, ● current, ○ to come). Add the topic list (priorities, scope,
-dependencies, review level, exit evidence) when it helps.
+Add the topic list (priorities, scope, dependencies, review level, exit evidence) under the progress
+line when it helps. **Explain when needed** (`INTERACTION.md` §6), at the PI's level. There is no mode to ask about; an
+interview mode an earlier kit version recorded is ignored (say so once; change nothing else).
 
-**Explain when needed** (`INTERACTION.md` §6), at the PI's level; there is no mode to ask about. An
-interview mode recorded by an earlier kit version (`STATUS.md` §8 or the notes) is ignored: say so
-once, and change nothing else.
-
-**Small projects stay small.** For a short utility, Steps A–C can be one read-back and one
-question, the plan one page, and the whole run four or five exchanges.
+**Small projects stay small** (`references/planning-guide.md` §1): for a short utility, Steps A–C
+are one read-back and one block, the plan one page, the whole run four or five exchanges.
 
 ### Step A: Review
 
@@ -103,15 +99,17 @@ never claim a test ran unless you ran it now or a record shows it), the roadmap,
 and the next thrust you recommend. Run `python tools/check_governance.py` and quote its OVERALL
 line.
 
-Use the inherited review and autonomy preferences. Ask only whether the PI wants an override for
-this planning effort: light or thorough critique, how much brainstorming, an outside review. A
-this-time-only preference goes in the draft (non-governing). A new **project default** (review
-depth, transition policy, planning cadence) is a governing change: say what it would change, and
-record it through `/arpd-amend` from the PI's clear words.
+Use the inherited review and autonomy preferences; do not ask about overriding them. If the PI
+raises one, a this-time-only preference goes in the draft (non-governing); a new **project
+default** (review depth, transition policy, planning cadence) is a governing change: say what it
+would change, and record it through `/arpd-amend` from the PI's clear words.
 
 ### Step B: One sprint or several
 
-Always ask, explicitly:
+The PI always chooses, explicitly. For a single-milestone or small project, do not spend a turn on
+it: state the recommendation ("one sprint") in the Step C read-back, and put the choice inside that
+block (for example: "Do these priorities match yours? I recommend planning one sprint; say if you
+would rather map out several."). Otherwise ask:
 
 ```text
 ────────────────────────────────
@@ -125,12 +123,10 @@ B. Several sprints as one coordinated effort.
 For a complex project, say above the block why several may help (shared dependencies). An approved
 project default is shown as "(recommended)", never applied silently.
 
-If several, ask **once** per planning effort how transitions should work (A. PI approval between
-sprints; B. a light check-in at agreed boundaries; C. continue after independent review and
-close-out, where the PI explicitly authorizes it). Say above it that **every sprint still gets review,
-tests and close-out**, whatever is chosen. The answer is planning input. Inherited cadence (`CLAUDE.md`
-§8) and SAs in force are never widened by it: continuation becomes authority only by the PI's words
-in Step F or G.
+If several, ask **once** per planning effort how transitions should work
+(`references/multi-sprint-and-handoff.md` §2). The answer is planning input: inherited cadence
+(`CLAUDE.md` §8) and SAs in force are never widened by it, and continuation becomes authority only
+by the PI's words in Step F or G.
 
 ### Step C: Priorities
 
@@ -155,14 +151,11 @@ Write `reports/planning/PLAN-YYYY-MM-DD.md` (`-2`, `-3` for a later effort the s
 labelled provisional with what may change them (`references/planning-guide.md`). Mark it DRAFT,
 `Version: v1`.
 
-**Dependency screen.** For every unresolved decision the plan relies on, add or update its row in
-`DECISIONS.md` *Waiting on the PI*: *Affects*, *Needed by*, *Can continue meanwhile*. That table is
-canonical; the plan cites the row and does not restate it. Only the dependent work is blocked.
-Respect each row's gate: one needed "before planning" is put to the PI before approval (or deferred
-by ruling); one needed "before implementing X" is scheduled to be decided before the work package
-for X; one needed "before deployment" blocks only release work.
-Refresh `STATUS.md` §5's summary and set Readiness `Planning: draft (PLAN-…, v1)`, `Next step:
-review plan`.
+**Dependency screen** (`references/planning-guide.md` §5): the plan cites *Waiting on the PI* rows
+and does not restate them; only dependent work is blocked. Respect each row's gate: one needed
+"before planning" is put to the PI before approval (or deferred by ruling); one needed "before
+implementing X" is scheduled to be decided before X's work package; one needed "before deployment"
+blocks only release work. Set Readiness `Planning: draft (PLAN-…, v1)`, `Next step: review plan`.
 
 Commit: `Plan draft PLAN-YYYY-MM-DD v1 (not approved)`. Summarize the plan in chat in one screen;
 the detail stays in the file.
@@ -189,11 +182,9 @@ WP3 only).
 ```
 
 Name what a yes covers: planning only, S0N's execution, or a series. Record the PI's words verbatim
-as the next R-NN, in the plan-approval format (`references/multi-sprint-and-handoff.md`). When the
+as the next R-NN, in the plan-approval format (`kit/templates/DECISIONS.md`; `references/multi-sprint-and-handoff.md` §3). When the
 PI does not clearly say more, record **planning approval only**. Clear words need no second
-confirmation; ask once only if they could mean materially different things. A bare "yes" is
-recorded with the block's text as read back: "(read back by the lead; PI assented: '<words>')".
-Then set the plan's status marker as its template says ("Approved by R-NN (vN, commit …)"; the
+confirmation; ask once only if they could mean materially different things. Then set the plan's status marker as its template says ("Approved by R-NN (vN, commit …)"; the
 approved version's text is never edited), set its `MASTER_PLAN.md` §3 rows to "planned (PLAN-… vN, R-NN)" and §4 items to
 Selected (milestone changes go to `/arpd-amend`),
 set Readiness `Planning: approved (PLAN-…, vN, R-NN)`, run the checker, log
@@ -219,33 +210,21 @@ The start option always says what it authorizes and which record it creates; for
 names the series and the SA (`references/multi-sprint-and-handoff.md` §3).
 
 - **Now.** The PI's words are the execution authorization: record them verbatim as an R-NN (the
-  approval ruling, if given in the same message). A bare letter is recorded as "(read back by the
-  lead; PI chose: 'A')" followed by the chosen option's full text and its stated effect. For a
-  series continuing without a new ruling at each boundary, also record the continuation SA, with
-  the same read-back. Then, at sprint start, write
-  `reports/sprints/SPRINT-NN.md` Part 1 from the approved plan, with the rows *Approved plan*,
-  *Execution authorized by* and *Transition policy*, the start time (`date -u +%Y-%m-%dT%H:%MZ`)
-  and commit; log `sprint_start`; rewrite `STATUS.md`. From there follow the charter: task plans
-  under `CLAUDE.md` §5, independent review, close-out.
+  approval ruling, if given in the same message), plus the continuation SA for a series, as
+  `references/multi-sprint-and-handoff.md` §3 says (including a bare letter's read-back). Then start
+  the sprint (§4 there: Part 1 of `reports/sprints/SPRINT-NN.md` from the approved plan, STATUS,
+  `sprint_start`) and follow the charter: task plans under `CLAUDE.md` §5, independent review,
+  close-out.
 - **Later.** Set Readiness `Execution: not started`, `Next step: begin implementation`. Put the
-  exact copyable start prompt in `START-HERE.md` and in chat. Log `handoff`, commit, and stop.
+  exact copyable start prompt in `START-HERE.md` and in chat. Log `handoff`, commit, and stop (§6
+  there).
 
-In a series under an SA, later sprints start without a new ruling, each boundary with its Part 2
-close-out, independent review, checks, a dependency screen and a check of the transition
-conditions. Pause for a new scientific, scope or PI-reserved decision, or a PI checkpoint.
+In a series under an SA, later sprints start without a new ruling, after the boundary procedure (§5
+there); pause for a new scientific, scope or PI-reserved decision, or a PI checkpoint.
 
-## Authorization matrix
-
-| The PI says | Result | Execution permitted? |
-|---|---|---|
-| "Draft the next three sprints." | A draft | **No** |
-| "I approve this three-sprint plan." | Planning approval (R-NN) | **No.** Ask now or later, and what scope |
-| "Start Sprint 1 now; check with me before Sprint 2." | Execution ruling for S1; gated boundary | **Sprint 1 only** |
-| "Start this approved sequence; proceed after independent review and close-out if no new scientific or scope decisions arise." | Execution ruling plus continuation SA for the series | **Yes**, within the charter and the stated limits |
-| "Use autonomous transitions as the project default from now on." | A governing change | Through `/arpd-amend` (charter §8 cadence, or an SA); nothing else is relaxed |
-
-A continuation SA never covers what `CLAUDE.md` §6 reserves to the PI: closing a milestone,
-accepting a validation, real data, sharing outside the project, amending governing documents.
+**What the PI's words authorize** (a draft, a plan approval, an execution start, a continuation SA,
+a governing change) follows `kit/docs/INTERACTION.md` §1 and `references/multi-sprint-and-handoff.md`
+§3.
 
 ## Recovery and change
 

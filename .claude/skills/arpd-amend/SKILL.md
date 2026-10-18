@@ -1,7 +1,7 @@
 ---
 name: arpd-amend
-description: Amend an ARPD project's governing documents under the PI's authority. Records a ruling verbatim; records or changes a standing authorization (SA-NN); amends the team charter or paradigm specification; sets a project default (review depth, sprint transition policy, planning cadence); changes roadmap milestones; adds, retires or changes a module; turns an incident into a rule; reopens a decision with its original rationale. Use when the PI types /arpd-amend or asks to change the rules, the science specification, the milestones, the team arrangement, a project default, or what the agents may decide without asking.
-argument-hint: "[ruling | authorization [SA-id] | charter | spec | default | roadmap | module <name> | incident <id> | reopen <DEC-id>]"
+description: Amend an ARPD project's governing documents under the PI's authority. Records a ruling verbatim; records or changes a standing authorization (SA-NN); amends the team charter or paradigm specification; sets a project default (review depth, sprint transition policy, planning cadence); changes roadmap milestones; changes a requirement (including its acceptance criteria) or an architecture decision; adds, retires or changes a module; turns an incident into a rule; reopens a decision with its original rationale. Use when the PI types /arpd-amend or asks to change the rules, the science specification, the milestones, a requirement or design decision, the team arrangement, a project default, or what the agents may decide without asking.
+argument-hint: "[ruling | authorization [SA-id] | charter | spec | default | roadmap | requirement <REQ-id> | decision <D-id> | module <name> | incident <id> | reopen <DEC-id>]"
 ---
 
 # ARPD amendment
@@ -15,6 +15,8 @@ and auditable.
 |---|---|
 | A **project default** raised in `/arpd-setup` or `/arpd-plan`: review depth, sprint transition policy, planning cadence ("from now on, …") | An amendment, applied directly from the PI's clear words: the charter (for example §8 *Cadence*) when it changes a charter rule, or an SA when it delegates (for example, continuing across sprint boundaries). A this-time-only preference is not an amendment: it stays in the plan draft or the notes |
 | A change to **milestones or the roadmap's direction** | `MASTER_PLAN.md` §2 (and §3 where the order follows), by ruling; the lead updates sprint rows in §3 on its own only as planning and close-outs record |
+| A change to a **requirement**: its wording, or its *Requirement details* (acceptance criteria, priority, dependencies) | `REQUIREMENTS.md`, by ruling (a requirement changes only in that file, recorded as a decision): step 4, *Requirement* |
+| A change to an **Architecture decisions** row (`ARCHITECTURE.md`): a different choice, a Provisional row confirmed, an Open one decided | By ruling when it is consequential (`CLAUDE.md` §6) and no SA covers it; otherwise a DEC on its route: step 4, *Architecture decision* |
 | **Approval of a sprint plan**, or the **start of execution** | Recorded by `/arpd-plan` in its formats (plan-approval R-NN; execution R-NN; continuation SA). Use this skill only for a later change to them: a new ruling or SA that supersedes, narrows, widens or withdraws, never an edit |
 | **Continuing across several sprints** without a check-in at each boundary | An SA, under the add-versus-change rules below |
 | Everything else in this skill's description | The steps below |
@@ -72,6 +74,18 @@ and auditable.
    - **Reopening a decision:** write a new DEC entry that quotes the original rationale, says what
      changed and why that rationale no longer holds, and names the affected work. Mark the old entry
      "Reopened by DEC-NN".
+   - **Requirement:** edit the row and its *Requirement details* entry in place, keeping the ID (a
+     dropped requirement becomes Retired, citing R-NN; a requirement now future-priority moves to
+     the `MASTER_PLAN.md` backlog and is Retired here), and record a DEC citing R-NN with the old
+     and new text. If changed criteria undo existing evidence, return the state to what the
+     remaining evidence supports, and name the tests to rework. Name any approved plan or open
+     sprint that relied on the old criteria: an open sprint's Part 1 is never edited (its
+     scope-change log records the effect); a plan not yet started may need re-planning.
+   - **Architecture decision:** never rewrite the row's history. A different choice is a new row
+     (next D-NN) and DEC, and the old row is marked "Superseded by D-NN (R-NN or DEC-NN)", keeping
+     its text; confirming a Provisional row or deciding an Open item sets its *Status* to Adopted
+     (R-NN) and removes its *Waiting on the PI* row. Update the platform table (§2) and any A-rule
+     that follows, and follow the consequence into requirements and plans as above.
    - **Project default or milestone:** edit the charter line or `MASTER_PLAN.md` §2 row the PI's
      words change, citing R-NN, and nothing else. If an approved plan or an open sprint depended on
      the old default or milestone, name it in the read-back: an open sprint's Part 1 is never
@@ -126,8 +140,8 @@ the ruling as above **and** record the delegation as an SA that cites it.
    - Never edit an SA in force. A superseded SA is marked "Superseded by SA-NN" and keeps its text.
    - **Continuing across sprints.** An SA letting the team move past sprint boundaries without a
      new ruling uses the continuation fields (*Scope:* sprints S0N–S0M of PLAN-… vN; *Transition
-     conditions*; *Consult the PI when*; `.claude/skills/arpd-plan/references/multi-sprint-and-handoff.md`
-     §3). A first one adds ("Supersedes: none"); extending, narrowing or ending one supersedes only
+     conditions*; *Consult the PI when*; the continuation format in `kit/templates/DECISIONS.md`).
+     A first one adds ("Supersedes: none"); extending, narrowing or ending one supersedes only
      that SA. It never covers what `CLAUDE.md` §6 reserves to the PI, and it never changes the
      review, tests and close-out every sprint boundary keeps. A **project default** for transitions
      ("from now on, always continue after review") is either a charter §8 amendment or a standing

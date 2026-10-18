@@ -13,7 +13,7 @@ substantial portions of it, keeps that copyright and permission notice with it.
 **Documents generated for your project.** The files that ARPD's setup and skills write for your own
 project are yours. This covers your team charter (`CLAUDE.md`), `PARADIGM-SPEC.md`,
 `REQUIREMENTS.md`, `MASTER_PLAN.md`, `DECISIONS.md`, `ARCHITECTURE.md`, `STATUS.md`, `INDEX.md`,
-`START-HERE.md`, your sprint records and reports, and your research instrument. You may use, modify,
+`START-HERE.md`, `docs/discovery/SETUP.md`, `reports/PROJECT-DEFINITION.md`, your sprint records and reports, and your research instrument. You may use, modify,
 distribute or keep them private, under any terms, without having to credit ARPD. They are covered
 even where they are adapted from ARPD's templates.
 

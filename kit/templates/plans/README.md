@@ -17,13 +17,7 @@ authoritative for executing its own scope. Priorities and order of work live in 
 - **Not a sprint plan.** A numbered plan is one scoped piece of work. A sprint plan, drafted with
   `/arpd-plan` in `reports/planning/`, is approved by the PI and covers a whole sprint or series.
 
-**Invariant, requirement or acceptance criterion?** Three different things:
-
-| Term | What it says | Where it lives | How it works |
-|---|---|---|---|
-| Invariant (INV) | What must never break, or the results stop meaning what we intend | `PARADIGM-SPEC.md` §5 | The PI owns it. It holds for the life of the project. |
-| Requirement (REQ) | What the instrument must do | `REQUIREMENTS.md` | It traces to a spec item or a ruling. It has a state and evidence. |
-| Acceptance criterion | An observable check that something was delivered | A requirement's criteria: `REQUIREMENTS.md` *Requirement details*. A plan's: inside the plan, `plans/NNN-…` | A plan's criteria come from its requirements' criteria and close with the plan. Their evidence moves a requirement's state. |
+How an invariant, a requirement and an acceptance criterion differ: `REQUIREMENTS.md`. A plan's acceptance criteria are drawn from its requirements' criteria and close with the plan.
 
 ## Template
 

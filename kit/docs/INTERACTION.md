@@ -53,12 +53,12 @@ Rules:
 
 ```text
 SETUP  ✓ Project → ● Requirements → ○ Architecture → ○ Team & Governance → ○ Definition Report
-✓ Who uses it  ◉ Main workflow  ○ Data to keep (partial)  ○ Exports
+✓ Who uses it  ✓ Main workflow  ◉ Saved entries  ○ Exports
 
 ────────────────────────────────
 QUESTION FOR YOU
-Walk me through one complete use, from the moment a student opens the app to the moment you see
-their answers. Describe the full version you imagine; we will choose the first useful version later.
+A student saves an entry, then notices a mistake in it. What should happen? (Your answer decides
+whether the export holds each entry once, or a history of its changes.)
 ────────────────────────────────
 ```
 
@@ -108,11 +108,10 @@ Progress is honest:
 
 ## 5. Question fuse
 
-After about 3–5 substantive questions in a phase or topic, stop and synthesize:
-
-- what you now understand;
-- the gaps that matter, and what they affect;
-- a choice: add more, or move on.
+After about 3–5 substantive questions in a phase or topic, synthesize, above the next real question:
+what you now understand, and the gaps that matter and what they affect. No turn exists only to offer
+"add more or move on", or "anything else?". The synthesis travels with the next real question; an
+offer to move on, if any, sits inside that question's block (for example, as its last option).
 
 The PI may ask to keep exploring. A phase ends when the understanding is enough to act on, not
 when a list is full. Record deferred items with what they affect. Moving on is ordinary agreement,

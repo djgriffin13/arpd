@@ -1,18 +1,13 @@
 # Multi-sprint transitions, records and handoff
 
-Detail for Steps B, F and G of `/arpd-plan`. Formats follow `kit/templates/DECISIONS.md` and
-`kit/templates/reports/SPRINT.md`; if a template there differs, the template wins and this file is
-out of date.
+Detail for Steps B, F and G of `/arpd-plan`. Record formats are in `kit/templates/DECISIONS.md` and
+`kit/templates/reports/SPRINT.md`; the templates win.
 
-## 1. Three things that are never merged
+## 1. Never merged
 
-| Thing | What it is | Recorded as |
-|---|---|---|
-| Plan approval | The PI approves an exact plan version as the scope of a sprint or series | R-NN in the plan-approval format |
-| Execution authorization | The PI's direction to start: one sprint, or a series | R-NN (it may be the same ruling as the approval), plus an SA-NN for a series |
-| Task-plan approval | A `plans/NNN` plan approved under `CLAUDE.md` §5 | The plan's own status; routine ones by the lead |
-
-A multi-sprint plan can be approved without authorizing anything beyond its first sprint.
+Plan approval, execution authorization and task-plan approval are separate (`kit/docs/INTERACTION.md`
+§1, kinds 4 and 5; task plans under `CLAUDE.md` §5). A multi-sprint plan can be approved without
+authorizing anything beyond its first sprint.
 
 ## 2. Transition policies (Step B)
 
@@ -45,90 +40,43 @@ authority. If the PI says it should be the **project default** ("from now on, al
 governing change: record it through `/arpd-amend` (charter §8 cadence, or an SA), and change
 nothing else.
 
-## 3. Record formats
+## 3. Records (Steps F and G)
 
-### Plan approval (Step F)
+The formats are in `kit/templates/DECISIONS.md`: the plan-approval ruling, the general ruling (for
+an execution start), and the continuation SA. Log each: `python tools/log_event.py ruling --actor lead --ref R-NN`
+(or `SA-NN`). What the formats leave to you:
 
-The next R-NN under *Rulings* in `DECISIONS.md`:
+- **Plan approval.** *Scope of approval* says what the PI's words approve: the plan only ("planning
+  only"), the plan and S0N's execution, or the plan and the series' execution. When the words say
+  nothing about starting, write "planning only" and "Execution authorized: no". A plain assent to
+  the APPROVAL REQUIRED block is recorded with the block's text as read back: "(read back by the
+  lead; PI assented: '<the PI's exact words>')".
+- **Execution.** A start given in a later message is its own R-NN ("execution of S0N (PLAN-… vN)"),
+  whose *Reading* names the plan, its approval ruling and the transition policy, and whose *Changes*
+  names the sprint record. The approval ruling is never edited to show the later start.
+- **The now-or-later block** is a `CHOICE FOR YOU` that **says it is an authorization**
+  (`kit/docs/INTERACTION.md` §2): the start option states what it authorizes (one sprint, or the
+  series and its transition conditions) and which records it creates (R-NN, and SA-NN for a series).
+  Without that statement a letter reply authorizes nothing; ask again. For a series under policy B
+  or C, offer a first-sprint-only option alongside one like:
 
-```text
-### R-NN, YYYY-MM-DD: approval of PLAN-YYYY-MM-DD vN
-> "the PI's exact words"
-- **Given:** directly in session
-- **Approves:** reports/planning/PLAN-YYYY-MM-DD.md, vN, commit <sha>
-- **Scope of approval:** planning only / S0N / series S0N–S0M
-- **Execution authorized:** no / S0N / series under SA-NN
-- **Reading:** the lead's reading, including any waiting decision that still blocks part of the plan
-- **Changes:** reports/planning/PLAN-YYYY-MM-DD.md (status marker); MASTER_PLAN.md §3–4 rows
-```
+  ```text
+  A. Now: start the series S04–S06 under PLAN-2026-10-20 v3. Choosing A authorizes S04 now, and
+     S05–S06 after each independent review and close-out under the plan's transition conditions;
+     I will record your answer as ruling R-08 and standing authorization SA-03.
+  ```
 
-- *Scope of approval* says what the PI's words approve: the plan only ("planning only"), the plan
-  and S0N's execution, or the plan and the series' execution.
-- When the words say nothing about starting, write "planning only" and "Execution authorized: no".
-- If the PI simply assents to the APPROVAL REQUIRED block, record the block's text as read back:
-  "(read back by the lead; PI assented: '<the PI's exact words>')".
-
-### Execution (Step G)
-
-If the start comes in a later message, record it as its own R-NN:
-
-```text
-### R-NN, YYYY-MM-DD: execution of S0N (PLAN-YYYY-MM-DD vN)
-> "the PI's exact words"
-- **Given:** directly in session
-- **Reading:** starts S0N under PLAN-YYYY-MM-DD vN, approved by R-MM; transition policy: …
-- **Changes:** reports/sprints/SPRINT-0N.md (Part 1 cites this ruling)
-```
-
-The approval ruling is never edited to show the later start; the execution ruling cites it.
-
-The now-or-later block is a `CHOICE FOR YOU` that **says it is an authorization**
-(`kit/docs/INTERACTION.md` §2): the start option states what it authorizes (one sprint, or the
-series and its transition conditions) and which records it creates (R-NN, and SA-NN for a series).
-Without that statement a letter reply authorizes nothing; ask again. For a series under policy B
-or C, offer a first-sprint-only option alongside one like:
-
-```text
-A. Now: start the series S04–S06 under PLAN-2026-10-20 v3. Choosing A authorizes S04 now, and
-   S05–S06 after each independent review and close-out under the plan's transition conditions;
-   I will record your answer as ruling R-08 and standing authorization SA-03.
-```
-
-A bare letter is recorded as:
-
-```text
-> "A"
-- **Given:** directly in session (read back by the lead; PI chose: 'A'): "<the option's full text,
-  including its stated effect>"
-```
-
-The continuation SA, if the option created one, quotes the same choice and read-back.
-
-### Continuation across a series (SA)
-
-Only when the PI's words authorize the team to move past at least one boundary without a new ruling
-(policy B or C). Record it under *Standing authorizations*, following `/arpd-amend`'s add-versus-change
-rules: a first continuation SA adds to those in force ("Supersedes: none"); a change to an earlier
-continuation SA supersedes only that SA.
-
-```text
-### SA-NN, YYYY-MM-DD: execution of sprints S0N–S0M
-> "the PI's exact words"
-- **Given:** directly in session, or in ruling R-NN
-- **Supersedes:** none / SA-KK
-- **Scope:** sprints S0N–S0M of PLAN-YYYY-MM-DD vN, as approved by R-MM
-- **Transition conditions:** independent review and close-out done; no new scientific, scope or
-  PI-reserved decision; <the PI's own conditions, e.g. all known-answer tests pass>
-- **Consult the PI when:** a transition condition fails; at the agreed check-in boundaries (policy
-  B); a sprint's provisional scope must change beyond what the plan lets the lead adjust
-- **In force until:** the close of S0M, or changed by the PI
-```
-
-Never widen it beyond the PI's words. It never covers what `CLAUDE.md` §6 reserves to the PI
-(closing a milestone, accepting a validation, real data, sharing outside the project, amending
-governing documents). A series that reaches a milestone close pauses there for the PI's walkthrough.
-
-Log each ruling and SA: `python tools/log_event.py ruling --actor lead --ref R-NN` (or `SA-NN`).
+  A bare letter is recorded as `> "A"` with **Given:** "directly in session (read back by the lead;
+  PI chose: 'A'): "<the option's full text, including its stated effect>""; a continuation SA the
+  option created quotes the same choice and read-back.
+- **Continuation SA,** only when the PI's words authorize moving past at least one boundary without
+  a new ruling (policy B or C), under `/arpd-amend`'s add-versus-change rules: a first one adds
+  ("Supersedes: none"); a change supersedes only that SA. *Consult the PI when* includes a failed
+  transition condition, the agreed check-in boundaries (policy B), and a provisional scope change
+  beyond what the plan lets the lead adjust. Never widen it beyond the PI's words. It never covers
+  what `CLAUDE.md` §6 reserves to the PI (closing a milestone, accepting a validation, real data,
+  sharing outside the project, amending governing documents); a series that reaches a milestone
+  close pauses there for the PI's walkthrough.
 
 ## 4. Starting a sprint (Step G "now", and each later sprint in a series)
 

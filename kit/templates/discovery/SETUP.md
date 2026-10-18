@@ -24,18 +24,6 @@ other repositories or folders the PI did not point to.
 
 **Last updated:** {{date and time in UTC, read from `date -u +%Y-%m-%dT%H:%MZ`, never estimated}}
 
-<!-- Compatibility with notes written by an earlier kit version (read deterministically on resume):
-- A line or section "Interview mode" is obsolete, whatever its value. Ignore it, keep it in place,
-  and mark it "(obsolete; ignored)". Never ask the PI to choose a mode.
-- Old phase labels map to the new phases: Intake -> Project; Research & Problem -> Project (with the
-  theory-context choice still to confirm, if relevant); Product & Engineering -> Requirements and
-  Architecture; Governance & Handoff -> Team & Governance, then Definition Report.
-- An old "PI profile" table is kept as context. Its answers are not re-asked.
-- Old sections "Vision", "First useful version" and "Later, wishlist and exclusions" map to Scope:
-  ideal version, minimum usable version, and nice-to-have or excluded. Ask only the scope questions
-  they do not already answer.
-- An old read-back draft is not a report: write reports/PROJECT-DEFINITION.md from these notes. -->
-
 ---
 
 ## 1. Mode and consent
@@ -95,9 +83,8 @@ Asked once each, after the product overview. Quote the PI.
 ## 6. Candidate requirements
 
 Candidates only. They become requirements only when the PI adopts the report. Priority follows
-the scope tiers (section 5). Status uses the
-report's legend (Adopted-on-adoption / Proposed / Provisional / Delegated (SA-NN) / Open (gate) /
-Excluded); here it means the status the item will carry in the report.
+the scope tiers (section 5). Status is the one the item will carry in the report (the report
+template's status table).
 
 | Candidate ID | Requirement | Priority (required / desired / future) | Source (labelled) | Status | Acceptance criteria noted |
 |---|---|---|---|---|---|
@@ -124,7 +111,14 @@ policy (or "none named"). Record what the PI said; do not ask questions only to 
 
 - **Report:** `reports/PROJECT-DEFINITION.md`, {{not started / Draft vN, presented on <date> / revision
   requested: <what> / adopted by R-NN (vN)}}
-- **Completeness check:** {{not run / run for vN: gaps <list or "none">}}
+- **Completeness check:** {{not run / run for vN: gaps <list or "none">}}. Before showing any
+  version, check for: ambiguous functionality; inconsistent requirements; missing inputs or outputs
+  (does each output's input carry what it needs?); unclear data semantics (each decided by the PI,
+  delegated under a policy the PI named, or Open with a gate); unresolved architecture dependencies;
+  unsupported assumptions; requirements without meaningful acceptance criteria; conflicts with the
+  exclusions; missing PI decisions; earlier PI preferences missing from report §10–11; anything
+  marked adopted too early; lead-invented details (a field, a limit, a name, a "no network" rule)
+  without a "Lead's" label. The report's *Completeness check: gaps found* gives the result.
 - **Pending approvals:** {{e.g. adoption of vN}}
 
 ## 11. Lead's interpretations

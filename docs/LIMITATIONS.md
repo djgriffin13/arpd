@@ -95,9 +95,10 @@ Most come from the independent review rounds and the developer tests in `evaluat
   pending, and the plan file and version must exist. It does not check that the cited authority
   covers the sprint's scope, or that the plan file still matches the commit its ruling names. Older
   records without these rows get an ADVISORY.
-- **Readiness is not checked.** The *Readiness* block in `STATUS.md` (setup, planning, execution,
-  next step) is listed under *Not checked*. `/arpd-checkin` cross-checks it against the records, by
-  reading them.
+- **Readiness is compared only on its Execution line.** The checker compares the *Execution* line
+  of the *Readiness* block in `STATUS.md` with the sprint records, as an advisory step that does not
+  change the overall result. The *Setup*, *Planning* and *Next step* lines are listed under *Not
+  checked*. `/arpd-checkin` cross-checks all of them against the records, by reading them.
 - **Records, not facts.** The checker relies on what is recorded in DECISIONS.md, the sprint
   records, REQUIREMENTS.md and INDEX.md. Within the steps it lists, it does not report PASS for an
   item it could not check; it cannot show that the records are true. It does not run the project's

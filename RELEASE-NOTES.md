@@ -133,7 +133,9 @@ and a computational estimator (Scenario B), plus checks for interruption and a c
 **Developer-test tooling.** The turn checker accepts the new setup progress line. A report checker
 (`evaluation/developer-tests/check_report.py`) checks a report's form: sections, acceptance criteria
 and status per requirement, a gate per open item, no adoption claimed by a draft. Contract tests check
-the skills and templates against the interface. Counts and results: to be filled.
+the skills and templates against the interface. Red-first evidence for the new tests was shown by
+running them against the previous commit (`1fe28e2`), where they fail. Counts and results: to be
+filled.
 
 ## Supported workflows and evidence
 
@@ -159,8 +161,10 @@ workflows has yet been completed by a researcher.
 ## The March (1991) starter, qualified
 
 `examples/march-1991/` is a software-verified implementation of March's (1991) mutual-learning model.
-The PI adopted its current documented implementation as the starter baseline for this candidate
-(ruling R-01 in its `DECISIONS.md`), with its existing assumptions, discrepancies and limitations
+It is a complete ARPD project with v0.3-format records: the PI adopted its current documented
+implementation as the starter baseline for v0.3.0-rc.1 (ruling R-01 in its `DECISIONS.md`), and its
+records are carried unchanged into this candidate, so the checker reports some steps as "older
+format". R-01 was given with its existing assumptions, discrepancies and limitations
 retained. In that ruling's terms, adoption permits use and extension. It does not establish exact
 replication, authenticate March's original implementation, or convert software verification into
 scientific validation.
@@ -216,10 +220,11 @@ Carried from earlier candidates:
   installed" decision is accepted whatever its status; skills installed at user level are not
   detected; for an open sprint, it does not check that the cited ruling or SA covers the sprint's
   scope, or that the approved plan file still matches the commit its ruling names; the readiness
-  block is not checked against the records.
+  block is compared with the records only on its Execution line (advisory).
 - **Setup:** template `<!-- keep:` blocks were sometimes dropped (DT-05).
 - **Install mode:** a bare `python -m pytest` rule still collects the kit's own tests (`START-HERE`
-  gives `python -m pytest --ignore=kit`); installing owed skills later needs a kit clone's path; the
+  gives the project's test command, `python -m pytest --ignore=kit --ignore=examples
+  --ignore=evaluation`); installing owed skills later needs a kit clone's path; the
   checker does not confirm that each prior rule kept by decision appears in the charter.
 - **Planning:** resuming an interrupted plan review has not been tested.
 - **Fenced examples:** the skills show block layouts inside code fences, while a real block is plain

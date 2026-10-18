@@ -7,8 +7,8 @@ description: Give the PI a plain-language check-in on an ARPD project. Covers re
 
 Write a short, plain-language check-in for the PI. It should fit on one screen.
 
-**A check-in changes no governing file.** It only reads, runs the two tools below, and records a
-ruling verbatim if the PI gives one (last section).
+**A check-in changes no governing file except recording a ruling the PI gives in `DECISIONS.md`**
+(last section). Otherwise it only reads and runs the two tools below.
 
 Read these first:
 
@@ -45,7 +45,9 @@ Then run both tools, every time:
 
 If they disagree (for example, STATUS says "planning approved" but no ruling cites that plan, or a
 sprint is open while STATUS says "not started"), say so and name each difference. The records win;
-STATUS is out of date. The checker does not check readiness, so do not cite it as proof.
+STATUS is out of date. The checker compares only the *Execution* line with the sprint records, as
+an advisory; it does not check *Setup*, *Planning* or *Next step*, so never cite it as proof of
+those.
 
 Cover:
 
@@ -94,16 +96,14 @@ Cover:
 **Focus on material decisions and exceptions.** Gloss every internal ID in plain words. Do not
 re-explain routine coordination.
 
-**When you ask the PI anything,** follow `kit/docs/INTERACTION.md`: end the turn with one labelled
-block (`QUESTION FOR YOU`, `CHOICE FOR YOU (select one)`, or `APPROVAL REQUIRED` for a decision the
-PI is asked to rule on), with nothing after its closing divider. Print every option before any
-choice widget. The next-step prompt goes above the block.
+**When you ask the PI anything,** follow `kit/docs/INTERACTION.md` §2–§3: end the turn with exactly
+one labelled block (`QUESTION FOR YOU`, `CHOICE FOR YOU (select one)`, or `APPROVAL REQUIRED` for a
+decision the PI is asked to rule on), as plain text, not in a code fence, with nothing after its
+closing divider. Print every option before any choice widget. The next-step prompt goes above the
+block.
 
 If the PI answers with a ruling, the lead agent records it **verbatim** in `DECISIONS.md` and logs
 `python tools/log_event.py ruling --actor lead --ref R-NN`. Any change to a governing document that
 the ruling asks for goes through `/arpd-amend`; plan approvals and execution starts go through
 `/arpd-plan`. Offer to log the PI's active minutes for this check-in:
 `python tools/log_event.py pi_time --actor pi --minutes N`.
-
-**When you wait for the PI:** end with exactly one labelled block (`kit/docs/INTERACTION.md` §2), as
-plain text, not in a code fence. Nothing follows its closing divider.
