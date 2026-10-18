@@ -182,14 +182,15 @@ and security.
 questions and never decide them silently. Ask the consequential ones; propose defaults for the rest.
 For a data-collection tool, most of these matter:
 
+- **ask these whenever they change the data:** how often an entry is made, and whether one person
+  may make several; which class, session, group, site or occasion an entry belongs to; timestamps
+  (recorded time versus event time, the time zone);
 - missing versus zero versus "not applicable"; required versus optional items, and how a blank is
   stored and exported;
 - the question types, and how each is coded in the output;
-- how often an entry is made, and how a session, class, site or occasion is identified;
 - duplicate or repeat submissions; editing or deleting saved records;
 - identifier semantics: what an identifier means, who assigns it, how it is validated, and what
   happens when it is mistyped;
-- timestamps: recorded time versus event time, and the time zone;
 - aggregation, rounding and numerical precision;
 - changes to the collected variables mid-use (a new question version), and how records show which
   version produced them;
@@ -276,7 +277,9 @@ with defaults.
 ### Agent team arrangement (report §10)
 
 Ask about the **task structure**, not about agents: can the work split into parts built and tested
-independently? Then recommend in proportion:
+independently? The arrangement is the **PI's choice**: put the recommended one (sized to the work,
+from the table) and one short alternative in a `CHOICE FOR YOU`, with the check-in cadence in the
+same block if the PI has not stated it. Never adopt an arrangement the PI was not asked about.
 
 | Situation | Team arrangement | Workspace |
 |---|---|---|
@@ -284,9 +287,9 @@ independently? Then recommend in proportion:
 | Most projects | **Lead with subagents** (implementer, reviewer; tester when the specification is rich) | Shared checkout, one subagent at a time |
 | Clearly separable parallel streams, and a PI comfortable with more moving parts | **Peers** (two or three) under the lead, plus an independent tester when justified | **Worktrees**, with separate ports and output directories |
 
-Never default to a large team for a simple tool; say in one sentence why the arrangement suits the
-task structure. If the PI chooses differently, respect it, and record that it differs from your
-recommendation. Roles and coordination: `kit/constitution/modules/team/team-arrangement.md`.
+Never recommend a large team for a simple tool; say in one sentence why the arrangement suits the
+task structure. If the PI chooses differently, record that it differs from your recommendation.
+Roles and coordination: `kit/constitution/modules/team/team-arrangement.md`.
 
 ### Authority and governance (report §11)
 
@@ -302,14 +305,15 @@ one line). In particular:
   PI names a policy, and quote it. Add the standard triggers: a changed objective, exceeded scope or
   resource limits, a contested interpretation.
 - **Review, cadence, limits:** review follows the PI's review depth (a PI who reads full drafts
-  gets full plans). [A check-in at every sprint boundary]; ask once only if the PI has not said.
+  gets full plans). [A check-in at every sprint boundary], asked with the arrangement.
   Sprint plans are approved by the PI, changes independently reviewed, milestones closed with the
   PI's walkthrough; anything outside the adopted report needs a ruling. [The team does not run
   while the PI is away]; note any time, compute or cost limits.
 
 Never present your draft as the PI's words; how an assent is recorded is in
 `generation-checklist.md`, row 5. **Modules:** select only those this project needs
-(`module-catalog.md`), and say why in §11.
+(`module-catalog.md`), and say why in §11; human-subjects data whenever the tool collects data from
+or about people.
 
 ### Open decisions and gates (report §12)
 

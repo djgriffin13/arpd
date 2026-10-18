@@ -33,10 +33,11 @@ draft.
 
 ## A2. Completeness check
 
-Before showing any version, run the check listed in the notes template
-(`kit/templates/discovery/SETUP.md` §10). Fix what you can. **Report material gaps to the PI** in the
-report's *Completeness check: gaps found* and in the presentation; never manufacture detail to look
-complete. Record the result in the notes, *Report version and state*.
+Before showing **any** version, v2 and later included, run the whole check listed in the notes
+template (`kit/templates/discovery/SETUP.md` §10), its consistency items included. Fix what you can.
+**Report material gaps to the PI** in the report's *Completeness check: gaps found* and in the
+presentation; never manufacture detail to look complete. Record the result in the notes, *Report
+version and state*.
 
 ## A3. Present
 
@@ -47,8 +48,9 @@ many; the consequential ones by ID).
 
 Then ask how to proceed (`CHOICE FOR YOU (select one)`):
 
-- A. Accept my proposals as written, and go to adoption. (Data-semantics proposals are not included:
-  each is listed by ID in the approval request, for you to accept or not.)
+- A. Accept my proposals as written, and go to adoption. (Not included: data-semantics proposals,
+  which are listed by ID in the approval request for you to accept or not, and Open items, which
+  stay open unless you answer them.)
 - B. Change something (say what).
 - C. Go through the consequential proposals one by one.
 - D. Reject this approach.
@@ -63,16 +65,19 @@ directly; read it back before continuing.
 - Every change after a version is shown makes a new version (vN+1), with a *Change history* row.
   Accepting proposals at adoption (A3 choice A, or a named acceptance in the adoption reply) is not a
   change to the report and makes no new version.
-- Re-run the completeness check; present briefly what changed and what is still open.
+- Re-run the whole completeness check (A2) on the new version; present briefly what changed and
+  what is still open.
 - Resolve each proposal the PI has not accepted to a status in the template's table, or leave it
-  Proposed (not adopted; backlog). A rejection: ask what to change; nothing is adopted.
+  Proposed (not adopted; backlog). An O-NN is resolved only by the PI's answer to it; mark it
+  "Resolved:" in §12, or move it out. A rejection: ask what to change; nothing is adopted.
 
 ## A5. Adoption
 
 Ask with `APPROVAL REQUIRED`. Name the file and version, what a yes adopts, and what it does not
-authorize. List each **data-semantics proposal** by ID and one line, and say that only those the PI
-names are accepted. The PI may adopt and accept named proposals in one reply ("adopt v3 with
-REQ-DATA-02 and D-04 accepted"). For example:
+authorize. List each **data-semantics proposal** and each **Open item** by ID and one line, and say
+that only the proposals the PI names are accepted, and the Open items stay open. The PI may adopt
+and accept named proposals in one reply ("adopt v3 with REQ-DATA-02 and D-04 accepted"). For
+example:
 
 ```text
 ────────────────────────────────
@@ -81,8 +86,9 @@ Adopt reports/PROJECT-DEFINITION.md v3? A yes, in your own words, becomes ruling
 the items marked Adopted-on-adoption and my other proposals (your choice A), and records the
 delegated, provisional, open and excluded items as such. These data-semantics proposals are
 accepted only if you name them: REQ-DATA-02 (a skipped item is exported as an empty cell); D-04 (a
-repeated export rewrites the whole file). I then write the governing documents from it. It does not
-approve a sprint plan or start any implementation.
+repeated export rewrites the whole file). These stay open: O-01 (entries per student; before
+implementing the entry screen). I then write the governing documents from it. It does not approve a
+sprint plan or start any implementation.
 ────────────────────────────────
 ```
 
@@ -108,7 +114,7 @@ Then:
 **IDs.** R-01, SA-01 and DEC-01 assume an empty ledger. On import, continue the existing numbering,
 and fill an inherited placeholder rather than reuse a given ID (`import-path.md`, *Numbering*).
 
-**Dates** are read, never estimated (`SKILL.md`, *Working files*); without `date`, use
+**Dates** are read, never estimated (`SKILL.md`, *Every turn*); without `date`, use
 `python -c "import datetime; print(datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%MZ'))"`.
 "Proposed" dates come from the notes' recorded times.
 

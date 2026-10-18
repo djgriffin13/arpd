@@ -33,7 +33,10 @@ program".
 2. **An existing solution.** Ask whether a clear existing solution or architecture applies. That
    includes **configuring an existing tool instead of building**: a survey platform, a spreadsheet
    with validation, an existing package, an automation service. If one fits, say so plainly, even
-   when it makes most of the build unnecessary.
+   when it makes most of the build unnecessary. Describe it fairly: some research survey and
+   data-collection platforms are hosted by the institution, not a vendor, and some work offline;
+   when unsure, say "not verified" rather than dismiss it. For a computational method, always weigh
+   reusing or wrapping existing libraries before writing new code.
 3. **Credible alternatives.** Usually two to four. Each must be something you would defend.
 4. **Trade-offs.** For each, the advantages and disadvantages that matter to *this* PI. Cover
    development effort, distribution and updates, data location and safety, cost and licensing,
@@ -112,7 +115,7 @@ gate before implementing. It does not get pushed silently into sprint planning.
 | C#/.NET desktop program | Strong Windows integration; mature desktop UI tooling | Mostly Windows-only in the relevant frameworks; fewer researchers can maintain it |
 | Local browser page or local web app | Familiar interface; flexible UI; a single HTML file needs no installation | Saving data locally needs a deliberate design (browser storage is easy to lose; file export must be explicit); a local app server must still be installed and started |
 | Hosted web application | Central collection, one place to update, no installation | Needs hosting, connectivity, server operations, and attention to security and privacy |
-| Existing survey or data-collection software | May remove most custom development; often has offline modes | Less control over behaviour and export; licensing, privacy and platform constraints |
+| Existing survey or data-collection software | May remove most custom development; some are institution-hosted or have offline modes | Less control over behaviour and export; licensing, privacy and platform constraints (check what the PI's institution offers) |
 
 ### Statistical method or estimator
 

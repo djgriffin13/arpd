@@ -82,7 +82,7 @@ Provisional. -->
 - **Constraints:**
 - **Acceptance criteria:**
   - {{an observable check}}
-- **Priority:** {{required / desired / future}}
+- **Priority:** {{required / desired / future / open (O-NN), while the PI leaves that scope tier open}}
 - **Dependencies:** {{REQ IDs, D-NN (section 6), O-NN (section 12), or "none"}}
 - **Source:** {{PI: "<verbatim>" / Lead's derivation from <what> / Lead's recommendation; PI accepted: "<words>"}}
 - **Status:** {{a status from the table above}}
@@ -158,13 +158,17 @@ integrates; shared checkout or worktrees; why it suits the task structure. -->
   policy, verbatim}}. Agents choose implementation mechanisms only.
 - **Decisions requiring the PI:**
 - **Review, cadence and limits:** review depth, the theory-context choice, check-ins, limits on
-  autonomous work (time, compute, cost). Modules selected, and why.
+  autonomous work (time, compute, cost).
+- **Modules:** {{each selected module and why; human-subjects data whenever the tool collects data
+  from or about people}}.
 
 ## 12. Risks, assumptions and open decisions
 
 Every item has a gate: before planning, before implementing <what>, or before deployment. At
 adoption each open O-NN becomes a row of `DECISIONS.md` *Waiting on the PI* (O-01 → #1, and so on,
 in this order), with *Needed by* = its gate; the adoption ruling's *Reading* records the mapping.
+An item the PI has answered starts with "Resolved:" (in a table, the first cell: "Resolved: O-04"),
+saying where it now lives, or moves out of this section.
 
 | ID | Item | Kind | Affects | Gate | Can continue meanwhile | Recommendation |
 |---|---|---|---|---|---|---|

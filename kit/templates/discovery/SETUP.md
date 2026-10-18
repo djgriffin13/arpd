@@ -116,9 +116,13 @@ policy (or "none named"). Record what the PI said; do not ask questions only to 
   (does each output's input carry what it needs?); unclear data semantics (each decided by the PI,
   delegated under a policy the PI named, or Open with a gate); unresolved architecture dependencies;
   unsupported assumptions; requirements without meaningful acceptance criteria; conflicts with the
-  exclusions; missing PI decisions; earlier PI preferences missing from report §10–11; anything
-  marked adopted too early; lead-invented details (a field, a limit, a name, a "no network" rule)
-  without a "Lead's" label. The report's *Completeness check: gaps found* gives the result.
+  exclusions; missing PI decisions (the team arrangement and cadence included); a needed module
+  missing from §11; earlier PI preferences missing from report §10–11; anything marked adopted too
+  early; an unanswered item recorded as an assumption or requirement; contradictions between
+  sections (an item Open in one and resolved in another; "no policy named" against a requirement the
+  PI decided; a decision both Delegated and Open; a stale completeness check); lead-invented
+  details (a field, a limit, a name, a "no network" rule) without a "Lead's" label. The report's
+  *Completeness check: gaps found* gives the result.
 - **Pending approvals:** {{e.g. adoption of vN}}
 
 ## 11. Lead's interpretations

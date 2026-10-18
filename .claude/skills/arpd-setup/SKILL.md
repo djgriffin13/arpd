@@ -51,7 +51,11 @@ Follow `kit/docs/INTERACTION.md`. In short:
   asked, restate the question in a new block. A closing turn that does not wait ends with the next
   step and its exact prompt, and no block.
 - **One primary question per turn**; one bounded choice may settle several closely related,
-  low-stakes items. Print every option before any widget; mark a recommendation "(recommended)".
+  low-stakes items. Never bundle parts the PI may answer only partly, or spend a turn on how to
+  handle gaps: ask the most valuable one. Print every option before any widget; mark a
+  recommendation "(recommended)".
+- **Every time you write**, the notes' included, comes from `date -u +%Y-%m-%dT%H:%MZ` run in that
+  step, marked UTC; never estimated or reused.
 - `APPROVAL REQUIRED` is only for adopting the report. Moving on, or picking an option during the
   interview, is a `CHOICE FOR YOU`.
 
@@ -80,7 +84,7 @@ again only when one feature's placement is genuinely unclear and matters now.
 | **Project** | Opening, classification, existing material, theory-context choice when relevant | What, for whom and why are clear, and the scientific boundary is set |
 | **Requirements** | The scope sequence; users, workflows, functional requirements, data and persistence, nonfunctional needs | Each first-version requirement is testable, or open with a gate |
 | **Architecture** | Each material decision, explored and recommended (`architecture-guide.md`) | Each has alternatives, a recommendation, and the PI's choice or a gate |
-| **Team & Governance** | Agent arrangement, SA-01 with data semantics, review, cadence, open decisions | The proposed governance is drafted from what the PI said |
+| **Team & Governance** | Agent arrangement, SA-01 with data semantics, review, cadence, open decisions | The PI has chosen the arrangement and cadence; the rest is drafted from what the PI said |
 | **Definition Report** | Draft, completeness check, review, adoption, generation, handoff | Setup closes with planning pending |
 
 Information given out of order closes topics wherever they belong. After every reply: record the
@@ -114,7 +118,9 @@ or claims.
 - Label provenance as the notes template says. Statuses, and where each goes at adoption: the
   report template's status table, the one mapping.
 - Writing something down never adopts it. An interview choice is a recorded preference until the
-  report containing it is adopted. Silence is never consent.
+  report containing it is adopted. Silence is never consent: what the PI did not choose (an unpicked
+  option, the unanswered part of a question) is Open with a gate or Proposed, never an assumption
+  or a hard requirement.
 
 ## Working files
 
@@ -122,15 +128,14 @@ The notes (`docs/discovery/SETUP.md`) and the draft report (`reports/PROJECT-DEF
 only writes before adoption, and both are non-governing. Update the notes after every useful reply,
 with no stale "not yet asked". Install mode: ask consent first (`import-path.md`, *Working files*).
 
-**Every date and time you write is read at that moment** with `date -u +%Y-%m-%dT%H:%MZ`, and marked
-UTC: in the notes, the report, R/SA/DEC entries and `STATUS.md`. Never estimate one. Never write
-secrets, credentials, participant data, or content from unrelated folders.
+Never write secrets, credentials, participant data, or content from unrelated folders.
 
 ## The report and adoption
 
 Follow `generation-checklist.md`, Part A. The report (sections 1–12, plus §13 *What adoption
 authorizes*) **is the full draft** the PI reviews; never promise full drafts and then show a
-summary. Report material gaps from the completeness check; never paper over them.
+summary. Re-run the completeness check, consistency between sections included, on **every** version
+before showing it; report material gaps, never paper over them.
 
 Adopt only through `APPROVAL REQUIRED`, naming `reports/PROJECT-DEFINITION.md` and its version, and
 saying that a yes authorizes no implementation. Record the reply **verbatim** as R-NN (`Adopts:

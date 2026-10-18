@@ -108,8 +108,9 @@ Every sprint boundary still gets its close-out, independent review and checks (C
   accepts ({{IDs, and how: "choice A" or named}}); its Delegated, Provisional, Open and Excluded items
   are recorded as such (open items O-NN become *Waiting on the PI* #N: {{mapping}}), and other
   Proposed items are not adopted. CLAUDE.md v1.0 and
-  PARADIGM-SPEC.md v1.0 are written from it and are in force. The research question is PARADIGM-SPEC
-  §1, verbatim. Adoption authorizes the governing documents only, not implementation.
+  PARADIGM-SPEC.md v1.0 are written from it and are in force. {{The research question is
+  PARADIGM-SPEC §1, verbatim. / PARADIGM-SPEC §1 is the PI's purpose; there is no research question
+  (product-only work).}} Adoption authorizes the governing documents only, not implementation.
 - **Changes:** CLAUDE.md v1.0, PARADIGM-SPEC.md v1.0, REQUIREMENTS.md v1.0
 
 <!-- keep: format for every ruling:
