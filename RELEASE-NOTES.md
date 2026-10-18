@@ -1,6 +1,6 @@
-# Release notes: ARPD v0.6.0-rc.1 (release candidate, in preparation)
+# Release notes: ARPD v0.6.0-rc.1 (release candidate)
 
-**Status: a release candidate in preparation. Not a final release.** It restructures the kit so that
+**Status: a release candidate, held for manual testing. Not a final release.** It restructures the kit so that
 every project is its own repository and everything copied from the kit sits in one `arpd/` folder.
 The setup interview, planning, check-in and amendment work as in v0.5; their paths change. A final
 release follows only after people have completed the manual tests

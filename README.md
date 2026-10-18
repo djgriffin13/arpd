@@ -1,7 +1,7 @@
 # ARPD: Agentic Research Paradigm Development
 
 **A team-based framework for expanding organizational inquiry.** This is release candidate
-v0.6.0-rc.1, in preparation ([RELEASE-NOTES.md](RELEASE-NOTES.md)). ARPD is the research artifact
+v0.6.0-rc.1, held for manual testing ([RELEASE-NOTES.md](RELEASE-NOTES.md)). ARPD is the research artifact
 for a proposal to the *Organization Science* special issue "AI-Enabled Frontiers in Organizational
 Science."
 

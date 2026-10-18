@@ -26,8 +26,9 @@ The evidence behind them is indexed in [evaluation/README.md](../evaluation/READ
 
 - **The relaunch step and `install.py` are new.** Creating the project folder, reopening Claude Code
   there and continuing the interview, and the `new`, `import`, `install`, `update` and `owed`
-  commands, are covered by unit tests (`tests/test_install.py`). The driven runs (a new project to
-  the `/arpd-plan` handoff, an install, an import of the worked example) are still to come.
+  commands, are covered by unit tests (`tests/test_install.py`). Driven runs with scripted answers covered
+  a new project through `/arpd-plan`, check-in and amend, an install, and an import of the worked
+  example (`evaluation/developer-tests/v0.6-runs-report.md`); no person has done the relaunch yet.
 - **Windows paths and OneDrive.** Synced folders can lock or duplicate files while git and agents
   work; `install.py` warns but does not refuse. Paths with spaces need quotes. A folder above the
   project holding `CLAUDE.md` or `AGENTS.md` adds instructions Claude Code also reads; again a

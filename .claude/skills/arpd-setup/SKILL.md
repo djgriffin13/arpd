@@ -51,8 +51,8 @@ and continues in a new Claude Code session opened in the project.
    folder, whose inventory you show the PI before rerunning with `--yes`);
    `python arpd/tools/install.py install "<path>"` (a repository the PI keeps working in; without
    consent add `--notes "<notes path>"`). Show its output in full (never piped through `tail` or
-   `head`). Show the PI any `CONFLICTS:` list; `--force` only on the
-   PI's yes. Quote every `WARNING:` and `REFUSED:` line (a failed commit's includes how to recover)
+   `head`). Show the PI any `CONFLICTS:` list (from `install` or `owed`); `--force` only
+   on the PI's yes to that list. Quote every `WARNING:` and `REFUSED:` line (a failed commit's includes how to recover)
    and help the PI act on it (`import-path.md`, *Warnings*).
 5. **Notes, then hand over.** Copy `arpd/templates/setup/NOTES.md` to
    `<path>/reports/setup/NOTES.md` with the mode, the folder and the PI's opening answer

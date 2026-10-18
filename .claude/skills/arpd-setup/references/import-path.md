@@ -116,9 +116,12 @@ Worked case: the March example, from its own repository (`/arpd-setup import <it
 1. **Inventory first.** Read `START-HERE.md`, `STATUS.md`, `DECISIONS.md` (*Waiting on the PI*),
    `PARADIGM-SPEC.md` and any import notes. Run its tests and its own checker as it stands (an older
    starter's `python tools/check_governance.py`), each as `<command>; echo "exit=$?"`; keep the full
-   output verbatim, outside the project.
+   output verbatim, outside the project. Do this **before any commit of your own** (adoption
+   included), so the baseline shows the starter exactly as received.
 2. **Interview, confirming rather than re-asking.** Read the written science to the PI in plain
-   language to confirm; the report keeps its IDs.
+   language to confirm; the report keeps its IDs. Ask for the research question in the PI's own
+   words, and ask the authority boundaries (what to bring back, time and cost limits); never carry
+   the starter's SA-01 defaults over without asking.
    - An item marked *"(draft wording, awaiting the PI's words)"* gets the PI's own words or stays
      pending in *Waiting on the PI*; adopting "as they stand" does not clear it. Keep a replaced
      draft under "Superseded draft wording".
@@ -137,7 +140,8 @@ Worked case: the March example, from its own repository (`/arpd-setup import <it
    shows deletions only. Re-run the tests (`; echo "exit=$?"`) and quote the output. A DEC, written
    at generation, records the removal; until it happens the *Map* lists `tools/` as "pending:
    removed after the `.claude/` step". If the PI declines the `.claude/` step, keep `tools/hooks/`
-   and record that.
+   and record that. An old git-ignored root `logs/` (written by the old hook before the re-point)
+   moves into `arpd/logs/` (a plain move; it is not tracked).
 4. **Then edit in place,** through rulings and authorizations; superseded entries keep their text.
    - `CLAUDE.md`: the Version line (R-NN), *Authority profile* (SA-NN), the PI line, §6's examples,
      and the named path updates. Nothing else without a ruling.
