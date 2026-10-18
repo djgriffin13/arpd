@@ -84,7 +84,7 @@ again only when one feature's placement is genuinely unclear and matters now.
 | **Project** | Opening, classification, existing material, theory-context choice when relevant | What, for whom and why are clear, and the scientific boundary is set |
 | **Requirements** | The scope sequence; users, workflows, functional requirements, data and persistence, nonfunctional needs | Each first-version requirement is testable, or open with a gate |
 | **Architecture** | Each material decision, explored and recommended (`architecture-guide.md`) | Each has alternatives, a recommendation, and the PI's choice or a gate |
-| **Team & Governance** | Agent arrangement, SA-01 with data semantics, review, cadence, open decisions | The PI has chosen the arrangement and cadence; the rest is drafted from what the PI said |
+| **Team & Governance** | Agent arrangement, modules, SA-01 with data semantics, review, cadence, open decisions | The PI has chosen the arrangement, cadence and any proposed module; the rest is drafted from what the PI said |
 | **Definition Report** | Draft, completeness check, review, adoption, generation, handoff | Setup closes with planning pending |
 
 Information given out of order closes topics wherever they belong. After every reply: record the
@@ -107,15 +107,16 @@ Otherwise skip it; never ask a scientific maturity question for general software
 only an ambiguity that affects the implementation or prevents a valid design; record the rest
 (`interview-guide.md`, *Theory context*). For estimators, simulations and theory-dependent models,
 the **mathematical semantics are central requirements**, whatever the answer. **Data semantics are
-consequential** (`kit/constitution/CORE.md` §6): ask them as product questions, never decide them
-silently, and never delegate them unless the PI names a policy. Never invent constructs, invariants
-or claims.
+consequential** (`kit/constitution/CORE.md` §6): ask them during Requirements as ordinary product
+questions, never save them for the adoption block, never decide them silently, and never delegate
+them unless the PI names a policy. Never invent constructs, invariants or claims.
 
 ## Architecture, provenance and status
 
 - Each material decision follows `architecture-guide.md`; a low-consequence one gets a stated
   default or is delegated. A recommendation is not an adopted design.
-- Label provenance as the notes template says. Statuses, and where each goes at adoption: the
+- Label provenance as the notes template says. Quote the PI only from the notes' verbatim record,
+  never the report's or your own wording. Statuses, and where each goes at adoption: the
   report template's status table, the one mapping.
 - Writing something down never adopts it. An interview choice is a recorded preference until the
   report containing it is adopted. Silence is never consent: what the PI did not choose (an unpicked
@@ -126,7 +127,10 @@ or claims.
 
 The notes (`docs/discovery/SETUP.md`) and the draft report (`reports/PROJECT-DEFINITION.md`) are the
 only writes before adoption, and both are non-governing. Update the notes after every useful reply,
-with no stale "not yet asked". Install mode: ask consent first (`import-path.md`, *Working files*).
+with no stale "not yet asked", and before ending a turn that asks a question with a recommendation
+(save the question, the recommendation and the alternatives), presents a report version ("vN
+presented <UTC time>") or closes a topic in chat. Install mode: ask consent first (`import-path.md`,
+*Working files*).
 
 Never write secrets, credentials, participant data, or content from unrelated folders.
 
@@ -134,13 +138,16 @@ Never write secrets, credentials, participant data, or content from unrelated fo
 
 Follow `generation-checklist.md`, Part A. The report (sections 1–12, plus §13 *What adoption
 authorizes*) **is the full draft** the PI reviews; never promise full drafts and then show a
-summary. Re-run the completeness check, consistency between sections included, on **every** version
-before showing it; report material gaps, never paper over them.
+summary. Before showing **every** version, run
+`python kit/tools/check_report.py reports/PROJECT-DEFINITION.md --stage draft` (install mode: the
+kit clone's path) and fix every FAIL; then re-run the completeness check, consistency between
+sections included. Report material gaps; never paper over them.
 
 Adopt only through `APPROVAL REQUIRED`, naming `reports/PROJECT-DEFINITION.md` and its version, and
 saying that a yes authorizes no implementation. Record the reply **verbatim** as R-NN (`Adopts:
 reports/PROJECT-DEFINITION.md vN`). After the move-only commits, the **adoption-first commit** holds
-`DECISIONS.md` and the adopted report together, and nothing else; the report is then frozen. Then
+`DECISIONS.md` and the adopted report together (checked first with `--stage adopted`), and nothing
+else; the report is then frozen. Then
 generate (Part B). Setup approval never authorizes implementation: only an approved plan and a
 start direction do.
 

@@ -67,7 +67,7 @@ and checks, whatever is chosen.
 - **C. Continue** after review and close-out under a standing authorization (SA-NN) naming the
   sprints, the transition conditions and when to consult the PI. This needs the PI's words.
 
-**Chosen:** {{A / B / C, or "not yet chosen"}}
+**Chosen:** {{A / B / C, or "not yet chosen"; a single sprint: "Single sprint: per charter §8 / SA-01"}}
 
 ## Review notes
 

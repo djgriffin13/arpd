@@ -106,7 +106,7 @@ Known limitations are listed in [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
 | `kit/constitution/` | `CORE.md` (charter template) and `modules/` |
 | `kit/templates/` | Governing-document and report templates, including the setup working notes (`discovery/SETUP.md`), the Project Definition Report (`reports/PROJECT-DEFINITION.md`), the sprint-plan draft (`planning/PLAN.md`) and the import baseline (`reports/IMPORT-BASELINE.md`) |
 | `kit/agents/` | Implementer and reviewer role definitions |
-| `kit/tools/` | Governance checker, plan numbering, event logging and summary, hook script |
+| `kit/tools/` | Governance checker, report checker, plan numbering, event logging and summary, hook script |
 | `kit/settings/` | Hook configuration installed into projects |
 | `kit/docs/EVENTS.md` | What the event log captures, and what it cannot |
 | `kit/docs/INTERACTION.md` | The interaction conventions shared by the four skills |

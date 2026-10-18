@@ -126,7 +126,8 @@ project default is shown as "(recommended)", never applied silently.
 If several, ask **once** per planning effort how transitions should work
 (`references/multi-sprint-and-handoff.md` §2). The answer is planning input: inherited cadence
 (`CLAUDE.md` §8) and SAs in force are never widened by it, and continuation becomes authority only
-by the PI's words in Step F or G.
+by the PI's words in Step F or G. For a single sprint, the plan's transition policy is the
+charter's default cadence ("per charter §8 / SA-01"), not recorded as a PI choice.
 
 ### Step C: Priorities
 
@@ -155,7 +156,9 @@ labelled provisional with what may change them (`references/planning-guide.md`).
 and does not restate them; only dependent work is blocked. Respect each row's gate: one needed
 "before planning" is put to the PI before approval (or deferred by ruling); one needed "before
 implementing X" is scheduled to be decided before X's work package; one needed "before deployment"
-blocks only release work. Set Readiness `Planning: draft (PLAN-…, v1)`, `Next step: review plan`.
+blocks only release work. Decisions put to the PI (a decision pack included) end with a labelled
+block, `CHOICE FOR YOU` or `APPROVAL REQUIRED` (`INTERACTION.md` §2), never in prose. Set
+Readiness `Planning: draft (PLAN-…, v1)`, `Next step: review plan`.
 
 Commit: `Plan draft PLAN-YYYY-MM-DD v1 (not approved)`. Summarize the plan in chat in one screen;
 the detail stays in the file.
@@ -163,9 +166,10 @@ the detail stays in the file.
 ### Step E: Review and revise
 
 Tell the PI the draft is theirs to examine: they may edit it, challenge priorities, ask for
-re-planning, or send it to an independent agent. Offer an outside review; never require one for a
-small plan. Each revision bumps the Version (v2, v3), lists what changed, and is committed with the
-same message pattern. No governing file changes during review.
+re-planning, or send it to an independent agent. Ask whether to have an outside review as an option
+inside the block that ends the draft turn, not only in prose; never require one for a small plan.
+Each revision bumps the Version (v2, v3), lists what changed, and is committed with the same
+message pattern. No governing file changes during review.
 
 ### Step F: Approval
 

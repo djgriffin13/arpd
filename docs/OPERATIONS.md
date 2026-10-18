@@ -45,6 +45,8 @@ does not render, an ASCII form is used (`[x]`, `[>]`, `[ ]`, `->`, a line of `-`
   it adopts. Adoption authorizes writing the governing documents from the report, not development:
   only an approved plan and your start direction start work (section 5). After adoption the report
   is kept as the record; the governing documents carry its content and win where they differ.
+  Setup checks its form with `check_report.py` (`kit/tools/`, copied to the project's `tools/`)
+  before showing each version.
 - **Statuses in the report.** *Adopted-on-adoption* (you stated or accepted it; adopted with the
   report), *Proposed* (the lead's recommendation; not adopted unless you accept it), *Provisional* (a
   working assumption with a gate), *Delegated* (within a standing authorization's bounds), *Open*

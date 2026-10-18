@@ -178,13 +178,14 @@ persists versus what is temporary; entities and relationships, and repeated obse
 sessions; integrity, provenance, versioning and compatibility; backup, recovery and export; privacy
 and security.
 
-**Data semantics are consequential** (`kit/constitution/CORE.md` §6). Raise them as product
-questions and never decide them silently. Ask the consequential ones; propose defaults for the rest.
-For a data-collection tool, most of these matter:
+**Data semantics are consequential** (`kit/constitution/CORE.md` §6). Raise them during
+Requirements as ordinary product questions (one per turn, or naturally grouped), never saved for the
+adoption block, and never decide them silently. Ask the consequential ones; propose defaults for the
+rest. For a data-collection tool, most of these matter:
 
-- **ask these whenever they change the data:** how often an entry is made, and whether one person
-  may make several; which class, session, group, site or occasion an entry belongs to; timestamps
-  (recorded time versus event time, the time zone);
+- **ask these first, whenever they change the data:** when people take part in groups or sessions,
+  how a record identifies its class, session, group or site; how often an entry is made, and whether
+  one person may make several; timestamps (recorded time versus event time, the time zone);
 - missing versus zero versus "not applicable"; required versus optional items, and how a blank is
   stored and exported;
 - the question types, and how each is coded in the output;
@@ -195,10 +196,13 @@ For a data-collection tool, most of these matter:
 - changes to the collected variables mid-use (a new question version), and how records show which
   version produced them;
 - replacing unavailable data;
-- shared computers; where and how data are saved, and what happens on a crash;
+- shared computers; where data are saved;
 - export: who exports, how often, file naming; cumulative or incremental, and whether a repeated
   export duplicates records; the encoding of free text (commas, quotes, line breaks, Unicode); how
   the output reaches the PI.
+
+Not data semantics: reliability behaviours (autosave, crash recovery, export determinism) are
+ordinary requirements with acceptance criteria, adopted with the report.
 
 **Input adequacy.** Check that the inputs carry every quantity each output needs ("present but
 silent" versus "absent" needs a roster, not only a log). An unresolved gap is an open item with a gate.
@@ -278,8 +282,9 @@ with defaults.
 
 Ask about the **task structure**, not about agents: can the work split into parts built and tested
 independently? The arrangement is the **PI's choice**: put the recommended one (sized to the work,
-from the table) and one short alternative in a `CHOICE FOR YOU`, with the check-in cadence in the
-same block if the PI has not stated it. Never adopt an arrangement the PI was not asked about.
+from the table) and one short alternative in a `CHOICE FOR YOU`, with the check-in cadence (if the
+PI has not stated it) and each proposed module (for example, human-subjects data) in the same block,
+not left to the adoption assent. Never adopt an arrangement the PI was not asked about.
 
 | Situation | Team arrangement | Workspace |
 |---|---|---|

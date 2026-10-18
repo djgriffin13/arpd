@@ -57,6 +57,7 @@ Internal routing only; the PI is not asked to pick a category when the descripti
 
 Visible phases: Project → Requirements → Architecture → Team & Governance → Definition Report.
 **Current phase:** {{phase}}.
+**Pending question:** {{none / the question as asked, its recommendation and the alternatives shown}}
 
 One table per phase. Topics are added, merged or retired as the interview goes. A topic's status is
 set from everything the PI has said, not only from the question asked.
@@ -109,7 +110,7 @@ policy (or "none named"). Record what the PI said; do not ask questions only to 
 
 ## 10. Report version and state
 
-- **Report:** `reports/PROJECT-DEFINITION.md`, {{not started / Draft vN, presented on <date> / revision
+- **Report:** `reports/PROJECT-DEFINITION.md`, {{not started / Draft vN, presented <UTC time> / revision
   requested: <what> / adopted by R-NN (vN)}}
 - **Completeness check:** {{not run / run for vN: gaps <list or "none">}}. Before showing any
   version, check for: ambiguous functionality; inconsistent requirements; missing inputs or outputs
@@ -124,6 +125,7 @@ policy (or "none named"). Record what the PI said; do not ask questions only to 
   details (a field, a limit, a name, a "no network" rule) without a "Lead's" label. The report's
   *Completeness check: gaps found* gives the result.
 - **Pending approvals:** {{e.g. adoption of vN}}
+- **Resumed:** {{none / <UTC time>: what was found, what was redone}}
 
 ## 11. Lead's interpretations
 

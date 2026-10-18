@@ -256,7 +256,10 @@ authorized. Before anything else, check the project root (in install mode, the t
 Then:
 
 1. **Tell the PI** what you found, in plain words.
-2. **Old-format notes** (written by an earlier kit version) are read deterministically:
+2. **Old-format notes** (written by an earlier kit version) are converted to the current notes
+   template at once, before the next question: the phase tracker rewritten under the new phases,
+   old profile answers moved to *Governance preferences*, the PI's words kept verbatim. They are
+   read deterministically:
    - **"Interview mode" line or section:** obsolete, whatever its value. Leave it in place, mark it
      "(obsolete; ignored)", and never ask the PI to choose a mode or offer one. The same holds for
      an interview mode recorded in an old `STATUS.md` §8 (`/arpd-plan` ignores it too).
@@ -267,7 +270,8 @@ Then:
    - **Old scope sections** "First useful version", "Vision" and "Later, wishlist and exclusions"
      map to the *Scope* tiers: minimum usable version, ideal version, and nice-to-have or excluded.
      Ask only the scope questions they leave unanswered.
-   - **An old "PI profile" table:** keep it as context, and do not re-ask its answers. An old
+   - **An old "PI profile" table:** its answers (autonomy bounds, review depth, check-ins) are
+     settled: never re-ask them; confirm them in the read-back. An old
      adviser-role answer is not a theory-context choice. Ask the theory question only if theory is
      relevant, and show the old answer beside it.
    - **An old read-back draft** (never adopted) is not a report. Write
@@ -292,7 +296,9 @@ Then:
      unfilled `{{…}}`). Ask the PI only for what the record does not settle.
    - If the ruling cites no report and holds no read-back text, say so: show any uncommitted file
      to the PI and ask them to confirm it before you keep it.
-5. Record the recovery in `STATUS.md`, in a `Recovered:` line naming what was found and what was
-   redone. If `tools/log_event.py` exists, log
+5. Record the recovery: before adoption, in the notes (*Report version and state*, a `Resumed:`
+   line naming what was found and what was redone), since `STATUS.md` does not exist yet; after
+   adoption, in `STATUS.md`'s `Recovered:` line (`generation-checklist.md`, row 7). If
+   `tools/log_event.py` exists, log
    `python tools/log_event.py resume --actor lead --note "setup resumed"`.
 6. Finish as usual: the final checker run, the stray-file check, the setup commit and the closeout.

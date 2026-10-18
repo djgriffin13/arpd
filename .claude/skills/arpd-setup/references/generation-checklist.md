@@ -22,6 +22,8 @@ complexity and risk; the template's guidance says what each section holds. Also:
 - §1: a project name only if the PI gave one; otherwise a working name labelled as yours.
 - §2–3: the scope tiers, exclusions and workflows keep the PI's words; each requirement's Priority
   follows the scope answers.
+- §3: a required requirement always has acceptance criteria; if they depend on an Open decision, say
+  so in them ("pending O-01: …").
 - §7: every data-semantics item raised in the interview has its decider, or is Open with a gate.
 - §11: every earlier PI preference carried forward (review depth, theory-context choice, autonomy,
   check-ins), the data-semantics rule, and the modules with why.
@@ -33,8 +35,10 @@ draft.
 
 ## A2. Completeness check
 
-Before showing **any** version, v2 and later included, run the whole check listed in the notes
-template (`kit/templates/discovery/SETUP.md` §10), its consistency items included. Fix what you can.
+Before showing **any** version, v2 and later included, run
+`python kit/tools/check_report.py reports/PROJECT-DEFINITION.md --stage draft` (install mode: the
+kit clone's path) and fix every FAIL. Then run the whole check listed in the notes template
+(`kit/templates/discovery/SETUP.md` §10), its consistency items included. Fix what you can.
 **Report material gaps to the PI** in the report's *Completeness check: gaps found* and in the
 presentation; never manufacture detail to look complete. Record the result in the notes, *Report
 version and state*.
@@ -76,7 +80,8 @@ directly; read it back before continuing.
 ## A5. Adoption
 
 Ask with `APPROVAL REQUIRED`. Name the file and version, what a yes adopts, and what it does not
-authorize. List each **data-semantics proposal** and each **Open item** by ID and one line, and say
+authorize. List each **data-semantics proposal** still unanswered (they were asked during
+Requirements) and each **Open item** by ID and one line, and say
 that only the proposals the PI names are accepted, and the Open items stay open. The PI may adopt
 and accept named proposals in one reply ("adopt v3 with REQ-DATA-02 and D-04 accepted"). For
 example:
@@ -130,7 +135,8 @@ ruling accepted counts as Adopted-on-adoption, with the ruling as its source.
    moves; the untracked notes and draft report are in no move commit. Never `git add -A` here.
 2. **The adoption, first.** Write `DECISIONS.md` (row 5), with R-NN and SA-01. Then make the
    report's only post-adoption edit: set the Status line to `Adopted by R-NN (vN)`, and replace the
-   DRAFT banner with the template's ADOPTED banner. Commit the two files together, and nothing else:
+   DRAFT banner with the template's ADOPTED banner. Run `check_report.py` (as A2) with
+   `--stage adopted`, and fix every FAIL. Commit the two files together, and nothing else:
    `git add DECISIONS.md reports/PROJECT-DEFINITION.md && git commit -m "Record adoption ruling R-NN (setup in progress)"`.
    The report is then frozen. Read this commit's SHA (`git rev-parse HEAD`) for `STATUS.md` and
    `START-HERE.md`. Install mode without consent: copy the adopted report into the target now
@@ -164,12 +170,12 @@ ruling accepted counts as Adopted-on-adoption, with the ruling as its source.
 | 4 | `MASTER_PLAN.md` | `kit/templates/MASTER_PLAN.md`, or the starter's own | The objective (§1); milestones from report §9 (§2); the broad order of work (§3), each row "planning pending", with no invented sprint plans; the backlog (§4) with what the status table sends there, each Backlogged and citing the report. Risks from report §12; the cadence from §11. *Check:* milestones and order match report §9. |
 | 5 | `DECISIONS.md` | `kit/templates/DECISIONS.md`, or the starter's own | **R-NN:** as A5. **SA-01:** every field from report §11, in the PI's words or as "(drafted by the lead; PI assented: '<the PI's exact words>')"; data semantics not delegated unless a named policy is quoted. **DECs:** each adopted material decision of report §6 (citing D-NN), the team arrangement, import or move decisions (citing `reports/IMPORT-BASELINE-<date>.md`; an install DEC names the kit commit, `git -C <kit folder> rev-parse HEAD`), anything owed. **Waiting on the PI:** one row per Open item, and per gated Provisional item, in O-NN order; *Needed by* is the gate. |
 | 6 | `ARCHITECTURE.md` | `kit/templates/ARCHITECTURE.md`, or the starter's own | Overview (§1), platform table (§2), components and data flow (§3) from report §5. *Architecture decisions*: the report §6 rows the status table sends here, same columns, each labelled. A-rules start as TARGET. Dependencies from §5. *Check:* the platform table agrees with the decisions; nothing is an unsupported guess. |
-| 7 | `STATUS.md` | `kit/templates/STATUS.md` (an imported one is **rewritten** in this format) | **Readiness** as `SKILL.md`, *Closeout*, plus `reports/PROJECT-DEFINITION.md vN, commit <SHA from step 2>`. §2 "No sprint open"; §4 *On deck*: run `/arpd-plan`; §5 a short summary pointing to *Waiting on the PI*. Base commit, recovery block, UTC time. Any test command is *The project's test command*. Team, workspace and resources. **§8:** the PI's working style from §11 (review depth, theory-context choice, check-ins); no interview mode. **§6 *Owed*:** every item not written; "Nothing owed" only when nothing is. |
+| 7 | `STATUS.md` | `kit/templates/STATUS.md` (an imported one is **rewritten** in this format) | **Readiness** as `SKILL.md`, *Closeout*, plus `reports/PROJECT-DEFINITION.md vN, commit <SHA from step 2>`. §2 "No sprint open"; §4 *On deck*: run `/arpd-plan`; §5 a short summary pointing to *Waiting on the PI*. Base commit, recovery block (if setup was resumed, a `Recovered:` line saying so, with the notes as the record), UTC time. Any test command is *The project's test command*. Team, workspace and resources. **§8:** the PI's working style from §11 (review depth, theory-context choice, check-ins); no interview mode. **§6 *Owed*:** every item not written; "Nothing owed" only when nothing is. |
 | 8 | `INDEX.md` | `kit/templates/INDEX.md`, or the starter's own | All top-level paths that exist, including `reports/PROJECT-DEFINITION.md` (the adopted setup report) and the project's own. A later path gets "pending: <reason>". List `docs/discovery/` only if the notes are in the project. No empty directories. *Check:* every governing file and the report are listed. |
 | 9 | `plans/README.md` | `kit/templates/plans/README.md` | Copy as is. |
 | 10 | `reports/templates/` | `kit/templates/reports/*` | Copy as templates. Do not create `reports/sprints/`. |
 | 11 | `reports/IMPORT-BASELINE-YYYY-MM-DD.md` | `kit/templates/reports/IMPORT-BASELINE.md` | **Import and install only.** The inherited baseline: source and provenance; each command as run, with its working directory, exit code and output **verbatim**; the test counts; any checker output; what was not run. Written once, then frozen. DECs and the first sprint cite it, and never copy it. |
-| 12 | `tools/` | `kit/tools/*` | Copy `check_governance.py`, `next_plan_number.py`, `log_event.py`, `summarize_events.py` and `hooks/log_hook.py`, and copy `kit/LICENSE` to `tools/LICENSE`. An imported starter's differing tools are replaced, and the import DEC says so. |
+| 12 | `tools/` | `kit/tools/*` | Copy `check_governance.py`, `check_report.py`, `next_plan_number.py`, `log_event.py`, `summarize_events.py` and `hooks/log_hook.py`, and copy `kit/LICENSE` to `tools/LICENSE` (not the kit's `test_*.py` or `fixtures/`). An imported starter's differing tools are replaced, and the import DEC says so. |
 | 13 | `.claude/settings.json` | `kit/settings/settings.json` | *Permission prompts*, below. If a settings file exists, merge only the `hooks` key and show the PI the diff. Check that `python` resolves (`python --version`); otherwise use `python3` or the full path. |
 | 14 | `.claude/agents/` | `kit/agents/*` | *Permission prompts*. Copy only the roles the arrangement in report §10 uses (for example, only `reviewer.md` for solo with a fresh-subagent review). |
 | 15 | `.claude/skills/arpd-*` | the kit's `.claude/skills/arpd-*` | **Install mode only.** *Permission prompts*. Copy all four folders whole, with their `references/`. |
@@ -202,7 +208,8 @@ If the PI declines, or a write is blocked (a non-interactive run cannot approve 
 - record a DEC titled "event logging not installed", "agent files not installed" or "skills not
   installed", with the reason and the route;
 - list the item in `STATUS.md` §6 *Owed* and §7, and under *Known gaps* in `START-HERE.md`, with the
-  exact commands below;
+  exact commands below, saying which happened: "the PI agreed, but Claude Code's permission prompt
+  did not allow the write" or "the PI declined";
 - continue. The governance check reports the gap as ADVISORY once the DEC exists, and as MISSING
   until then.
 

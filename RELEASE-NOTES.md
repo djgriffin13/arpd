@@ -131,8 +131,9 @@ when planning. It does not re-ask scope.
 and a computational estimator (Scenario B), plus checks for interruption and a change of scope.
 
 **Developer-test tooling.** The turn checker accepts the new setup progress line. A report checker
-(`evaluation/developer-tests/check_report.py`) checks a report's form: sections, acceptance criteria
-and status per requirement, a gate per open item, no adoption claimed by a draft. Contract tests check
+(`kit/tools/check_report.py`, copied into the project's `tools/`) checks a report's form: sections,
+acceptance criteria and status per requirement, a gate per open item, no adoption claimed by a
+draft. Setup runs it on every report version before showing it. Contract tests check
 the skills and templates against the interface. Red-first evidence for the new tests was shown by
 running them against the previous commit (`1fe28e2`), where they fail. Counts and results: to be
 filled.

@@ -74,8 +74,9 @@ decide these yourself. Deferred decisions stay listed, marked "deferred (R-NN)".
 ## 6. Owed
 
 List checks not yet run, reports not yet received, messages sent without an acknowledgement, and
-anything setup could not write (for example, `.claude/settings.json` when the permission prompt was
-declined). Write "Nothing owed" only when nothing is.
+anything setup could not write (for example, `.claude/settings.json`, saying whether the PI declined
+or Claude Code's permission prompt did not allow the write), with its commands.
+Write "Nothing owed" only when nothing is.
 
 ## 7. Team, workspace and runtime resources
 
