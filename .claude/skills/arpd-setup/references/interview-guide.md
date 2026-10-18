@@ -202,7 +202,10 @@ rest. For a data-collection tool, most of these matter:
   the output reaches the PI.
 
 Not data semantics: reliability behaviours (autosave, crash recovery, export determinism) are
-ordinary requirements with acceptance criteria, adopted with the report.
+ordinary requirements with acceptance criteria, adopted with the report; storage location, file
+names and similar mechanics are implementation defaults (delegable). Data details that change the
+data (timestamps and time zone, what a repeated export contains, what identifying fields are
+excluded) are asked here, during Requirements, not first raised in the approval block.
 
 **Input adequacy.** Check that the inputs carry every quantity each output needs ("present but
 silent" versus "absent" needs a roster, not only a log). An unresolved gap is an open item with a gate.

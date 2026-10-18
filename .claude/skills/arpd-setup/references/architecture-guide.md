@@ -35,7 +35,10 @@ program".
    with validation, an existing package, an automation service. If one fits, say so plainly, even
    when it makes most of the build unnecessary. Describe it fairly: some research survey and
    data-collection platforms are hosted by the institution, not a vendor, and some work offline;
-   when unsure, say "not verified" rather than dismiss it. For a computational method, always weigh
+   when unsure, say "not verified" rather than dismiss it. Unless the PI excluded it, an existing
+   tool gets its own row in the decision table, with its real advantages. If a constraint seems to
+   rule it out (for example, "data stay internal"), ask what the PI means first; never present your
+   own reading as the PI's ruling. For a computational method, always weigh
    reusing or wrapping existing libraries before writing new code.
 3. **Credible alternatives.** Usually two to four. Each must be something you would defend.
 4. **Trade-offs.** For each, the advantages and disadvantages that matter to *this* PI. Cover

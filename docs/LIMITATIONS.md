@@ -1,4 +1,4 @@
-# Known limitations (release candidate v0.5.0-rc.1, in preparation, 2026-10-17)
+# Known limitations (release candidate v0.5.0-rc.1, 2026-10-18)
 
 These are stated openly so that users and reviewers know what the kit does and does not establish.
 Most come from the independent review rounds and the developer tests in `evaluation/developer-tests/`.
@@ -10,8 +10,9 @@ Most come from the independent review rounds and the developer tests in `evaluat
   and real `/arpd-checkin` and `/arpd-amend` sessions. The v0.4 developer tests (DT-09 to DT-13) ran
   the earlier setup and `/arpd-plan` with scripted answers; 3 of 67 waiting turns broke the
   question-last rule, so placement still depends on the model following it. The one manual run
-  (MT-2026-10-17-1, on v0.4) prompted the v0.5 setup revision. The v0.5 scripted scenarios (A–H) are
-  to be filled. None of this tests whether a researcher can use the kit (`docs/MANUAL-TESTING.md`).
+  (MT-2026-10-17-1, on v0.4) prompted the v0.5 setup revision. The v0.5 driven scenarios (A, A2, A3, B,
+  C, D, F, H; `evaluation/developer-tests/v0.5-scenarios-report.md`) ran with scripted answers and
+  were judged on substance; the progress line was still occasionally omitted. None of this tests whether a researcher can use the kit (`docs/MANUAL-TESTING.md`).
 - **The v0.5 setup is untested with people.** The tool-first opening, the scope questions, the
   theory-context choice, architecture exploration, the Project Definition Report and its adoption,
   and the handoff to `/arpd-plan` have not been used by a researcher.
@@ -50,7 +51,7 @@ Most come from the independent review rounds and the developer tests in `evaluat
     committed (DT-08, on v0.3).
   - Resuming before adoption, from the working notes in `docs/discovery/SETUP.md`, ran once on v0.4
     (DT-13). In v0.5, resuming in three phases, with a draft report, and from notes written by an
-    earlier kit version (an obsolete interview mode, old phase labels) is scenario F: to be filled.
+    earlier kit version (an obsolete interview mode, old phase labels) ran in scenario F (four sessions, three interruptions); two settled topics were re-asked and one resume showed the wrong phase, both since fixed and not re-run.
   - In install mode without consent to save notes, the notes stay outside the repository. A later
     session can resume from them only if the researcher gives their path.
   - Resuming an interrupted plan review from `reports/planning/` has not been tested.

@@ -1,8 +1,7 @@
-# Release notes: ARPD v0.5.0-rc.1 (release candidate, in preparation)
+# Release notes: ARPD v0.5.0-rc.1 (release candidate)
 
-**Status: in preparation on the branch `setup-revision`. Not yet tagged, and not a final release.**
-The tag `v0.5.0-rc.1` will mark the reviewed and tested commit; `git rev-parse v0.5.0-rc.1^{commit}`
-will print it. A final release follows only after people have completed the manual tests in
+**Status: a release candidate, held for manual testing. Not a final release.** The tag
+`v0.5.0-rc.1` marks the reviewed and tested commit; `git rev-parse v0.5.0-rc.1^{commit}` prints it. A final release follows only after people have completed the manual tests in
 [docs/MANUAL-TESTING.md](docs/MANUAL-TESTING.md) and any blockers they find are fixed.
 
 **Earlier candidates are preserved** under their tags: `v0.4.0-rc.1` (summarized at the end) and
@@ -146,7 +145,7 @@ workflows has yet been completed by a researcher.
 
 | Workflow | Evidence | Status in this candidate |
 |---|---|---|
-| v0.5 setup: Scenario A (data-collection app, the manual test replayed), B (estimator), C (existing repository), D (scope correction), E (governance checks inside A–D), F (interrupt and resume, including old-format notes), G (report checks), H (handoff to `/arpd-plan`) | v0.5 scripted scenarios A–H: to be filled | Not yet run |
+| v0.5 setup: Scenario A (data-collection app, the manual test replayed), B (estimator), C (existing repository), D (scope correction), E (governance checks inside A–D), F (interrupt and resume, including old-format notes), G (report checks), H (handoff to `/arpd-plan`) | [v0.5 scenarios](evaluation/developer-tests/v0.5-scenarios-report.md) | Runs end to end in scripted sessions (A, A2, A3, B, C, D, F, H); judged on substance |
 | `/arpd-plan`, check-in, amendment, import and install moves, owed `.claude/` items, event logging and recovery | DT-01 to DT-13 on v0.3 and v0.4 ([DT-09–13](evaluation/developer-tests/DT-09-13-report.md)) | Unchanged in their mechanics; the setup interviews in those tests are evidence for the earlier flows only |
 
 ## Tested and draft components
@@ -154,7 +153,7 @@ workflows has yet been completed by a researcher.
 | Tested (with the evidence above) | Draft or untested |
 |---|---|
 | Charter, governing-document templates and the v0.3 and v0.4 skills, in scripted developer tests | Every workflow with a real researcher, including the v0.5 setup |
-| Governance checker and event summary: automated tests in `kit/tools/`; independent review rounds 1 to 8b | The v0.5 setup and report (scripted scenarios to be filled) |
+| Governance checker and event summary: automated tests in `kit/tools/`; independent review rounds 1 to 8b | The v0.5 setup and report (driven scenarios: [v0.5 scenarios](evaluation/developer-tests/v0.5-scenarios-report.md)) |
 | Event-logging hooks and recovery, in real Claude Code sessions | Approving the `.claude/` writes interactively; native choice widgets and symbol rendering |
 | Modules: computational model; team arrangement | Draft modules: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data |
 | The March (1991) worked example: 70 tests; two independent review rounds | Other agent harnesses than Claude Code; the `StopFailure` hook's payload fields |

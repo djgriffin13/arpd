@@ -53,7 +53,9 @@ Follow `kit/docs/INTERACTION.md`. In short:
 - **One primary question per turn**; one bounded choice may settle several closely related,
   low-stakes items. Never bundle parts the PI may answer only partly, or spend a turn on how to
   handle gaps: ask the most valuable one. Print every option before any widget; mark a
-  recommendation "(recommended)".
+  recommendation "(recommended)". "Please recommend" is an answer: record your recommendation as a
+  labelled proposal and move on; it reaches the PI in the report (data semantics and material
+  architecture choices are still asked).
 - **Every time you write**, the notes' included, comes from `date -u +%Y-%m-%dT%H:%MZ` run in that
   step, marked UTC; never estimated or reused.
 - `APPROVAL REQUIRED` is only for adopting the report. Moving on, or picking an option during the
@@ -84,7 +86,7 @@ again only when one feature's placement is genuinely unclear and matters now.
 | **Project** | Opening, classification, existing material, theory-context choice when relevant | What, for whom and why are clear, and the scientific boundary is set |
 | **Requirements** | The scope sequence; users, workflows, functional requirements, data and persistence, nonfunctional needs | Each first-version requirement is testable, or open with a gate |
 | **Architecture** | Each material decision, explored and recommended (`architecture-guide.md`) | Each has alternatives, a recommendation, and the PI's choice or a gate |
-| **Team & Governance** | Agent arrangement, modules, SA-01 with data semantics, review, cadence, open decisions | The PI has chosen the arrangement, cadence and any proposed module; the rest is drafted from what the PI said |
+| **Team & Governance** | Agent arrangement, modules, SA-01 with data semantics, review, cadence, open decisions | The PI has chosen the arrangement, cadence, review depth and any proposed module (one choice block); the rest is drafted from what the PI said |
 | **Definition Report** | Draft, completeness check, review, adoption, generation, handoff | Setup closes with planning pending |
 
 Information given out of order closes topics wherever they belong. After every reply: record the
@@ -139,8 +141,8 @@ Never write secrets, credentials, participant data, or content from unrelated fo
 Follow `generation-checklist.md`, Part A. The report (sections 1–12, plus §13 *What adoption
 authorizes*) **is the full draft** the PI reviews; never promise full drafts and then show a
 summary. Before showing **every** version, run
-`python kit/tools/check_report.py reports/PROJECT-DEFINITION.md --stage draft` (install mode: the
-kit clone's path) and fix every FAIL; then re-run the completeness check, consistency between
+`python kit/tools/check_report.py reports/PROJECT-DEFINITION.md --stage draft` (install mode, from
+the target: `python "<kit folder>/kit/tools/check_report.py" reports/PROJECT-DEFINITION.md --stage draft`) and fix every FAIL; then re-run the completeness check, consistency between
 sections included. Report material gaps; never paper over them. An open item gated "before
 planning" is asked before the report is shown, unless the PI defers it; a phase is not marked done
 while one is unasked.
