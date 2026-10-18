@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 r"""Governance checks for an ARPD project.
 
-    python tools/check_governance.py
+    python arpd/tools/check_governance.py      (from the project root)
 
 Each step reports PASS, FAIL, MISSING (could not run), PENDING (awaiting
 the PI's ruling) or ADVISORY (a note that does not change the result). The overall result is:
@@ -12,8 +12,11 @@ the PI's ruling) or ADVISORY (a note that does not change the result). The overa
 
 Within the steps listed below, it does not report PASS for an item it could not check. What it does
 not check is printed in a "Not checked" block after the steps. It relies on what is recorded in
-DECISIONS.md, the sprint records, REQUIREMENTS.md and INDEX.md; it cannot show that those records are
-true.
+DECISIONS.md, the sprint records, REQUIREMENTS.md and START-HERE.md's map; it cannot show that those
+records are true.
+
+Run in the kit itself (a folder holding the .arpd-kit marker), it stops: the kit is not a project.
+When arpd/VERSION exists, its first line is printed first.
 
 Exit codes: 0 PASS, 1 FAIL, 2 INCOMPLETE.
 
@@ -94,18 +97,20 @@ The checks:
    Approves line is ADVISORY). A record without these rows (the older format, including the old
    "Authorized to continue..." row) is ADVISORY, never a FAIL. A plan in reports/planning/ marked
    "approved by R-NN" where R-NN is not a given ruling is ADVISORY; a draft plan needs no ruling.
-6. INDEX.md mentions every top-level entry, and every path listed in its first column (in
-   backticks) exists, unless its row says "pending:" or "git-ignored" (advisory).
-7. Event logging and agent roles installed: .claude/settings.json runs tools/hooks/log_hook.py and
+6. START-HERE.md's "## Map" section mentions every top-level entry (except START-HERE.md itself and
+   the skipped folders, arpd/ among them), and every path it lists (in backticks, in a table row's first
+   column or first on a bullet line) exists, unless its line says "pending:" or "git-ignored"
+   (advisory). A project set up before v0.6 whose START-HERE.md has no Map section uses its INDEX.md
+   (the whole file) instead.
+7. Event logging and agent roles installed: .claude/settings.json runs arpd/tools/hooks/log_hook.py
+   (or, in a project set up before v0.6, tools/hooks/log_hook.py) and
    does not set "disableAllHooks": true; and, when the Team arrangement line mentions subagents or
    peers (and is not solo), .claude/agents/implementer.md and reviewer.md exist. Anything missing is
    MISSING, unless a decision in DECISIONS.md records it as not installed ("event logging not
    installed" / "agent files not installed", citing R-NN or with a "Route: routine" line), which is
    ADVISORY.
 8. ARPD skills installed: .claude/skills/arpd-checkin/SKILL.md, .claude/skills/arpd-amend/SKILL.md
-   and .claude/skills/arpd-plan/SKILL.md exist in the project root, or in a folder between it and
-   the root of the git repository that contains it (as for a worked example inside the kit).
-   Anything missing is MISSING, unless a decision records "skills not installed" as in step 7
+   and .claude/skills/arpd-plan/SKILL.md exist in the project (only there). Anything missing is MISSING, unless a decision records "skills not installed" as in step 7
    (ADVISORY).
 9. Live items cite no superseded spec item (advisory): a requirement's source, an A-rule in
    ARCHITECTURE.md, a claim (CLM-NN) in PARADIGM-SPEC.md, or a standing authorization in force
@@ -116,7 +121,8 @@ The checks:
    "Acceptance criteria" with at least one bullet is ADVISORY. Without that section (the older
    format) the step passes and says it was not compared.
 11. Adopted report traced (advisory): for each given ruling whose Adopts line names a file and version
-   (e.g. "`reports/PROJECT-DEFINITION.md` v2"), that file exists and its Status line reads
+   (e.g. "`reports/setup/PROJECT-DEFINITION.md` v2", or the legacy "`reports/PROJECT-DEFINITION.md` v2"),
+   that file exists and its Status line reads
    "Adopted by R-NN (vN)" with the same ruling and version; otherwise ADVISORY. With no Adopts line
    (the older format) the step passes and says it was not compared. The report's content is not
    compared with the governing documents.
@@ -132,10 +138,13 @@ import sys
 
 ROOT = "."
 GOVERNING = ["CLAUDE.md", "PARADIGM-SPEC.md", "REQUIREMENTS.md", "MASTER_PLAN.md", "DECISIONS.md",
-             "ARCHITECTURE.md", "STATUS.md", "INDEX.md"]
+             "ARCHITECTURE.md", "STATUS.md", "START-HERE.md"]
+KIT_MARKER = ".arpd-kit"  # present at the root of the ARPD kit itself, never in a project
 REQ_STATES = {"Planned", "Implemented", "Verified", "Validated", "Retired"}
 PLAN_STATES = {"Proposed", "Approved", "Active", "Complete"}
-SKIP_DIRS = {".git", "node_modules", "__pycache__", "logs", "output", ".venv", "venv", "kit"}
+# "arpd" is the kit payload copied into the project (not the project's own records); "kit" is its name
+# in projects set up before v0.6.
+SKIP_DIRS = {".git", "node_modules", "__pycache__", "logs", "output", ".venv", "venv", "arpd", "kit"}
 
 results = []
 not_checked = []   # exclusions found while checking, printed after the steps
@@ -161,13 +170,16 @@ def read(path):
         raise NotUTF8(path)
 
 
-KIT_ASIDE = os.path.join("docs", "arpd-kit")  # the kit's own pre-setup files, moved aside at setup
+def governing():
+    """The governing documents. A project set up before v0.6 may have INDEX.md and no START-HERE.md."""
+    if not os.path.exists(os.path.join(ROOT, "START-HERE.md")) and os.path.exists(os.path.join(ROOT, "INDEX.md")):
+        return [f if f != "START-HERE.md" else "INDEX.md" for f in GOVERNING]
+    return list(GOVERNING)
 
 
 def md_files():
     for d, dirs, files in os.walk(ROOT):
-        dirs[:] = [x for x in dirs if x not in SKIP_DIRS and not x.startswith(".")
-                   and os.path.relpath(os.path.join(d, x), ROOT) != KIT_ASIDE]
+        dirs[:] = [x for x in dirs if x not in SKIP_DIRS and not x.startswith(".")]
         for f in files:
             if f.endswith(".md"):
                 yield os.path.relpath(os.path.join(d, f), ROOT)
@@ -208,7 +220,7 @@ def table_rows(text, header_startswith):
 
 
 def check_exists():
-    missing = [f for f in GOVERNING if not os.path.exists(os.path.join(ROOT, f))]
+    missing = [f for f in governing() if not os.path.exists(os.path.join(ROOT, f))]
     step("Governing documents exist", "FAIL" if missing else "PASS", ["missing: " + m for m in missing])
 
 
@@ -245,7 +257,7 @@ def _version_status(known, pending_ids):
 
 def check_adoption():
     unfilled = []
-    for f in GOVERNING:
+    for f in governing():
         if not os.path.exists(os.path.join(ROOT, f)):
             continue  # reported by check_exists
         for ph in sorted(set(re.findall(r"\{\{[^{}]*\}\}", _strip_non_text(read(f))))):
@@ -309,9 +321,6 @@ def check_adopted_report():
 
 
 def check_links():
-    if os.path.isdir(os.path.join(ROOT, KIT_ASIDE)):
-        not_checked.append("docs/arpd-kit/: the kit's own pre-setup files, moved aside at setup; their links "
-                           "describe the kit's layout and are not checked")
     bad = []
     for f in md_files():
         text = read(f)
@@ -396,7 +405,8 @@ def check_requirement_details():
 def check_plans():
     d = os.path.join(ROOT, "plans")
     if not os.path.isdir(d):
-        step("Plans", "MISSING", ["plans/ absent"])
+        step("Plans: unique numbers, valid status", "PASS",
+             ["no plans/ folder yet (it is created with the first task plan)"])
         return
     nums, problems = {}, []
     for name in sorted(os.listdir(d)):
@@ -899,23 +909,56 @@ def check_open_sprints():
     step(name, status, details or ["no open sprint records" if not checked else "cited authority exists"])
 
 
-def check_index():
-    if not os.path.exists(os.path.join(ROOT, "INDEX.md")):
-        step("INDEX covers top level; listed paths exist (advisory)", "MISSING", ["INDEX.md absent"])
+MAP_STEP = "START-HERE map covers top level; listed paths exist (advisory)"
+
+
+def _project_map():
+    """(file, text) of the project's map: START-HERE.md's "## Map" section, else a legacy INDEX.md
+    (the whole file); (None, reason) when there is none."""
+    if os.path.exists(os.path.join(ROOT, "START-HERE.md")):
+        m = re.search(r"^##\s+Map\b[^\n]*\n(.*?)(?=^##\s|\Z)", read("START-HERE.md"), re.S | re.M)
+        if m:
+            return "START-HERE.md", m.group(1)
+    if os.path.exists(os.path.join(ROOT, "INDEX.md")):
+        return "INDEX.md", read("INDEX.md")
+    if os.path.exists(os.path.join(ROOT, "START-HERE.md")):
+        return None, "START-HERE.md has no '## Map' section"
+    return None, "START-HERE.md absent"
+
+
+def _listed_paths(line):
+    """Paths a map line lists: backticked paths in a table row's first column, or the first backticked
+    path on a bullet line."""
+    s = line.strip()
+    if s.startswith("|"):
+        return re.findall(r"`([^`]+)`", split_row(line)[0])
+    if re.match(r"^[-*+]\s", s):
+        m = re.search(r"`([^`]+)`", s)
+        return [m.group(1)] if m else []
+    return []
+
+
+def check_map():
+    where, text = _project_map()
+    if where is None:
+        step(MAP_STEP, "MISSING", [text])
         return
-    idx = read("INDEX.md")
     notes = ["not mentioned: " + e for e in sorted(os.listdir(ROOT))
-             if not e.startswith(".") and e not in SKIP_DIRS and e not in idx]
-    for line in idx.splitlines():
-        if not line.strip().startswith("|") or re.search(r"pending:|git-ignored", line, re.I):
+             if not e.startswith(".") and e not in SKIP_DIRS and e != where and e not in text]
+    for line in text.splitlines():
+        if re.search(r"pending:|git-ignored", line, re.I):
             continue
-        for path in re.findall(r"`([^`]+)`", split_row(line)[0]):
+        for path in _listed_paths(line):
             path = path.strip()
             if "{{" in path or "*" in path or "<" in path or re.match(r"^[a-z]+:", path):
                 continue
             if not os.path.exists(os.path.join(ROOT, path.rstrip("/"))):
                 notes.append("listed but does not exist: " + path)
-    step("INDEX covers top level; listed paths exist (advisory)", "ADVISORY" if notes else "PASS", notes)
+    if where == "INDEX.md":
+        notes_ok = ["map read from INDEX.md (a project set up before v0.6)"]
+    else:
+        notes_ok = []
+    step(MAP_STEP, "ADVISORY" if notes else "PASS", notes + notes_ok if notes else notes_ok)
 
 
 def _not_installed_decision(phrase):
@@ -935,8 +978,8 @@ def check_logging():
     settings = os.path.join(".claude", "settings.json")
     if not os.path.exists(os.path.join(ROOT, settings)):
         gaps.append(("event logging not installed", ".claude/settings.json is missing"))
-    elif "tools/hooks/log_hook.py" not in read(settings).replace("\\", "/"):
-        gaps.append(("event logging not installed", ".claude/settings.json does not run tools/hooks/log_hook.py"))
+    elif not re.search(r"(?:arpd/)?tools/hooks/log_hook\.py", read(settings).replace("\\", "/")):
+        gaps.append(("event logging not installed", ".claude/settings.json does not run arpd/tools/hooks/log_hook.py"))
     elif re.search(r'"disableAllHooks"\s*:\s*true', read(settings)):
         gaps.append(("event logging not installed", ".claude/settings.json sets disableAllHooks: true"))
     team = ""
@@ -965,27 +1008,11 @@ def check_logging():
 SKILLS = ("arpd-checkin", "arpd-amend", "arpd-plan")
 
 
-def _skill_roots():
-    """The project root, then each folder above it up to the root of the git repository that holds
-    it. With no enclosing git repository, the project root only."""
-    here = os.path.abspath(ROOT)
-    chain = [here]
-    while not os.path.exists(os.path.join(here, ".git")):
-        parent = os.path.dirname(here)
-        if parent == here:
-            return chain[:1]
-        here = parent
-        chain.append(here)
-    return chain
-
-
 def check_skills():
     name = "ARPD skills installed"
-    roots = _skill_roots()
     missing = []
     for skill in SKILLS:
-        rel = os.path.join(".claude", "skills", skill, "SKILL.md")
-        if not any(os.path.exists(os.path.join(r, rel)) for r in roots):
+        if not os.path.exists(os.path.join(ROOT, ".claude", "skills", skill, "SKILL.md")):
             missing.append(".claude/skills/%s/SKILL.md is missing" % skill)
     if not missing:
         step(name, "PASS")
@@ -1091,7 +1118,7 @@ STEPS = (
     (check_sprints, "Closed sprints: decision tracking and authorization"),
     (check_open_sprints, "Open sprints: plan approval and execution authority cited"),
     (check_readiness, "Readiness agrees with the sprint records (advisory)"),
-    (check_index, "INDEX covers top level; listed paths exist (advisory)"),
+    (check_map, MAP_STEP),
     (check_logging, "Event logging and agent roles installed"),
     (check_skills, "ARPD skills installed"),
     (check_superseded, "Live items cite no superseded spec item (advisory)"),
@@ -1099,6 +1126,17 @@ STEPS = (
 
 
 def main():
+    if os.path.exists(os.path.join(ROOT, KIT_MARKER)):
+        print("This is the ARPD kit, not a project; run setup to create a project.")
+        sys.exit(2)
+    version = os.path.join(ROOT, "arpd", "VERSION")
+    if os.path.isfile(version):
+        try:
+            first = (read(os.path.join("arpd", "VERSION")).splitlines() or [""])[0].strip()
+        except NotUTF8:
+            first = ""
+        if first:
+            print(first + "\n")
     for fn, title in STEPS:
         try:
             fn()
@@ -1122,7 +1160,8 @@ def main():
             "traced)",
             "the code itself: run the project's tests separately"]:
         print("    - " + d)
-    print("Relies on recorded information in DECISIONS.md, sprint records, REQUIREMENTS.md and INDEX.md.")
+    print("Relies on recorded information in DECISIONS.md, sprint records, REQUIREMENTS.md and START-HERE.md's "
+          "map (INDEX.md in older projects).")
     statuses = {s for _, s, _ in results}
     overall = "FAIL" if "FAIL" in statuses else ("INCOMPLETE" if statuses & {"MISSING", "PENDING"} else "PASS")
     print("\nOVERALL: " + overall)

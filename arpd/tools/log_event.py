@@ -1,21 +1,36 @@
 #!/usr/bin/env python3
 """Record a coordination event that the hooks cannot see.
 
-Agents (and the PI) append manual events to logs/events.jsonl, for example:
+Agents (and the PI) append manual events to arpd/logs/events.jsonl, for example:
 
-    python tools/log_event.py question --actor lead --ref DP-2026-10-20 --note "asked PI about turnover rule"
-    python tools/log_event.py handoff  --actor lead --note "STATUS.md rewritten before context reset"
-    python tools/log_event.py review   --actor reviewer --ref plan-004 --result PASS
-    python tools/log_event.py pi_time  --actor pi --minutes 25 --note "reviewed decision pack, 2 rulings"
-    python tools/log_event.py adopted  --actor lead --ref DEC-04 --note "authorized by R-03; commit abc1234"
+    python arpd/tools/log_event.py question --actor lead --ref DP-2026-10-20 --note "asked PI about turnover rule"
+    python arpd/tools/log_event.py handoff  --actor lead --note "STATUS.md rewritten before context reset"
+    python arpd/tools/log_event.py review   --actor reviewer --ref plan-004 --result PASS
+    python arpd/tools/log_event.py pi_time  --actor pi --minutes 25 --note "reviewed decision pack, 2 rulings"
+    python arpd/tools/log_event.py adopted  --actor lead --ref DEC-04 --note "authorized by R-03; commit abc1234"
 
-Event types and their meanings are listed in docs/EVENTS.md.
+Event types and their meanings are listed in arpd/docs/EVENTS.md. Run from the project root. In a
+project set up before v0.6 that has only logs/events.jsonl, that legacy log is used.
 """
 import argparse
 import datetime
 import io
 import json
 import os
+import sys
+
+LOG = os.path.join("arpd", "logs", "events.jsonl")
+LEGACY_LOG = os.path.join("logs", "events.jsonl")  # projects set up before v0.6
+
+
+def default_log():
+    """The project's event log: arpd/logs/events.jsonl, or an existing legacy logs/events.jsonl
+    when the new one is absent (a project set up before v0.6)."""
+    if not os.path.exists(LOG) and os.path.exists(LEGACY_LOG):
+        sys.stderr.write("Note: using the legacy event log %s (no %s).\n" % (LEGACY_LOG, LOG))
+        return LEGACY_LOG
+    return LOG
+
 
 TYPES = [
     "question",      # agent asks the PI something
@@ -45,8 +60,10 @@ def main():
     ap.add_argument("--result", default=None, help="PASS / FAIL / INCOMPLETE where relevant")
     ap.add_argument("--minutes", type=float, default=None, help="for pi_time only")
     ap.add_argument("--note", default=None, help="one line")
-    ap.add_argument("--log", default=os.path.join("logs", "events.jsonl"))
+    ap.add_argument("--log", default=None, help="default: %s (or a legacy %s)" % (LOG, LEGACY_LOG))
     a = ap.parse_args()
+    if a.log is None:
+        a.log = default_log()
     rec = {
         "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="milliseconds"),
         "source": "manual",

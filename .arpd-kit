@@ -1,0 +1,2 @@
+ARPD kit root marker. Its presence tells the ARPD tools that this folder is the kit, not a project
+(check_governance.py stops; install.py refuses to create a project inside it). Do not copy it into a project.

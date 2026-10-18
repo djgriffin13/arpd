@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Check a Project Definition Report (reports/PROJECT-DEFINITION.md) against the v0.5 contract.
+"""Check a Project Definition Report (reports/setup/PROJECT-DEFINITION.md; in projects set up before
+v0.6, reports/PROJECT-DEFINITION.md) against the v0.5 contract.
 
-    python check_report.py <report.md> [--stage draft|adopted]
+    python arpd/tools/check_report.py <report.md> [--stage draft|adopted]      (from the project root)
 
 Each check is reported PASS, FAIL or WARN with what it rests on. HTML comments are ignored.
 

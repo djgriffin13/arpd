@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Summarize logs/events.jsonl for a sprint record (SPRINT-NN.md §2.7).
+"""Summarize arpd/logs/events.jsonl for a sprint record (SPRINT-NN.md §2.7).
 
-    python tools/summarize_events.py [--since 2026-10-20T09:00] [--until 2026-10-20T18:00]
-    python tools/summarize_events.py --since ... --until ... --export reports/sprints/SPRINT-NN-events.jsonl
-    python tools/summarize_events.py --since <STATUS.md rewrite time> --sessions
+    python arpd/tools/summarize_events.py [--since 2026-10-20T09:00] [--until 2026-10-20T18:00]
+    python arpd/tools/summarize_events.py --since ... --until ... --export reports/sprints/SPRINT-NN-events.jsonl
+    python arpd/tools/summarize_events.py --since <STATUS.md rewrite time> --sessions
 
-Prints a Markdown table. Every measure is labelled with what it is and is not. See docs/EVENTS.md.
+Prints a Markdown table. Every measure is labelled with what it is and is not. See arpd/docs/EVENTS.md.
+Run from the project root. In a project set up before v0.6 that has only logs/events.jsonl, that
+legacy log is used.
 
 - Elapsed time: from the first to the last event in the window. It includes idle time and the gaps
   between sessions.
@@ -28,7 +30,7 @@ interrupted or ended without a Stop, and whether it did work (at least one tool 
 lead quotes this output (CLAUDE.md section 9).
 
 --export writes the raw log lines in the window to a file, so that a sprint's events can be
-committed with its record (logs/ itself is not committed). It never overwrites an existing file,
+committed with its record (arpd/logs/ itself is not committed). It never overwrites an existing file,
 and writes nothing when the window is empty.
 """
 import argparse
@@ -38,6 +40,19 @@ import json
 import os
 import sys
 from collections import defaultdict
+
+LOG = os.path.join("arpd", "logs", "events.jsonl")
+LEGACY_LOG = os.path.join("logs", "events.jsonl")  # projects set up before v0.6
+
+
+def default_log():
+    """The project's event log: arpd/logs/events.jsonl, or an existing legacy logs/events.jsonl
+    when the new one is absent (a project set up before v0.6)."""
+    if not os.path.exists(LOG) and os.path.exists(LEGACY_LOG):
+        sys.stderr.write("Note: using the legacy event log %s (no %s).\n" % (LEGACY_LOG, LOG))
+        return LEGACY_LOG
+    return LOG
+
 
 TURN_END = ("Stop", "StopFailure", "SessionEnd")
 
@@ -182,15 +197,17 @@ def export(events, path):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--log", default=os.path.join("logs", "events.jsonl"))
+    ap.add_argument("--log", default=None, help="default: %s (or a legacy %s)" % (LOG, LEGACY_LOG))
     ap.add_argument("--since")
     ap.add_argument("--until")
     ap.add_argument("--sessions", action="store_true", help="also print one line per main session")
     ap.add_argument("--export", help="write the raw events in the window to this file (e.g. "
                                      "reports/sprints/SPRINT-NN-events.jsonl)")
     a = ap.parse_args()
+    if a.log is None:
+        a.log = default_log()
     if not os.path.exists(a.log):
-        print("No event log at %s (logs/ is not committed: on a fresh clone or another machine, use --log "
+        print("No event log at %s (the event log is not committed: on a fresh clone or another machine, use --log "
               "with the last exported reports/sprints/SPRINT-NN-events.jsonl)." % a.log)
         return
     events = load(a.log, _ts(a.since) if a.since else None, _ts(a.until) if a.until else None)

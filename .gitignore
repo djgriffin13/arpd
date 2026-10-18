@@ -5,3 +5,4 @@ logs/
 .claude/settings.local.json
 output/
 .pytest_cache/
+arpd/logs/

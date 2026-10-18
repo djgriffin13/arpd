@@ -3,6 +3,8 @@
 
 It scans plans/ in the working tree and on every local and remote branch, so that agents working in
 parallel worktrees never claim the same number.
+
+    python arpd/tools/next_plan_number.py      (from the project root)
 """
 import os
 import re

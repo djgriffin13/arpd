@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """ARPD event-logging hook for Claude Code.
 
-Appends one JSON line per hook event to <project>/logs/events.jsonl. It is a pure logger:
+Appends one JSON line per hook event to <project>/arpd/logs/events.jsonl. It is a pure logger:
 
 - it never prints to stdout (stdout from some hooks is injected into the agent's context);
 - it never blocks;
 - it always exits 0, even on error.
 
 It records metadata only: no prompt text, tool inputs, tool outputs or file contents. The exact
-fields are documented in docs/EVENTS.md. Set ARPD_LOG_PROMPT_TEXT=1 to also record prompt text,
+fields are documented in arpd/docs/EVENTS.md. Set ARPD_LOG_PROMPT_TEXT=1 to also record prompt text,
 for the PI's own projects only.
 """
 import datetime
@@ -76,7 +76,7 @@ def main():
         raw = sys.stdin.buffer.read().decode("utf-8", errors="replace")
         payload = json.loads(raw) if raw.strip() else {}
         project = os.environ.get("CLAUDE_PROJECT_DIR") or payload.get("cwd") or os.getcwd()
-        log_dir = os.path.join(project, "logs")
+        log_dir = os.path.join(project, "arpd", "logs")
         os.makedirs(log_dir, exist_ok=True)
         with io.open(os.path.join(log_dir, "events.jsonl"), "a", encoding="utf-8") as fh:
             fh.write(json.dumps(_record(payload), ensure_ascii=False) + "\n")
