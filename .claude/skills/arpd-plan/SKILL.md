@@ -36,7 +36,7 @@ plan or technical edit need the PI.
 Read before you start:
 
 - `kit/docs/INTERACTION.md`: the labelled blocks, choices printed before any widget, the progress
-  line, the tutorial overlay, the dependency screen. Follow it on every turn that waits for the PI.
+  line, explaining when needed, the dependency screen. Follow it on every turn that waits for the PI.
 - `references/planning-guide.md` (this folder): the read-back, sizing, the draft's content,
   versions, review, the dependency screen.
 - `references/multi-sprint-and-handoff.md` (this folder): transition policies, the ruling and SA
@@ -48,11 +48,16 @@ Read before you start:
    in `DECISIONS.md`. If `CLAUDE.md` is the kit's "not yet set up" file, or the ruling is missing,
    say so plainly and offer `/arpd-setup`. Never plan execution against an unadopted charter.
 2. **Read, in this order:** `CLAUDE.md` and the standing authorizations in `DECISIONS.md`;
-   `PARADIGM-SPEC.md` if the work touches the science; `REQUIREMENTS.md`; `MASTER_PLAN.md`;
-   `ARCHITECTURE.md`; `STATUS.md` (Readiness, §5, §6, §8); the current or last sprint record and its
-   evidence; existing `plans/` and open decision packs; `START-HERE.md` (orientation only); notes in
-   `reports/planning/` and `docs/discovery/` (context only, never authority). Do not re-ask a
-   preference that is already recorded.
+   `PARADIGM-SPEC.md` if the work touches the science; `REQUIREMENTS.md`, including *Requirement
+   details* (acceptance criteria, priority, dependencies); `MASTER_PLAN.md`; `ARCHITECTURE.md`,
+   including *Architecture decisions* (note which are Provisional or Delegated); `DECISIONS.md`
+   *Waiting on the PI*, with each row's gate (*Needed by*); `STATUS.md` (Readiness, §5, §6, §8); the
+   current or last sprint record and its evidence; existing `plans/` and open decision packs;
+   `START-HERE.md` (orientation only); the adopted `reports/PROJECT-DEFINITION.md` and notes in
+   `reports/planning/` and `docs/discovery/` (context only, never authority: where they differ from
+   a governing document, the governing document wins). Do not re-ask a preference that is already
+   recorded, and never re-ask scope: the minimum usable version, the ideal version and the
+   nice-to-haves come from the adopted report and the requirement priorities.
 3. **A draft in progress?** A `reports/planning/PLAN-*.md` is approved only if its current Version
    line is the version an existing approval ruling names (*Approves:* line). Otherwise it is a
    draft: show its file and Version, say plainly that this version is **not approved** (naming any
@@ -84,9 +89,9 @@ Show `PLAN  ✓ Review → ● Priorities → ○ Draft → ○ Approval → ○
 turn that waits for the PI (✓ done, ● current, ○ to come). Add the topic list (priorities, scope,
 dependencies, review level, exit evidence) when it helps.
 
-**Tutorial.** Use the mode in `STATUS.md` §8 (or the discovery notes). If none is stored, ask the
-first-use choice from `INTERACTION.md` §6 and record the answer in §8. "Tutorial on/off" applies at
-once and changes nothing that is asked or approved.
+**Explain when needed** (`INTERACTION.md` §6), at the PI's level; there is no mode to ask about. An
+interview mode recorded by an earlier kit version (`STATUS.md` §8 or the notes) is ignored: say so
+once, and change nothing else.
 
 **Small projects stay small.** For a short utility, Steps A–C can be one read-back and one
 question, the plan one page, and the whole run four or five exchanges.
@@ -153,6 +158,9 @@ labelled provisional with what may change them (`references/planning-guide.md`).
 **Dependency screen.** For every unresolved decision the plan relies on, add or update its row in
 `DECISIONS.md` *Waiting on the PI*: *Affects*, *Needed by*, *Can continue meanwhile*. That table is
 canonical; the plan cites the row and does not restate it. Only the dependent work is blocked.
+Respect each row's gate: one needed "before planning" is put to the PI before approval (or deferred
+by ruling); one needed "before implementing X" is scheduled to be decided before the work package
+for X; one needed "before deployment" blocks only release work.
 Refresh `STATUS.md` §5's summary and set Readiness `Planning: draft (PLAN-…, v1)`, `Next step:
 review plan`.
 

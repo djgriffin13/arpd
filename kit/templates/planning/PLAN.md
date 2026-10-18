@@ -40,10 +40,10 @@ Keep it minimal but sufficient. A simple sprint needs no long task list or specu
 | Topic | Content |
 |---|---|
 | Outcome | The objective in plain language, and what the PI will observe afterwards |
-| Traceability | Milestone; requirement IDs; paradigm-spec items, if any |
+| Traceability | Milestone; requirement IDs (their acceptance criteria are in `REQUIREMENTS.md` *Requirement details*); architecture decisions relied on (D-NN); paradigm-spec items, if any |
 | Scope | Work packages, in order, with the expected task plans (`plans/NNN-…`) |
 | Dependencies | What must exist first; pending decisions (`DECISIONS.md` *Waiting on the PI*); blockers; work that can go ahead regardless |
-| Exit | Exit criteria (when the sprint is done), each with the evidence or test expected. Acceptance criteria belong to the task plans (`plans/NNN`) |
+| Exit | Exit criteria (when the sprint is done), each with the evidence or test expected. Task-plan acceptance criteria (`plans/NNN`) are drawn from the requirements' criteria |
 | Boundaries | Non-goals; risks; constraints; time, compute or cost limits where relevant |
 | Workflow | Team arrangement; independent review and test gates; resources |
 | Authority | Decisions reserved to the PI; choices delegated; the execution authority requested |

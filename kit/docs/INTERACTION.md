@@ -36,7 +36,7 @@ Rules:
 
 - **The block is last.** Nothing follows the closing divider: no extra request ("when you answer,
   also tell me…"), no tip, no summary. Anything else you need goes inside the block or waits for the
-  next turn. Explanation, progress, tool results and tutorial notes all go above it. Write the block
+  next turn. Explanation, progress and tool results all go above it. Write the block
   as plain text, not inside a code fence (the examples here are fenced only to show the layout).
 - **A closing turn has no block.** When the skill ends and does not wait for the PI (for example,
   after "later"), end with the next step and the exact prompt instead.
@@ -52,13 +52,13 @@ Rules:
   at once, without a second confirmation.
 
 ```text
-SETUP  ✓ Intake → ● Research & Problem → ○ Product & Engineering → ○ Governance & Handoff
-✓ Purpose  ✓ Who will use it  ◉ What to build  ○ Scientific invariants (partial)
+SETUP  ✓ Project → ● Requirements → ○ Architecture → ○ Team & Governance → ○ Definition Report
+✓ Who uses it  ◉ Main workflow  ○ Data to keep (partial)  ○ Exports
 
 ────────────────────────────────
 QUESTION FOR YOU
-What would you like built to make this possible? Describe the full version you imagine. We will
-choose the first useful version later.
+Walk me through one complete use, from the moment a student opens the app to the moment you see
+their answers. Describe the full version you imagine; we will choose the first useful version later.
 ────────────────────────────────
 ```
 
@@ -79,10 +79,11 @@ an approval. If the widget fails, the printed block stands and the PI can answer
 ```text
 ────────────────────────────────
 CHOICE FOR YOU (select one)
-How much should the team help develop the science behind the tool?
-A. Build from my existing scientific design.
-B. Help me brainstorm and clarify when useful. (recommended)
-C. Actively review and challenge the scientific design.
+How should the team treat the theory behind this estimator?
+A. Use it to guide implementation, without evaluating it.
+B. Identify theoretical or methodological concerns as we go.
+C. Help me develop it.
+D. Leave theory aside.
 ────────────────────────────────
 ```
 
@@ -91,8 +92,8 @@ C. Actively review and challenge the scientific design.
 Show the skill's progress line above the block on every interview turn.
 
 - **Setup:**
-  `SETUP  ✓ Intake → ● Research & Problem → ○ Product & Engineering → ○ Governance & Handoff`
-  (✓ done, ● current, ○ to come). Under it, list the current phase's topics (◉ marks the current
+  `SETUP  ● Project → ○ Requirements → ○ Architecture → ○ Team & Governance → ○ Definition Report`
+  (two spaces after `SETUP`; ✓ done, ● current, ○ to come). Under it, list the current phase's topics (◉ marks the current
   focus). With more than about six topics, show the counts line instead:
   `3 complete | 2 partial | 6 open; next: <topic>`, and add "Full phase plan on request."
 - **Plan:** `PLAN  ✓ Review → ● Priorities → ○ Draft → ○ Approval → ○ Handoff`. Add topics
@@ -117,52 +118,18 @@ The PI may ask to keep exploring. A phase ends when the understanding is enough 
 when a list is full. Record deferred items with what they affect. Moving on is ordinary agreement,
 not adoption of anything.
 
-## 6. Tutorial overlay
+## 6. Explain when needed
 
-**First use.** When no preference is stored, ask before the first interview question:
-
-```text
-────────────────────────────────
-CHOICE FOR YOU (select one)
-How would you like to work through this?
-A. Standard interview: questions only, with short explanations when needed.
-B. Guided tutorial: the same questions, with a short explanation of each step the first time it
-   comes up.
-────────────────────────────────
-```
-
-Give no default and no recommendation. Store the answer in the discovery notes, and after adoption
-in `STATUS.md` §8.
-
-**Any time.** "Tutorial on" or "tutorial off" takes effect at once. Do not restart, lose answers, or
-change what is asked or what needs approval. The tutorial adds explanation to the same interview.
-
-**How to explain.** Put explanations above the block. Explain a feature the first time it comes up,
-in one or two sentences. Taper once the PI shows they know it. Never repeat the same explanation
-every turn.
-
-First-use hints:
-
-- **Setup:**
-  - what setup does and what it produces;
-  - the four phases, and the topic list;
-  - answers can be informal, out of order or revised, and the PI can ask to brainstorm;
-  - why the full vision comes before the first useful version;
-  - answering a question is not authorizing anything;
-  - what an approval will change;
-  - why sprint planning is a separate, optional next step;
-  - the difference between an invariant, a requirement and an acceptance criterion, the first time
-    each appears.
-- **Plan:**
-  - the draft is detailed and is for the PI's review;
-  - the PI can edit it, or send it to another agent for review;
-  - drafts iterate until the PI is satisfied;
-  - one sprint or several, and how transitions work;
-  - every sprint still gets review and close-out;
-  - approving a plan does not start work;
-  - the PI can begin now, or later with a copyable prompt.
-- **Check-in and amend:** a direct instruction to change a rule is recorded as given, with no second
-  approval.
+- Use language suited to the PI. Gloss a technical term the first time it matters, and stop once
+  the PI shows they know it. Never infer low research expertise from low coding experience.
+- Explain an important engineering concept (where data live, what a dependency costs, what an
+  approval changes) when a decision depends on it, in one or two sentences, above the block.
+- For a consequential choice, give the options, their trade-offs and your recommendation, with the
+  reason in one plain sentence.
+- Say once what the process will do. After that the progress line carries it: do not narrate the
+  process on every turn.
+- Do not ask questions just to establish the PI's expertise. Infer it from how the PI writes, and
+  adjust when they correct you.
 
 ## 7. Dependency screen
 
@@ -206,4 +173,5 @@ files), or when the PI asks.
 | ○ | `[ ]` |
 | → | `->` |
 
-The labels and the option letters stay the same.
+The labels and the option letters stay the same. The setup line in ASCII:
+`SETUP  [>] Project -> [ ] Requirements -> [ ] Architecture -> [ ] Team & Governance -> [ ] Definition Report`

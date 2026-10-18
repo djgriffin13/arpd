@@ -18,7 +18,7 @@ where data goes, and how results come out.}}
 
 ## 2. Platform and stack
 
-| Choice | Value | Why (and alternatives considered) |
+| Choice | Value | Why (the decision row below, D-NN) |
 |---|---|---|
 | Delivery | {{web app / desktop / R package / Python package / CLI / ...}} |  |
 | Language(s) |  |  |
@@ -52,3 +52,15 @@ implications. Record why each was chosen.
 
 | Dependency | Why | Licence | Approved by |
 |---|---|---|---|
+
+## Architecture decisions
+
+The material design decisions, from the adopted Project Definition Report (§6), in the same
+columns. Only rows that are **Adopted** (by R-NN), **Delegated** (SA-NN, with its bounds) or
+**Provisional** (with what would confirm it, and its *Waiting on the PI* row) appear here, each
+labelled in *Status*. Rejected alternatives stay in *Alternatives considered*, with the reason. A
+Provisional row is not an adopted design. A change to a row is a decision in `DECISIONS.md`.
+
+| Decision | Alternatives considered | Recommendation | Rationale | Status | Consequences |
+|---|---|---|---|---|---|
+| D-01: {{decision}} |  |  |  | {{Adopted (R-NN) / Delegated (SA-NN) / Provisional (Waiting #N)}} |  |

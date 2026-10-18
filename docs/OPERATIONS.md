@@ -21,7 +21,7 @@ The skills live in this repository's `.claude/skills/`. Opening the cloned kit f
 
 | Command | What it does |
 |---|---|
-| `/arpd-setup` | Fresh project: the interview, then the governing documents and tools, in this repository. Ends with planning pending; writes no sprint and builds nothing |
+| `/arpd-setup` | Fresh project: the interview and the Project Definition Report, then, once you adopt the report, the governing documents and tools, in this repository. Ends with planning pending; writes no sprint and builds nothing |
 | `/arpd-setup import <path or git URL>` | Brings existing code into this repository, and sets it up |
 | `/arpd-setup install <path>` | Installs the charter, governing documents, tools, hooks and agents into your existing repository at `<path>`. It also copies the `arpd-*` skills and the `kit/` folder there, so planning, check-ins and amendments work from that repository |
 | `/arpd-plan` | Plans the next sprint, or a series, with you: review, priorities, a versioned draft, your approval of one version, then begin now or later. Arguments: `one`, `multiple`, `resume` |
@@ -35,6 +35,25 @@ does not render, an ASCII form is used (`[x]`, `[>]`, `[ ]`, `->`, a line of `-`
 
 ## 3. Your authority, and your words
 
+- **The Project Definition Report** (`reports/PROJECT-DEFINITION.md`). Setup ends by writing this
+  report from the interview: overview and scope (minimum usable version, ideal version,
+  nice-to-have), numbered requirements (`REQ-<AREA>-NN`, nonfunctional ones `REQ-NFR-NN`) with
+  acceptance criteria, priority and status, the architecture with the alternatives considered, data
+  and interface contracts, verification, roadmap, team, governance, and open decisions, each with a
+  gate (before planning, before implementing something named, before deployment). It is a draft,
+  with a version, until you adopt a version in your own words. That ruling (R-01) names the version
+  it adopts. Adoption authorizes writing the governing documents from the report, not development:
+  only an approved plan and your start direction start work (section 5). After adoption the report
+  is kept as the record; the governing documents carry its content and win where they differ.
+- **Statuses in the report.** *Adopted-on-adoption* (you stated or accepted it; adopted with the
+  report), *Proposed* (the lead's recommendation; not adopted unless you accept it), *Provisional* (a
+  working assumption with a gate), *Delegated* (within a standing authorization's bounds), *Open*
+  (a decision with a gate; it goes to `DECISIONS.md` *Waiting on the PI*) and *Excluded* (out of
+  scope).
+- **Data semantics stay yours.** Missing versus zero, duplicate or repeated observations, what an
+  identifier means, aggregation, numerical precision or estimation assumptions, changes to collected
+  variables and replacing unavailable data are consequential (`CLAUDE.md` §6). Agents choose how to
+  implement them, never what they mean, unless you name a policy (recorded in SA-01 or a ruling).
 - **Authority profile.** At setup you choose how much the team decides on its own: *consult first*
   (it asks before adopting any consequential scientific assumption), *bounded autonomy* (the
   suggested default: it works within agreed boundaries and reports at checkpoints) or *exploratory autonomy*
@@ -183,15 +202,21 @@ session was lost. The new session checks `git log`, `git status`, the working no
 `docs/discovery/SETUP.md`, any move-only commits, and the commit
 "Record adoption ruling R-NN (setup in progress)". Then:
 
-- **Before you adopted the read-back** (no adoption ruling): nothing generated is authorized. If the
+- **Before you adopted the report** (no adoption ruling): nothing generated is authorized. If the
   working notes exist, it shows you what they gathered (the phase reached, the topics, your words,
-  the open questions), restores the topic list and the interview mode, and continues from the next
-  open topic. Nothing in the notes counts as adopted: you adopt a fresh read-back. Without notes,
+  the open questions) and continues from the next open topic, without re-asking settled ones. A
+  draft report that exists is shown again as the draft it is, not rewritten from scratch. Nothing in
+  the notes or the draft counts as adopted: you adopt a version of the report. Without notes,
   earlier answers count only if you confirm them. Committed moves are kept, not repeated. In install
   mode without consent, the notes are outside the repository, and the new session needs their path
   from you.
-- **After you adopted it:** your ruling and its read-back are the authority. Setup continues from
-  the first missing file, without repeating moves, renumbering IDs or rewriting completed work.
+- **After you adopted it:** your ruling and the report version it names are the authority. Setup
+  continues from the first missing file, without repeating moves, renumbering IDs or rewriting
+  completed work.
+- **Notes from an earlier kit version** are read the same way. An "Interview mode" line is ignored
+  and marked "(obsolete; ignored)"; you are not asked to choose a mode. The old phases map to the new
+  ones: Intake and Research & Problem to Project; Product & Engineering to Requirements and
+  Architecture; Governance & Handoff to Team & Governance, then Definition Report.
 
 **If a plan draft was interrupted**, run `/arpd-plan` (or `/arpd-plan resume`). A file in
 `reports/planning/` without an "Approved by R-NN" marker is shown to you as a draft, **not
@@ -202,7 +227,7 @@ start it, send the prompt `START-HERE.md` gives.
 ## 10. The import baseline report
 
 When you import or install into existing code, setup runs the project's own tests (and its
-governance check, if it has one) before changing anything. After you adopt the read-back, it records
+governance check, if it has one) before changing anything. After you adopt the report, it records
 the results **verbatim** in `reports/IMPORT-BASELINE-<date>.md`: the source and commit, each command with its working directory,
 exit code and output, the test counts, and what was not run, and why. It is written once and then
 frozen. Failures are recorded as they are.

@@ -1,13 +1,16 @@
-# Release notes: ARPD v0.4.0-rc.1 (release candidate)
+# Release notes: ARPD v0.5.0-rc.1 (release candidate, in preparation)
 
-**Status: a release candidate, held for manual testing. This is not a final release.** The tag
-`v0.4.0-rc.1` marks the exact commit described here; `git rev-parse v0.4.0-rc.1^{commit}` prints it. A final release follows only after people
-have completed the manual tests in [docs/MANUAL-TESTING.md](docs/MANUAL-TESTING.md) and any blockers
-they find are fixed.
+**Status: in preparation on the branch `setup-revision`. Not yet tagged, and not a final release.**
+The tag `v0.5.0-rc.1` will mark the reviewed and tested commit; `git rev-parse v0.5.0-rc.1^{commit}`
+will print it. A final release follows only after people have completed the manual tests in
+[docs/MANUAL-TESTING.md](docs/MANUAL-TESTING.md) and any blockers they find are fixed.
 
-**The previous candidate, `v0.3.0-rc.1`, is preserved** under its tag, with its regression baseline.
-Its manual walkthrough was skipped by the PI's decision, because this candidate changes the setup
-flow it would have tested. Manual testing moves to this candidate.
+**Earlier candidates are preserved** under their tags: `v0.4.0-rc.1` (summarized at the end) and
+`v0.3.0-rc.1`. This candidate revises setup after the first manual test of v0.4
+(`evaluation/manual-tests/MT-2026-10-17-1-findings.md`): its opening and theory questions were
+oriented to scientific discovery when the researcher wanted a simple tool, its tutorial mode slowed
+the interview, engineering alternatives were barely explored, and its read-back was too short to
+serve as a specification.
 
 ## What ARPD is
 
@@ -24,149 +27,134 @@ March example also needs numpy and pytest.
 ```bash
 git clone <repository URL> my-project
 cd my-project
-git checkout v0.4.0-rc.1
+git checkout v0.5.0-rc.1
 claude
 ```
 
 Then type `/arpd-setup` (a new project), `/arpd-setup import <path or URL>` (bring code into this
 repository) or `/arpd-setup install <path>` (install into your own repository). When setup is done,
-type `/arpd-plan` to plan the first sprint. Details, hook permissions, readiness, confirming that
-logging works, owed items and recovery: [QUICKSTART.md](QUICKSTART.md) and
+type `/arpd-plan` to plan the first sprint. Details: [QUICKSTART.md](QUICKSTART.md) and
 [docs/OPERATIONS.md](docs/OPERATIONS.md).
 
-## Upgrading a project set up with v0.3
+## Upgrading a project set up with v0.4 or earlier
 
-A project set up with an earlier version keeps working. If you copy in the new
-`tools/check_governance.py`, its "ARPD skills installed" step reports `arpd-plan` as MISSING until
-you copy the kit's `.claude/skills/arpd-plan/` folder (with its `references/`) into the project's
-`.claude/skills/`, or record a "skills not installed" decision. Older sprint records without the new
-Part 1 rows are reported as ADVISORY, never FAIL. The charter (`CLAUDE.md`) changes only by your
-ruling (`/arpd-amend`).
+- A project already set up keeps working. Its charter changes only by your ruling (`/arpd-amend`).
+  The new data-semantics rule (`CLAUDE.md` §6) and the SA-01 data-semantics line apply to an
+  existing project only if you adopt them that way.
+- `/arpd-plan` no longer has a tutorial mode. A mode recorded in `STATUS.md` §8 is ignored, and the
+  skill says so once.
+- An interrupted setup begun with v0.4 resumes from its working notes: the "Interview mode" line is
+  ignored and marked "(obsolete; ignored)", the old phases map to the new ones, and no answer is
+  lost (`docs/OPERATIONS.md` §9).
 
-## What changed since v0.3.0-rc.1
+## What changed since v0.4.0-rc.1
 
-**Setup (`/arpd-setup`) is adaptive, and ends before any sprint.**
+**Setup (`/arpd-setup`) is tool-first.**
 
-- Four visible phases: Intake, Research & Problem, Product & Engineering, Governance & Handoff. The
-  internal phases 0–10 still apply underneath.
-- On first use, a choice between a standard interview and a guided tutorial, with no default. "Tutorial
-  on" or "tutorial off" works at any time without changing what is asked or approved.
-- Each phase keeps a working list of three to six topics, re-evaluated after every reply. One
-  question at a time; a summary after about three to five questions, with a choice to add more or
-  move on.
-- It opens with two separate questions: what the researcher wants to investigate or accomplish, and
-  what they want built. Coding experience, research maturity and the role wanted on the science are
-  asked separately. The full vision comes before the first useful version.
-- Science is scaled to the request. Product-only work is not taken through constructs, invariants or
-  causal claims; its requirements can cite the adoption ruling.
-- Working notes are saved as the interview goes, in `docs/discovery/SETUP.md`. They are
-  non-governing. In install mode, setup asks consent before saving them in the researcher's
-  repository. They are committed alone at adoption and never pushed without authorization.
-- An interrupted setup can now resume **before** adoption, from the working notes. Nothing in them
-  counts as adopted.
-- Setup writes **no sprint record** and never offers to begin implementation. It ends with planning
-  pending, `START-HERE.md` pointing to `/arpd-plan`, and a choice: plan now or later.
-- Expected length: 30–60 minutes, depending on how much scientific help is asked for.
+- Five visible phases: Project → Requirements → Architecture → Team & Governance → Definition Report.
+- The first question, after a quick inspection, asks what the researcher would like to build. The
+  interview-mode, research-maturity, coding-experience and profile questions are gone; the agent
+  infers how much to explain.
+- Three scope questions, each asked once: the minimum usable version, the ideal version (features of
+  interest named), and nice-to-have features not expected in the first release. They set requirement
+  priority (required, desired or future, later).
+- Theory is optional. When it is relevant, the researcher chooses how the team treats it: use it to
+  guide implementation without evaluating it, identify concerns, help develop it, or leave it aside.
+  The full paradigm-specification method applies only when chosen, when correctness depends on it
+  (estimators, simulations, models), or on request. A data-collection tool is not taken through
+  constructs.
+- Requirements discovery covers workflows, functional and nonfunctional requirements, data and
+  persistence, and future direction, as a menu of coverage domains, not a questionnaire.
+- Architecture: for each material decision, the credible alternatives, their trade-offs, a
+  recommendation with reasons, and the consequences. Existing tools that would avoid custom software
+  are considered. A claim about a technology is checked in its documentation or marked "not
+  verified".
+- The short read-back is replaced by the **Project Definition Report**
+  (`reports/PROJECT-DEFINITION.md`), described below.
+- Setup still ends with planning pending and never builds anything. Expected length: about 20–60
+  minutes, depending on complexity.
 
-**New skill: `/arpd-plan`.**
+**The Project Definition Report.** A new template, `kit/templates/reports/PROJECT-DEFINITION.md`:
 
-- Works after setup, between sprints, or in a new session, from the project's records.
-- Steps: review where the project stands; one sprint or several (always asked); priorities; a draft
-  in `reports/planning/PLAN-<date>.md`, versioned and committed; review and revision, with an
-  optional outside review; the PI's approval of an exact version; then begin now or later.
-- Plan approval, execution authority and task-plan approval stay separate. Approval alone starts
-  nothing; when the PI says nothing about starting, planning approval only is recorded. "Later"
-  leaves an exact start prompt in `START-HERE.md`.
-- For a series, the PI chooses how sprints follow each other. Continuing across boundaries without a
-  new ruling needs a standing authorization naming the sprints, the transition conditions and when to
-  consult the PI. Every boundary still gets close-out, independent review and checks.
+- versioned, with a DRAFT banner until the researcher adopts a version;
+- sections 1–12 (overview, product and workflows, functional and nonfunctional requirements,
+  architecture, alternatives and decisions, data and interface contracts, verification, roadmap,
+  team, authority and governance, risks and open decisions) and §13 *What adoption authorizes*; a
+  section that does not apply is one line, and detail scales with complexity and risk;
+- requirements as `REQ-<AREA>-NN` (nonfunctional ones `REQ-NFR-NN`), each with acceptance criteria,
+  priority, dependencies, source and status;
+- statuses mapped onto the kit's existing mechanisms: Adopted-on-adoption, Proposed, Provisional,
+  Delegated (SA-NN), Open (with a gate: before planning, before implementing something named, or
+  before deployment), Excluded;
+- a completeness check, filled in before the report is presented.
 
-**Shared interaction conventions** (`kit/docs/INTERACTION.md`), used by all four skills: one
-labelled block (`QUESTION FOR YOU`, `CHOICE FOR YOU`, `APPROVAL REQUIRED`) last in every turn that
-waits for the PI; choice options printed as text before any widget; progress lines; the tutorial
-overlay; five kinds of information and action (an answer is not an authorization); a quick
-dependency screen; an ASCII fallback.
+Adoption is a ruling, R-01, in the researcher's words, with `Adopts: reports/PROJECT-DEFINITION.md
+vN`; the report is committed with it in the adoption-first commit. Adoption authorizes the governing
+documents only. Implementation still needs an approved plan and a start direction (`/arpd-plan`).
+After adoption the report is kept as the record; the governing documents carry its content and win
+where they differ.
 
-**Check-in and amendment.**
+**Charter (`CORE.md`).** §6 lists **data semantics** as consequential: missing versus zero,
+duplicate or repeated observations, identifier meaning, aggregation, numerical precision or
+estimation assumptions, changes to collected variables, replacement of unavailable data. Agents
+choose implementation mechanisms, never these semantics, unless a ruling or an SA names the policy.
+§2 lists the setup report as deciding nothing.
 
-- `/arpd-checkin` reports readiness (setup, planning, execution) and cross-checks it against the
-  records; lists decisions ahead, grouped by the work they block; runs the dependency screen; and
-  gives the exact next prompt.
-- `/arpd-amend` routes project defaults (review depth, transition policy, planning cadence) and
-  milestone changes, applied from the PI's clear words with no second approval, and records
-  continuation authorizations across sprints.
+**Templates.**
 
-**Charter and templates.**
+- `REQUIREMENTS.md`: a *Requirement details* section (acceptance criteria, priority, dependencies
+  per requirement); the requirements table is unchanged.
+- `ARCHITECTURE.md`: an *Architecture decisions* table, in the report's columns; only Adopted,
+  Delegated or Provisional rows, each labelled.
+- `DECISIONS.md`: R-01 cites the adopted report version; SA-01 has a data-semantics line ("never
+  delegated unless a named policy"); *Needed by* is the open item's gate.
+- `STATUS.md`: no interview mode in §8; *Readiness* names the adopted report.
+- `MASTER_PLAN.md`: the roadmap comes from the report.
+- Setup working notes: the new phases, classification, theory context, the three scope tiers,
+  architecture alternatives, candidate requirements with status, governance preferences, report
+  version and state, and the compatibility rules for older notes.
+- "Acceptance criterion" is explained the same way in `PARADIGM-SPEC.md`, `REQUIREMENTS.md`,
+  `plans/README.md` and QUICKSTART: each requirement has its own; a task plan's are drawn from them.
 
-- `CORE.md`: working notes and plan drafts are listed as deciding nothing; a sprint plan is approved
-  by the PI, unlike routine task plans; planning is not starting; multi-sprint continuation is an SA;
-  a dependency screen at set points; `STATUS.md` carries a readiness block.
-- `STATUS.md`: a *Readiness* block (setup, planning, execution, next step); §5 summarizes the
-  decisions ahead.
-- `DECISIONS.md`: *Waiting on the PI* is the one canonical list of open decisions, with *Affects*,
-  *Needed by* and *Can continue meanwhile* columns; formats for plan approval and for a continuation
-  SA.
-- Sprint record Part 1: the rows *Approved plan*, *Execution authorized by* and *Transition policy*
-  replace "Authorized to continue into the next sprint without a check-in?". Older records keep the
-  old row.
-- `MASTER_PLAN.md`: a broad roadmap that can say "planning pending".
-- New templates: the setup working notes, the sprint-plan draft, and the import baseline report.
-- Invariant, requirement and acceptance criterion are explained in the same three rows in
-  `PARADIGM-SPEC.md`, `REQUIREMENTS.md`, `plans/README.md` and the project's `START-HERE.md`. The
-  task-plan heading "Scientific constraints" is now "Scientific invariants this work must respect
-  (INV IDs)".
+**Interaction conventions (`kit/docs/INTERACTION.md`).** The tutorial overlay is removed kit-wide.
+In its place, "Explain when needed": language suited to the researcher, engineering concepts
+explained when a decision depends on them, trade-offs and a recommendation for consequential choices,
+no repeated narration of the process, no questions just to establish expertise. The setup progress
+line and its ASCII form are updated.
 
-**Import baseline.** An imported or installed project's test and checker results before any change
-are recorded once, verbatim, in `reports/IMPORT-BASELINE-<date>.md`. The import decision cites it,
-and so does the first sprint's Part 1. Before, they were recorded in the first sprint's Part 1.
+**Sprint planning (`/arpd-plan`).** No tutorial mode. At entry it reads the requirement details, the
+architecture decisions and the adopted report (as context), and it respects each open item's gate
+when planning. It does not re-ask scope.
 
-**Governance checker.**
+**Documentation.** QUICKSTART, README, OPERATIONS and LIMITATIONS describe the new setup.
+`docs/MANUAL-TESTING.md` is rewritten around two projects: a simple data-collection app (Scenario A)
+and a computational estimator (Scenario B), plus checks for interruption and a change of scope.
 
-- The skills step is renamed "ARPD skills installed" and includes `arpd-plan`.
-- A project with setup adopted and no sprint passes.
-- New step "Open sprints: plan approval and execution authority cited": in an open sprint's Part 1,
-  the cited rulings and SAs must exist and not be pending, and the plan file and version must exist.
-  Records in the older format get an ADVISORY, never a FAIL.
-- The readiness block is listed under *Not checked*. Closed-sprint checks are unchanged.
-
-**Developer-test tooling.** A turn checker, `evaluation/developer-tests/check_turn.py`, checks the
-form of a saved turn in scripted tests: the labelled block last, choice options in the text, the
-progress line, and that an approval names what it approves.
+**Developer-test tooling.** The turn checker accepts the new setup progress line. A report checker
+(`evaluation/developer-tests/check_report.py`) checks a report's form: sections, acceptance criteria
+and status per requirement, a gate per open item, no adoption claimed by a draft. Contract tests check
+the skills and templates against the interface. Counts and results: to be filled.
 
 ## Supported workflows and evidence
 
-Every developer test below is, or will be, a real Claude Code session with **scripted** researcher
-answers, audited by an independent tester agent. Scripted responses are not evidence of human
-usability. None of these workflows has yet been completed by a researcher.
+Every developer test is a real Claude Code session with **scripted** researcher answers, audited by
+an independent tester agent. Scripted responses are not evidence of human usability. None of these
+workflows has yet been completed by a researcher.
 
-DT-01 to DT-08 were run on v0.3.0-rc.1. They remain the evidence for what v0.4 did not change. The
-setup interview and its handoff changed, so the setup tests (DT-02 to DT-05, DT-08) are evidence for
-the earlier interview only; the moves, history and owed-item handling they show are unchanged.
-
-| Workflow | Evidence | What it shows | Status in this candidate |
-|---|---|---|---|
-| Adaptive fresh setup, ending with planning pending | DT-09 ([DT-09–13](evaluation/developer-tests/DT-09-13-report.md)) | 27 turns. Tutorial toggled; notes saved and non-governing; nothing governing before adoption; no SPRINT-01; Readiness and START-HERE point to `/arpd-plan`; checker PASS | Runs end to end (scripted) |
-| `/arpd-plan`: one sprint, approved, started later | DT-10, DT-10b ([DT-09–13](evaluation/developer-tests/DT-09-13-report.md)) | A versioned draft; approval names file, version and commit, planning only; a revision after approval reads as a draft; the start choice states its effect; Part 1 cites approval and start rulings | Runs end to end (scripted); DT-10b on the fixed kit |
-| `/arpd-plan`: a series with a gated transition, or continuation by SA | DT-11, DT-11b ([DT-09–13](evaluation/developer-tests/DT-09-13-report.md)) | Later sprints provisional; dependency recorded with Affects, Needed by and Can continue; Sprint 1 only, or an SA with scope and transition conditions | Runs end to end (scripted), on the kit before the round-8 fixes |
-| Import of the March starter, with the import baseline report | DT-12 ([DT-09–13](evaluation/developer-tests/DT-09-13-report.md)) | Pure-rename moves; baseline report cited by the import decision; no SPRINT-01; checker PASS. A stale scripted answer deferred adopted decisions (import guidance fixed) | Runs end to end (scripted) |
-| Setup interrupted before adoption, resumed from the working notes | DT-13 ([DT-09–13](evaluation/developer-tests/DT-09-13-report.md)) | A new session found the notes, adopted nothing, asked only what was open, re-did the read-back | Runs end to end (scripted) |
-| Fresh setup, v0.3 interview | [DT-03](evaluation/developer-tests/DT-03-report.md) | Interview through first sprint plan; governing documents generated; owed `.claude/` items recorded | Superseded flow; generation and owed-item handling unchanged |
-| Import, including the March starter | [DT-02](evaluation/developer-tests/DT-02-report.md), [DT-04](evaluation/developer-tests/DT-04-report.md) | Starter records and history kept through move-only commits; inherited decisions carried | Ran end to end on v0.3 |
-| Install into an existing repository | [DT-05](evaluation/developer-tests/DT-05-report.md), [DT-08](evaluation/developer-tests/DT-08-report.md) | Prior instructions kept and reconciled by decision; code, tests and data untouched; history kept. DT-05 found that the skills were not installed (fixed). DT-08: an install interrupted after the adoption ruling and resumed in a new session kept everything without duplicating it | Ran end to end on v0.3; resume tested at one interruption point. The consent prompt for working notes is new and untested |
-| Check-in | [DT-06](evaluation/developer-tests/DT-06-report.md), [DT-07](evaluation/developer-tests/DT-07-report.md) | After a fix, the check-in surfaces an incomplete installation and says when STATUS is out of date | Ran on v0.3; the readiness and decisions-ahead additions are untested |
-| Amendment | [DT-06](evaluation/developer-tests/DT-06-report.md), [DT-07](evaluation/developer-tests/DT-07-report.md) | A new delegation adds to SA-01; open questions go to the specification; a superseded invariant is kept and followed through dependent documents | Ran on v0.3; the routes for project defaults and milestones are untested |
-| Event logging and recovery after a lost session | [DT-01](evaluation/developer-tests/DT-01-report.md), addendum 2 | Hook capture and the charter's recovery steps, in real sessions | Checked on v0.3; unchanged |
+| Workflow | Evidence | Status in this candidate |
+|---|---|---|
+| v0.5 setup: Scenario A (data-collection app, the manual test replayed), B (estimator), C (existing repository), D (scope correction), E (governance checks inside A–D), F (interrupt and resume, including old-format notes), G (report checks), H (handoff to `/arpd-plan`) | v0.5 scripted scenarios A–H: to be filled | Not yet run |
+| `/arpd-plan`, check-in, amendment, import and install moves, owed `.claude/` items, event logging and recovery | DT-01 to DT-13 on v0.3 and v0.4 ([DT-09–13](evaluation/developer-tests/DT-09-13-report.md)) | Unchanged in their mechanics; the setup interviews in those tests are evidence for the earlier flows only |
 
 ## Tested and draft components
 
 | Tested (with the evidence above) | Draft or untested |
 |---|---|
-| Charter, governing-document templates and the v0.3 skills, in scripted developer tests | Every workflow with a real researcher |
-| Governance checker and event summary: automated tests (150: 131 for the kit tools and 19 for the turn checker); seven independent review rounds on v0.3, and rounds 8 and 8b on v0.4 | The adaptive setup, `/arpd-plan`, the interaction conventions and the v0.4 check-in and amendment changes: scripted developer tests DT-09 to DT-13 (75 turns, each checked for question placement); none tested by people |
-| Event-logging hooks and recovery, in real Claude Code sessions | Approving the `.claude/` writes interactively (scripted runs cannot approve them) |
-| Modules: computational model; team arrangement | Native choice widgets, and symbol rendering, in the Claude Code terminal and the Claude app |
-| The March (1991) worked example: 70 tests; two independent review rounds | Draft modules: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data |
-|  | Other agent harnesses than Claude Code; the `StopFailure` hook's payload fields, against a real failure |
+| Charter, governing-document templates and the v0.3 and v0.4 skills, in scripted developer tests | Every workflow with a real researcher, including the v0.5 setup |
+| Governance checker and event summary: automated tests in `kit/tools/`; independent review rounds 1 to 8b | The v0.5 setup and report (scripted scenarios to be filled) |
+| Event-logging hooks and recovery, in real Claude Code sessions | Approving the `.claude/` writes interactively; native choice widgets and symbol rendering |
+| Modules: computational model; team arrangement | Draft modules: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data |
+| The March (1991) worked example: 70 tests; two independent review rounds | Other agent harnesses than Claude Code; the `StopFailure` hook's payload fields |
 
 ## The March (1991) starter, qualified
 
@@ -187,15 +175,15 @@ scientific validation.
 
 The full list is in [docs/LIMITATIONS.md](docs/LIMITATIONS.md). The most important:
 
-- No researcher has used the kit yet; all workflow evidence is scripted developer testing. The new
-  setup interview, `/arpd-plan` and the interaction conventions have not been used by people.
-- The turn checker checks the form of a turn, not whether the question was a good one, how the
-  tutorial feels, or how native widgets behave. Those need the manual tests.
-- Telling an interview answer from a ruling, a plan approval or a start is the agent's judgement,
-  guided by the skills. The checker cannot confirm that any of them is in the PI's own words.
-- The governance checker reads records. It does not report PASS for an item it could not check, and
-  each run lists what it did not check, but it cannot show that the records are true. It does not
-  check the readiness block, or whether a cited authority covers an open sprint's scope.
+- No researcher has used the kit yet; all workflow evidence is scripted developer testing, and the
+  v0.5 scenarios are still to be run.
+- The turn and report checkers check form, not quality: not whether a question was the right one,
+  whether the requirements and acceptance criteria are meaningful, or whether the alternatives were
+  credible.
+- Architecture recommendations rest on the model's knowledge unless documentation was checked.
+- Telling an answer from a ruling, a plan approval or a start, and recognizing a data-semantics
+  choice, are the agent's judgement, guided by the skills.
+- The governance checker reads records. It cannot show that the records are true.
 - Installing the hooks, agent roles and (in install mode) skills needs an interactive approval in
   Claude Code. When that is not given, setup records the items as owed with exact commands.
 - The kit's benefits are proposed from team science and practice, not yet shown to improve outcomes.
@@ -221,38 +209,54 @@ is requested in [CITATION.cff](CITATION.cff), separately from the licence terms.
 
 ## Deferred to the backlog (not in this candidate)
 
-Carried from v0.3.0-rc.1:
+Carried from earlier candidates:
 
-- **Checker, advisory step "Live items cite no superseded spec item":** it does not yet catch
-  supersession written as strikethrough, ID ranges (`CON-01–03`), or VAL rows citing a superseded
-  claim.
-- **Checker:** a "skills not installed" decision is accepted whatever its status; skills installed
-  at user level (`~/.claude/skills`) are not detected.
-- **Setup:** template `<!-- keep:` blocks were sometimes dropped (DT-05); a setup decision recorded
-  as "consult" with no scientific consequence (DT-05).
-- **Install mode:** a project whose kept rule is a bare `python -m pytest` still collects the kit's
-  own tests (`START-HERE` gives `python -m pytest --ignore=kit`); a pytest configuration written at
-  install would fix this. Installing the owed skills later needs the path of a kit clone, because
-  the skills are not inside `kit/`. The checker does not yet confirm that each prior rule kept by
-  decision appears in the charter.
-- **March:** comparison with independent reconstructions and a systematic exploration of the
-  assumptions (B-07 to B-09); no further March work in this candidate.
-- **Modules:** the five draft modules stay drafts until tested.
-
-New in this candidate:
-
-- **Checker:** for an open sprint, it does not check whether the cited ruling or SA covers that
-  sprint's scope, or whether the approved plan file still matches the commit its ruling names. The
-  readiness block is not checked against the records.
+- **Checker:** the advisory step "Live items cite no superseded spec item" does not catch
+  strikethrough, ID ranges (`CON-01–03`), or VAL rows citing a superseded claim; a "skills not
+  installed" decision is accepted whatever its status; skills installed at user level are not
+  detected; for an open sprint, it does not check that the cited ruling or SA covers the sprint's
+  scope, or that the approved plan file still matches the commit its ruling names; the readiness
+  block is not checked against the records.
+- **Setup:** template `<!-- keep:` blocks were sometimes dropped (DT-05).
+- **Install mode:** a bare `python -m pytest` rule still collects the kit's own tests (`START-HERE`
+  gives `python -m pytest --ignore=kit`); installing owed skills later needs a kit clone's path; the
+  checker does not confirm that each prior rule kept by decision appears in the charter.
 - **Planning:** resuming an interrupted plan review has not been tested.
-
-- **Fenced examples.** The skills show block layouts inside code fences, while the rule says a
-  real block is plain text; agents sometimes copy the fence. `check_turn.py` does not yet warn about
-  a fenced block.
+- **Fenced examples:** the skills show block layouts inside code fences, while a real block is plain
+  text; `check_turn.py` does not warn about a fenced block.
+- **March:** comparison with independent reconstructions and a systematic exploration of the
+  assumptions (B-07 to B-09).
+- **Modules:** the five draft modules stay drafts until tested.
 
 ## Before a public release
 
-- Tag `v0.4.0-rc.1`, then complete and record the manual tests in `docs/MANUAL-TESTING.md`.
+- Run and record the v0.5 scripted scenarios, review the diff independently, then tag `v0.5.0-rc.1`
+  and complete the manual tests in `docs/MANUAL-TESTING.md`.
 - Confirm copyright ownership, and the copyright holder named in `LICENSE`. During anonymous review
   it reads "The ARPD authors".
 - After review, replace the anonymous author entry in `CITATION.cff` and add the framework paper.
+
+---
+
+## Earlier: v0.4.0-rc.1 (tagged; superseded by this candidate)
+
+v0.4 made setup adaptive and separated it from planning:
+
+- setup ended with planning pending, wrote no sprint record, and saved non-governing working notes
+  (`docs/discovery/SETUP.md`) that let an interrupted setup resume before adoption;
+- the new `/arpd-plan` skill: review, one sprint or several, priorities, a versioned draft in
+  `reports/planning/`, approval of an exact version, then begin now or later; plan approval,
+  execution authority and task-plan approval kept separate; continuation across sprints only by a
+  standing authorization;
+- the shared interaction conventions (`kit/docs/INTERACTION.md`): one labelled block last, choices
+  printed before any widget, progress lines, five kinds of information and action, a dependency
+  screen;
+- check-in reported readiness and decisions ahead; amendment routed project defaults and milestones;
+- `STATUS.md` *Readiness*; *Waiting on the PI* as the one list of open decisions, with *Affects*,
+  *Needed by* and *Can continue meanwhile*; the sprint record's Part 1 rows *Approved plan*,
+  *Execution authorized by* and *Transition policy*; the import baseline report;
+- the checker's "ARPD skills installed" and "Open sprints: plan approval and execution authority
+  cited" steps; a turn checker for scripted tests.
+
+Its evidence was scripted developer tests DT-09 to DT-13 (75 turns), on top of DT-01 to DT-08 from
+v0.3, and 150 automated tests. Its tutorial overlay and four-phase interview are replaced in v0.5.

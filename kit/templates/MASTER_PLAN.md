@@ -29,7 +29,8 @@ closes a milestone.
 ## 3. Planned order of development
 
 This is the broad roadmap: the main stretches of work expected, in order, and what each depends on.
-It is not a sprint plan. Use as many rows as the project needs; a small project may have one.
+At setup it is written from the adopted Project Definition Report's roadmap (§9), as are the
+milestones in §2 and the deferred features in §4. It is not a sprint plan. Use as many rows as the project needs; a small project may have one.
 Sprints are planned with `/arpd-plan`, and the PI approves each plan by ruling (`CLAUDE.md` §8).
 Until a sprint is planned, its row says "planning pending". This is a valid state. Each sprint is
 sized to finish in one working block. The order is revised at sprint planning and at each sprint

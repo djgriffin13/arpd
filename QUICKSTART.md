@@ -25,44 +25,58 @@ Opening this folder in Claude Code makes the skills in `.claude/skills/` availab
 /arpd-setup
 ```
 
-**First, choose how you want to work.** Setup asks once, with no default:
+**It starts with your project.** After a quick look at the folder, the first question is what you
+would like to build: an overview of the tool, who would use it, and what you imagine it doing. A
+rough idea, a detailed specification or a pointer to existing documents or code are all fine. There
+is no questionnaire about your background or research maturity first.
 
-- **Standard interview:** questions only, with short explanations when needed.
-- **Guided tutorial:** the same questions, with a short explanation of each step the first time it
-  comes up.
-
-You can say "tutorial on" or "tutorial off" at any time. Nothing restarts, no answer is lost, and
-nothing changes in what needs your approval.
-
-**Four visible phases.** A progress line at the top of each turn shows where you are:
+**Five visible phases.** A progress line at the top of each turn shows where you are:
 
 ```
-SETUP  ✓ Intake → ● Research & Problem → ○ Product & Engineering → ○ Governance & Handoff
+SETUP  ● Project → ○ Requirements → ○ Architecture → ○ Team & Governance → ○ Definition Report
 ```
 
 Under it is a short list of the topics still to understand in the current phase. The list changes as
-you answer; one answer can close several topics. Expect **30–60 minutes**, depending on how much
-help with the science you ask for.
+you answer; one answer can close several topics. Expect **about 20–60 minutes**, depending on how
+complex the project is.
+
+- **Project:** what you want to build and what already exists. If a theory or model should inform the
+  tool, you choose how the team treats it: use it to guide implementation without evaluating it,
+  identify concerns, help develop it, or leave theory aside. For a tool that only collects data, the
+  question is skipped.
+- **Requirements:** after your overview, three scope questions, each asked once: the **minimum
+  usable version**; the **ideal version**, naming the features you are interested in; and
+  **nice-to-have** features you do not expect in the first release. Then workflows, data, and how
+  well it must work. Each requirement gets acceptance criteria: how anyone could check it was met.
+- **Architecture:** for each material choice (for example, desktop app, browser app, or an existing
+  survey tool), the agent explains the credible alternatives and their trade-offs, then recommends
+  one. You are not asked to choose a technology cold.
+- **Team & Governance:** how the agents are arranged, how much they decide on their own, review
+  and check-ins, and the open decisions, each with the point by which it must be settled.
+- **Definition Report:** the agent writes `reports/PROJECT-DEFINITION.md` and checks it for gaps.
 
 **One question at a time.** Each turn ends with one labelled block: `QUESTION FOR YOU`,
 `CHOICE FOR YOU` or `APPROVAL REQUIRED`. Nothing comes after it. For a choice, every option is
-printed in the text (A., B., …) before any pop-up widget, so you can always answer by letter. After a
-few questions in a phase, the agent sums up what it heard and asks whether to add more or move on.
-
-**You talk about purpose and science; the agent proposes the engineering.** It first asks what you
-want to investigate or accomplish, and separately what you want built. It hears your full vision
-before narrowing to a first useful version. How much science it covers depends on what you ask for:
-if you only want a tool built, it does not take you through constructs, invariants or causal claims
-you did not ask for.
+printed in the text (A., B., …) before any pop-up widget, so you can always answer by letter. The
+agent explains a concept when a decision depends on it, at your level, without narrating the process.
 
 **Working notes are saved as you go**, in `docs/discovery/SETUP.md`. They are **not governing**: they
 record what you said so that an interrupted setup can resume, and nothing in them is adopted. If you
 install into your own repository, setup asks your consent before saving them there. Notes never hold
 secrets or participant data, and are never pushed without your say-so.
 
-**Answering is not authorizing.** Your answers inform the agent; they decide nothing. Near the end,
-the agent reads back a plain-language summary under `APPROVAL REQUIRED`. Only when you adopt it, in
-your own words, is anything governing written. Your words are recorded verbatim as a ruling.
+**You adopt the Project Definition Report.** It is the full specification: overview and scope,
+numbered requirements with acceptance criteria, architecture and the alternatives considered, data
+and interface contracts, verification, a roadmap, the team, governance, and open decisions with
+their gates. Each item is marked Adopted-on-adoption, Proposed, Provisional, Delegated, Open or
+Excluded. Revise it as often as you like. Only when you adopt a version, in your own words, under
+`APPROVAL REQUIRED`, is anything governing written; your words are recorded verbatim as ruling R-01,
+citing the report's version. Adoption authorizes the governing documents only, not any
+implementation.
+
+**Data semantics stay yours.** What a blank answer means, missing versus zero, duplicates and
+repeated submissions, what an identifier means, aggregation, precision: agents choose how to
+implement these, never what they mean, unless you name a policy.
 
 You also choose an **authority profile**: how much the team decides on its own (consult first,
 bounded autonomy, or exploratory autonomy). You can change it at any time.
@@ -76,9 +90,11 @@ in `STATUS.md` and `START-HERE.md`, with the commands to finish later.
 have:
 
 - `CLAUDE.md`: the team charter your agents follow;
-- `PARADIGM-SPEC.md`: your science, to the depth you chose;
-- `REQUIREMENTS.md`, `MASTER_PLAN.md` (a broad roadmap), `DECISIONS.md`, `STATUS.md`: the plan and
-  the record;
+- `PARADIGM-SPEC.md`: your purpose and, where relevant, your science, to the depth you chose;
+- `REQUIREMENTS.md` (with each requirement's acceptance criteria), `ARCHITECTURE.md` (with its
+  decisions), `MASTER_PLAN.md` (a broad roadmap), `DECISIONS.md`, `STATUS.md`: the plan and the
+  record;
+- `reports/PROJECT-DEFINITION.md`: the report you adopted, kept as the record;
 - `START-HERE.md`: your next step, which is `/arpd-plan`.
 
 The last question is a choice: plan the first sprint now, or finish and plan later with `/arpd-plan`.
@@ -89,8 +105,9 @@ The last question is a choice: plan the first sprint now, or finish and plan lat
 /arpd-plan
 ```
 
-It works in a new session, after setup or between sprints. It reads the project's records, so you do
-not repeat yourself. Its progress line is
+It works in a new session, after setup or between sprints. It reads the project's records (including
+each requirement's acceptance criteria, the architecture decisions and the open decisions' gates),
+so you do not repeat yourself. Its progress line is
 `PLAN  ✓ Review → ● Priorities → ○ Draft → ○ Approval → ○ Handoff`.
 
 1. **Review.** A short read-back of where the project stands, with the governance check's result.
@@ -151,7 +168,7 @@ python tools/check_governance.py
 |---|---|---|
 | **Invariant** (INV) | What must never break, or the results stop meaning what you intend. You own it, for the life of the project. | `PARADIGM-SPEC.md` §5 |
 | **Requirement** (REQ) | What the instrument must do. It traces to a spec item or a ruling, and has a state and evidence. | `REQUIREMENTS.md` |
-| **Acceptance criterion** | How one task plan proves it delivered. It closes with the plan; its evidence moves a requirement's state. | Inside the plan, `plans/NNN-…` |
+| **Acceptance criterion** | An observable check that something was delivered. Each requirement has its own; a task plan's are drawn from them and close with the plan. Their evidence moves a requirement's state. | `REQUIREMENTS.md` *Requirement details*; inside the plan, `plans/NNN-…` |
 
 There are also three levels of plan:
 
@@ -170,7 +187,7 @@ There are also three levels of plan:
 | See where things stand, and what decisions are coming | `/arpd-checkin` |
 | Decide something | Just say it. The lead agent records your words verbatim as a ruling. |
 | Change the rules, the science spec, a project default, the milestones, or what the team may decide alone | `/arpd-amend`. A direct instruction is enough; you are not asked to approve your own words again. |
-| Turn the guided tutorial on or off | Say "tutorial on" or "tutorial off". |
+| Get an explanation | Ask. The agent explains at your level when a decision depends on it. |
 | Check the governance records | `python tools/check_governance.py` (statuses: [OPERATIONS §11](docs/OPERATIONS.md#11-reading-the-governance-check)) |
 | See time and activity | `python tools/summarize_events.py` (add `--sessions` for one row per session) |
 | Resume after a lost session | Start a new session and say: "Start a new session on this project: follow the charter's recovery steps." ([OPERATIONS §9](docs/OPERATIONS.md#9-resuming-after-a-lost-session)) |

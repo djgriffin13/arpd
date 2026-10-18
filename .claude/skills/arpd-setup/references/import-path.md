@@ -54,29 +54,70 @@ lose everything before the move. So:
    project root. Commit: "Move <starter> to the project root (no changes)".
 3. **Only then** edit anything.
 
-Do the moves at the start of Phase 9, after the PI has adopted the read-back. Check each move commit
-with `git show --stat --find-renames HEAD`: every line should be a rename with no content change.
-The discovery notes are untracked at this point: stage only the moves, so the notes never enter a
-move commit. They get their own commit after the adoption ruling (`generation-checklist.md`,
-*Commit order*).
+Do the moves at the start of generation, after the PI has adopted the report. Check each move
+commit with `git show --stat --find-renames HEAD`: every line should be a rename with no content
+change. The notes and the draft report are untracked at this point. Stage only the moves, so that
+neither enters a move commit. The report is committed with the adoption ruling, and the notes alone
+after it (`generation-checklist.md`, *Commit order*).
 
-## Discovery notes in import and install modes
+## Working files in import and install modes
 
-The interview's working notes (`docs/discovery/SETUP.md`, from `kit/templates/discovery/SETUP.md`)
-are the one file written before the read-back. They are non-governing (`SKILL.md`, *Discovery
-notes*).
+The working notes (`docs/discovery/SETUP.md`) and the draft report (`reports/PROJECT-DEFINITION.md`)
+are the only files written before adoption. Both are non-governing (`SKILL.md`, *Working files
+before adoption*).
 
-- **Import:** the project root is this repository. Write the notes here, and tell the PI once.
-- **Install:** the target is the PI's own repository, which may be shared or public. In Intake,
-  before the first write, ask once for consent to save the notes there, and name the path
-  (`docs/discovery/SETUP.md` in the target). Record the answer in the notes' *Mode and consent*.
-  - With consent: write them there, uncommitted until adoption, then commit them alone.
-  - Without consent: keep them in the OS temp directory, tell the PI the path, and say that a later
-    session can resume from them only if the PI gives that path. They are never added to the
-    repository unless the PI later asks.
-- Never commit the notes with a move, never push them without the PI's authorization, and never
-  write secrets, participant data or content from unrelated repositories in them.
-- Writing notes authorizes nothing: no move, no installation and no governing file.
+- **Import:** the project root is this repository. Write both here, and tell the PI once.
+- **Install:** the target is the PI's own repository, which may be shared or public. Before the
+  first write, ask once for consent to save both files there, naming the paths. Record the answer
+  in the notes' *Mode and consent*.
+  - **With consent:** write them there, uncommitted until adoption. The report is then committed
+    with the adoption ruling, and the notes alone.
+  - **Without consent:** keep both in the OS temp directory, and tell the PI the path. Say that a
+    later session can resume from them only if the PI gives that path. At adoption, the adopted
+    report is written into the target, because adoption authorizes it. The notes are never added
+    unless the PI later asks.
+- Never commit either file with a move, and never push without the PI's authorization. Never write
+  secrets, participant data or content from unrelated repositories in them.
+- Writing them authorizes nothing: no move, no installation and no governing file.
+
+## Existing repository review
+
+When the project already exists (an install, or an import of the PI's own code), setup is about the
+**requested change**, not a re-creation of the project. In the Project phase, before asking about
+the change in detail:
+
+1. **Review what exists:**
+   - the architecture: languages, components, data formats, entry points;
+   - the tests, and the baseline run;
+   - the governance: prior instructions, any `DECISIONS.md`, documented design choices;
+   - the users and outputs that depend on current behaviour.
+
+   Summarize this for the PI in plain words.
+2. **Identify reusable parts:** what the change can build on unchanged, and what it must modify.
+3. **Never overwrite a valid existing decision.**
+   - A documented choice, an established output format, or a calculation the PI wants kept is
+     recorded as a **retained** capability. It goes in report §3, with a regression acceptance
+     criterion, such as "the existing outputs are reproduced exactly on the existing test data".
+   - Changing one is a decision for the PI, raised explicitly.
+4. **Investigate the requested change.** Use the coverage domains (`interview-guide.md`), but only
+   for what the change touches. Do not re-elicit the whole product. The scope sequence
+   (`SKILL.md`) applies to the change.
+5. **Compatibility and migration:**
+   - existing data files and output formats;
+   - callers, scripts and users that depend on current behaviour;
+   - the existing tests;
+   - dependencies and their versions;
+   - prior instructions;
+   - whether old outputs must still be producible.
+
+   Each concern becomes a requirement, a decision, or an open item with a gate.
+6. **A development-oriented modification plan** in the report:
+   - §5 describes the existing architecture and what changes;
+   - §6 records the decisions about the change;
+   - §9 is the modification roadmap: what is changed first, what stays protected by regression
+     tests, and the migration steps.
+
+   It sets direction only; `/arpd-plan` plans the sprints.
 
 ## Numbering: never hard-code IDs
 
@@ -96,11 +137,11 @@ Continue every ledger from where it stands: the next free DEC, R and SA numbers 
 
 ## Steps for a non-ARPD project (import or install)
 
-**Nothing governing is written before the read-back** (`SKILL.md`, ground rule 8). Steps 1–4 only
-read the project; the only file written is the discovery notes (above). Steps 6–9 write, in this
-order, after the PI has adopted the read-back.
+**Nothing governing is written before adoption.** Steps 1–4 only read the project. The only files
+written are the notes and the draft report (above). Steps 6–9 write, in this order, after the PI
+has adopted the report.
 
-**Before the read-back (read only)**
+**Before adoption (read only)**
 
 1. **Inventory.**
    - From a git URL, `git clone` it into a temporary directory **outside** this repository and read
@@ -125,15 +166,19 @@ order, after the PI has adopted the read-back.
    starter's charter). Classify each prior rule against the charter as *same* (drop it; the charter
    covers it), *compatible addition* (propose it as a Part B project rule) or *conflict*.
 
-**The interview and the read-back**
+**The interview and the report**
 
-5. **Interview (the four phases; internal Phases 1–8).** In Research & Problem, the PI confirms or corrects each inferred spec item. Where
-   the code and the PI's intent differ, that is a finding: record it as a defect or an assumption,
-   and never quietly align either one to the other. Every reconciliation conflict and proposed
-   addition goes in the read-back, in plain language, for the PI to rule on. Nothing from the prior
-   instructions is silently adopted or discarded. The read-back ends with the adoption ruling (R-NN).
+5. **Interview** (the five phases, with the *Existing repository review* above).
+   - Where the inferred behaviour carries scientific meaning, the PI confirms or corrects each
+     inferred spec item.
+   - Where the code and the PI's intent differ, that is a finding. Record it as a defect or an
+     assumption, and never quietly align either one to the other.
+   - Every reconciliation conflict and proposed addition goes in the report (§11 and §12), in plain
+     language, for the PI to rule on. Nothing from the prior instructions is silently adopted or
+     discarded.
+   - The report's adoption is the ruling (R-NN).
 
-**After the read-back (writes, in this order)**
+**After adoption (writes, in this order)**
 
 6. **Move the kit's own files** to `docs/arpd-kit/` in a move-only commit (above; fresh and import
    modes only).
@@ -160,8 +205,9 @@ Worked case: importing `examples/march-1991/` into this kit repository.
    the March starter: `cd examples/march-1991 && python -m pytest -m "not slow" -q` and
    `python tools/check_governance.py`), and keep the commands and output verbatim, outside the
    project, for the import baseline report.
-2. **Interview (the four phases; internal Phases 1–8), confirming rather than re-asking.** The science is already written
-   down: read it to the PI in plain language and ask them to confirm or change it.
+2. **Interview (the five phases), confirming rather than re-asking.** The science is already
+   written down: read it to the PI in plain language and ask them to confirm or change it. The
+   report records it with its existing IDs.
    - **Draft wording.** Any item marked *"(draft wording, awaiting the PI's words)"*, such as the
      research question, either gets the importing PI's own words in the interview, or stays
      explicitly pending and is listed in *Waiting on the PI*. Adopting the charter and specification
@@ -170,7 +216,7 @@ Worked case: importing `examples/march-1991/` into this kit repository.
    - **Inherited pending decisions:** list them for the PI in plain language. They may be decided
      now, delegated (as a standing authorization), deferred by ruling, or left pending. They block
      only work that depends on them.
-3. **Move-only commits** (above), at the start of Phase 9. Run these in Git Bash (or any POSIX
+3. **Move-only commits** (above), at the start of generation. Run these in Git Bash (or any POSIX
    shell); `set -e` and `|| exit 1` stop at the first failure, so a half-done move is never
    committed. Type the commands, or, if you save them as a script, save it **outside** the
    repository (the OS temp directory or the session scratchpad), never in the project.
@@ -249,7 +295,7 @@ Worked case: importing `examples/march-1991/` into this kit repository.
      `reports/IMPORT-BASELINE-YYYY-MM-DD.md`.
    - **Inherited decisions the starter already adopted** (by its own ruling, for example the March
      starter's R-01 adopting DEC-01 to DEC-07 as its working baseline) stay adopted. The importing
-     PI's adoption of the starter carries them, so the read-back lists each one by ID and title, as
+     PI's adoption of the starter carries them, so the report lists each one by ID and title, as
      adopted by the starter's ruling. Do not mark them pending or deferred. If the PI's words would
      reverse one (for example, "leave them pending"), say that they are already adopted and what
      reversing them would block, and ask once before recording anything. If the PI wants
@@ -296,11 +342,11 @@ Worked case: importing `examples/march-1991/` into this kit repository.
 ## Resuming an interrupted setup
 
 A setup can stop part-way: a lost session, an API error, a turn limit. The record decides what is
-authorized. At Phase 0, check the project root (in install mode, the target repository):
+authorized. Before anything else, check the project root (in install mode, the target repository):
 
 - `git log --oneline -15` and `git status --short`;
-- `docs/discovery/SETUP.md`, tracked or untracked (in install mode without consent, the notes are
-  outside the repository: ask the PI for their path);
+- `docs/discovery/SETUP.md` and `reports/PROJECT-DEFINITION.md`, tracked or untracked. In install
+  mode without consent they are outside the repository: ask the PI for their path;
 - move-only commits already made (kit files to `docs/arpd-kit/`, prior instructions to
   `docs/prior-instructions/`, a starter to the root);
 - the commit "Record adoption ruling R-NN (setup in progress)", and which checklist files exist.
@@ -308,26 +354,43 @@ authorized. At Phase 0, check the project root (in install mode, the target repo
 Then:
 
 1. **Tell the PI** what you found, in plain words.
-2. **If no adoption ruling is recorded,** nothing generated is authorized.
-   - If discovery notes exist, read them. Show the PI briefly what was gathered: the phase reached,
-     the topics covered, the PI's words, and the open questions. Restore the coverage map and the
-     interview mode, and continue from the next open topic.
-   - Nothing in the notes is adopted. The PI's earlier words are discovery; the lead's proposals
-     stay proposals. Never treat an earlier proposal as agreed, and never re-adopt it on resume.
+2. **Old-format notes** (written by an earlier kit version) are read deterministically:
+   - **"Interview mode" line or section:** obsolete, whatever its value. Leave it in place, mark it
+     "(obsolete; ignored)", and never ask the PI to choose a mode or offer one.
+   - **Old phase labels** map as follows: Intake → Project; Research & Problem → Project, with the
+     theory-context choice still to confirm if relevant; Product & Engineering → Requirements and
+     Architecture; Governance & Handoff → Team & Governance, then Definition Report. Topics keep
+     their status under the new phase.
+   - **An old "PI profile" table:** keep it as context, and do not re-ask its answers. An old
+     adviser-role answer is not a theory-context choice. Ask the theory question only if theory is
+     relevant, and show the old answer beside it.
+   - **An old read-back draft** (never adopted) is not a report. Write
+     `reports/PROJECT-DEFINITION.md` v1 from the notes.
+3. **If no adoption ruling is recorded,** nothing generated is authorized.
+   - Read the notes. Show the PI briefly what was gathered: the phase reached, the topics covered,
+     and the open questions. Continue from the next open topic, without re-asking anything settled.
+   - Nothing in the notes or the draft report is adopted. The PI's earlier words are discovery, and
+     the lead's proposals stay proposals. A choice the PI made during the interview stays a recorded
+     preference. Never re-adopt anything on resume.
+   - **If a draft report exists,** re-present that version as it is; do not regenerate it. If the
+     notes show answers given after that version, write vN+1 and say what changed.
    - Without notes, re-run the interview from where the record leaves off. Earlier answers count
      only if the PI confirms them now.
-   - Keep the committed moves and do not repeat them.
-   - Re-do the read-back. It must be adopted now, in the PI's words.
+   - Keep the committed moves, and do not repeat them.
    - Show the PI any uncommitted generated files, and ask before discarding them.
-3. **If the adoption ruling is recorded,** it and its read-back are the authority. Continue the
-   checklist from the first missing or incomplete row. If the discovery notes are in the project but
-   uncommitted, commit them alone. Never repeat a move, never renumber an ID, and never rewrite a
-   completed file. Check each existing file, committed or not, against its checklist row and against
-   the recorded read-back (for example, the question and construct wording, or an unfilled `{{…}}`).
-   Ask the PI only for what the record does not settle. **If the ruling does not contain the
-   read-back text**, say so: an uncommitted file cannot then be checked against what the PI adopted,
-   so show it to the PI and ask them to confirm it before you keep it.
-4. Record the recovery in `STATUS.md` (a `Recovered:` line naming what was found and what was
-   redone). If `tools/log_event.py` exists, log
+4. **If the adoption ruling is recorded,** it and the report version it cites are the authority.
+   - A ruling from an earlier kit version that adopted a read-back keeps that read-back as its
+     authority. Do not write a report after the fact as if it had been adopted.
+   - Continue the checklist from the first missing or incomplete row. If the notes are in the
+     project but uncommitted, commit them alone.
+   - Never repeat a move, renumber an ID or rewrite a completed file.
+   - Check each existing file against its checklist row, and against the adopted report or
+     read-back (for example, the purpose wording, or an unfilled `{{…}}`).
+   - Ask the PI only for what the record does not settle.
+   - If the ruling cites no report and contains no read-back text, say so. An uncommitted file cannot
+     then be checked against what the PI adopted, so show it to the PI and ask them to confirm it
+     before you keep it.
+5. Record the recovery in `STATUS.md`, in a `Recovered:` line naming what was found and what was
+   redone. If `tools/log_event.py` exists, log
    `python tools/log_event.py resume --actor lead --note "setup resumed"`.
-5. Finish as usual: the final checker run, the stray-file check, the setup commit and the closeout.
+6. Finish as usual: the final checker run, the stray-file check, the setup commit and the closeout.

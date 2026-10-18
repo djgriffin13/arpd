@@ -21,6 +21,8 @@ by the lead agent, and only on recorded evidence. *Validated* also needs the PI'
 - *Planned* is not a place for unapproved ideas. Those go to the backlog in `MASTER_PLAN.md`.
 - A requirement with an open defect against it is never reported as Verified or Validated.
 - A requirement's wording is changed only in this file, and the change is recorded as a decision.
+- Every requirement has an entry under *Requirement details*, with at least one acceptance
+  criterion, its priority and its dependencies.
 
 **Invariant, requirement or acceptance criterion?** Three different things:
 
@@ -28,7 +30,7 @@ by the lead agent, and only on recorded evidence. *Validated* also needs the PI'
 |---|---|---|---|
 | Invariant (INV) | What must never break, or the results stop meaning what we intend | `PARADIGM-SPEC.md` §5 | The PI owns it. It holds for the life of the project. |
 | Requirement (REQ) | What the instrument must do | `REQUIREMENTS.md` | It traces to a spec item or a ruling. It has a state and evidence. |
-| Acceptance criterion | How one plan proves it delivered | Inside its plan, `plans/NNN-…` | It closes with the plan. Its evidence moves a requirement's state. |
+| Acceptance criterion | An observable check that something was delivered | A requirement's criteria: `REQUIREMENTS.md` *Requirement details*. A plan's: inside the plan, `plans/NNN-…` | A plan's criteria come from its requirements' criteria and close with the plan. Their evidence moves a requirement's state. |
 
 ---
 
@@ -38,9 +40,32 @@ by the lead agent, and only on recorded evidence. *Validated* also needs the PI'
 |---|---|---|---|---|
 | REQ-CORE-01 |  | OP-01 | Planned |  |
 
-<!-- The setup skill writes the first 5-15 requirements from the interview. Each is phrased as what
-the PI would observe, e.g. "A participant can play a full game against the partner agent and the
-game log records every action with its timestamp", not as an implementation task. -->
+<!-- The setup skill writes the adopted requirements from the adopted Project Definition Report
+(reports/PROJECT-DEFINITION.md, sections 3 and 4), with the same IDs; only Adopted-on-adoption
+requirements go in. Each is phrased as what the PI would observe, e.g. "A participant can play a
+full game against the partner agent and the game log records every action with its timestamp", not
+as an implementation task. -->
+
+## Requirement details
+
+One entry per requirement in the table above, with the same ID. The table holds the state; this
+section holds what each requirement must satisfy. A change to an entry is recorded as a decision,
+like a change to the requirement's wording.
+
+<!-- Format for every entry (the setup skill copies it from the adopted report):
+### REQ-AREA-NN: short name
+- **Acceptance criteria:**
+  - an observable check an independent tester could run
+- **Priority:** required / desired / future
+- **Dependencies:** REQ IDs, architecture decisions (D-NN), Waiting on the PI rows, or "none"
+-->
+
+### REQ-CORE-01: {{short name}}
+
+- **Acceptance criteria:**
+  - {{an observable check}}
+- **Priority:** {{required / desired / future}}
+- **Dependencies:** {{REQ IDs, D-NN, Waiting on the PI rows, or "none"}}
 
 Milestones (sets of requirements with a walkthrough exit) are defined in `MASTER_PLAN.md` §2, not
 here.

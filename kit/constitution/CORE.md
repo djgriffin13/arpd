@@ -49,6 +49,7 @@ persuasive.
 | Execution of one scoped piece of work | the approved plan in `plans/` | Its owner |
 | Nothing (interview working notes; nothing in them is adopted) | `docs/discovery/` | The lead agent |
 | Nothing until approved (sprint-plan drafts; an approved version binds only through the ruling that cites it) | `reports/planning/` | The lead agent drafts; the PI approves a version by ruling |
+| Nothing (the setup report; once adopted, its record. The governing documents carry its content and win where they differ, with the difference recorded) | `reports/PROJECT-DEFINITION.md` | The lead agent drafts; the PI adopts it (R-01) |
 | Nothing (navigation only) | `INDEX.md` | Anyone, in the same commit as the change |
 | Nothing (informative) | `START-HERE.md`, `docs/`, `reports/`, everything else | Anyone |
 
@@ -159,10 +160,14 @@ Two questions decide how a choice is handled:
    - an assumption (ASM) or a permitted claim;
    - the validation plan;
    - what data are collected or kept;
-   - what a participant sees or experiences.
+   - what a participant sees or experiences;
+   - data semantics: missing versus zero, duplicate or repeated observations, identifier meaning,
+     aggregation, numerical precision or estimation assumptions, changes to collected variables,
+     replacing unavailable data.
 
-   New dependencies with licence or cost implications also count, as does anything irreversible.
-   Ease of reversal does not make a scientific choice routine.
+   Agents choose how data semantics are implemented, never the semantics themselves, unless a
+   ruling or an SA names the policy. New dependencies with licence or cost implications also
+   count, as does anything irreversible. Ease of reversal does not make a scientific choice routine.
 2. **Has the PI already delegated authority over it?** Delegation is recorded only as a standing
    authorization (SA-NN). The PI can create or change one in any message. If the PI delegates in a
    ruling, the lead agent records that delegation as an SA that cites the ruling.

@@ -111,6 +111,10 @@ The checks:
    ARCHITECTURE.md, a claim (CLM-NN) in PARADIGM-SPEC.md, or a standing authorization in force
    (one not "superseded by SA-NN") that cites a PARADIGM-SPEC.md item whose row says "Superseded
    by" is ADVISORY. Retired requirements and A-rules are ignored.
+10. Requirement details (advisory): when REQUIREMENTS.md has a "## Requirement details" section,
+   a requirement in the table (not Retired) with no details entry ("### REQ-...:") holding
+   "Acceptance criteria" with at least one bullet is ADVISORY. Without that section (the older
+   format) the step passes and says it was not compared.
 """
 import datetime
 import io
@@ -301,6 +305,31 @@ def check_requirements():
         if not re.search(r"\b(?:CON|OP|INV|CLM|VAL|R)-\d+\b", src):
             problems.append("%s: no traceable source" % rid)
     step("Requirements: states, evidence, traceability", "FAIL" if problems else "PASS", problems)
+
+
+def check_requirement_details():
+    """Advisory: each adopted requirement has acceptance criteria in its Requirement details entry."""
+    name = "Requirement details: acceptance criteria (advisory)"
+    if not os.path.exists(os.path.join(ROOT, "REQUIREMENTS.md")):
+        return  # reported by check_requirements
+    text = re.sub(r"<!--.*?-->", "", read("REQUIREMENTS.md"), flags=re.S)
+    m = re.search(r"^## Requirement details\b(.*?)(?=^## |\Z)", text, re.S | re.M)
+    if not m:
+        step(name, "PASS", ["no Requirement details section in REQUIREMENTS.md (older format); not compared"])
+        return
+    entries = {}
+    for e in re.finditer(r"^#{3,4}\s+\**(REQ-[A-Za-z0-9]+-\d+)\b(.*?)(?=^#{1,4}\s|\Z)", m.group(1), re.S | re.M):
+        body = e.group(2)
+        ac = re.search(r"^[-*]?\s*\**Acceptance criteria\**\s*:?\**(.*?)(?=^[-*]\s+\**[A-Z][\w /]*:|\Z)", body, re.S | re.M)
+        entries[e.group(1)] = bool(ac and re.search(r"^\s+(?:[-*+]|\d+[.)])\s+\S", ac.group(1), re.M))
+    notes = []
+    for r in table_rows(text, "ID"):
+        rid = r.get("ID", "")
+        if MALFORMED in r or not rid or "{{" in rid or r.get("State") == "Retired":
+            continue
+        if not entries.get(rid):
+            notes.append("%s: adopted requirement without acceptance criteria in Requirement details" % rid)
+    step(name, "ADVISORY" if notes else "PASS", notes)
 
 
 def check_plans():
@@ -991,7 +1020,7 @@ def check_readiness():
     step(name, "ADVISORY" if notes else "PASS", notes or ["Execution line consistent with the sprint records"])
 
 def main():
-    for fn in (check_exists, check_adoption, check_links, check_requirements, check_plans, check_sprints,
+    for fn in (check_exists, check_adoption, check_links, check_requirements, check_requirement_details, check_plans, check_sprints,
                check_open_sprints, check_readiness, check_index, check_logging, check_skills, check_superseded):
         try:
             fn()

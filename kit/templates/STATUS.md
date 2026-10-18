@@ -27,14 +27,16 @@ memory. If `logs/` is absent (a fresh clone or another machine), say so, and use
 
 ## Readiness
 
-Four lines, each with one value. Setup, planning and execution are separate: a project can be set up
-with no sprint planned, and an approved plan does not start work (`CLAUDE.md` §8). A passing
-governance check is not readiness to execute. `START-HERE.md` gives the PI the same next step.
+Four lines, each with one value, then the adopted setup report. Setup, planning and execution are
+separate: a project can be set up with no sprint planned, and an approved plan does not start work
+(`CLAUDE.md` §8). A passing governance check is not readiness to execute. `START-HERE.md` gives the
+PI the same next step.
 
 - **Setup:** {{in progress | adopted (R-NN)}}
 - **Planning:** {{not started | draft (PLAN-YYYY-MM-DD, vN) | approved (PLAN-YYYY-MM-DD, vN, R-NN)}}
 - **Execution:** {{not started | authorized (R-NN or SA-NN, scope) | in progress (S0N) | complete}}
 - **Next step:** {{finish setup | run /arpd-plan | review plan | begin implementation | check in | amend}}
+- **Adopted report:** `reports/PROJECT-DEFINITION.md` v{{N}} (R-{{NN}}, commit {{SHA of the adoption-first commit}})
 
 ## 1. Read first
 
@@ -86,5 +88,5 @@ declined). Write "Nothing owed" only when nothing is.
 
 ## 8. The PI's working style
 
-Record how the PI likes decisions brought, how often they want check-ins, and what to avoid. Record
-the interview mode too (standard interview or guided tutorial).
+Record how the PI likes decisions brought, how often they want check-ins, how much explanation
+helps them, and what to avoid.

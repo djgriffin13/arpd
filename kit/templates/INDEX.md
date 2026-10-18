@@ -17,6 +17,7 @@ not exist.
 | `STATUS.md` | Right now: current sprint, in flight, on deck, handoff | Yes, for the present state only |
 | `START-HERE.md` | How to work with the team on this project | No |
 | `plans/` | One plan per scoped piece of work | Each for its own scope |
+| `reports/PROJECT-DEFINITION.md` | The Project Definition Report the PI adopted at setup (R-01): the record of what was adopted. The governing documents carry its content and win where they differ | No (record) |
 | `reports/sprints/` | One audit record per sprint (pending: created when the first sprint starts) | No (record) |
 | `reports/` | Decision packs, walkthroughs, agent reports | No |
 | `logs/events.jsonl` | Event log written by hooks and agents (git-ignored by default) | No (data) |

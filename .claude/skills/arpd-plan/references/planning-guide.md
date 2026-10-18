@@ -59,10 +59,10 @@ Content per sprint. Write each heading even when the answer is short; "none" is 
 |---|---|
 | Identity | Proposed sprint number; draft file and version; authorization sought |
 | Outcome | The objective in one sentence, and what the PI will observe |
-| Traceability | Milestone; requirement IDs and target states; paradigm-spec items, if any |
+| Traceability | Milestone; requirement IDs and target states, with their acceptance criteria (`REQUIREMENTS.md` *Requirement details*); architecture decisions relied on (D-NN, noting any Provisional); paradigm-spec items, if any |
 | Scope | Work packages in order, each with the task plans it expects (`plans/NNN` are written at execution, not now) |
 | Dependencies | What must exist first; *Waiting on the PI* rows it relies on (cite the row number); work that is unaffected and can proceed |
-| Exit | Observable exit criteria (when the sprint is done), each with the test or check that will show it. Acceptance criteria belong to the task plans (`plans/NNN`) |
+| Exit | Observable exit criteria (when the sprint is done), each with the test or check that will show it. Task-plan acceptance criteria (`plans/NNN`) are drawn from the requirements' criteria |
 | Boundaries | Non-goals; risks; constraints; time, compute or cost limits where relevant |
 | Workflow | Team arrangement; independent review and test gates; resources |
 | Authority | Decisions reserved to the PI; choices delegated by an SA in force (name it); execution authority sought |
@@ -91,9 +91,10 @@ plan relies on:
 
 1. Find its row in `DECISIONS.md` *Waiting on the PI*, or add one (decisions found in the spec's
    §9 *Open scientific questions* get a row that cites the Q-NN).
-2. Fill *Affects* (requirements, and the named work packages and sprints), *Needed by* (the work
-   package or date at which the answer is first needed) and *Can continue meanwhile* (the work that
-   does not depend on it).
+2. Fill *Affects* (requirements, and the named work packages and sprints), *Needed by* (the gate:
+   before planning, before implementing a named work package, before deployment, or a date) and
+   *Can continue meanwhile* (the work that does not depend on it). A row from setup keeps its gate;
+   sharpen it to the work package, never loosen it.
 3. In the plan, cite the row number. Do not copy its content into the plan.
 4. Refresh the `STATUS.md` §5 summary, which points to the table.
 
@@ -147,9 +148,10 @@ Log
 Revise the draft into a new version, and tell the PI which findings you took and which you did not,
 and why. The PI may also bring a review from elsewhere: treat it the same way.
 
-## 8. Tutorial hints for planning
+## 8. Worth explaining when it first matters
 
-Put these above the block, the first time each comes up, in one or two sentences. Taper them.
+If the PI seems not to know these, say them once, above the block, in one or two sentences
+(`INTERACTION.md` §6). Do not repeat them.
 
 - "This draft is for you to examine. You can ask me to revise it, or have another agent review it.
   Nothing is approved until you say so."

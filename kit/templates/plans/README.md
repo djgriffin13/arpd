@@ -23,7 +23,7 @@ authoritative for executing its own scope. Priorities and order of work live in 
 |---|---|---|---|
 | Invariant (INV) | What must never break, or the results stop meaning what we intend | `PARADIGM-SPEC.md` §5 | The PI owns it. It holds for the life of the project. |
 | Requirement (REQ) | What the instrument must do | `REQUIREMENTS.md` | It traces to a spec item or a ruling. It has a state and evidence. |
-| Acceptance criterion | How one plan proves it delivered | Inside its plan, `plans/NNN-…` | It closes with the plan. Its evidence moves a requirement's state. |
+| Acceptance criterion | An observable check that something was delivered | A requirement's criteria: `REQUIREMENTS.md` *Requirement details*. A plan's: inside the plan, `plans/NNN-…` | A plan's criteria come from its requirements' criteria and close with the plan. Their evidence moves a requirement's state. |
 
 ## Template
 

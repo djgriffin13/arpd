@@ -1,4 +1,4 @@
-# Known limitations (release candidate v0.4.0-rc.1, in development, 2026-10-17)
+# Known limitations (release candidate v0.5.0-rc.1, in preparation, 2026-10-17)
 
 These are stated openly so that users and reviewers know what the kit does and does not establish.
 Most come from the independent review rounds and the developer tests in `evaluation/developer-tests/`.
@@ -7,21 +7,34 @@ Most come from the independent review rounds and the developer tests in `evaluat
 
 - **No workflow has been run by a researcher.** Every developer test used scripted answers.
   DT-01 to DT-08 were run on v0.3.0-rc.1: real `/arpd-setup` runs in fresh, import and install modes,
-  and real `/arpd-checkin` and `/arpd-amend` sessions. The v0.4 developer tests (DT-09 to DT-13) ran the
-  adaptive setup and `/arpd-plan` with scripted answers; 3 of 67 waiting turns broke the
-  question-last rule, so placement still depends on the model following it. None of this tests the interview's length, clarity or feel, or whether a researcher
-  can use the kit (`docs/MANUAL-TESTING.md`).
-- **The new parts are untested with people.** The adaptive setup interview, the guided tutorial,
-  `/arpd-plan`, the interaction conventions (`kit/docs/INTERACTION.md`) and the v0.4 changes to
-  check-in and amendment have been exercised, at most, in scripted developer tests.
-- **The setup time is an estimate.** "30–60 minutes, depending on how much scientific help you ask
-  for" has not been measured with a researcher.
+  and real `/arpd-checkin` and `/arpd-amend` sessions. The v0.4 developer tests (DT-09 to DT-13) ran
+  the earlier setup and `/arpd-plan` with scripted answers; 3 of 67 waiting turns broke the
+  question-last rule, so placement still depends on the model following it. The one manual run
+  (MT-2026-10-17-1, on v0.4) prompted the v0.5 setup revision. The v0.5 scripted scenarios (A–H) are
+  to be filled. None of this tests whether a researcher can use the kit (`docs/MANUAL-TESTING.md`).
+- **The v0.5 setup is untested with people.** The tool-first opening, the scope questions, the
+  theory-context choice, architecture exploration, the Project Definition Report and its adoption,
+  and the handoff to `/arpd-plan` have not been used by a researcher.
+- **The setup time is an estimate.** "About 20–60 minutes, depending on complexity" has not been
+  measured with a researcher.
 - **The interaction rules are only partly checkable automatically.** A turn checker for the scripted
   tests (`evaluation/developer-tests/check_turn.py`) checks the form of a turn: that it ends with a
   labelled block, that a choice block's options are printed in the text, and that the setup or plan
   progress line is present. It cannot judge whether the question is the right one, whether the topic
-  list is honest, whether the tutorial helps, or whether one answer really closed several topics.
-  Those rest on the model following the skill, and on manual testing.
+  list is honest, or whether one answer really closed several topics. Those rest on the model
+  following the skill, and on manual testing.
+- **The report's quality is a judgement.** A report checker for the scripted tests checks the
+  report's form: its sections, that each requirement has acceptance criteria and a status, that each
+  open item has a gate, that a draft claims no adoption. It cannot judge whether the requirements are
+  the right ones, whether the acceptance criteria are meaningful, whether the alternatives were
+  credible, or whether the detail is proportionate.
+- **Architecture recommendations rest on the model's knowledge.** The skill says when to check
+  current documentation, and to say "not verified" otherwise. A session without web access cannot
+  check, and a recommendation can be out of date.
+- **Recognizing data semantics is a judgement.** The charter reserves data semantics (missing versus
+  zero, duplicates, identifiers, aggregation, precision) to the researcher unless they name a policy.
+  Whether an agent recognizes that an implementation choice changes data semantics has not been
+  tested with people.
 - **Native choice widgets are untested.** The skills print every option in text before opening a
   widget, so the transcript stays readable if the widget vanishes. How the widget itself behaves, in
   the Claude Code terminal and in the Claude app, has not been tested.
@@ -35,8 +48,9 @@ Most come from the independent review rounds and the developer tests in `evaluat
 - **Resuming is tested at few points.**
   - An interrupted setup was resumed once, with the interruption just after the adoption ruling was
     committed (DT-08, on v0.3).
-  - Resuming before adoption, from the working notes in `docs/discovery/SETUP.md`, is new and under
-    test (DT-13).
+  - Resuming before adoption, from the working notes in `docs/discovery/SETUP.md`, ran once on v0.4
+    (DT-13). In v0.5, resuming in three phases, with a draft report, and from notes written by an
+    earlier kit version (an obsolete interview mode, old phase labels) is scenario F: to be filled.
   - In install mode without consent to save notes, the notes stay outside the repository. A later
     session can resume from them only if the researcher gives their path.
   - Resuming an interrupted plan review from `reports/planning/` has not been tested.
@@ -56,7 +70,8 @@ Most come from the independent review rounds and the developer tests in `evaluat
 - **Draft modules.** Only the computational-model and team-arrangement modules have been used. The
   statistical-methods, experiment-platform, measurement-pipeline, simulated-agents and
   human-subjects modules are labelled untested drafts.
-- **Charter length.** The core charter is about 3,100 words, up from about 2,900 in v0.3. It is meant
+- **Charter length.** The core charter is about 3,200 words, up from about 3,100 in v0.4 and 2,900
+  in v0.3. It is meant
   to stay lean, so rules that no longer earn their cost should be retired.
 
 ## Governance checker (`tools/check_governance.py`)

@@ -1,9 +1,9 @@
 # ARPD: Agentic Research Paradigm Development
 
 **A team-based framework for expanding organizational inquiry.** This is release candidate
-v0.4.0-rc.1 (October 2026), held for manual testing
-([RELEASE-NOTES.md](RELEASE-NOTES.md)). The previous candidate, v0.3.0-rc.1, is preserved under its
-tag. ARPD is the research artifact for a proposal to the *Organization Science* special issue
+v0.5.0-rc.1 (October 2026), in preparation, with a revised setup
+([RELEASE-NOTES.md](RELEASE-NOTES.md)). The previous candidates, v0.4.0-rc.1 and v0.3.0-rc.1, are
+preserved under their tags. ARPD is the research artifact for a proposal to the *Organization Science* special issue
 "AI-Enabled Frontiers in Organizational Science."
 
 ## What it is for
@@ -22,11 +22,11 @@ scientific decision**. Testing, review and explicit scientific validation are it
 
 | Part | What it does | Status |
 |---|---|---|
-| **Team charter** (`kit/constitution/CORE.md` → the project's `CLAUDE.md`) | A short governing document every agent reads each session. It covers: authority by subject; the PI's rulings recorded verbatim; decision routes set by scientific consequence and by the authority the researcher has delegated, with an authority profile (consult first, bounded autonomy, or exploratory autonomy) agreed at setup; requirement states that separate *Implemented*, *Verified* (software evidence) and *Validated* (scientific evidence the researcher accepts); sprints with auditable close-outs; and a learning loop that adds and retires rules. | Built |
+| **Team charter** (`kit/constitution/CORE.md` → the project's `CLAUDE.md`) | A short governing document every agent reads each session. It covers: authority by subject; data semantics (missing versus zero, duplicates, identifiers, aggregation, precision) reserved to the researcher unless they name a policy; the PI's rulings recorded verbatim; decision routes set by scientific consequence and by the authority the researcher has delegated, with an authority profile (consult first, bounded autonomy, or exploratory autonomy) agreed at setup; requirement states that separate *Implemented*, *Verified* (software evidence) and *Validated* (scientific evidence the researcher accepts); sprints with auditable close-outs; and a learning loop that adds and retires rules. | Built |
 | **Paradigm specification** (`kit/templates/PARADIGM-SPEC.md`) | Traces the research question → constructs → operationalizations → invariants → claims, and claims not to make → validation evidence. | Built |
-| **Setup and import interview** (`/arpd-setup`) | An adaptive interview in four visible phases (Intake, Research & Problem, Product & Engineering, Governance & Handoff), as a standard interview or a guided tutorial. It asks what the researcher wants to study and what they want built, gives as much scientific help as they ask for, and proposes the engineering. Working notes are saved as it goes, in non-governing `docs/discovery/SETUP.md`. Nothing governing is written before the researcher adopts a read-back. It ends with planning pending: no sprint, no implementation. Supports a fresh project, importing a codebase, or installing into an existing repository. Prior instructions are preserved and reconciled by decision, never silently merged. | Built. The v0.3 interview ran end to end in scripted developer tests of fresh mode (DT-03), import mode (DT-02, DT-04) and install mode (DT-05, DT-08). The adaptive v0.4 interview: DT-09, DT-12 and DT-13. Not yet tested with a researcher. |
-| **Sprint planning** (`/arpd-plan`) | Plans the next sprint or a series with the researcher: a review of where the project stands, one sprint or several, priorities, a versioned draft in `reports/planning/`, approval of an exact version, then begin now or later. Plan approval, execution authority and task-plan approval stay separate; continuing across several sprints without a check-in at each boundary needs a standing authorization. | New in v0.4. Scripted developer tests DT-10, DT-10b, DT-11 and DT-11b. Not yet tested with a researcher. |
-| **Interaction conventions** (`kit/docs/INTERACTION.md`) | Shared by the four skills: one labelled block (`QUESTION FOR YOU`, `CHOICE FOR YOU`, `APPROVAL REQUIRED`) last in every turn that waits for the researcher; choice options printed as text before any widget; progress lines; the tutorial overlay; the five kinds of information and action (an answer is not an authorization); a quick dependency screen. | New in v0.4. Not yet tested with people. |
+| **Setup and import interview** (`/arpd-setup`) | A tool-first interview in five visible phases (Project, Requirements, Architecture, Team & Governance, Definition Report). It opens by asking what the researcher wants to build; asks three scope questions (minimum usable version, ideal version, nice-to-have); offers help with theory only when it is relevant, and only as much as the researcher chooses; compares architecture alternatives and recommends one; and writes a Project Definition Report (`reports/PROJECT-DEFINITION.md`): numbered requirements with acceptance criteria, the architecture decisions, data contracts, verification, roadmap, team, governance and open decisions with gates. Working notes are saved as it goes, in non-governing `docs/discovery/SETUP.md`. Nothing governing is written before the researcher adopts a version of the report; adoption authorizes the governing documents, not development. It ends with planning pending. Supports a fresh project, importing a codebase, or installing into an existing repository. Prior instructions are preserved and reconciled by decision, never silently merged. | Revised in v0.5. Scripted scenarios A–H: to be filled. Earlier flows: DT-02 to DT-05, DT-08 (v0.3) and DT-09, DT-12, DT-13 (v0.4). Not yet tested with a researcher. |
+| **Sprint planning** (`/arpd-plan`) | Plans the next sprint or a series with the researcher, from the adopted requirements (with their acceptance criteria), the architecture decisions and the open decisions' gates: a review of where the project stands, one sprint or several, priorities, a versioned draft in `reports/planning/`, approval of an exact version, then begin now or later. Plan approval, execution authority and task-plan approval stay separate; continuing across several sprints without a check-in at each boundary needs a standing authorization. | New in v0.4. Scripted developer tests DT-10, DT-10b, DT-11 and DT-11b; the v0.5 handoff (scenario H): to be filled. Not yet tested with a researcher. |
+| **Interaction conventions** (`kit/docs/INTERACTION.md`) | Shared by the four skills: one labelled block (`QUESTION FOR YOU`, `CHOICE FOR YOU`, `APPROVAL REQUIRED`) last in every turn that waits for the researcher; choice options printed as text before any widget; progress lines; explaining when needed, at the researcher's level; the five kinds of information and action (an answer is not an authorization); a quick dependency screen. | New in v0.4. Not yet tested with people. |
 | **Team and workspace arrangement** | The team (solo / lead with subagents / peers) and the workspace (shared checkout / worktrees) are chosen separately. Shared runtime resources (ports, output paths) are assigned per agent. | Built |
 | **Event logging** (hooks + `tools/`) | Records defined coordination events. It reports elapsed time, agent-working time (prompt to end of turn), subagent time and failed or interrupted turns, separately from the researcher's self-reported active time. Hooks cannot measure the researcher's active time, and the tooling says so. | Built |
 | **Governance checker** (`tools/check_governance.py`) | Checks, from what is recorded: links, requirement evidence and traceability, plan numbering, charter adoption, installation files (including the planning, check-in and amend skills), whether consequential decisions in closed sprints were authorized before adoption, and whether an open sprint's Part 1 cites a plan approval and execution authority that exist. A project with setup adopted and no sprint passes. Within the steps it lists, it does not report PASS for an item it could not check; each run prints what it did not check. It cannot show that the records themselves are true. | Built |
@@ -70,14 +70,15 @@ other agent tools to it, and adapters for other tools are planned.
 The developer tests are labelled developer evidence with scripted inputs, not demonstrations with a
 researcher. Records are in [`evaluation/developer-tests/`](evaluation/developer-tests/).
 
-DT-01 to DT-08 were run on v0.3.0-rc.1. They remain the evidence for what v0.4 did not change: moves
-and history on import and install, owed `.claude/` items, logging, the basics of check-in and
-amendment, and recovery. The setup interview and its handoff changed in v0.4, so DT-03's interview is
-evidence for the earlier flow only.
+DT-01 to DT-08 were run on v0.3.0-rc.1 and DT-09 to DT-13 on v0.4.0-rc.1. They remain the evidence
+for what later versions did not change: moves and history on import and install, owed `.claude/`
+items, logging, check-in, amendment, planning and recovery. The setup interview changed in v0.4 and
+again in v0.5, so their setup interviews are evidence for the earlier flows only.
 
 | Workflow | Evidence | Status |
 |---|---|---|
-| Adaptive setup: four phases, tutorial toggle, discovery notes, ends with planning pending | DT-09, DT-12, DT-13 ([report](evaluation/developer-tests/DT-09-13-report.md)) | Runs end to end in scripted tests |
+| v0.5 setup: tool-first opening, scope questions, theory choice when relevant, architecture alternatives, Project Definition Report, adoption, handoff to planning | v0.5 scripted scenarios A–H: to be filled | Not yet run |
+| v0.4 adaptive setup: discovery notes, resume before adoption, ends with planning pending | DT-09, DT-12, DT-13 ([report](evaluation/developer-tests/DT-09-13-report.md)) | Ran end to end in scripted tests (earlier flow) |
 | Sprint planning (`/arpd-plan`): one sprint or a series, approval of a version, begin now or later | DT-10, DT-10b, DT-11, DT-11b ([report](evaluation/developer-tests/DT-09-13-report.md)) | Runs end to end in scripted tests |
 | Fresh setup (`/arpd-setup`), v0.3 flow | DT-03 | Run end to end; `.claude/` writes needed an interactive approval and were recorded as owed |
 | Import (`/arpd-setup import`), including a starter inside the kit | DT-02, DT-04 | Run end to end |
@@ -90,7 +91,7 @@ evidence for the earlier flow only.
 | Tested | Draft or untested |
 |---|---|
 | Charter, governing-document templates and the v0.3 skills (setup in all three modes, check-in, amendment), in scripted developer tests | Every workflow with a real researcher, and approving the `.claude/` writes interactively |
-| Governance checker and event summary: automated tests in `kit/tools/` (131 for the kit tools, plus 19 for the turn checker), and independent review rounds 1 to 8b | The adaptive setup interview, `/arpd-plan`, the interaction conventions, and the v0.4 changes to check-in and amendment: scripted developer tests DT-09 to DT-13; none tested by people |
+| Governance checker and event summary: automated tests in `kit/tools/` and `evaluation/developer-tests/`, and independent review rounds 1 to 8b | The v0.5 setup (scripted scenarios A–H: to be filled), `/arpd-plan`, the interaction conventions, and the v0.4 changes to check-in and amendment: none tested by people |
 | Event-logging hooks and recovery, in real Claude Code sessions | Draft modules: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data |
 | Modules: computational model; team arrangement | Other agent harnesses than Claude Code |
 | The March (1991) worked example: 70 tests, two independent review rounds | The `StopFailure` hook's payload fields, against a real failure |
@@ -103,7 +104,7 @@ Known limitations are listed in [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
 |---|---|
 | `.claude/skills/` | `arpd-setup` (interview and import), `arpd-plan` (sprint planning), `arpd-checkin`, `arpd-amend` |
 | `kit/constitution/` | `CORE.md` (charter template) and `modules/` |
-| `kit/templates/` | Governing-document and report templates, including the setup working notes (`discovery/SETUP.md`), the sprint-plan draft (`planning/PLAN.md`) and the import baseline (`reports/IMPORT-BASELINE.md`) |
+| `kit/templates/` | Governing-document and report templates, including the setup working notes (`discovery/SETUP.md`), the Project Definition Report (`reports/PROJECT-DEFINITION.md`), the sprint-plan draft (`planning/PLAN.md`) and the import baseline (`reports/IMPORT-BASELINE.md`) |
 | `kit/agents/` | Implementer and reviewer role definitions |
 | `kit/tools/` | Governance checker, plan numbering, event logging and summary, hook script |
 | `kit/settings/` | Hook configuration installed into projects |
@@ -113,11 +114,12 @@ Known limitations are listed in [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
 | `evaluation/` | Protocols for the feasibility demonstration and the planned studies; `developer-tests/` holds the labelled developer-test records and their scripted inputs |
 | `docs/` | Operations guide (`OPERATIONS.md`), manual-testing guide (`MANUAL-TESTING.md`), known limitations (`LIMITATIONS.md`), design rationale and references |
 
-In a project after setup, two more folders appear. Both are informative and decide nothing:
+In a project after setup, these also appear. All are informative and decide nothing:
 
 | Project path | Contents |
 |---|---|
-| `docs/discovery/SETUP.md` | The setup interview's working notes. Written as the interview goes; nothing in them is adopted except through the read-back ruling. In install mode, saved in your repository only with your consent |
+| `docs/discovery/SETUP.md` | The setup interview's working notes. Written as the interview goes; nothing in them is adopted except through the report's adoption ruling. In install mode, saved in your repository only with your consent |
+| `reports/PROJECT-DEFINITION.md` | The Project Definition Report. A draft until you adopt a version (ruling R-01); then the record of what you adopted. The governing documents carry its content and win where they differ |
 | `reports/planning/PLAN-<date>.md` | Sprint-plan drafts, one file per planning effort, with a version for each revision. A version binds only through the ruling that approves it |
 
 ## Evidence status

@@ -32,8 +32,9 @@ decided. A decision the PI has deferred by ruling stays listed, marked "deferred
 decided.
 
 - **Affects:** the requirements and work that depend on the decision.
-- **Needed by:** the point where the dependent work cannot go on without it (a sprint, a plan, a
-  design step).
+- **Needed by:** the gate: the point where the dependent work cannot go on without it (before
+  planning, before implementing <what>, before deployment, or a named sprint or plan). Open items
+  from the Project Definition Report arrive here at adoption with their gate.
 - **Can continue meanwhile:** the work that does not depend on it. A pending decision blocks only
   the work that depends on it (`kit/docs/INTERACTION.md`, *Dependency screen*).
 
@@ -53,6 +54,10 @@ decided.
 - **Purpose:**
 - **Scientific boundaries** (what agents may decide within):
 - **Permitted assumption changes:**
+- **Data semantics** (missing versus zero, duplicates and repeats, identifier meaning, aggregation,
+  precision or estimation assumptions, changes to collected variables, replacing unavailable data):
+  never delegated unless a named policy: {{"none named" / the PI's policy, verbatim}}. Agents choose
+  implementation mechanisms only (`CLAUDE.md` §6).
 - **Consult the PI when:**
   - the research objective would change;
   - work would exceed the agreed scope or resource limits;
@@ -92,13 +97,17 @@ Every sprint boundary still gets its close-out, independent review and checks (C
 
 ## Rulings
 
-### R-01, {{DATE}}: adoption of the team charter and the paradigm specification
+### R-01, {{DATE}}: adoption of the Project Definition Report and the governing documents
 
-> "{{The PI's words adopting CLAUDE.md v1.0 and PARADIGM-SPEC.md v1.0, from the setup interview}}"
+> "{{The PI's words adopting the report version, from the setup session}}"
 
 - **Given:** in the setup session
-- **Reading:** CLAUDE.md v1.0 and PARADIGM-SPEC.md v1.0 are in force. The research question is
-  PARADIGM-SPEC §1, verbatim.
+- **Adopts:** `reports/PROJECT-DEFINITION.md` v{{N}}. The report is committed with this ruling, in
+  the adoption-first commit; a ruling cannot name its own commit, so `STATUS.md` records the SHA.
+- **Reading:** the report's Adopted-on-adoption items are adopted; its Delegated, Provisional, Open
+  and Excluded items are recorded as such, and Proposed items are not adopted. CLAUDE.md v1.0 and
+  PARADIGM-SPEC.md v1.0 are written from it and are in force. The research question is PARADIGM-SPEC
+  §1, verbatim. Adoption authorizes the governing documents only, not implementation.
 - **Changes:** CLAUDE.md v1.0, PARADIGM-SPEC.md v1.0, REQUIREMENTS.md v1.0
 
 <!-- keep: format for every ruling:
