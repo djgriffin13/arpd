@@ -174,7 +174,7 @@ message pattern. No governing file changes during review.
 
 ### Step F: Approval
 
-When the PI is satisfied:
+When the PI is satisfied, ask in an `APPROVAL REQUIRED` block (never `CHOICE FOR YOU`):
 
 ```text
 ────────────────────────────────
@@ -223,6 +223,9 @@ names the series and the SA (`references/multi-sprint-and-handoff.md` §3).
 - **Later.** Set Readiness `Execution: not started`, `Next step: begin implementation`. Put the
   exact copyable start prompt in `START-HERE.md` and in chat. Log `handoff`, commit, and stop (§6
   there).
+
+Either way, refresh `STATUS.md` §4 *On deck* with the handoff (the sprint now open, or the start
+prompt); never leave it at "Run /arpd-plan".
 
 In a series under an SA, later sprints start without a new ruling, after the boundary procedure (§5
 there); pause for a new scientific, scope or PI-reserved decision, or a PI checkpoint.

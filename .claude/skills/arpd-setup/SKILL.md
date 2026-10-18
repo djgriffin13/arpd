@@ -37,7 +37,8 @@ and continues in a new Claude Code session opened in the project.
 
    Ask **no** interview-mode, maturity, coding-experience or profile questions. Do not assume the
    project is a study, an app or a package before you hear it. Never infer low research expertise
-   from low coding experience.
+   from low coding experience. In import mode ask it too, unless the PI's invoking message already
+   answers it.
 3. **Propose the folder.** From the answer (and any argument), work out the mode (`import-path.md`,
    *Modes*), and propose a short project name and an **absolute** path, by default a sibling of the
    kit clone (`<kit parent>/<slug>`), as a `CHOICE FOR YOU (select one)` showing the path in full:
@@ -49,12 +50,14 @@ and continues in a new Claude Code session opened in the project.
    `python arpd/tools/install.py import <source> "<path>"` (existing code: a git path or URL, or a
    folder, whose inventory you show the PI before rerunning with `--yes`);
    `python arpd/tools/install.py install "<path>"` (a repository the PI keeps working in; without
-   consent add `--notes "<notes path>"`). Show the PI any `CONFLICTS:` list; `--force` only on the
+   consent add `--notes "<notes path>"`). Show its output in full (never piped through `tail` or
+   `head`). Show the PI any `CONFLICTS:` list; `--force` only on the
    PI's yes. Quote every `WARNING:` and `REFUSED:` line (a failed commit's includes how to recover)
    and help the PI act on it (`import-path.md`, *Warnings*).
 5. **Notes, then hand over.** Copy `arpd/templates/setup/NOTES.md` to
    `<path>/reports/setup/NOTES.md` with the mode, the folder and the PI's opening answer
-   **verbatim** (UTC time), then
+   **verbatim** (UTC time): the PI's exact message (or the invoking message that answered it), never
+   stitched from several messages or files. Then
    `git -C "<path>" add reports/setup/NOTES.md && git -C "<path>" commit -m "Setup notes (non-governing)"`
    (install mode: uncommitted, and without consent at the notes path instead). End as a
    closing turn, no block, telling the PI exactly: in a new terminal, `cd "<absolute path>"`, then
@@ -97,7 +100,8 @@ question, in this order, skipping any already answered:
 3. "Are there any other features or functionality that would be nice to have but that you don't
    expect to include in the initial release?"
 
-Minimum: **required**; ideal: **desired** or **future**; nice-to-haves: backlog. Never re-ask scope
+The progress line moves to `● Requirements` with the first scope question. Minimum: **required**;
+ideal: **desired** or **future**; nice-to-haves: backlog. Never re-ask scope
 in another form, unless one feature's placement is genuinely unclear and matters now.
 
 ## Phases
@@ -107,7 +111,7 @@ in another form, unless one feature's placement is genuinely unclear and matters
 | **Project** | Opening, classification, existing material, theory-context choice when relevant | What, for whom and why are clear, and the scientific boundary is set |
 | **Requirements** | The scope sequence; users, workflows, functional requirements, data and persistence, nonfunctional needs | Each first-version requirement is testable, or open with a gate |
 | **Architecture** | Each material decision, explored and recommended (`architecture-guide.md`) | Each has alternatives, a recommendation, and the PI's choice or a gate |
-| **Team & Governance** | Agent arrangement, modules, SA-01 with data semantics, review, cadence, open decisions | The PI has chosen the arrangement, cadence, review depth and any proposed module (one choice block); the rest is drafted from what the PI said |
+| **Team & Governance** | Agent arrangement, modules, SA-01 with data semantics, review, cadence, open decisions | The PI has chosen the arrangement, cadence, review depth, authority profile and any proposed module (one choice block); the rest is drafted from what the PI said |
 | **Definition Report** | Draft, completeness check, review, adoption, generation, handoff | Setup closes with planning pending |
 
 After every reply: record the PI's words verbatim, your reading labelled separately; re-evaluate
@@ -143,7 +147,8 @@ Follow `generation-checklist.md`, Part A. The report (sections 1–12, plus §13
 authorizes*) **is the full draft** the PI reviews. Before showing **every** version, run
 `python arpd/tools/check_report.py reports/setup/PROJECT-DEFINITION.md --stage draft`, fix every
 FAIL, and re-run the completeness check. Report material gaps; never paper over them. An open item
-gated "before planning" is asked before the report is shown, unless the PI defers it.
+gated "before planning" is asked before the report is shown, unless the PI defers it (the item
+then says "deferred by the PI"; `check_report.py` WARNs otherwise).
 
 Adopt only through `APPROVAL REQUIRED`, naming the report and its version, and saying that a yes
 authorizes no implementation. Record the reply **verbatim** as R-NN (`Adopts:

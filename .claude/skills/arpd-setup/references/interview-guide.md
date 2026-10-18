@@ -286,8 +286,9 @@ with defaults.
 Ask about the **task structure**, not about agents: can the work split into parts built and tested
 independently? The arrangement is the **PI's choice**: put the recommended one (sized to the work,
 from the table) and one short alternative in a `CHOICE FOR YOU`, with the check-in cadence (if the
-PI has not stated it) and each proposed module (for example, human-subjects data) in the same block,
-not left to the adoption assent. Never adopt an arrangement the PI was not asked about.
+PI has not stated it), the review depth (`arpd/docs/INTERACTION.md` §1), the authority profile
+(below) and each proposed module (for example, human-subjects data) in the same block, not left to
+the adoption assent. Never adopt an arrangement, review depth or profile the PI was not asked about.
 
 | Situation | Team arrangement | Workspace |
 |---|---|---|

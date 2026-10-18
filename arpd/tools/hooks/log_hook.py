@@ -80,7 +80,7 @@ def main():
         os.makedirs(log_dir, exist_ok=True)
         with io.open(os.path.join(log_dir, "events.jsonl"), "a", encoding="utf-8") as fh:
             fh.write(json.dumps(_record(payload), ensure_ascii=False) + "\n")
-    except Exception:  # a logger must never interfere with the session
+    except BaseException:  # a logger must never interfere with the session (exit 2 would block it)
         pass
     sys.exit(0)
 

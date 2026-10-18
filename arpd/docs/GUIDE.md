@@ -227,7 +227,8 @@ Three things are kept apart:
   team continue without a new ruling each time, your words become an SA naming the sprints, the
   transition conditions and when to consult you. Every boundary still gets a close-out, independent
   review and checks. A continuation SA never covers what the charter reserves to you.
-- **Project defaults.** "From now on, always …" about review depth, transition policy or planning
+- **Project defaults.** "From now on, always …" about review depth (how much you read and approve:
+  light-touch, standard or comprehensive, defined in `arpd/docs/INTERACTION.md` §1), transition policy or planning
   cadence is a governing change. `/arpd-amend` applies it from your clear words, without asking you
   to approve them again.
 

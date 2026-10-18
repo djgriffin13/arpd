@@ -10,7 +10,8 @@ Agents (and the PI) append manual events to arpd/logs/events.jsonl, for example:
     python arpd/tools/log_event.py adopted  --actor lead --ref DEC-04 --note "authorized by R-03; commit abc1234"
 
 Event types and their meanings are listed in arpd/docs/EVENTS.md. Run from the project root. In a
-project set up before v0.6 that has only logs/events.jsonl, that legacy log is used.
+project with no arpd/ folder (set up before v0.6) that has logs/events.jsonl, that legacy log is
+used; a project with arpd/ always uses arpd/logs/events.jsonl.
 """
 import argparse
 import datetime
@@ -25,8 +26,8 @@ LEGACY_LOG = os.path.join("logs", "events.jsonl")  # projects set up before v0.6
 
 def default_log():
     """The project's event log: arpd/logs/events.jsonl, or an existing legacy logs/events.jsonl
-    when the new one is absent (a project set up before v0.6)."""
-    if not os.path.exists(LOG) and os.path.exists(LEGACY_LOG):
+    only when the project has no arpd/ folder (a project set up before v0.6)."""
+    if not os.path.isdir("arpd") and os.path.exists(LEGACY_LOG):
         sys.stderr.write("Note: using the legacy event log %s (no %s).\n" % (LEGACY_LOG, LOG))
         return LEGACY_LOG
     return LOG

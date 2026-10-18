@@ -33,7 +33,8 @@ update   Refresh arpd/ (keeping arpd/logs/) and .claude/skills/arpd-* from the k
 owed     Install what setup owes: arpd/settings/settings.json as .claude/settings.json (into an
          existing one, only its "hooks" key is merged, replacing earlier ARPD log-hook entries),
          arpd/agents/*.md into .claude/agents/, and any missing ARPD skill (needs the kit). The hook
-         commands use "python" if it is on the PATH, else "python3", else this interpreter's path.
+         commands use "python" if it is on the PATH, else "python3", else this interpreter's path, and
+         run the script through a launcher that exits 0 when it is missing (exit 2 would block prompts).
 
 The kit is the folder that holds this script's arpd/ when that folder has the .arpd-kit marker
 (running the kit clone's copy); a project's own copy needs --kit <path to the kit clone>.
@@ -423,6 +424,18 @@ def copy_folder(src, dest):
             shutil.copy2(os.path.join(d, f), os.path.join(out, f))
 
 
+def warn_old_hooks(project):
+    """Warn when the project's .claude/settings.json runs an older root tools/hooks/log_hook.py."""
+    try:
+        text = io.open(os.path.join(project, ".claude", "settings.json"), encoding="utf-8").read().replace("\\", "/")
+    except (IOError, OSError, UnicodeDecodeError):
+        return
+    if re.search(r"(?<!arpd/)tools/hooks/log_hook\.py", text):
+        warn(".claude/settings.json runs tools/hooks/log_hook.py; keep tools/hooks/ until setup re-points the hooks "
+             "with  python arpd/tools/install.py owed .  (a hook whose script is missing blocks every prompt). "
+             ".claude/ was not changed.")
+
+
 # --- commands -------------------------------------------------------------------------------------
 
 def existing_ancestor(path):
@@ -490,6 +503,7 @@ def cmd_import(a):
     write_version(dest, kit, "import", imported=imported)
     sha = commit_all(dest, "Bootstrap ARPD (setup in progress)", force_add=True)
     report(result)
+    warn_old_hooks(dest)
     if not stub:
         say("The source's own CLAUDE.md was kept; setup will fold it into the charter.")
     say("Committed %s: Bootstrap ARPD (setup in progress)." % sha)
@@ -512,6 +526,7 @@ def cmd_install(a):
     stub = write_stub_claude(path, a.notes)
     write_version(path, kit, "install")
     report(result)
+    warn_old_hooks(path)
     if added:
         say("Added to .gitignore: " + ", ".join(added))
     if stub:

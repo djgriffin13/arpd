@@ -6,8 +6,8 @@
     python arpd/tools/summarize_events.py --since <STATUS.md rewrite time> --sessions
 
 Prints a Markdown table. Every measure is labelled with what it is and is not. See arpd/docs/EVENTS.md.
-Run from the project root. In a project set up before v0.6 that has only logs/events.jsonl, that
-legacy log is used.
+Run from the project root. In a project with no arpd/ folder (set up before v0.6) that has
+logs/events.jsonl, that legacy log is used.
 
 - Elapsed time: from the first to the last event in the window. It includes idle time and the gaps
   between sessions.
@@ -47,8 +47,8 @@ LEGACY_LOG = os.path.join("logs", "events.jsonl")  # projects set up before v0.6
 
 def default_log():
     """The project's event log: arpd/logs/events.jsonl, or an existing legacy logs/events.jsonl
-    when the new one is absent (a project set up before v0.6)."""
-    if not os.path.exists(LOG) and os.path.exists(LEGACY_LOG):
+    only when the project has no arpd/ folder (a project set up before v0.6)."""
+    if not os.path.isdir("arpd") and os.path.exists(LEGACY_LOG):
         sys.stderr.write("Note: using the legacy event log %s (no %s).\n" % (LEGACY_LOG, LOG))
         return LEGACY_LOG
     return LOG

@@ -105,12 +105,13 @@ The checks:
    (advisory). A project set up before v0.6 whose START-HERE.md has no Map section uses its INDEX.md
    (the whole file) instead.
 7. Event logging and agent roles installed: .claude/settings.json runs arpd/tools/hooks/log_hook.py
-   (or, in a project set up before v0.6, tools/hooks/log_hook.py) and
+   (or, in a project set up before v0.6, tools/hooks/log_hook.py; directly or through the fail-safe
+   launcher), that script exists (FAIL otherwise: a missing script can block every prompt), and
    does not set "disableAllHooks": true; and, when the Team arrangement line mentions subagents or
    peers (and is not solo), .claude/agents/implementer.md and reviewer.md exist. Anything missing is
    MISSING, unless a decision in DECISIONS.md records it as not installed ("event logging not
    installed" / "agent files not installed", citing R-NN or with a "Route: routine" line), which is
-   ADVISORY.
+   ADVISORY. An agent file that differs from arpd/agents/ is ADVISORY.
 8. ARPD skills installed: .claude/skills/arpd-checkin/SKILL.md, .claude/skills/arpd-amend/SKILL.md
    and .claude/skills/arpd-plan/SKILL.md exist in the project (only there). Anything missing is MISSING, unless a decision records "skills not installed" as in step 7
    (ADVISORY).
@@ -990,27 +991,42 @@ def _not_installed_decision(phrase):
     return None
 
 
+HOOK_REF = re.compile(r"(arpd\W{1,4})?tools\W{1,4}hooks\W{1,4}log_hook\.py")
+
+
 def check_logging():
     name = "Event logging and agent roles installed"
-    gaps = []
+    gaps, fails, advisories = [], [], []
     settings = os.path.join(".claude", "settings.json")
     if not os.path.exists(os.path.join(ROOT, settings)):
         gaps.append(("event logging not installed", ".claude/settings.json is missing"))
-    elif not re.search(r"(?:arpd/)?tools/hooks/log_hook\.py", read(settings).replace("\\", "/")):
+    elif not HOOK_REF.search(read(settings).replace("\\", "/")):
         gaps.append(("event logging not installed", ".claude/settings.json does not run arpd/tools/hooks/log_hook.py"))
-    elif re.search(r'"disableAllHooks"\s*:\s*true', read(settings)):
-        gaps.append(("event logging not installed", ".claude/settings.json sets disableAllHooks: true"))
+    else:
+        # The script each hook runs (a plain path or the fail-safe launcher's), relative to the project root.
+        scripts = {"arpd/tools/hooks/log_hook.py" if m.group(1) else "tools/hooks/log_hook.py"
+                   for m in HOOK_REF.finditer(read(settings).replace("\\", "/"))}
+        for rel in sorted(scripts):
+            if not os.path.isfile(os.path.join(ROOT, *rel.split("/"))):
+                fails.append(".claude/settings.json runs %s, which does not exist: every prompt may be blocked; run "
+                             "python arpd/tools/install.py owed . --kit <kit>" % rel)
+        if re.search(r'"disableAllHooks"\s*:\s*true', read(settings)):
+            gaps.append(("event logging not installed", ".claude/settings.json sets disableAllHooks: true"))
     team = ""
     if os.path.exists(os.path.join(ROOT, "CLAUDE.md")):
         m = re.search(r"\*\*Team arrangement:\*\*([^\n]*)", read("CLAUDE.md"))
         team = m.group(1).lower() if m else ""
     if ("subagent" in team or "peer" in team) and "solo" not in team:
         for role in ("implementer", "reviewer"):
-            if not os.path.exists(os.path.join(ROOT, ".claude", "agents", role + ".md")):
+            here, kit = (os.path.join(ROOT, d, "agents", role + ".md") for d in (".claude", "arpd"))
+            if not os.path.exists(here):
                 gaps.append(("agent files not installed", ".claude/agents/%s.md is missing (team arrangement "
                              "needs it)" % role))
+            elif os.path.isfile(kit) and read(here) != read(kit):
+                advisories.append(".claude/agents/%s.md differs from arpd/agents/%s.md (an older or edited copy; "
+                                  "python arpd/tools/install.py owed . --force replaces it)" % (role, role))
     if not gaps:
-        step(name, "PASS")
+        step(name, "FAIL" if fails else ("ADVISORY" if advisories else "PASS"), fails + advisories)
         return
     notes, unexplained = [], False
     for phrase, what in gaps:
@@ -1020,7 +1036,7 @@ def check_logging():
         else:
             notes.append("%s; no decision records it as not installed" % what)
             unexplained = True
-    step(name, "MISSING" if unexplained else "ADVISORY", notes)
+    step(name, "FAIL" if fails else ("MISSING" if unexplained else "ADVISORY"), fails + notes + advisories)
 
 
 SKILLS = ("arpd-checkin", "arpd-amend", "arpd-plan")

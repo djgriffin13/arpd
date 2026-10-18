@@ -1,15 +1,15 @@
 {
   "hooks": {
-    "SessionStart": [{ "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
-    "SessionEnd": [{ "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 5 }] }],
-    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
-    "PostToolUse": [{ "matcher": "*", "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
-    "PostToolUseFailure": [{ "matcher": "*", "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
-    "SubagentStart": [{ "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
-    "SubagentStop": [{ "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
-    "PreCompact": [{ "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
-    "Stop": [{ "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
-    "StopFailure": [{ "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
-    "Notification": [{ "hooks": [{ "type": "command", "command": "python", "args": ["${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }]
+    "SessionStart": [{ "hooks": [{ "type": "command", "command": "python", "args": ["-c", "import os,runpy,sys; p=sys.argv[1]; os.path.isfile(p) and runpy.run_path(p, run_name='__main__')", "${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
+    "SessionEnd": [{ "hooks": [{ "type": "command", "command": "python", "args": ["-c", "import os,runpy,sys; p=sys.argv[1]; os.path.isfile(p) and runpy.run_path(p, run_name='__main__')", "${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 5 }] }],
+    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "python", "args": ["-c", "import os,runpy,sys; p=sys.argv[1]; os.path.isfile(p) and runpy.run_path(p, run_name='__main__')", "${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
+    "PostToolUse": [{ "matcher": "*", "hooks": [{ "type": "command", "command": "python", "args": ["-c", "import os,runpy,sys; p=sys.argv[1]; os.path.isfile(p) and runpy.run_path(p, run_name='__main__')", "${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
+    "PostToolUseFailure": [{ "matcher": "*", "hooks": [{ "type": "command", "command": "python", "args": ["-c", "import os,runpy,sys; p=sys.argv[1]; os.path.isfile(p) and runpy.run_path(p, run_name='__main__')", "${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
+    "SubagentStart": [{ "hooks": [{ "type": "command", "command": "python", "args": ["-c", "import os,runpy,sys; p=sys.argv[1]; os.path.isfile(p) and runpy.run_path(p, run_name='__main__')", "${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
+    "SubagentStop": [{ "hooks": [{ "type": "command", "command": "python", "args": ["-c", "import os,runpy,sys; p=sys.argv[1]; os.path.isfile(p) and runpy.run_path(p, run_name='__main__')", "${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
+    "PreCompact": [{ "hooks": [{ "type": "command", "command": "python", "args": ["-c", "import os,runpy,sys; p=sys.argv[1]; os.path.isfile(p) and runpy.run_path(p, run_name='__main__')", "${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
+    "Stop": [{ "hooks": [{ "type": "command", "command": "python", "args": ["-c", "import os,runpy,sys; p=sys.argv[1]; os.path.isfile(p) and runpy.run_path(p, run_name='__main__')", "${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
+    "StopFailure": [{ "hooks": [{ "type": "command", "command": "python", "args": ["-c", "import os,runpy,sys; p=sys.argv[1]; os.path.isfile(p) and runpy.run_path(p, run_name='__main__')", "${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }],
+    "Notification": [{ "hooks": [{ "type": "command", "command": "python", "args": ["-c", "import os,runpy,sys; p=sys.argv[1]; os.path.isfile(p) and runpy.run_path(p, run_name='__main__')", "${CLAUDE_PROJECT_DIR}/arpd/tools/hooks/log_hook.py"], "timeout": 10 }] }]
   }
 }

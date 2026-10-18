@@ -32,7 +32,8 @@ Each check is reported PASS, FAIL or WARN with what it rests on. HTML comments a
       rule as Open (<gate>) in (c) and (e)). An item is closed only by a leading "Resolved:",
       "Closed:" or "Excluded:", or, in a table, a Status cell of Adopted, Delegated, Resolved, Closed
       or Excluded, or a Gate cell of Resolved, Closed or Excluded; the words elsewhere in an item do
-      not close it;
+      not close it. An open item gated before planning WARNs unless it says "deferred by the PI"
+      (setup asks such items before showing the report);
   (g) section 13 says that adoption does not authorize implementation (a sentence with not / no /
       never and "implement");
   (h) a "Completeness check" subsection is present (WARN if absent).
@@ -76,6 +77,9 @@ PI_ACCEPTED = re.compile(r"\bPI\s+accepted\b\W{0,3}" + QUOTE, re.I)
 LEAD_ONLY = re.compile(r"\b(?:lead|derived|derivation|recommend\w*|inferred)\b", re.I)
 INHERITED = re.compile(r"adopted\s*\(\s*inherited\b", re.I)
 INHERITED_OK = re.compile(r"adopted\s*\(\s*inherited\s*[,;:]?\s*R-\d+\s*\)", re.I)
+# Section 12: an open item gated "before planning" is asked before the report is shown, unless the PI deferred it.
+BEFORE_PLANNING = re.compile(r"\bbefore\s+(?:%s\s*)*(?:planning|plan)\b" % DETERMINER, re.I)
+PI_DEFERRED = re.compile(r"\bdeferred\s+by\s+the\s+PI\b", re.I)
 # Section 12: an item is closed only by a leading marker, or (in a table) by a Status or Gate cell saying so.
 CLOSED_MARK = re.compile(r"^\W*(?:resolved|closed|excluded)\W*:", re.I)
 CLOSED_STATUS = re.compile(r"^(?:adopted|delegated|resolved|closed|excluded)\b", re.I)
@@ -378,7 +382,7 @@ def check(text, stage="draft"):
 
     # (f) section 12 open items name a gate
     name = "(f) section 12: every open item names a gate"
-    problems, items = [], 0
+    problems, items, planning = [], 0, 0
     if 12 in found and not is_na(12):
         body = body_of(12)
         table_lines = set()
@@ -398,6 +402,7 @@ def check(text, stage="draft"):
                 where = cells[gate_col] if gate_col is not None else line
                 if not GATE.search(where):
                     problems.append("open item without a gate: " + short(line, 80))
+                planning += bool(BEFORE_PLANNING.search(where) and not PI_DEFERRED.search(line))
         for line in body:
             if line.strip() in table_lines or not re.match(r"^(?:[-*+]|\d+[.)])\s+\S", line):
                 continue  # only top-level bullets are items
@@ -408,7 +413,12 @@ def check(text, stage="draft"):
             items += 1
             if not GATE.search(line):
                 problems.append("open item without a gate (%s): %s" % (GATE_HINT, short(line, 80)))
+            planning += bool(BEFORE_PLANNING.search(line) and not PI_DEFERRED.search(line))
     out += [("FAIL", name, p) for p in problems] or [("PASS", name, "%d open item(s)" % items)]
+    if planning:
+        out.append(("WARN", "(f) items gated before planning were asked",
+                    "%d open item(s) gated before planning: ask them before presenting, or record the PI's "
+                    "deferral (\"deferred by the PI\")" % planning))
     odd = sorted({m.group(0) for line in lines for m in GATE.finditer(line) if not STAGE.match(line[m.start():])})
     if odd:
         out.append(("WARN", "(f) gates name a project stage",

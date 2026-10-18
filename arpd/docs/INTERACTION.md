@@ -20,6 +20,18 @@ document and grant no authority. Each skill keeps its own steps and its own prog
   Ask only when the intent is materially unclear.
 - When the PI approves a plan without saying more, record planning approval only.
 
+**Review depth** is how much the PI reads and approves, a project default recorded in SA-01 and
+`STATUS.md` §8:
+
+- **Light-touch:** the PI approves the report, plans and consult decisions, and reads sprint
+  close-out summaries.
+- **Standard:** also reviews sprint records.
+- **Comprehensive:** also reviews task plans and reviewer reports.
+
+Independent agent review happens at every level; review depth does not change it. So "Make
+light-touch review the default." is a clear ruling: `/arpd-amend` records and applies it with no
+clarifying question.
+
 ## 2. The labelled block
 
 When you wait for the PI, end the turn with one labelled block. The block opens with a divider

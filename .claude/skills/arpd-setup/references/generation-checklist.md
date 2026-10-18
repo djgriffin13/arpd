@@ -119,10 +119,9 @@ counts as Adopted-on-adoption, with the ruling as its source.
 
 ## Commit order
 
-1. **Move- or remove-only commits** (import and install): prior instruction files to
-   `docs/prior-instructions/`; an ARPD starter's older copies removed (`import-path.md`). Each
-   alone, staging only those paths; `git show --stat --find-renames HEAD` shows renames with no
-   content change, or deletions only.
+1. **Move-only commits** (import and install): prior instruction files to
+   `docs/prior-instructions/`. Each alone, staging only those paths; `git show --stat
+   --find-renames HEAD` shows renames with no content change.
 2. **The adoption, first.** Write `DECISIONS.md` (row 5), with R-NN and SA-01. Make the report's
    only post-adoption edit: the Status line `Adopted by R-NN (vN)` and the template's ADOPTED banner
    in place of DRAFT. Run `check_report.py` (as A2) with `--stage adopted` and fix every FAIL. Commit
@@ -133,8 +132,14 @@ counts as Adopted-on-adoption, with the ruling as its source.
 3. **The notes, alone** (row 13), if in the project: a last update, then
    `git add reports/setup/NOTES.md && git commit -m "Setup notes (non-governing)"`. Then frozen; a
    correction gets its own commit ("Correct setup notes (non-governing)").
-4. **The import baseline** (row 10), then the remaining files, committed at the end (*Then*).
-5. **`.claude/` last** (*Permission prompts*).
+4. **The import baseline, alone** (import and install; row 10), right after the notes:
+   `git add reports/setup/IMPORT-BASELINE.md && git commit -m "Import baseline (non-governing)"`.
+   Then the remaining files, committed at the end (*Then*).
+5. **`.claude/`** (*Permission prompts*).
+6. **An ARPD starter's remove-only commit, last** (`import-path.md`, starter step 3): only after
+   step 5 has re-pointed the starter's hooks to `arpd/tools/hooks/`, because a hook whose script is
+   missing blocks every prompt. If the PI declined step 5, keep `tools/hooks/` and say so in the
+   "event logging not installed" DEC. `git show --stat HEAD` shows deletions only.
 
 ## Every generated file
 
@@ -156,10 +161,10 @@ updated in place.
 | 4 | `MASTER_PLAN.md` | Objective (§1); milestones from report §9; the broad order of work, each row "planning pending", no invented sprints; the backlog, each Backlogged and citing the report; risks (§12); cadence (§11). |
 | 5 | `DECISIONS.md` | **R-NN:** as A5. **SA-01:** every field from report §11, in the PI's words or "(drafted by the lead; PI assented: '<the PI's exact words>')"; data semantics delegated only under a quoted named policy. **DECs:** each adopted decision of report §6 (citing D-NN), the team arrangement, import, move or removal (citing `reports/setup/IMPORT-BASELINE.md` and the kit commit in `arpd/VERSION`), anything owed. **Waiting on the PI:** a row per Open or gated Provisional item; *Needed by* is the gate. |
 | 6 | `ARCHITECTURE.md` | Overview, platform table, components and data flow from report §5; *Architecture decisions*: the §6 rows the status table sends here, labelled; A-rules start as TARGET. *Check:* the platform table agrees with the decisions. |
-| 7 | `STATUS.md` | (an imported one is rewritten in this format) **Readiness** as `SKILL.md`, *Closeout*, plus the report version and commit. §2 "No sprint open"; §4 *On deck*: `/arpd-plan`; §5 points to *Waiting on the PI*; base commit, recovery block, UTC time; **§8** the PI's working style (no interview mode); **§6 *Owed*:** every item not installed, or "Nothing owed". |
+| 7 | `STATUS.md` | (an imported one is rewritten in this format) **Readiness** as `SKILL.md`, *Closeout*, plus the report version and commit. §2 "No sprint open"; §4 *On deck*: `/arpd-plan`; §5 points to *Waiting on the PI*; base commit, recovery block, UTC time; **§8** the PI's working style and review depth (as SA-01; no interview mode); **§6 *Owed*:** every item not installed, or "Nothing owed". |
 | 8 | `START-HERE.md` | From `arpd/templates/START-HERE.md` (a starter's is rewritten; its `INDEX.md` folded into the *Map* and removed), one screen, the template's sections: **Next step** holds the exact prompt `/arpd-plan` (current state only there); **Map** lists every top-level entry, one line each ("pending: <reason>" for a later one); **Known gaps** has exact commands, or "none". *Check:* the checker's map step passes. |
 | 9 | `AGENTS.md` | (a starter's is kept) One line: "Read CLAUDE.md in full before doing anything else; it is this project's team charter." |
-| 10 | `reports/setup/IMPORT-BASELINE.md` | **Import and install only,** from its template: each command with its working directory, exit code and output **verbatim**; what was not run. Written once, then frozen; cited, never copied. |
+| 10 | `reports/setup/IMPORT-BASELINE.md` | **Import and install only,** from its template: each command (run as `<command>; echo "exit=$?"`) with its working directory, the printed exit code and the full output **verbatim**, never trimmed; what was not run. Committed alone after the notes (*Commit order* 4), then frozen; cited, never copied. |
 | 11 | `arpd/`, `.claude/skills/arpd-*` | Present since bootstrap. Verify that `arpd/VERSION` names the kit version, `arpd/tools/` holds `check_governance.py`, `check_report.py`, `log_event.py`, `summarize_events.py` and `next_plan_number.py`, and the four skills exist. If stale: `python arpd/tools/install.py update . --kit "<kit clone>"` on the PI's yes, recorded by a DEC. |
 | 12 | `.gitignore` | Written by `install.py`: verify `arpd/logs/`, `output/`, `__pycache__/`, `.claude/settings.local.json`; the project's own lines are kept. |
 | 13 | `reports/setup/NOTES.md` | The final update marks the report adopted by R-NN (vN), and says the ruling and governing documents, not the notes, are the authority. Committed alone (step 3). Never in install mode without consent. |
@@ -168,7 +173,8 @@ updated in place.
 
 ## Permission prompts for `.claude/`
 
-Last, as one step on its own, so a refusal blocks nothing else.
+Last (for an ARPD starter, only its remove-only commit follows), as one step on its own, so a
+refusal blocks nothing else.
 
 1. **Tell the PI first** what each item is for, and ask
    (`CHOICE FOR YOU (select one)`: install them now / skip them for now, and they are owed):

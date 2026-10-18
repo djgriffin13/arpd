@@ -51,6 +51,7 @@ decided.
 
 - **Given:** in the setup interview
 - **Profile:** Consult first / Bounded autonomy / Exploratory autonomy
+- **Review depth:** Light-touch / Standard / Comprehensive (`arpd/docs/INTERACTION.md` §1)
 - **Purpose:**
 - **Scientific boundaries** (what agents may decide within):
 - **Permitted assumption changes:**

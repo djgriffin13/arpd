@@ -84,7 +84,8 @@ only.
 **Nothing governing is written before adoption.** Steps 1–5 only read; steps 6–7 write, after it.
 
 1. **Inventory,** in the project folder: structure, languages, test commands. Run the existing
-   tests; keep each command, working directory, exit code and output **verbatim**, with the source's
+   tests (`<command>; echo "exit=$?"`); keep each command, working directory, printed exit code and
+   full output **verbatim**, never trimmed, with the source's
    commit (`arpd/VERSION`, *Imported from*), outside the repository (OS temp or the session
    scratchpad), for `reports/setup/IMPORT-BASELINE.md` at generation. Never report the baseline as
    better than it is. Find the instruction files: `CLAUDE.md` (not `install.py`'s "Setup in
@@ -114,7 +115,8 @@ Worked case: the March example, from its own repository (`/arpd-setup import <it
 
 1. **Inventory first.** Read `START-HERE.md`, `STATUS.md`, `DECISIONS.md` (*Waiting on the PI*),
    `PARADIGM-SPEC.md` and any import notes. Run its tests and its own checker as it stands (an older
-   starter's `python tools/check_governance.py`); keep the output verbatim, outside the project.
+   starter's `python tools/check_governance.py`), each as `<command>; echo "exit=$?"`; keep the full
+   output verbatim, outside the project.
 2. **Interview, confirming rather than re-asking.** Read the written science to the PI in plain
    language to confirm; the report keeps its IDs.
    - An item marked *"(draft wording, awaiting the PI's words)"* gets the PI's own words or stays
@@ -127,11 +129,15 @@ Worked case: the March example, from its own repository (`/arpd-setup import <it
      `arpd/docs/EVENTS.md`, `logs/` → `arpd/logs/`; the older copies (`tools/`, `docs/EVENTS.md`,
      `reports/templates/`) removed, since `arpd/` replaces them; `INDEX.md` folded into
      `START-HERE.md`'s *Map*.
-3. **Remove-only commit,** first after adoption: `git rm` the older copies that exist and nothing
-   else, "Remove the starter's older ARPD copies; arpd/ replaces them (no other changes)";
-   `git show --stat HEAD` shows deletions only. Re-run the tests. A DEC records the removal. The
-   starter's `.claude/settings.json` runs the old hook until `install.py owed .` (the `.claude/`
-   step).
+3. **Remove-only commit, the last generation step** (`generation-checklist.md`, *Commit order* 6):
+   the starter's `.claude/settings.json` runs `tools/hooks/log_hook.py` until `install.py owed .`
+   (the `.claude/` step, on the PI's yes) re-points it, and a hook whose script is missing blocks
+   every prompt. After that step, `git rm` the older copies that exist and nothing else, "Remove the
+   starter's older ARPD copies; arpd/ replaces them (no other changes)"; `git show --stat HEAD`
+   shows deletions only. Re-run the tests (`; echo "exit=$?"`) and quote the output. A DEC, written
+   at generation, records the removal; until it happens the *Map* lists `tools/` as "pending:
+   removed after the `.claude/` step". If the PI declines the `.claude/` step, keep `tools/hooks/`
+   and record that.
 4. **Then edit in place,** through rulings and authorizations; superseded entries keep their text.
    - `CLAUDE.md`: the Version line (R-NN), *Authority profile* (SA-NN), the PI line, §6's examples,
      and the named path updates. Nothing else without a ruling.
@@ -151,7 +157,8 @@ Worked case: the March example, from its own repository (`/arpd-setup import <it
    - `STATUS.md` and `START-HERE.md` rewritten in the current format, carrying over what applies;
      `INDEX.md` removed by `git rm` once its entries are in the *Map*.
 5. **Records are kept as they are:** rulings, decisions, sprint records, reviews, decision packs.
-6. **Import baseline** with the runs of steps 1 and 3. **Inherited checks must keep passing with the
+6. **Import baseline** with the runs of step 1, committed after the notes (`generation-checklist.md`,
+   row 10). **Inherited checks must keep passing with the
    extension disabled.**
 7. **Then** search the governing documents for phrases the adoption made stale ("pending R-01",
    "Pending adoption", "the importing PI") and update each.

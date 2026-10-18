@@ -89,5 +89,5 @@ Write "Nothing owed" only when nothing is.
 
 ## 8. The PI's working style
 
-Record how the PI likes decisions brought, how often they want check-ins, how much explanation
-helps them, and what to avoid.
+Record the review depth (as SA-01), how the PI likes decisions brought, how often they want
+check-ins, how much explanation helps them, and what to avoid.
