@@ -72,7 +72,8 @@ recommendation, or "PI accepted: '...'".
 <!-- IDs REQ-<AREA>-NN, the same in REQUIREMENTS.md. Drop Behaviour, Inputs/outputs and Constraints
 when they add nothing; Acceptance criteria (checks an independent tester could run), Priority,
 Source and Status are always present. A requirement sourced only by the lead is Proposed or
-Provisional. -->
+Provisional. One status per requirement: if parts differ, split it. Criteria that wait on an open
+decision are still bullets: "- pending O-NN: <what will be checked>". -->
 
 #### REQ-{{AREA}}-01: {{name}}
 

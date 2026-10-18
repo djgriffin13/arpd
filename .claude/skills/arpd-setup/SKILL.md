@@ -141,7 +141,9 @@ authorizes*) **is the full draft** the PI reviews; never promise full drafts and
 summary. Before showing **every** version, run
 `python kit/tools/check_report.py reports/PROJECT-DEFINITION.md --stage draft` (install mode: the
 kit clone's path) and fix every FAIL; then re-run the completeness check, consistency between
-sections included. Report material gaps; never paper over them.
+sections included. Report material gaps; never paper over them. An open item gated "before
+planning" is asked before the report is shown, unless the PI defers it; a phase is not marked done
+while one is unasked.
 
 Adopt only through `APPROVAL REQUIRED`, naming `reports/PROJECT-DEFINITION.md` and its version, and
 saying that a yes authorizes no implementation. Record the reply **verbatim** as R-NN (`Adopts:
@@ -185,7 +187,8 @@ generated is authorized; continue from the next open topic without re-asking.
    - **A:** invoke the separate `/arpd-plan` skill; never plan inside setup. In install mode, say
      that planning works best from a session in the target repository.
    - **B:** stop. The records point to `/arpd-plan`.
-   - If `/arpd-plan` is not installed, say so, give the install command, and offer only B.
+   - If `/arpd-plan` is not installed, there is no choice: end as a closing turn, with no block, saying
+     it is owed and giving the install command and the next step.
 
    Never offer "begin implementation" from setup.
 

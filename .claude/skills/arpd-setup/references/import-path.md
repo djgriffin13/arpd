@@ -88,7 +88,7 @@ the change in detail:
    the scope sequence applies to the change. Do not re-elicit the whole product.
 5. **Compatibility and migration:** existing data files and output formats; callers, scripts and
    users; the existing tests; dependencies and versions; prior instructions; whether old outputs
-   must still be producible. Each becomes a requirement, a decision, or an open item with a gate.
+   (files and printed output) must still be producible, and the migration steps if not. Each becomes a requirement, a decision, or an open item with a gate.
 6. **A modification plan** in the report: §5 the existing architecture and what changes; §6 the
    decisions; §9 the modification roadmap (what changes first, what regression tests protect, the
    migration steps). Direction only; `/arpd-plan` plans the sprints.
