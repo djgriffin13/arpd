@@ -68,7 +68,9 @@ directly; read it back before continuing.
 - Re-run the whole completeness check (A2) on the new version; present briefly what changed and
   what is still open.
 - Resolve each proposal the PI has not accepted to a status in the template's table, or leave it
-  Proposed (not adopted; backlog). An O-NN is resolved only by the PI's answer to it; mark it
+  Proposed (not adopted; backlog). **Exception: a data-semantics proposal the PI has not accepted
+  becomes Open**, gated "before implementing <the feature it affects>", with its own row in
+  *Waiting on the PI*. It never goes to the backlog, and nothing that depends on it is built. An O-NN is resolved only by the PI's answer to it; mark it
   "Resolved:" in §12, or move it out. A rejection: ask what to change; nothing is adopted.
 
 ## A5. Adoption
@@ -101,7 +103,7 @@ Then:
   and maps each open O-NN to its *Waiting on the PI* row (#N).
 - A plain assent ("ok", "aproved") is recorded exactly as given, with the line "(PI assented to
   reports/PROJECT-DEFINITION.md vN, as read back: '<the block's text>')". A plain assent accepts no
-  data-semantics proposal.
+  data-semantics proposal: each one becomes Open with its gate and a *Waiting on the PI* row (A4).
 - If the reply assents but adds something that could change the report, do not record the
   adoption. Revise to vN+1 and ask once more (`kit/docs/INTERACTION.md`, *A reply to an approval
   that also adds something*).
@@ -158,7 +160,7 @@ ruling accepted counts as Adopted-on-adoption, with the ruling as its source.
 |---|---|---|---|
 | 1 | `CLAUDE.md` | `kit/constitution/CORE.md`; an ARPD starter's own | Fill every `{{…}}`: purpose and instrument from report §1, team and workspace from §10, `{{AUTHORITY_PROFILE}}` (the name only), `{{DATA_RULES}}` from §7 and §11. Append the selected modules under Part B (science first, then `team/team-arrangement.md` filled in; draft ones marked "(draft module, untested)"). Kept prior instructions go in Part B as `B.P-PROJECT: Project rules`, quoted, with their DEC. §6 "This project's examples": the routine, delegated and consult choices from §11, with the data-semantics examples as consult items unless a named policy delegates them. **ARPD starter:** update only the Version line (R-NN), *Authority profile*, PI line and §6's examples. *Check:* matches report §10–11. |
 | 2 | `PARADIGM-SPEC.md` | `kit/templates/PARADIGM-SPEC.md`, or the starter's own | Depth follows the theory-context choice. **Not relevant, or D:** §1 is the PI's purpose verbatim; other sections "Not applicable for this project (R-NN)"; no pending research question. **A:** the context in the PI's words, unevaluated. **B:** the concerns the PI kept, in §9 or as ASM items, labelled. **C, or correctness-critical semantics:** the full CON…VAL items, definitions verbatim. §8: report §2's exclusions. Never invent CON, OP or INV items; a draft-wording marker stays until the PI's own words. |
-| 3 | `REQUIREMENTS.md` | `kit/templates/REQUIREMENTS.md`, or the starter's own | The requirements the status table sends here, with the same IDs: ID, plain-language requirement, source (R-NN, or the spec item), state Planned (except imported Verified evidence, `import-path.md`) and evidence; *Requirement details* copies each one's acceptance criteria, priority and dependencies from the report. *Check:* every row has a details entry with at least one acceptance criterion, and matches the report's requirement in ID and meaning; nothing Proposed, Open or future-priority slipped in. |
+| 3 | `REQUIREMENTS.md` | `kit/templates/REQUIREMENTS.md`, or the starter's own | The requirements the status table sends here, with the same IDs: ID, plain-language requirement, source (R-NN, or the spec item), state Planned (except imported Verified evidence, `import-path.md`) and evidence; *Requirement details* copies each one's acceptance criteria, priority and dependencies from the report. *Check:* every row has a details entry with at least one acceptance criterion, and matches the report's requirement in ID and meaning; nothing Proposed (unless the R-NN *Reading* accepts it by ID), Open or future-priority slipped in. |
 | 4 | `MASTER_PLAN.md` | `kit/templates/MASTER_PLAN.md`, or the starter's own | The objective (§1); milestones from report §9 (§2); the broad order of work (§3), each row "planning pending", with no invented sprint plans; the backlog (§4) with what the status table sends there, each Backlogged and citing the report. Risks from report §12; the cadence from §11. *Check:* milestones and order match report §9. |
 | 5 | `DECISIONS.md` | `kit/templates/DECISIONS.md`, or the starter's own | **R-NN:** as A5. **SA-01:** every field from report §11, in the PI's words or as "(drafted by the lead; PI assented: '<the PI's exact words>')"; data semantics not delegated unless a named policy is quoted. **DECs:** each adopted material decision of report §6 (citing D-NN), the team arrangement, import or move decisions (citing `reports/IMPORT-BASELINE-<date>.md`; an install DEC names the kit commit, `git -C <kit folder> rev-parse HEAD`), anything owed. **Waiting on the PI:** one row per Open item, and per gated Provisional item, in O-NN order; *Needed by* is the gate. |
 | 6 | `ARCHITECTURE.md` | `kit/templates/ARCHITECTURE.md`, or the starter's own | Overview (§1), platform table (§2), components and data flow (§3) from report §5. *Architecture decisions*: the report §6 rows the status table sends here, same columns, each labelled. A-rules start as TARGET. Dependencies from §5. *Check:* the platform table agrees with the decisions; nothing is an unsupported guess. |

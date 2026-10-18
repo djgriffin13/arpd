@@ -35,7 +35,7 @@ Each requirement, decision and open item has one status, mapped onto the kit's e
 | **Delegated (SA-NN)** (agents decide within its bounds) | That SA; listed as delegated in `ARCHITECTURE.md` or `REQUIREMENTS.md` |
 | **Provisional** (says what confirms it) | `ARCHITECTURE.md` *Architecture decisions*, labelled, or *Waiting on the PI* with its gate; never a requirement's source |
 | **Open (gate)** | `DECISIONS.md` *Waiting on the PI*, *Needed by* = the gate |
-| **Proposed** (the lead's; not accepted) | Not adopted, unless the adoption ruling names it: `MASTER_PLAN.md` §4 backlog |
+| **Proposed** (the lead's; not accepted) | Not adopted, unless the adoption ruling names it: `MASTER_PLAN.md` §4 backlog. A data-semantics proposal not accepted becomes **Open** instead (gate: before implementing the feature it affects) |
 | **Excluded** | The out-of-scope list (`PARADIGM-SPEC.md` §8) |
 | Priority **future**, any status | `MASTER_PLAN.md` roadmap or backlog only, not `REQUIREMENTS.md` |
 
