@@ -1,158 +1,108 @@
 # ARPD: Agentic Research Paradigm Development
 
 **A team-based framework for expanding organizational inquiry.** This is release candidate
-v0.5.0-rc.1 (October 2026), held for manual testing, with a revised setup
-([RELEASE-NOTES.md](RELEASE-NOTES.md)). The previous candidates, v0.4.0-rc.1 and v0.3.0-rc.1, are
-preserved under their tags. ARPD is the research artifact for a proposal to the *Organization Science* special issue
-"AI-Enabled Frontiers in Organizational Science."
+v0.6.0-rc.1, in preparation ([RELEASE-NOTES.md](RELEASE-NOTES.md)). ARPD is the research artifact
+for a proposal to the *Organization Science* special issue "AI-Enabled Frontiers in Organizational
+Science."
 
 ## What it is for
 
-Which questions organizational researchers can pursue is limited by the cost of developing,
-validating, maintaining and coordinating research instruments: experimental platforms, measurement
-systems, statistical tools and computational models. AI coding agents can lower those costs. But
-agent-built software can pass its own checks while measuring the wrong construct, and those who most
-need the help are least able to see that.
+Which questions organizational researchers can pursue is limited by the cost of building,
+validating and maintaining research instruments: experimental platforms, measurement systems,
+statistical tools and computational models. AI coding agents can lower those costs. But agent-built
+software can pass its own checks while measuring the wrong construct, and those who most need the
+help are least able to see that.
 
 ARPD lets a domain researcher who is not a software developer direct a **team** of AI agents to
 build and revise a research instrument, **while keeping authority over every consequential
 scientific decision**. Testing, review and explicit scientific validation are its core pillars.
 
-## The parts
-
-| Part | What it does | Status |
-|---|---|---|
-| **Team charter** (`kit/constitution/CORE.md` → the project's `CLAUDE.md`) | A short governing document every agent reads each session. It covers: authority by subject; data semantics (missing versus zero, duplicates, identifiers, aggregation, precision) reserved to the researcher unless they name a policy; the PI's rulings recorded verbatim; decision routes set by scientific consequence and by the authority the researcher has delegated, with an authority profile (consult first, bounded autonomy, or exploratory autonomy) agreed at setup; requirement states that separate *Implemented*, *Verified* (software evidence) and *Validated* (scientific evidence the researcher accepts); sprints with auditable close-outs; and a learning loop that adds and retires rules. | Built |
-| **Paradigm specification** (`kit/templates/PARADIGM-SPEC.md`) | Traces the research question → constructs → operationalizations → invariants → claims, and claims not to make → validation evidence. | Built |
-| **Setup and import interview** (`/arpd-setup`) | A tool-first interview in five visible phases (Project, Requirements, Architecture, Team & Governance, Definition Report). It opens by asking what the researcher wants to build; asks three scope questions (minimum usable version, ideal version, nice-to-have); offers help with theory only when it is relevant, and only as much as the researcher chooses; compares architecture alternatives and recommends one; and writes a Project Definition Report (`reports/PROJECT-DEFINITION.md`): numbered requirements with acceptance criteria, the architecture decisions, data contracts, verification, roadmap, team, governance and open decisions with gates. Working notes are saved as it goes, in non-governing `docs/discovery/SETUP.md`. Nothing governing is written before the researcher adopts a version of the report; adoption authorizes the governing documents, not development. It ends with planning pending. Supports a fresh project, importing a codebase, or installing into an existing repository. Prior instructions are preserved and reconciled by decision, never silently merged. | Revised in v0.5. Driven scenarios A, A2, A3, B, C, D, F ([v0.5 scenarios](evaluation/developer-tests/v0.5-scenarios-report.md)). Earlier flows: DT-02 to DT-05, DT-08 (v0.3) and DT-09, DT-12, DT-13 (v0.4). Not yet tested with a researcher. |
-| **Sprint planning** (`/arpd-plan`) | Plans the next sprint or a series with the researcher, from the adopted requirements (with their acceptance criteria), the architecture decisions and the open decisions' gates: a review of where the project stands, one sprint or several, priorities, a versioned draft in `reports/planning/`, approval of an exact version, then begin now or later. Plan approval, execution authority and task-plan approval stay separate; continuing across several sprints without a check-in at each boundary needs a standing authorization. | New in v0.4. Scripted developer tests DT-10, DT-10b, DT-11 and DT-11b; the v0.5 handoff (scenario H, [v0.5 scenarios](evaluation/developer-tests/v0.5-scenarios-report.md)). Not yet tested with a researcher. |
-| **Interaction conventions** (`kit/docs/INTERACTION.md`) | Shared by the four skills: one labelled block (`QUESTION FOR YOU`, `CHOICE FOR YOU`, `APPROVAL REQUIRED`) last in every turn that waits for the researcher; choice options printed as text before any widget; progress lines; explaining when needed, at the researcher's level; the five kinds of information and action (an answer is not an authorization); a quick dependency screen. | New in v0.4. Not yet tested with people. |
-| **Team and workspace arrangement** | The team (solo / lead with subagents / peers) and the workspace (shared checkout / worktrees) are chosen separately. Shared runtime resources (ports, output paths) are assigned per agent. | Built |
-| **Event logging** (hooks + `tools/`) | Records defined coordination events. It reports elapsed time, agent-working time (prompt to end of turn), subagent time and failed or interrupted turns, separately from the researcher's self-reported active time. Hooks cannot measure the researcher's active time, and the tooling says so. | Built |
-| **Governance checker** (`tools/check_governance.py`) | Checks, from what is recorded: links, requirement evidence and traceability, plan numbering, charter adoption, installation files (including the planning, check-in and amend skills), whether consequential decisions in closed sprints were authorized before adoption, and whether an open sprint's Part 1 cites a plan approval and execution authority that exist. A project with setup adopted and no sprint passes. Within the steps it lists, it does not report PASS for an item it could not check; each run prints what it did not check. It cannot show that the records themselves are true. | Built |
-| **Modules** (`kit/constitution/modules/`) | Built: computational model; team arrangement. Drafts, untested: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data. | Partial |
-| **Worked example** (`examples/march-1991/`) | A checked implementation of March's (1991) mutual-learning model, kept as a complete ARPD project with v0.3-format records (its ruling R-01 was given for v0.3.0-rc.1; the records are carried unchanged, so the checker reports some steps as "older format"). It is also the starter for the feasibility demonstration. | Built: software verification (48 tests) and directional replication (22 tests), with two independent review rounds. Its assumptions were adopted as the working baseline by the PI's ruling R-01; whether they match March's own program remains open (backlog B-07 to B-09). |
-
-## Why a team, and why a charter
-
-The design draws on team science:
-
-- team process phases (Marks, Mathieu & Zaccaro, 2001);
-- team charters (Mathieu & Rapp, 2009);
-- coordination mechanisms (Okhuysen & Bechky, 2009);
-- functional leadership (Morgeson, DeRue & Karam, 2010);
-- team reflexivity (Schippers, West & Dawson, 2015);
-- the human–LLM agent-team guidelines of Yurrita et al. (2026). `docs/DESIGN-RATIONALE.md` maps the
-  kit's mechanisms to them.
-
-Evaluations of multi-agent AI systems report mixed results. Whether added agents help depends on the
-task (Kim et al., 2026), and added governance can cost more than it returns (Gloaguen et al., 2026).
-Those evaluations test particular architectures, not a researcher-directed arrangement built on team
-science.
-
-**We do not claim the kit explains or overcomes those results.** We treat it as a hypothesis, and
-the kit doubles as a **test bed**: the same task can be run solo or with several agents, with or
-without the charter, and with lean or full configurations. See `evaluation/`.
+The design draws on team science: process phases (Marks, Mathieu & Zaccaro, 2001), team charters
+(Mathieu & Rapp, 2009), coordination mechanisms (Okhuysen & Bechky, 2009), functional leadership
+(Morgeson, DeRue & Karam, 2010), reflexivity (Schippers, West & Dawson, 2015) and the human–LLM
+agent-team guidelines of Yurrita et al. (2026). Evaluations of multi-agent systems report mixed
+results (Kim et al., 2026; Gloaguen et al., 2026). **We do not claim the kit overcomes them.** Its
+benefits are proposed, not yet tested; the kit doubles as a test bed ([evaluation/](evaluation/)).
+[docs/DESIGN-RATIONALE.md](docs/DESIGN-RATIONALE.md) maps each mechanism to its sources.
 
 ## Quick start
 
-See [QUICKSTART.md](QUICKSTART.md). In short: clone, open in Claude Code, and type `/arpd-setup`.
-When setup is done, type `/arpd-plan` to plan the first sprint.
-Installation, hook permissions, confirming that logging works, recovery after a lost session, and how
-to read the governance check are in [docs/OPERATIONS.md](docs/OPERATIONS.md).
+You need Claude Code, Git (with your name and email set) and Python 3.8+ on the PATH as `python`.
 
-**Requirements:** Claude Code (tested with 2.1.220), Git, and Python 3.8+ on the PATH as `python`.
-The March example also needs numpy and pytest. The charter is plain Markdown. `AGENTS.md` points
-other agent tools to it, and adapters for other tools are planned.
+```bash
+git clone <this repository> arpd-kit
+cd arpd-kit
+claude                      # then type /arpd-setup and say what you would like to build
+# setup proposes a project folder (default ../<name>) and creates it as a separate git repository
+cd "<project folder>"       # in a new terminal, as setup tells you
+claude                      # then type /arpd-setup again; the interview continues there
+# adopt the Project Definition Report; setup writes the governing documents
+/arpd-plan                  # plan the first sprint; work starts only when you say so
+```
 
-## Supported workflows and evidence
+The kit clone is never the project. Keep it, and start further projects from it. To bring existing
+code, use `/arpd-setup import <path or git URL>` (a new project, cloned with its history) or
+`/arpd-setup install <path>` (an existing repository, in place). The full guide for the PI travels
+with every project: [arpd/docs/GUIDE.md](arpd/docs/GUIDE.md).
 
-The developer tests are labelled developer evidence with scripted inputs, not demonstrations with a
-researcher. Records are in [`evaluation/developer-tests/`](evaluation/developer-tests/).
+## The parts
 
-DT-01 to DT-08 were run on v0.3.0-rc.1 and DT-09 to DT-13 on v0.4.0-rc.1. They remain the evidence
-for what later versions did not change: moves and history on import and install, owed `.claude/`
-items, logging, check-in, amendment, planning and recovery. The setup interview changed in v0.4 and
-again in v0.5, so their setup interviews are evidence for the earlier flows only.
-
-| Workflow | Evidence | Status |
-|---|---|---|
-| v0.5 setup: tool-first opening, scope questions, theory choice when relevant, architecture alternatives, Project Definition Report, adoption, handoff to planning | [v0.5 scenarios](evaluation/developer-tests/v0.5-scenarios-report.md): A, A2, A3 (the manual test replayed), B (estimator), C (existing repository), D (scope correction), F (interrupt and resume), H (handoff) | Runs end to end in scripted sessions; judged on substance |
-| v0.4 adaptive setup: discovery notes, resume before adoption, ends with planning pending | DT-09, DT-12, DT-13 ([report](evaluation/developer-tests/DT-09-13-report.md)) | Ran end to end in scripted tests (earlier flow) |
-| Sprint planning (`/arpd-plan`): one sprint or a series, approval of a version, begin now or later | DT-10, DT-10b, DT-11, DT-11b ([report](evaluation/developer-tests/DT-09-13-report.md)) | Runs end to end in scripted tests |
-| Fresh setup (`/arpd-setup`), v0.3 flow | DT-03 | Run end to end; `.claude/` writes needed an interactive approval and were recorded as owed |
-| Import (`/arpd-setup import`), including a starter inside the kit | DT-02, DT-04 | Run end to end |
-| Install into an existing repository (`/arpd-setup install`) | DT-05, DT-08 | Run end to end; DT-05's missing-skills defect fixed; DT-08 resumed an interrupted install in a new session |
-| Check-in and amendment (`/arpd-checkin`, `/arpd-amend`) | DT-06, DT-07 | DT-06's defects fixed and re-run in DT-07 |
-| Event logging and recovery after a lost session | DT-01, addendum 2 | Real sessions; hook capture and recovery checked |
-
-## Tested and draft components
-
-| Tested | Draft or untested |
+| Part | What it does |
 |---|---|
-| Charter, governing-document templates and the v0.3 skills (setup in all three modes, check-in, amendment), in scripted developer tests | Every workflow with a real researcher, and approving the `.claude/` writes interactively |
-| Governance checker and event summary: automated tests in `kit/tools/` and `evaluation/developer-tests/`, and independent review rounds 1 to 8b | The v0.5 setup (driven scenarios, [v0.5 scenarios](evaluation/developer-tests/v0.5-scenarios-report.md)), `/arpd-plan`, the interaction conventions, and the v0.4 changes to check-in and amendment: none tested by people |
-| Event-logging hooks and recovery, in real Claude Code sessions | Draft modules: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data |
-| Modules: computational model; team arrangement | Other agent harnesses than Claude Code |
-| The March (1991) worked example: 70 tests, two independent review rounds | The `StopFailure` hook's payload fields, against a real failure |
+| **Team charter** (`arpd/constitution/CORE.md` → the project's `CLAUDE.md`) | Authority by subject; data semantics reserved to the PI; rulings recorded verbatim; decision routes by scientific consequence and delegated authority; requirement states (*Implemented*, *Verified*, *Validated*); sprints with auditable close-outs; a learning loop |
+| **Paradigm specification** (`arpd/templates/PARADIGM-SPEC.md`) | Research question → constructs → operationalizations → invariants → claims → validation evidence, to the depth the project needs |
+| **Setup** (`/arpd-setup`) | A tool-first interview in five phases, ending in a Project Definition Report the PI adopts; only then the governing documents. New, import or install |
+| **Planning** (`/arpd-plan`) | One sprint or a series, a versioned draft, approval of an exact version, then begin now or later |
+| **Check-in and amendment** (`/arpd-checkin`, `/arpd-amend`) | Where things stand and what needs the PI; rulings, standing authorizations and charter changes |
+| **Tools** (`arpd/tools/`) | Project creation and updates (`install.py`), governance and report checkers, event logging and summary |
+| **Modules** (`arpd/constitution/modules/`) | Built: computational model, team arrangement. Five untested drafts |
 
-Known limitations are listed in [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
-
-## Layout
+## A project's layout
 
 | Path | Contents |
 |---|---|
-| `.claude/skills/` | `arpd-setup` (interview and import), `arpd-plan` (sprint planning), `arpd-checkin`, `arpd-amend` |
-| `kit/constitution/` | `CORE.md` (charter template) and `modules/` |
-| `kit/templates/` | Governing-document and report templates, including the setup working notes (`discovery/SETUP.md`), the Project Definition Report (`reports/PROJECT-DEFINITION.md`), the sprint-plan draft (`planning/PLAN.md`) and the import baseline (`reports/IMPORT-BASELINE.md`) |
-| `kit/agents/` | Implementer and reviewer role definitions |
-| `kit/tools/` | Governance checker, report checker, plan numbering, event logging and summary, hook script |
-| `kit/settings/` | Hook configuration installed into projects |
-| `kit/docs/EVENTS.md` | What the event log captures, and what it cannot |
-| `kit/docs/INTERACTION.md` | The interaction conventions shared by the four skills |
-| `examples/march-1991/` | The worked example |
-| `evaluation/` | Protocols for the feasibility demonstration and the planned studies; `developer-tests/` holds the labelled developer-test records and their scripted inputs |
-| `docs/` | Operations guide (`OPERATIONS.md`), manual-testing guide (`MANUAL-TESTING.md`), known limitations (`LIMITATIONS.md`), design rationale and references |
+| `CLAUDE.md`, `AGENTS.md`, `START-HERE.md`, `PARADIGM-SPEC.md`, `REQUIREMENTS.md`, `ARCHITECTURE.md`, `MASTER_PLAN.md`, `DECISIONS.md`, `STATUS.md` | The governing documents, at the root. `START-HERE.md` holds the next step and the project's map |
+| `reports/` | `setup/NOTES.md` and `setup/PROJECT-DEFINITION.md`; later `planning/` and `sprints/` |
+| `plans/` | Task plans, created with the first one |
+| `.claude/` | The `arpd-*` skills, the logging hooks and the agent roles |
+| `arpd/` | Everything else from the kit, including the guide and the event log (`arpd/logs/`) |
 
-In a project after setup, these also appear. All are informative and decide nothing:
+The researcher's own code sits beside these.
 
-| Project path | Contents |
-|---|---|
-| `docs/discovery/SETUP.md` | The setup interview's working notes. Written as the interview goes; nothing in them is adopted except through the report's adoption ruling. In install mode, saved in your repository only with your consent |
-| `reports/PROJECT-DEFINITION.md` | The Project Definition Report. A draft until you adopt a version (ruling R-01); then the record of what you adopted. The governing documents carry its content and win where they differ |
-| `reports/planning/PLAN-<date>.md` | Sprint-plan drafts, one file per planning effort, with a version for each revision. A version binds only through the ruling that approves it |
+## The worked example
 
-## Evidence status
+A checked implementation of March's (1991) mutual-learning model is kept as a complete ARPD project
+(v0.3-format records) in its own repository, `arpd-example-march1991`. It is local for now and will
+be published later. To extend it, import it with `/arpd-setup import <path>`.
 
-The kit's rules come from practice: the governing records of three agent-built research instruments,
-reorganized around team-science theory. **Their benefits are proposed, not yet tested.** Testing them
-is what `evaluation/` is for.
+## Evidence and limitations
+
+Developer tests with scripted answers, one manual test, and the tested and draft components are
+indexed in [evaluation/README.md](evaluation/README.md). **No researcher has yet completed a
+workflow.** Known limitations are in [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
 
 ## Licence
 
 The whole repository is released under the [MIT License](LICENSE): code, documentation, templates,
-skills, the governance framework and the worked example. `kit/LICENSE` is the same licence, kept
-with the kit so that copies of it carry the notice; `kit/README.md` repeats the permission below for
-generated documents, so it travels with every installed project.
+skills and the governance framework. `arpd/LICENSE` is the same licence, kept in the folder that is
+copied into every project; `arpd/README.md` repeats the permission below.
 
 **Documents generated for your project.** The files that ARPD's setup and skills write for your own
 project are yours. This covers your team charter (`CLAUDE.md`), `PARADIGM-SPEC.md`,
-`REQUIREMENTS.md`, `MASTER_PLAN.md`, `DECISIONS.md`, `ARCHITECTURE.md`, `STATUS.md`, `INDEX.md`,
-`START-HERE.md`, the setup notes (`docs/discovery/SETUP.md`), the Project Definition Report
-(`reports/PROJECT-DEFINITION.md`), your sprint records and other reports, and your research
-instrument. You may use, modify, distribute or keep them private, under any terms, without having to
-credit ARPD. They are covered even where they are adapted from ARPD's templates.
+`REQUIREMENTS.md`, `MASTER_PLAN.md`, `DECISIONS.md`, `ARCHITECTURE.md`, `STATUS.md`,
+`START-HERE.md`, the setup notes (`reports/setup/NOTES.md`), the Project Definition Report
+(`reports/setup/PROJECT-DEFINITION.md`), your plans, sprint records and other reports, and your
+research instrument. You may use, modify, distribute or keep them private, under any terms, without
+having to credit ARPD. They are covered even where they are adapted from ARPD's templates.
 
 **The framework itself.** Redistributing ARPD, or substantial portions of its own source materials
-(for example `kit/`, the skills in `.claude/skills/`, or the tools copied into a project's `tools/`),
-carries the normal MIT condition: keep the copyright and permission notice with them.
+(for example the `arpd/` folder, including the copy in a project, or the skills in
+`.claude/skills/`), carries the normal MIT condition: keep the copyright and permission notice with
+them.
 
 **Exceptions: third-party material.** The repository includes no third-party code. Short quotations
-from published works, for example March (1991) and the other sources quoted in
-`examples/march-1991/SOURCES.md` and `docs/DESIGN-RATIONALE.md`, are quoted for
-scholarship and remain their owners'. The MIT License does not cover them. Dependencies such as
-numpy and pytest are installed separately, under their own licences, and are not distributed here.
+from published works, such as those in `docs/DESIGN-RATIONALE.md`, are quoted for scholarship and
+remain their owners'. The MIT License does not cover them.
 
 **Citation (a request, not a licence term).** If ARPD helps your research, please cite it
-([CITATION.cff](CITATION.cff)) and, once it is available, the framework paper. Citation is
-encouraged, not a condition of use.
+([CITATION.cff](CITATION.cff)) and, once it is available, the framework paper.

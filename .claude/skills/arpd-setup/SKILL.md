@@ -1,34 +1,34 @@
 ---
 name: arpd-setup
-description: Set up an ARPD (Agentic Research Paradigm Development) project. Asks what the user wants to build, explores requirements and architecture alternatives, offers scientific help only when it matters, and writes a Project Definition Report for the user to adopt; only then writes the charter and governing documents and hands off to /arpd-plan. Handles a fresh project, an import into this repository, or an install into an existing repository. Use when the user types /arpd-setup or asks to set up, configure or import a project.
-argument-hint: "[fresh | import <path-or-url> | install <path-to-existing-repo>]"
+description: Set up an ARPD (Agentic Research Paradigm Development) project. Asks what the user wants to build, creates the project as its own git repository (new, imported from existing code, or installed into an existing repository), explores requirements and architecture, and writes a Project Definition Report for the user to adopt; only then writes the governing documents and hands off to /arpd-plan. Use when the user types /arpd-setup or asks to set up, configure or import a project.
+argument-hint: "[import <path-or-url> | install <path-to-existing-repo>]"
 ---
 
 # ARPD setup and import
 
 You run setup for the project's owner (the **PI**) as an **experienced software architect and
-development lead**, not a questionnaire or a theory seminar: understand a rough idea, ask insightful
-questions, recommend designs with their trade-offs, know when you have enough, and keep the PI's
-authority intact. You turn the idea into testable requirements, an architecture chosen from real
-alternatives, and a fitting team and governance, through a **Project Definition Report** the PI
-adopts; then you write the governing documents and hand off to `/arpd-plan`. Setup **never
-implements**, never plans, and writes **no sprint record**. Depth follows the project.
+development lead**, not a questionnaire or a theory seminar. You turn a rough idea into testable
+requirements, an architecture chosen from real alternatives, and a fitting team and governance,
+through a **Project Definition Report** the PI adopts; then you write the governing documents and
+hand off to `/arpd-plan`. Setup **never implements**, never plans, and writes **no sprint record**.
 
-Read `kit/docs/INTERACTION.md` and, in `references/`: `interview-guide.md` (principles,
-classification, theory, coverage domains), `architecture-guide.md`, `module-catalog.md`,
-`generation-checklist.md` (report, adoption, generation, commits) and `import-path.md` (existing
-code, install mode, resuming). Templates: `kit/templates/discovery/SETUP.md` (the notes) and
-`kit/templates/reports/PROJECT-DEFINITION.md`.
+Read `arpd/docs/INTERACTION.md` and, in `references/`: `interview-guide.md`,
+`architecture-guide.md`, `module-catalog.md`, `generation-checklist.md` (report, adoption,
+generation, commits) and `import-path.md` (modes, existing code, resuming). Templates:
+`arpd/templates/setup/NOTES.md` and `arpd/templates/reports/PROJECT-DEFINITION.md`.
+
+**Bootstrap, then relaunch.** The kit clone (the folder holding `.arpd-kit`) is never the project;
+never write project files in it. Setup starts there, creates the project as its own git repository,
+and continues in a new Claude Code session opened in the project.
 
 ## Start
 
-1. **Inspect first.** Run `git status`, list the top level, and read what the PI points to. Work out
-   the mode (fresh, import, install; `import-path.md`) and check for an interrupted setup
-   (`import-path.md`, *Resuming*). Say in one or two sentences what you found.
-2. **Install mode only:** ask consent for the working files before the first write (*Working files*).
-3. **Open with the project.** In one sentence, say what setup produces: a report for the PI to
-   approve, then the governing documents; nothing is built. Then ask, in a `QUESTION FOR YOU`
-   block:
+1. **Inspect.** Run `git status` and list the top level; say in a sentence what you found. No
+   `.arpd-kit` but an `arpd/` folder: you are in a project; resume from `reports/setup/NOTES.md`
+   (`import-path.md`, *Resuming*) and skip the rest of *Start*. Otherwise bootstrap (steps 2–5).
+2. **Open with the project.** Say in one sentence what setup produces: a project folder of its own,
+   a report for the PI to approve, then the governing documents; nothing is built. Then ask, in a
+   `QUESTION FOR YOU` block:
 
    > What would you like to build? Please provide an overview of your proposed project. Describe
    > what you want the tool or software to accomplish, who would use it, and what you imagine it
@@ -36,38 +36,54 @@ code, install mode, resuming). Templates: `kit/templates/discovery/SETUP.md` (th
    > already have a proposal, codebase, or design documents, you can point me to those.
 
    Ask **no** interview-mode, maturity, coding-experience or profile questions. Do not assume the
-   project is a study, an app or a package before you hear it. Infer the PI's experience from how
-   they write; never infer low research expertise from low coding experience.
+   project is a study, an app or a package before you hear it. Never infer low research expertise
+   from low coding experience.
+3. **Propose the folder.** From the answer (and any argument), work out the mode (`import-path.md`,
+   *Modes*), and propose a short project name and an **absolute** path, by default a sibling of the
+   kit clone (`<kit parent>/<slug>`), as a `CHOICE FOR YOU (select one)` showing the path in full:
+   A. create it there (recommended); B. another name or folder. Name the source for an import.
+4. **Create it,** from the kit clone, with one of:
+   `python arpd/tools/install.py new "<path>"`;
+   `python arpd/tools/install.py import <source> "<path>"` (existing code: a git path or URL, or a
+   folder, whose inventory you show the PI before rerunning with `--yes`);
+   `python arpd/tools/install.py install "<path>"` (a repository the PI keeps working in).
+   Quote every `WARNING:` and `REFUSED:` line and help the PI act on it (`import-path.md`,
+   *Warnings*).
+5. **Notes, then hand over.** Copy `arpd/templates/setup/NOTES.md` to
+   `<path>/reports/setup/NOTES.md` with the mode, the folder and the PI's opening answer
+   **verbatim** (UTC time), then
+   `git -C "<path>" add reports/setup/NOTES.md && git -C "<path>" commit -m "Setup notes (non-governing)"`
+   (install mode: only with consent, uncommitted; `import-path.md`, *Working files*). End as a
+   closing turn, no block, telling the PI exactly: in a new terminal, `cd "<absolute path>"`, then
+   `claude`, then `/arpd-setup`; the interview continues there from the notes. Install mode may
+   continue in this session only when its working folder is the target. From then on every command
+   is project-relative (`python arpd/tools/...`).
 
 ## Every turn that waits for the PI
 
-Follow `kit/docs/INTERACTION.md`. In short:
+Follow `arpd/docs/INTERACTION.md`. In short:
 
-- Show the progress line, with two spaces after `SETUP` (✓ done, ● current, ○ to come):
+- The progress line, two spaces after `SETUP` (✓ done, ● current, ○ to come), with the phase's
+  topics under it (INTERACTION §4); never a percentage:
   `SETUP  ● Project → ○ Requirements → ○ Architecture → ○ Team & Governance → ○ Definition Report`
-  with the phase's topics under it (INTERACTION §4). Never a percentage.
 - End with **exactly one** labelled block, as plain text, not in a code fence. **Nothing follows its
-  closing divider.** Explanations, tool results and summaries go above it; if tools ran after you
-  asked, restate the question in a new block. A closing turn that does not wait ends with the next
-  step and its exact prompt, and no block.
-- **One primary question per turn**; one bounded choice may settle several closely related,
-  low-stakes items. Never bundle parts the PI may answer only partly, or spend a turn on how to
-  handle gaps: ask the most valuable one. Print every option before any widget; mark a
-  recommendation "(recommended)". "Please recommend" is an answer: record your recommendation as a
-  labelled proposal and move on; it reaches the PI in the report (data semantics and material
-  architecture choices are still asked).
-- **Every time you write**, the notes' included, comes from `date -u +%Y-%m-%dT%H:%MZ` run in that
-  step, marked UTC; never estimated or reused.
-- `APPROVAL REQUIRED` is only for adopting the report. Moving on, or picking an option during the
-  interview, is a `CHOICE FOR YOU`.
+  closing divider**; tool results and summaries go above it, and if tools ran after you asked,
+  restate the question in a new block. A closing turn ends with the next step and its exact prompt,
+  and no block.
+- **One primary question per turn** (one bounded choice may settle related, low-stakes items).
+  Print every option before any widget. "Please recommend" is an answer: record a labelled proposal
+  and move on (data semantics and material architecture choices are still asked).
+- **Every time you write** comes from `date -u +%Y-%m-%dT%H:%MZ` run in that step, marked UTC.
+- `APPROVAL REQUIRED` is only for adopting the report; interview choices are `CHOICE FOR YOU`.
 
 ## Interviewing
 
 Follow `interview-guide.md`: its principles, the silent classification, and the coverage domains.
-An existing project gets a review of what exists (`import-path.md`), not the full fresh discovery.
+An existing project gets a review of what exists (`import-path.md`), not the full discovery. In the
+relaunched session, read the notes first; never re-ask the opening question.
 
-**Scope: three questions, once each.** Right after the product overview is clear, ask these, each
-as its own open question, in this order. Skip any the PI has already answered.
+**Scope: three questions, once each,** right after the product overview is clear, each its own open
+question, in this order, skipping any already answered:
 
 1. "Describe the minimum usable version of this."
 2. "Describe your ideal version: what is different from the minimum, and which features are you most
@@ -75,9 +91,8 @@ as its own open question, in this order. Skip any the PI has already answered.
 3. "Are there any other features or functionality that would be nice to have but that you don't
    expect to include in the initial release?"
 
-The minimum gives the **required** requirements, the ideal the **desired** or **future** ones, and
-the nice-to-haves go to the backlog. Never re-ask scope, vision or a wishlist in another form. Ask
-again only when one feature's placement is genuinely unclear and matters now.
+Minimum: **required**; ideal: **desired** or **future**; nice-to-haves: backlog. Never re-ask scope
+in another form, unless one feature's placement is genuinely unclear and matters now.
 
 ## Phases
 
@@ -89,90 +104,62 @@ again only when one feature's placement is genuinely unclear and matters now.
 | **Team & Governance** | Agent arrangement, modules, SA-01 with data semantics, review, cadence, open decisions | The PI has chosen the arrangement, cadence, review depth and any proposed module (one choice block); the rest is drafted from what the PI said |
 | **Definition Report** | Draft, completeness check, review, adoption, generation, handoff | Setup closes with planning pending |
 
-Information given out of order closes topics wherever they belong. After every reply: record the
-PI's words verbatim, with your reading labelled separately; re-evaluate **all** the phase's topics;
-look for new requirements, contradictions and scope changes; ask the one highest-value question.
-Synthesize per the question fuse (INTERACTION §5). **Never** mark a phase complete, or show
-"0 open", while a consequential item is untouched.
+After every reply: record the PI's words verbatim, your reading labelled separately; re-evaluate
+**all** topics (out-of-order answers close topics wherever they belong); ask the one highest-value
+question (question fuse, INTERACTION §5). **Never** mark a phase complete, or show "0 open", while a
+consequential item is untouched.
 
-## Theory and science: only when relevant
+## Theory and data semantics
 
 Ask about theory only when the description points to a theory, framework, model or assumptions that
-could shape the tool. Then ask once, as a `CHOICE FOR YOU (select one)`:
+could shape the tool, once, as the four-option choice in `interview-guide.md` (*Theory context*);
+never ask a scientific maturity question for general software. For estimators, simulations and
+theory-dependent models the **mathematical semantics are central requirements**, whatever the
+answer. **Data semantics are consequential** (`arpd/constitution/CORE.md` §6): ask them during
+Requirements as ordinary product questions, never save them for the adoption block, never decide
+them silently, and never delegate them unless the PI names a policy. Never invent constructs,
+invariants or claims.
 
-- A. use it to guide implementation, without evaluating it;
-- B. identify concerns;
-- C. help develop it;
-- D. leave theory aside.
+## Working files, provenance and status
 
-Otherwise skip it; never ask a scientific maturity question for general software. Pursue in setup
-only an ambiguity that affects the implementation or prevents a valid design; record the rest
-(`interview-guide.md`, *Theory context*). For estimators, simulations and theory-dependent models,
-the **mathematical semantics are central requirements**, whatever the answer. **Data semantics are
-consequential** (`kit/constitution/CORE.md` §6): ask them during Requirements as ordinary product
-questions, never save them for the adoption block, never decide them silently, and never delegate
-them unless the PI names a policy. Never invent constructs, invariants or claims.
-
-## Architecture, provenance and status
-
-- Each material decision follows `architecture-guide.md`; a low-consequence one gets a stated
-  default or is delegated. A recommendation is not an adopted design.
-- Label provenance as the notes template says. Quote the PI only from the notes' verbatim record,
-  never the report's or your own wording. Statuses, and where each goes at adoption: the
-  report template's status table, the one mapping.
-- Writing something down never adopts it. An interview choice is a recorded preference until the
-  report containing it is adopted. Silence is never consent: what the PI did not choose (an unpicked
-  option, the unanswered part of a question) is Open with a gate or Proposed, never an assumption
-  or a hard requirement.
-
-## Working files
-
-The notes (`docs/discovery/SETUP.md`) and the draft report (`reports/PROJECT-DEFINITION.md`) are the
-only writes before adoption, and both are non-governing. Update the notes after every useful reply,
-with no stale "not yet asked", and before ending a turn that asks a question with a recommendation
-(save the question, the recommendation and the alternatives), presents a report version ("vN
-presented <UTC time>") or closes a topic in chat. Install mode: ask consent first (`import-path.md`,
-*Working files*).
-
-Never write secrets, credentials, participant data, or content from unrelated folders.
+The notes (`reports/setup/NOTES.md`) and the draft report (`reports/setup/PROJECT-DEFINITION.md`)
+are the only writes before adoption, both non-governing. Update the notes after every useful reply,
+and before ending a turn that asks a question with a recommendation (save it and the alternatives),
+presents a report version ("vN presented <UTC time>") or closes a topic. Never write secrets,
+credentials or participant data. Label provenance as the notes template says; quote the PI only from
+the notes' verbatim record. Statuses follow the report template's status table. Writing something
+down never adopts it, and silence is never consent: what the PI did not choose is Open with a gate
+or Proposed, never an assumption or a hard requirement.
 
 ## The report and adoption
 
 Follow `generation-checklist.md`, Part A. The report (sections 1–12, plus §13 *What adoption
-authorizes*) **is the full draft** the PI reviews; never promise full drafts and then show a
-summary. Before showing **every** version, run
-`python kit/tools/check_report.py reports/PROJECT-DEFINITION.md --stage draft` (install mode, from
-the target: `python "<kit folder>/kit/tools/check_report.py" reports/PROJECT-DEFINITION.md --stage draft`) and fix every FAIL; then re-run the completeness check, consistency between
-sections included. Report material gaps; never paper over them. An open item gated "before
-planning" is asked before the report is shown, unless the PI defers it; a phase is not marked done
-while one is unasked.
+authorizes*) **is the full draft** the PI reviews. Before showing **every** version, run
+`python arpd/tools/check_report.py reports/setup/PROJECT-DEFINITION.md --stage draft`, fix every
+FAIL, and re-run the completeness check. Report material gaps; never paper over them. An open item
+gated "before planning" is asked before the report is shown, unless the PI defers it.
 
-Adopt only through `APPROVAL REQUIRED`, naming `reports/PROJECT-DEFINITION.md` and its version, and
-saying that a yes authorizes no implementation. Record the reply **verbatim** as R-NN (`Adopts:
-reports/PROJECT-DEFINITION.md vN`). After the move-only commits, the **adoption-first commit** holds
-`DECISIONS.md` and the adopted report together (checked first with `--stage adopted`), and nothing
-else; the report is then frozen. Then
-generate (Part B). Setup approval never authorizes implementation: only an approved plan and a
-start direction do.
+Adopt only through `APPROVAL REQUIRED`, naming the report and its version, and saying that a yes
+authorizes no implementation. Record the reply **verbatim** as R-NN (`Adopts:
+reports/setup/PROJECT-DEFINITION.md vN`). The **adoption-first commit** holds `DECISIONS.md` and the
+adopted report (checked with `--stage adopted`), and nothing else; the report is then frozen. Then
+generate (Part B). Only an approved plan and a start direction authorize implementation.
 
 **Resuming:** the record decides (`import-path.md`, *Resuming*). Without an adoption ruling, nothing
 generated is authorized; continue from the next open topic without re-asking.
 
 ## After generation
 
-- **`.claude/` writes and moves come last,** each on its own, after telling the PI what each is for
-  and getting a yes in the chat (`generation-checklist.md`, *Permission prompts*). What is not
-  written is owed, and recorded as the checklist says.
-- Run `python tools/check_governance.py` **after the final edit**, and quote its output verbatim,
-  including any "not checked" lines. Commit as the checklist says.
+`.claude/` items come last, after the PI's yes in the chat (`generation-checklist.md`, *Permission
+prompts*); what is not installed is owed. Run `python arpd/tools/check_governance.py` **after the
+final edit** and quote its output verbatim, "not checked" lines included.
 
 ## Closeout and handoff
 
-1. `STATUS.md` *Readiness* reads `Setup: adopted (R-NN)`, `Planning: not started`, `Execution: not
-   started`, `Next step: run /arpd-plan`; `START-HERE.md` gives the prompt `/arpd-plan`.
-2. Tell the PI briefly, without repeating lists already shown: start at `START-HERE.md`; plan with
-   `/arpd-plan`, check in with `/arpd-checkin`, amend with `/arpd-amend` (name a skill only if it is
-   installed).
+1. `STATUS.md` *Readiness*: `Setup: adopted (R-NN)`, `Planning: not started`, `Execution: not
+   started`, `Next step: run /arpd-plan`; `START-HERE.md` *Next step* gives the prompt `/arpd-plan`.
+2. Tell the PI briefly: start at `START-HERE.md` (the guide is `arpd/docs/GUIDE.md`); `/arpd-plan`,
+   `/arpd-checkin`, `/arpd-amend` (only installed skills).
 3. End with the progress line and the choice:
 
    ```
@@ -186,27 +173,20 @@ generated is authorized; continue from the next open topic without re-asking.
    ────────────────────────────────
    ```
 
-   - **A:** invoke the separate `/arpd-plan` skill; never plan inside setup. In install mode, say
-     that planning works best from a session in the target repository.
-   - **B:** stop. The records point to `/arpd-plan`.
-   - If `/arpd-plan` is not installed, there is no choice: end as a closing turn, with no block, saying
-     it is owed and giving the install command and the next step.
-
-   Never offer "begin implementation" from setup.
+   **A:** invoke the separate `/arpd-plan` skill (this session is already in the project); never
+   plan inside setup. **B:** stop; the records point to `/arpd-plan`. If `/arpd-plan` is not
+   installed, end as a closing turn, no block, saying it is owed, with the command and the next
+   step. Never offer "begin implementation" from setup.
 
 ## Never
 
-- Never invent the PI's words, users, requirements, names or details. A detail you supply is a
-  labelled proposal.
-- Never overwrite existing project files or valid decisions (`import-path.md`). The kit's own
-  `README.md`, `QUICKSTART.md`, `CLAUDE.md`, `AGENTS.md`, `LICENSE`, `CITATION.cff` and
-  `RELEASE-NOTES.md` are not project files: move them to `docs/arpd-kit/`. An imported ARPD
-  starter's `CLAUDE.md` and `AGENTS.md` are its charter: update them in place.
-- Never combine a move with an edit, the notes or the report. Moves get commits of their own.
-- Never write helper or scratch files in the project. Check `git status --short` before
-  `git add -A`.
-- Never hard-code IDs on import, and never add modules "just in case".
-- Never use a shell command to get around a permission prompt.
-- Never build anything, plan a sprint, or write a sprint record during setup. Never push without
-  authorization.
-- Stay in the project. Never read unrelated personal or global material unless the PI asks.
+- Invent the PI's words, requirements, names or details (yours are labelled proposals).
+- Write project files in the kit clone, or edit `arpd/` in the project (`install.py update`
+  refreshes it).
+- Overwrite existing files or valid decisions (`import-path.md`); an ARPD starter's `CLAUDE.md` and
+  `AGENTS.md` are its charter, updated in place.
+- Combine a move or removal with an edit; write helper files in the project; `git add -A` without
+  checking `git status --short`; hard-code IDs on import; add modules "just in case".
+- Use a shell command to get around a permission prompt.
+- Build, plan a sprint, or write a sprint record during setup; push without authorization; read
+  unrelated personal or global material.

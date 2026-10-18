@@ -26,7 +26,7 @@ and auditable.
    - the options;
    - a recommendation.
 
-   Ask in a labelled block (`kit/docs/INTERACTION.md`): `APPROVAL REQUIRED` for the change itself,
+   Ask in a labelled block (`arpd/docs/INTERACTION.md`): `APPROVAL REQUIRED` for the change itself,
    saying what a yes changes and in which files; `QUESTION FOR YOU` or `CHOICE FOR YOU` only to
    clarify. The block is last in the turn. Wait for the PI's reply. Never write a ruling the PI did
    not give. If the PI has stated the change,
@@ -68,7 +68,7 @@ and auditable.
      default. If the spec has no such section (an older starter), add it at the end, citing R-NN.
      Other documents may refer to the Q-NN; the question itself lives only in the spec. `MASTER_PLAN.md` holds plans, backlog,
      risks and incidents, not open scientific questions.
-   - **Module:** add it from `kit/constitution/modules/`, retire it (move its text to
+   - **Module:** add it from `arpd/constitution/modules/`, retire it (move its text to
      `docs/retired-rules.md`, citing R-NN), or change its arrangement values.
    - **Incident → rule:** the rule cites its incident ID from `MASTER_PLAN.md` §7.
    - **Reopening a decision:** write a new DEC entry that quotes the original rationale, says what
@@ -93,14 +93,14 @@ and auditable.
      re-planning through `/arpd-plan`.
 5. **Update `STATUS.md`** (you are the lead, its one writer): the current state, its *Readiness*
    block, *Waiting on the PI* and *Owed*, so they reflect the change.
-6. **Dependency screen** (`kit/docs/INTERACTION.md` §7): has the change introduced, changed,
+6. **Dependency screen** (`arpd/docs/INTERACTION.md` §7): has the change introduced, changed,
    resolved or exposed a dependency? If yes, trace only the affected requirements and work, and
    update their rows in `DECISIONS.md` *Waiting on the PI* (*Affects*, *Needed by*, *Can continue
    meanwhile*); remove a row the ruling decides. If no, say so in the read-back in one line.
 7. **Read it back** to the PI in plain words: what changed, the consequence from step 2, any
    dependency it touched, and any dependent item you could not update.
-8. **Check:** run `python tools/check_governance.py` and report the result verbatim.
-9. **Log:** `python tools/log_event.py ruling --actor lead --ref R-NN --note "<one line>"`.
+8. **Check:** run `python arpd/tools/check_governance.py` and report the result verbatim.
+9. **Log:** `python arpd/tools/log_event.py ruling --actor lead --ref R-NN --note "<one line>"`.
 10. **Commit** with the ruling ID in the message.
 
 ## Recording or changing a standing authorization (SA-NN)
@@ -112,7 +112,7 @@ the ruling as above **and** record the delegation as an SA that cites it.
 1. **Get the PI's words.** If the scope is unclear, ask. Never widen a delegation beyond what the PI
    said, and never record as delegated anything §6 reserves to the PI.
 2. **Record it verbatim** in `DECISIONS.md`, under *Standing authorizations*, as the next SA-NN,
-   in the template's format (`kit/templates/DECISIONS.md`):
+   in the template's format (`arpd/templates/DECISIONS.md`):
    - the PI's exact words, quoted;
    - **Given:** the session, or the ruling R-NN that created it (an SA may cite the ruling that
      created it);
@@ -140,7 +140,7 @@ the ruling as above **and** record the delegation as an SA that cites it.
    - Never edit an SA in force. A superseded SA is marked "Superseded by SA-NN" and keeps its text.
    - **Continuing across sprints.** An SA letting the team move past sprint boundaries without a
      new ruling uses the continuation fields (*Scope:* sprints S0N–S0M of PLAN-… vN; *Transition
-     conditions*; *Consult the PI when*; the continuation format in `kit/templates/DECISIONS.md`).
+     conditions*; *Consult the PI when*; the continuation format in `arpd/templates/DECISIONS.md`).
      A first one adds ("Supersedes: none"); extending, narrowing or ending one supersedes only
      that SA. It never covers what `CLAUDE.md` §6 reserves to the PI, and it never changes the
      review, tests and close-out every sprint boundary keeps. A **project default** for transitions
@@ -150,12 +150,12 @@ the ruling as above **and** record the delegation as an SA that cites it.
    asking, what still comes to the PI, and every SA now in force.
 5. **Dependency screen**, as in step 6 above.
 6. **Update `STATUS.md`, check, log and commit:** refresh STATUS's current state; run
-   `python tools/check_governance.py`; log
-   `python tools/log_event.py ruling --actor lead --ref SA-NN --note "<one line>"`; commit with the
+   `python arpd/tools/check_governance.py`; log
+   `python arpd/tools/log_event.py ruling --actor lead --ref SA-NN --note "<one line>"`; commit with the
    SA ID in the message.
 
 **Pruning is welcome.** Ask the PI whether any rule no longer earns its cost. A charter should get
 shorter as well as longer.
 
-**When you wait for the PI:** end with exactly one labelled block (`kit/docs/INTERACTION.md` §2), as
+**When you wait for the PI:** end with exactly one labelled block (`arpd/docs/INTERACTION.md` §2), as
 plain text, not in a code fence. Nothing follows its closing divider.

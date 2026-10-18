@@ -180,7 +180,7 @@ saying where it now lives, or moves out of this section.
 Adopting this version, by the PI's ruling (R-NN, in the PI's words), authorizes writing the
 governing documents from it (`CLAUDE.md`, `PARADIGM-SPEC.md`, `REQUIREMENTS.md`, `ARCHITECTURE.md`,
 `MASTER_PLAN.md`, `DECISIONS.md`, and `STATUS.md` for the present state), and the non-governing
-orientation files `START-HERE.md` and `INDEX.md`. It adopts the items marked Adopted-on-adoption, and
+orientation file `START-HERE.md`. It adopts the items marked Adopted-on-adoption, and
 any proposal the ruling names as accepted, and records the other items as their status says.
 
 It does **not** adopt other Proposed items, settle Open items, approve a sprint plan, or authorize
@@ -191,5 +191,5 @@ any implementation. Implementation needs an approved plan and the PI's start dir
 
 ## Completeness check: gaps found
 
-<!-- Two to four lines: the material gaps the check found (docs/discovery/SETUP.md §10 lists what is
+<!-- Two to four lines: the material gaps the check found (reports/setup/NOTES.md §10 lists what is
 checked), and where each is handled; or "None found". Never hide a gap behind a status. -->

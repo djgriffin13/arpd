@@ -12,7 +12,7 @@ when the science is in scope (`interview-guide.md`, *Theory context*), or when c
 on its semantics. Say in report §11 which modules were selected, and why, and summarize the rules
 each one adds, so the PI sees what the charter will contain.
 
-| Module | File (`kit/constitution/modules/`) | Status | Recommend when | Candidate invariants to propose (in scientific language) |
+| Module | File (`arpd/constitution/modules/`) | Status | Recommend when | Candidate invariants to propose (in scientific language) |
 |---|---|---|---|---|
 | **Team arrangement** | `team/team-arrangement.md` | **Built** | Always | none |
 | **Computational model** | `science/computational-model.md` | **Built** | Agent-based models, simulations, replications or extensions of formal models | "Each update rule is applied exactly as specified (order, timing, stopping rule)"; "Results are reported with Monte Carlo uncertainty"; "With extensions off, the original model's results are reproduced"; "A run is fully determined by its parameters and seed" |

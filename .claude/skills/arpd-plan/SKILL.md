@@ -23,7 +23,7 @@ Three levels of plan, never merged:
 Approving a sprint plan is a planning gate for the sprint as a package. It does not make every task
 plan or technical edit need the PI.
 
-**Every turn that waits for the PI** (`kit/docs/INTERACTION.md` §2–§4, in short):
+**Every turn that waits for the PI** (`arpd/docs/INTERACTION.md` §2–§4, in short):
 
 - Start with the progress line `PLAN  ✓ Review → ● Priorities → ○ Draft → ○ Approval → ○ Handoff`
   (two spaces after `PLAN`; ✓ done, ● current, ○ to come; keep every arrow).
@@ -35,7 +35,7 @@ plan or technical edit need the PI.
 
 Read before you start:
 
-- `kit/docs/INTERACTION.md`: the labelled blocks, choices printed before any widget, the progress
+- `arpd/docs/INTERACTION.md`: the labelled blocks, choices printed before any widget, the progress
   line, explaining when needed, the dependency screen. Follow it on every turn that waits for the PI.
 - `references/planning-guide.md` (this folder): the read-back, sizing, the draft's content,
   versions, review, the dependency screen.
@@ -45,7 +45,7 @@ Read before you start:
 ## Entry
 
 1. **Is setup adopted?** `CLAUDE.md`'s Version line must name an adoption ruling (R-NN) that exists
-   in `DECISIONS.md`. If `CLAUDE.md` is the kit's "not yet set up" file, or the ruling is missing,
+   in `DECISIONS.md`. If `CLAUDE.md` is the kit's own file or the "Setup in progress" stub, or the ruling is missing,
    say so plainly and offer `/arpd-setup`. Never plan execution against an unadopted charter.
 2. **Read, in this order:** `CLAUDE.md` and the standing authorizations in `DECISIONS.md`;
    `PARADIGM-SPEC.md` if the work touches the science; `REQUIREMENTS.md`, including *Requirement
@@ -53,8 +53,9 @@ Read before you start:
    including *Architecture decisions* (note which are Provisional or Delegated); `DECISIONS.md`
    *Waiting on the PI*, with each row's gate (*Needed by*); `STATUS.md` (Readiness, §5, §6, §8); the
    current or last sprint record and its evidence; existing `plans/` and open decision packs;
-   `START-HERE.md` (orientation only); the adopted `reports/PROJECT-DEFINITION.md` and notes in
-   `reports/planning/` and `docs/discovery/` (context only, never authority: where they differ from
+   `START-HERE.md` (orientation only); the adopted `reports/setup/PROJECT-DEFINITION.md` and the
+   notes in `reports/planning/` and `reports/setup/` (`docs/discovery/` in an older project)
+   (context only, never authority: where they differ from
    a governing document, the governing document wins). Do not re-ask a preference that is already
    recorded, and never re-ask scope: the minimum usable version, the ideal version and the
    nice-to-haves come from the adopted report and the requirement priorities.
@@ -63,7 +64,7 @@ Read before you start:
    draft: show its file and Version, say plainly that this version is **not approved** (naming any
    earlier version that was, and its ruling), list its open points, and offer to continue it
    (Step E). Log
-   `python tools/log_event.py resume --actor lead --ref PLAN-… --note "planning resumed"`.
+   `python arpd/tools/log_event.py resume --actor lead --ref PLAN-… --note "planning resumed"`.
 4. **An approved plan not yet started?** Do not re-plan it by default. If the PI's message gives the
    start (the prompt left in `START-HERE.md`), record it as the execution ruling and go to Step G
    "now". Otherwise offer to start it or to revise it (a new version needs a new approval).
@@ -96,7 +97,7 @@ are one read-back and one block, the plan one page, the whole run four or five e
 
 Give a short, factual read-back: what was last completed, what demonstrably works (with evidence;
 never claim a test ran unless you ran it now or a record shows it), the roadmap, what is blocked,
-and the next thrust you recommend. Run `python tools/check_governance.py` and quote its OVERALL
+and the next thrust you recommend. Run `python arpd/tools/check_governance.py` and quote its OVERALL
 line.
 
 Use the inherited review and autonomy preferences; do not ask about overriding them. If the PI
@@ -148,7 +149,7 @@ question fuse.
 ### Step D: Draft
 
 Write `reports/planning/PLAN-YYYY-MM-DD.md` (`-2`, `-3` for a later effort the same day) from
-`kit/templates/planning/PLAN.md`: minimal but sufficient, the first sprint precise, later sprints
+`arpd/templates/planning/PLAN.md`: minimal but sufficient, the first sprint precise, later sprints
 labelled provisional with what may change them (`references/planning-guide.md`). Mark it DRAFT,
 `Version: v1`.
 
@@ -186,13 +187,13 @@ WP3 only).
 ```
 
 Name what a yes covers: planning only, S0N's execution, or a series. Record the PI's words verbatim
-as the next R-NN, in the plan-approval format (`kit/templates/DECISIONS.md`; `references/multi-sprint-and-handoff.md` §3). When the
+as the next R-NN, in the plan-approval format (`arpd/templates/DECISIONS.md`; `references/multi-sprint-and-handoff.md` §3). When the
 PI does not clearly say more, record **planning approval only**. Clear words need no second
 confirmation; ask once only if they could mean materially different things. Then set the plan's status marker as its template says ("Approved by R-NN (vN, commit …)"; the
 approved version's text is never edited), set its `MASTER_PLAN.md` §3 rows to "planned (PLAN-… vN, R-NN)" and §4 items to
 Selected (milestone changes go to `/arpd-amend`),
 set Readiness `Planning: approved (PLAN-…, vN, R-NN)`, run the checker, log
-`python tools/log_event.py ruling --actor lead --ref R-NN --note "approval of PLAN-… vN"`, and commit
+`python arpd/tools/log_event.py ruling --actor lead --ref R-NN --note "approval of PLAN-… vN"`, and commit
 naming R-NN. If not approved, keep the draft and return to Step E.
 
 ### Step G: Handoff
@@ -227,7 +228,7 @@ In a series under an SA, later sprints start without a new ruling, after the bou
 there); pause for a new scientific, scope or PI-reserved decision, or a PI checkpoint.
 
 **What the PI's words authorize** (a draft, a plan approval, an execution start, a continuation SA,
-a governing change) follows `kit/docs/INTERACTION.md` §1 and `references/multi-sprint-and-handoff.md`
+a governing change) follows `arpd/docs/INTERACTION.md` §1 and `references/multi-sprint-and-handoff.md`
 §3.
 
 ## Recovery and change

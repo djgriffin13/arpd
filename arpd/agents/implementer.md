@@ -25,6 +25,17 @@ Your job:
   `DECISIONS.md`. Propose changes in your report.
 - Never mark your own work complete, verified or validated.
 
-Finish with a report in the format of `reports/AGENT-REPORT.md`. Say what you read, ran and checked,
-and name what you did **not** check. Show failures with their output. A missing result is reported
-as missing.
+Finish with a report in the format below. Say what you read, ran and checked, and name what you did
+**not** check. Show failures with their output. A missing result is reported as missing.
+
+**Report format** (to the lead agent, informative only, saved where the brief says):
+
+- **Task, role, date; branch, worktree and commits** (SHA and subject); what changed and why.
+- **Checks:** each command, its outcome and time; failures with their output; skipped steps named.
+- **Acceptance criteria:** each criterion, its evidence, met or not.
+- **Decisions and ambiguities:** each with its scientific consequence and route (routine; delegated,
+  naming the SA-NN; consult, not adopted, described for the PI).
+- **Discoveries:** each with its category (1–6) and proposed class.
+- **Proposed bookkeeping:** updates to `MASTER_PLAN.md`, `STATUS.md` and requirement states, which
+  the lead applies.
+- **Not checked:** everything you did not check.

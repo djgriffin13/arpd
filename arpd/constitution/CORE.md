@@ -47,11 +47,14 @@ persuasive.
 | What is happening right now, and how to pick up (live state and handoff) | `STATUS.md` | **One designated writer: the lead agent.** Rewritten after every meaningful operational change, at handoffs and at sprint boundaries. |
 | The record of each sprint (plan, scope changes, close-out, decision tracking) | `reports/sprints/SPRINT-NN.md` | The lead agent. The sprint plan is preserved as written; later scope changes are logged, not edited in; the record is frozen after close. |
 | Execution of one scoped piece of work | the approved plan in `plans/` | Its owner |
-| Nothing (interview working notes; nothing in them is adopted) | `docs/discovery/` | The lead agent |
+| Nothing (setup working notes; nothing in them is adopted) | `reports/setup/NOTES.md` | The lead agent |
 | Nothing until approved (sprint-plan drafts; an approved version binds only through the ruling that cites it) | `reports/planning/` | The lead agent drafts; the PI approves a version by ruling |
-| Nothing (the setup report; once adopted, its record. The governing documents carry its content and win where they differ, with the difference recorded) | `reports/PROJECT-DEFINITION.md` | The lead agent drafts; the PI adopts it (R-01) |
-| Nothing (navigation only) | `INDEX.md` | Anyone, in the same commit as the change |
-| Nothing (informative) | `START-HERE.md`, `docs/`, `reports/`, everything else | Anyone |
+| Nothing (the setup report; once adopted, its record. The governing documents carry its content and win where they differ, with the difference recorded) | `reports/setup/PROJECT-DEFINITION.md` | The lead agent drafts; the PI adopts it (R-01) |
+| Nothing (navigation only) | `START-HERE.md` map (its `## Map` section) | Anyone, in the same commit as the change |
+| Nothing (informative) | the rest of `START-HERE.md`, `docs/`, `reports/`, everything else | Anyone |
+
+`arpd/` is the kit's copy (tools, templates, this charter's source), never edited in the project: it is
+refreshed only with `python arpd/tools/install.py update . --kit <kit clone>`, recorded by a DEC.
 
 **Informative documents decide nothing.** A report, summary or review is never a source of
 authority. Durable content moves into a governing document through a recorded decision. It is
@@ -111,7 +114,7 @@ Breaking any of these is a defect, whether or not the tests pass.
 1. **Read.** Every session starts by reading this file, `PARADIGM-SPEC.md`, `STATUS.md` and the
    current sprint record. Before changing anything, also read the files you will touch.
 2. **Plan.** Any change beyond a trivial edit gets a plan in `plans/NNN-slug.md`, using
-   `plans/README.md`. Claim the number with `python tools/next_plan_number.py`. Every plan names:
+   `arpd/templates/plans/README.md`. Claim the number with `python arpd/tools/next_plan_number.py`. Every plan names:
    - the requirements it serves and the paradigm-spec items it touches;
    - its acceptance criteria and the evidence that will show they are met;
    - its non-goals.
@@ -178,7 +181,7 @@ Together these give **three routes**. They are alternatives, not successive appr
 |---|---|---|
 | **Routine** | No scientific consequence | Proceed. Report in aggregate at the sprint close-out. |
 | **Delegated** | Consequential, but inside a standing authorization's scope | Proceed within that scope. Record the decision with the authorization it used (SA-NN). Report it individually at the next checkpoint. |
-| **Consult** | Consequential and not covered by any authorization; or it would change the research objective, exceed agreed scope or resource limits, or settle a contested interpretation the PI has not delegated | Do not *adopt* it. Bring a decision to the PI (`reports/DECISION-PACK-<date>.md`; a second pack on the same day adds `-2`, and so on) explaining the process, the options and their consequences, a recommendation, and the decision requested, in plain language. Adopt it only after the PI's ruling (R-NN), and record the ruling with the decision. Unrelated work continues. |
+| **Consult** | Consequential and not covered by any authorization; or it would change the research objective, exceed agreed scope or resource limits, or settle a contested interpretation the PI has not delegated | Do not *adopt* it. Bring a decision to the PI (`reports/DECISION-PACK-<date>.md`, from `arpd/templates/reports/DECISION-PACK.md`; a second pack on the same day adds `-2`, and so on) explaining the process, the options and their consequences, a recommendation, and the decision requested, in plain language. Adopt it only after the PI's ruling (R-NN), and record the ruling with the decision. Unrelated work continues. |
 
 **Investigating is not adopting.** Where an authorization allows it, agents may implement and
 compare alternatives before anything is adopted. A contested assumption is never presented as
@@ -280,7 +283,7 @@ Each requirement moves through these states. The evidence for each state is reco
   approved plan, its execution authority and its transition policy, and is committed with `STATUS.md`
   when the sprint starts.
 - **Dependencies.** At planning, review, close-out, check-in and the other points listed in
-  `kit/docs/INTERACTION.md`, run its quick dependency screen. A pending decision blocks only the work that depends on it.
+  `arpd/docs/INTERACTION.md`, run its quick dependency screen. A pending decision blocks only the work that depends on it.
 - **Explain through science.** Anything brought to the PI states what it changes about what the
   instrument measures, manipulates or licenses, the options, and a recommendation. Engineering terms
   are glossed in plain words.
@@ -289,7 +292,8 @@ Each requirement moves through these states. The evidence for each state is reco
 - **Decision packs** carry consult-route items to the PI, in the form §6 describes. "Accept all" is
   a valid answer; silence is not.
 - **Walkthroughs close milestones.** The PI uses the instrument for its purpose and records PASS,
-  FAIL or NOT RUN per step (`reports/WALKTHROUGH.md`). Agents rehearse it first.
+  FAIL or NOT RUN per step (from `arpd/templates/reports/WALKTHROUGH.md`, written to `reports/`).
+  Agents rehearse it first.
 
 ## 9. Sessions, memory and handoff
 
@@ -303,9 +307,9 @@ Each requirement moves through these states. The evidence for each state is reco
   1. reads `STATUS.md` and notes the base commit it names (the last commit before that rewrite;
      the rewrite itself is committed after it, so at least one later commit is expected);
   2. runs `git log --oneline <base commit>..HEAD` and
-     `python tools/summarize_events.py --since <the time STATUS.md was last rewritten> --sessions`
+     `python arpd/tools/summarize_events.py --since <the time STATUS.md was last rewritten> --sessions`
      (which shows which sessions did work), and reads the open sprint record. It never describes the
-     history or the log from memory. If `logs/` is absent (a fresh clone or another machine), it
+     history or the log from memory. If `arpd/logs/` is absent (a fresh clone or another machine), it
      says so and uses the last exported sprint events file instead;
   3. records any difference in a `Recovered:` line at the top of `STATUS.md`, quoting the output of
      both commands;
@@ -313,12 +317,12 @@ Each requirement moves through these states. The evidence for each state is reco
 
   Where the record and the repository disagree, the repository wins. Unfinished work by a lost
   session is treated as unreviewed.
-- **Event log.** Hooks record the events listed in `docs/EVENTS.md`, and only those. Agents record
+- **Event log.** Hooks record the events listed in `arpd/docs/EVENTS.md`, and only those. Agents record
   questions, handoffs, interruptions, reviews, resumptions, decision packs, and when each
   consequential decision was proposed, authorized and adopted, with
-  `python tools/log_event.py`. The log cannot measure the PI's active time. `logs/` is not
+  `python arpd/tools/log_event.py`. The log cannot measure the PI's active time. `arpd/logs/` is not
   committed, so at each sprint close the lead exports the sprint's events to
-  `reports/sprints/SPRINT-NN-events.jsonl` (`tools/summarize_events.py --export`) and commits it.
+  `reports/sprints/SPRINT-NN-events.jsonl` (`arpd/tools/summarize_events.py --export`) and commits it.
 
 ## 10. Learning
 

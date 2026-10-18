@@ -1,15 +1,10 @@
-# Release notes: ARPD v0.5.0-rc.1 (release candidate)
+# Release notes: ARPD v0.6.0-rc.1 (release candidate, in preparation)
 
-**Status: a release candidate, held for manual testing. Not a final release.** The tag
-`v0.5.0-rc.1` marks the reviewed and tested commit; `git rev-parse v0.5.0-rc.1^{commit}` prints it. A final release follows only after people have completed the manual tests in
-[docs/MANUAL-TESTING.md](docs/MANUAL-TESTING.md) and any blockers they find are fixed.
-
-**Earlier candidates are preserved** under their tags: `v0.4.0-rc.1` (summarized at the end) and
-`v0.3.0-rc.1`. This candidate revises setup after the first manual test of v0.4
-(`evaluation/manual-tests/MT-2026-10-17-1-findings.md`): its opening and theory questions were
-oriented to scientific discovery when the researcher wanted a simple tool, its tutorial mode slowed
-the interview, engineering alternatives were barely explored, and its read-back was too short to
-serve as a specification.
+**Status: a release candidate in preparation. Not a final release.** It restructures the kit so that
+every project is its own repository and everything copied from the kit sits in one `arpd/` folder.
+The setup interview, planning, check-in and amendment work as in v0.5; their paths change. A final
+release follows only after people have completed the manual tests
+([evaluation/manual-tests/GUIDE.md](evaluation/manual-tests/GUIDE.md)) and any blockers are fixed.
 
 ## What ARPD is
 
@@ -18,179 +13,69 @@ A team-charter kit and four Claude Code skills (`/arpd-setup`, `/arpd-plan`, `/a
 coding agents building a research instrument, while keeping authority over every consequential
 scientific decision. See [README.md](README.md).
 
+## What changed since v0.5.0-rc.1
+
+- **The project is always a separate git repository.** The kit clone is never the project and can
+  be reused. `/arpd-setup` asks what you would like to build, proposes a project folder (by default
+  a sibling, `../<project-name>`), creates it, and asks you to reopen Claude Code there; the
+  interview continues in the project. The v0.5 machinery that moved the kit's own files aside
+  (`docs/arpd-kit/`, kit-file lists, fresh-mode detection by inventory) is gone.
+- **Import starts a new repository.** A git source is cloned with its history; its `origin` remote
+  is renamed `upstream`, with push disabled, so the project never pushes back. A plain folder is
+  listed first and copied only with the PI's agreement. Install still works in place.
+- **One `arpd/` folder.** The kit's `kit/` folder is renamed `arpd/` and copied whole into each
+  project: constitution, templates, tools, agents, settings, docs, and the event log
+  (`arpd/logs/`). There are no `tools/` or `reports/templates/` copies at the project root.
+- **`arpd/tools/install.py`** (standard library only) does the file work: `new`, `import`,
+  `install`, `update` (refresh a project's `arpd/` and skills from the kit, nothing committed) and
+  `owed` (install the hook settings, agent roles and missing skills). It writes `arpd/VERSION`. It
+  warns about OneDrive folders, instruction files in a parent folder, and nesting inside another
+  repository.
+- **`START-HERE.md` holds the map.** `INDEX.md` is gone; the governance checker reads the *Map*
+  section of `START-HERE.md`.
+- **Setup records in `reports/setup/`:** the working notes (`NOTES.md`) and the Project Definition
+  Report (`PROJECT-DEFINITION.md`), in place of `docs/discovery/SETUP.md` and
+  `reports/PROJECT-DEFINITION.md`.
+- **The guide travels.** `QUICKSTART.md` and `docs/OPERATIONS.md` are merged into
+  `arpd/docs/GUIDE.md`, which every project carries.
+- **The worked example is extracted** to its own repository, with its history. It is local for now
+  and is used through `/arpd-setup import <path>`.
+- **The kit's tests** moved out of the payload to `tests/`. A project's test command is plain
+  `python -m pytest`.
+- **Documentation.** The README is shorter; evidence is indexed in
+  [evaluation/README.md](evaluation/README.md); the manual-testing guide moved to
+  `evaluation/manual-tests/GUIDE.md` and covers the new flow.
+
 ## Install
 
-Requirements: Claude Code (tested with 2.1.220), Git, and Python 3.8+ on the PATH as `python`. The
-March example also needs numpy and pytest.
+Requirements: Claude Code (tested with 2.1.220), Git with `user.name` and `user.email` set, and
+Python 3.8+ on the PATH as `python`.
 
 ```bash
-git clone <repository URL> my-project
-cd my-project
-git checkout v0.5.0-rc.1
+git clone <repository URL> arpd-kit
+cd arpd-kit
 claude
 ```
 
-Then type `/arpd-setup` (a new project), `/arpd-setup import <path or URL>` (bring code into this
-repository) or `/arpd-setup install <path>` (install into your own repository). When setup is done,
-type `/arpd-plan` to plan the first sprint. Details: [QUICKSTART.md](QUICKSTART.md) and
-[docs/OPERATIONS.md](docs/OPERATIONS.md).
+Then type `/arpd-setup`, `/arpd-setup import <path or URL>` or `/arpd-setup install <path>`, and
+follow it into the project folder. Details: [arpd/docs/GUIDE.md](arpd/docs/GUIDE.md).
 
-## Upgrading a project set up with v0.4 or earlier
+## Upgrading a project set up with v0.5 or earlier
 
-- A project already set up keeps working. Its charter changes only by your ruling (`/arpd-amend`).
-  The new data-semantics rule (`CLAUDE.md` §6) and the SA-01 data-semantics line apply to an
-  existing project only if you adopt them that way.
-- `/arpd-plan` no longer has a tutorial mode. A mode recorded in `STATUS.md` §8 is ignored, and the
-  skill says so once.
-- An interrupted setup begun with v0.4 resumes from its working notes: the "Interview mode" line is
-  ignored and marked "(obsolete; ignored)", the old phases map to the new ones, and no answer is
-  lost (`docs/OPERATIONS.md` §9).
-
-## What changed since v0.4.0-rc.1
-
-**Setup (`/arpd-setup`) is tool-first.**
-
-- Five visible phases: Project → Requirements → Architecture → Team & Governance → Definition Report.
-- The first question, after a quick inspection, asks what the researcher would like to build. The
-  interview-mode, research-maturity, coding-experience and profile questions are gone; the agent
-  infers how much to explain.
-- Three scope questions, each asked once: the minimum usable version, the ideal version (features of
-  interest named), and nice-to-have features not expected in the first release. They set requirement
-  priority (required, desired or future, later).
-- Theory is optional. When it is relevant, the researcher chooses how the team treats it: use it to
-  guide implementation without evaluating it, identify concerns, help develop it, or leave it aside.
-  The full paradigm-specification method applies only when chosen, when correctness depends on it
-  (estimators, simulations, models), or on request. A data-collection tool is not taken through
-  constructs.
-- Requirements discovery covers workflows, functional and nonfunctional requirements, data and
-  persistence, and future direction, as a menu of coverage domains, not a questionnaire.
-- Architecture: for each material decision, the credible alternatives, their trade-offs, a
-  recommendation with reasons, and the consequences. Existing tools that would avoid custom software
-  are considered. A claim about a technology is checked in its documentation or marked "not
-  verified".
-- The short read-back is replaced by the **Project Definition Report**
-  (`reports/PROJECT-DEFINITION.md`), described below.
-- Setup still ends with planning pending and never builds anything. Expected length: about 20–60
-  minutes, depending on complexity.
-
-**The Project Definition Report.** A new template, `kit/templates/reports/PROJECT-DEFINITION.md`:
-
-- versioned, with a DRAFT banner until the researcher adopts a version;
-- sections 1–12 (overview, product and workflows, functional and nonfunctional requirements,
-  architecture, alternatives and decisions, data and interface contracts, verification, roadmap,
-  team, authority and governance, risks and open decisions) and §13 *What adoption authorizes*; a
-  section that does not apply is one line, and detail scales with complexity and risk;
-- requirements as `REQ-<AREA>-NN` (nonfunctional ones `REQ-NFR-NN`), each with acceptance criteria,
-  priority, dependencies, source and status;
-- statuses mapped onto the kit's existing mechanisms: Adopted-on-adoption, Proposed, Provisional,
-  Delegated (SA-NN), Open (with a gate: before planning, before implementing something named, or
-  before deployment), Excluded;
-- a completeness check, filled in before the report is presented.
-
-Adoption is a ruling, R-01, in the researcher's words, with `Adopts: reports/PROJECT-DEFINITION.md
-vN`; the report is committed with it in the adoption-first commit. Adoption authorizes the governing
-documents only. Implementation still needs an approved plan and a start direction (`/arpd-plan`).
-After adoption the report is kept as the record; the governing documents carry its content and win
-where they differ.
-
-**Charter (`CORE.md`).** §6 lists **data semantics** as consequential: missing versus zero,
-duplicate or repeated observations, identifier meaning, aggregation, numerical precision or
-estimation assumptions, changes to collected variables, replacement of unavailable data. Agents
-choose implementation mechanisms, never these semantics, unless a ruling or an SA names the policy.
-§2 lists the setup report as deciding nothing.
-
-**Templates.**
-
-- `REQUIREMENTS.md`: a *Requirement details* section (acceptance criteria, priority, dependencies
-  per requirement); the requirements table is unchanged.
-- `ARCHITECTURE.md`: an *Architecture decisions* table, in the report's columns; only Adopted,
-  Delegated or Provisional rows, each labelled.
-- `DECISIONS.md`: R-01 cites the adopted report version; SA-01 has a data-semantics line ("never
-  delegated unless a named policy"); *Needed by* is the open item's gate.
-- `STATUS.md`: no interview mode in §8; *Readiness* names the adopted report.
-- `MASTER_PLAN.md`: the roadmap comes from the report.
-- Setup working notes: the new phases, classification, theory context, the three scope tiers,
-  architecture alternatives, candidate requirements with status, governance preferences, report
-  version and state, and the compatibility rules for older notes.
-- "Acceptance criterion" is explained the same way in `PARADIGM-SPEC.md`, `REQUIREMENTS.md`,
-  `plans/README.md` and QUICKSTART: each requirement has its own; a task plan's are drawn from them.
-
-**Interaction conventions (`kit/docs/INTERACTION.md`).** The tutorial overlay is removed kit-wide.
-In its place, "Explain when needed": language suited to the researcher, engineering concepts
-explained when a decision depends on them, trade-offs and a recommendation for consequential choices,
-no repeated narration of the process, no questions just to establish expertise. The setup progress
-line and its ASCII form are updated.
-
-**Sprint planning (`/arpd-plan`).** No tutorial mode. At entry it reads the requirement details, the
-architecture decisions and the adopted report (as context), and it respects each open item's gate
-when planning. It does not re-ask scope.
-
-**Documentation.** QUICKSTART, README, OPERATIONS and LIMITATIONS describe the new setup.
-`docs/MANUAL-TESTING.md` is rewritten around two projects: a simple data-collection app (Scenario A)
-and a computational estimator (Scenario B), plus checks for interruption and a change of scope.
-
-**Developer-test tooling.** The turn checker accepts the new setup progress line. A report checker
-(`kit/tools/check_report.py`, copied into the project's `tools/`) checks a report's form: sections,
-acceptance criteria and status per requirement, a gate per open item, no adoption claimed by a
-draft. Setup runs it on every report version before showing it. Contract tests check
-the skills and templates against the interface. Red-first evidence for the new tests was shown by
-running them against the previous commit (`1fe28e2`), where they fail. Counts and results: to be
-filled.
-
-## Supported workflows and evidence
-
-Every developer test is a real Claude Code session with **scripted** researcher answers, audited by
-an independent tester agent. Scripted responses are not evidence of human usability. None of these
-workflows has yet been completed by a researcher.
-
-| Workflow | Evidence | Status in this candidate |
-|---|---|---|
-| v0.5 setup: Scenario A (data-collection app, the manual test replayed), B (estimator), C (existing repository), D (scope correction), E (governance checks inside A–D), F (interrupt and resume, including old-format notes), G (report checks), H (handoff to `/arpd-plan`) | [v0.5 scenarios](evaluation/developer-tests/v0.5-scenarios-report.md) | Runs end to end in scripted sessions (A, A2, A3, B, C, D, F, H); judged on substance |
-| `/arpd-plan`, check-in, amendment, import and install moves, owed `.claude/` items, event logging and recovery | DT-01 to DT-13 on v0.3 and v0.4 ([DT-09–13](evaluation/developer-tests/DT-09-13-report.md)) | Unchanged in their mechanics; the setup interviews in those tests are evidence for the earlier flows only |
-
-## Tested and draft components
-
-| Tested (with the evidence above) | Draft or untested |
-|---|---|
-| Charter, governing-document templates and the v0.3 and v0.4 skills, in scripted developer tests | Every workflow with a real researcher, including the v0.5 setup |
-| Governance checker and event summary: automated tests in `kit/tools/`; independent review rounds 1 to 8b | The v0.5 setup and report (driven scenarios: [v0.5 scenarios](evaluation/developer-tests/v0.5-scenarios-report.md)) |
-| Event-logging hooks and recovery, in real Claude Code sessions | Approving the `.claude/` writes interactively; native choice widgets and symbol rendering |
-| Modules: computational model; team arrangement | Draft modules: statistical methods, experiment platform, measurement pipeline, agents inside instruments, human-subjects data |
-| The March (1991) worked example: 70 tests; two independent review rounds | Other agent harnesses than Claude Code; the `StopFailure` hook's payload fields |
-
-## The March (1991) starter, qualified
-
-`examples/march-1991/` is a software-verified implementation of March's (1991) mutual-learning model.
-It is a complete ARPD project with v0.3-format records: the PI adopted its current documented
-implementation as the starter baseline for v0.3.0-rc.1 (ruling R-01 in its `DECISIONS.md`), and its
-records are carried unchanged into this candidate, so the checker reports some steps as "older
-format". R-01 was given with its existing assumptions, discrepancies and limitations
-retained. In that ruling's terms, adoption permits use and extension. It does not establish exact
-replication, authenticate March's original implementation, or convert software verification into
-scientific validation.
-
-- It reproduces March's qualitative results in direction, not in level: levels are mostly lower, by
-  about 0.1 to 0.2 for equilibrium code knowledge.
-- One headline result, the R2 reversal, depends on an incompletely specified update order (ASM-02).
-- Its nine assumptions (ASM-01 to ASM-09) are the adopted working baseline. Whether they match March's
-  own program is exploratory work in its backlog (B-07 to B-09), not part of this candidate.
+- **Keep the old layout.** Nothing forces a change. The project's own `tools/` and `logs/` keep
+  working. The v0.6 tools also accept the older layout: they fall back to `logs/events.jsonl`, to
+  `INDEX.md` when `START-HERE.md` has no *Map*, and to hooks in `tools/hooks/`.
+- **Or move to the v0.6 layout.** Add the folder with
+  `python <kit>/arpd/tools/install.py install <project>` (it reports the older skills as conflicts;
+  add `--force` to replace them; later refreshes use `update`), run
+  `python arpd/tools/install.py owed .` to point the hooks at `arpd/tools/`, then use `/arpd-amend`
+  to change the paths the charter names. The charter changes only by your ruling. Commit, then remove
+  the old `tools/` copies (and any copied kit folder) when nothing cites them.
 
 ## Known limitations
 
-The full list is in [docs/LIMITATIONS.md](docs/LIMITATIONS.md). The most important:
-
-- No researcher has used the kit yet; all workflow evidence is scripted developer testing, and the
-  v0.5 scenarios are still to be run.
-- The turn and report checkers check form, not quality: not whether a question was the right one,
-  whether the requirements and acceptance criteria are meaningful, or whether the alternatives were
-  credible.
-- Architecture recommendations rest on the model's knowledge unless documentation was checked.
-- Telling an answer from a ruling, a plan approval or a start, and recognizing a data-semantics
-  choice, are the agent's judgement, guided by the skills.
-- The governance checker reads records. It cannot show that the records are true.
-- Installing the hooks, agent roles and (in install mode) skills needs an interactive approval in
-  Claude Code. When that is not given, setup records the items as owed with exact commands.
-- The kit's benefits are proposed from team science and practice, not yet shown to improve outcomes.
+See [docs/LIMITATIONS.md](docs/LIMITATIONS.md). New in this candidate: the relaunch step and
+`install.py` are covered by unit tests only, until the driven runs are recorded.
 
 ## Licence
 
@@ -211,57 +96,20 @@ is requested in [CITATION.cff](CITATION.cff), separately from the licence terms.
 > separate from the standard MIT terms. Respect the current anonymous-review requirements.
 > Record this as my licence ruling. No additional confirmation is needed.
 
-## Deferred to the backlog (not in this candidate)
-
-Carried from earlier candidates:
-
-- **Checker:** the advisory step "Live items cite no superseded spec item" does not catch
-  strikethrough, ID ranges (`CON-01–03`), or VAL rows citing a superseded claim; a "skills not
-  installed" decision is accepted whatever its status; skills installed at user level are not
-  detected; for an open sprint, it does not check that the cited ruling or SA covers the sprint's
-  scope, or that the approved plan file still matches the commit its ruling names; the readiness
-  block is compared with the records only on its Execution line (advisory).
-- **Setup:** template `<!-- keep:` blocks were sometimes dropped (DT-05).
-- **Install mode:** a bare `python -m pytest` rule still collects the kit's own tests (`START-HERE`
-  gives the project's test command, `python -m pytest --ignore=kit --ignore=examples
-  --ignore=evaluation`); installing owed skills later needs a kit clone's path; the
-  checker does not confirm that each prior rule kept by decision appears in the charter.
-- **Planning:** resuming an interrupted plan review has not been tested.
-- **Fenced examples:** the skills show block layouts inside code fences, while a real block is plain
-  text; `check_turn.py` does not warn about a fenced block.
-- **March:** comparison with independent reconstructions and a systematic exploration of the
-  assumptions (B-07 to B-09).
-- **Modules:** the five draft modules stay drafts until tested.
-
 ## Before a public release
 
-- Run and record the v0.5 scripted scenarios, review the diff independently, then tag `v0.5.0-rc.1`
-  and complete the manual tests in `docs/MANUAL-TESTING.md`.
-- Confirm copyright ownership, and the copyright holder named in `LICENSE`. During anonymous review
-  it reads "The ARPD authors".
-- After review, replace the anonymous author entry in `CITATION.cff` and add the framework paper.
+- Record the v0.6 driven runs and an independent review, then tag `v0.6.0-rc.1`.
+- Complete the manual tests.
+- Confirm copyright ownership and the holder named in `LICENSE` (during anonymous review, "The ARPD
+  authors"); then replace the anonymous author in `CITATION.cff` and add the framework paper.
 
----
+## History
 
-## Earlier: v0.4.0-rc.1 (tagged; superseded by this candidate)
+Each earlier candidate is preserved under its tag.
 
-v0.4 made setup adaptive and separated it from planning:
-
-- setup ended with planning pending, wrote no sprint record, and saved non-governing working notes
-  (`docs/discovery/SETUP.md`) that let an interrupted setup resume before adoption;
-- the new `/arpd-plan` skill: review, one sprint or several, priorities, a versioned draft in
-  `reports/planning/`, approval of an exact version, then begin now or later; plan approval,
-  execution authority and task-plan approval kept separate; continuation across sprints only by a
-  standing authorization;
-- the shared interaction conventions (`kit/docs/INTERACTION.md`): one labelled block last, choices
-  printed before any widget, progress lines, five kinds of information and action, a dependency
-  screen;
-- check-in reported readiness and decisions ahead; amendment routed project defaults and milestones;
-- `STATUS.md` *Readiness*; *Waiting on the PI* as the one list of open decisions, with *Affects*,
-  *Needed by* and *Can continue meanwhile*; the sprint record's Part 1 rows *Approved plan*,
-  *Execution authorized by* and *Transition policy*; the import baseline report;
-- the checker's "ARPD skills installed" and "Open sprints: plan approval and execution authority
-  cited" steps; a turn checker for scripted tests.
-
-Its evidence was scripted developer tests DT-09 to DT-13 (75 turns), on top of DT-01 to DT-08 from
-v0.3, and 150 automated tests. Its tutorial overlay and four-phase interview are replaced in v0.5.
+- `v0.3.0-rc.1` (2026-10-16): the charter, governing documents, setup in three modes, check-in,
+  amendment, event logging and the governance checker; developer tests DT-01 to DT-08.
+- `v0.4.0-rc.1` (2026-10-17): adaptive setup ending with planning pending; `/arpd-plan`; shared
+  interaction conventions; readiness; developer tests DT-09 to DT-13.
+- `v0.5.0-rc.1` (2026-10-18): tool-first setup with scope questions, architecture alternatives and an
+  adopted Project Definition Report; data semantics reserved to the PI; driven scenarios A to H.

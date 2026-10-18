@@ -40,7 +40,8 @@ Each command exactly as run, with its working directory and its output verbatim.
 
 ## 4. Governance checker output
 
-Only if the source has an ARPD checker (`tools/check_governance.py`). Otherwise write "No checker in
+Only if the source has an ARPD checker (`tools/check_governance.py` in an older starter,
+`arpd/tools/check_governance.py` from v0.6). Otherwise write "No checker in
 the source".
 
 ```text

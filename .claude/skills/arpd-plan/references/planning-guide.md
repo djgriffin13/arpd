@@ -1,6 +1,6 @@
 # Planning guide: read-back, draft, versions and review
 
-Detail for Steps A–E of `/arpd-plan`. The shared conventions are in `kit/docs/INTERACTION.md`.
+Detail for Steps A–E of `/arpd-plan`. The shared conventions are in `arpd/docs/INTERACTION.md`.
 
 ## 1. Sizing the effort
 
@@ -40,7 +40,7 @@ numbers until each sprint starts.
 
 ## 4. The draft (Step D)
 
-Copy `kit/templates/planning/PLAN.md` to `reports/planning/PLAN-YYYY-MM-DD.md`. Use the date the
+Copy `arpd/templates/planning/PLAN.md` to `reports/planning/PLAN-YYYY-MM-DD.md`. Use the date the
 draft is first written. A second planning effort on the same day is `PLAN-YYYY-MM-DD-2.md`, and so
 on. One file holds one planning effort through all its versions, including any revision after
 approval.
@@ -120,7 +120,8 @@ blocks.
   approval ruling names in its *Approves:* line. Otherwise it is a draft, even if an earlier
   version was approved; say which version was approved, and by which ruling.
 - Commit only the plan file and the records Step D updates (`DECISIONS.md` *Waiting on the PI*
-  rows, `STATUS.md`, and `INDEX.md`, which gains a `reports/planning/` row with the first draft).
+  rows, `STATUS.md`, and `START-HERE.md`'s *Map*, which gains a `reports/planning/` line with the
+  first draft).
   Check `git status --short` first. Never push.
 - No governing change happens during review. If review shows the charter, spec or roadmap
   milestones must change, that is an `/arpd-amend` item for the PI.
@@ -140,7 +141,7 @@ clear enough to execute; what are the main risks, and are they bounded?
 Enter each finding in the plan's *Review notes* table, with the version reviewed and your response.
 A long report may also be saved as `reports/planning/PLAN-YYYY-MM-DD-review-N.md` (informative).
 Log
-`python tools/log_event.py review --actor reviewer --ref PLAN-YYYY-MM-DD --result PASS|FAIL --note "vN"`.
+`python arpd/tools/log_event.py review --actor reviewer --ref PLAN-YYYY-MM-DD --result PASS|FAIL --note "vN"`.
 Revise the draft into a new version, and tell the PI which findings you took and which you did not,
 and why. The PI may also bring a review from elsewhere: treat it the same way.
 

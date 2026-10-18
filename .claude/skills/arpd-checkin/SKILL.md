@@ -24,14 +24,14 @@ Read these first:
 
 Then run both tools, every time:
 
-- `python tools/check_governance.py`. Keep its actual OVERALL line and every step that is not PASS.
+- `python arpd/tools/check_governance.py`. Keep its actual OVERALL line and every step that is not PASS.
   Never state a checker result from memory or from an earlier run. If the checker cannot be run (it
   is missing, or it fails), say so plainly under "What needs you", with the error, and do not report
   the project as complete.
 - **Reconcile the checker with `STATUS.md`.** If the checker reports a gap that STATUS does not list
   (for example, STATUS says "Nothing owed" while a file is MISSING), say that STATUS is out of date,
   and name each gap.
-- `python tools/summarize_events.py --since <sprint start>`. If it reports no event log, or no events
+- `python arpd/tools/summarize_events.py --since <sprint start>`. If it reports no event log, or no events
   in the window, say so in plain words. Never invent figures. The `ruling` count includes standing
   authorizations (SA-NN), which are logged as rulings too.
 
@@ -77,7 +77,7 @@ Cover:
    anything owed.
 4. **Decisions ahead.** The open *Waiting on the PI* items not yet needed, grouped by the work they
    block (a sprint, work package or requirement), soonest *Needed by* first, each with what can
-   continue meanwhile. Then the **quick dependency screen** (`kit/docs/INTERACTION.md` §7): has
+   continue meanwhile. Then the **quick dependency screen** (`arpd/docs/INTERACTION.md` §7): has
    recent work introduced, changed, resolved or exposed a dependency? If yes, name it, and say which
    *Waiting on the PI* row is missing or stale (updating it is routine work for the lead after the
    check-in, not part of it). If no, say so in one line.
@@ -96,14 +96,14 @@ Cover:
 **Focus on material decisions and exceptions.** Gloss every internal ID in plain words. Do not
 re-explain routine coordination.
 
-**When you ask the PI anything,** follow `kit/docs/INTERACTION.md` §2–§3: end the turn with exactly
+**When you ask the PI anything,** follow `arpd/docs/INTERACTION.md` §2–§3: end the turn with exactly
 one labelled block (`QUESTION FOR YOU`, `CHOICE FOR YOU (select one)`, or `APPROVAL REQUIRED` for a
 decision the PI is asked to rule on), as plain text, not in a code fence, with nothing after its
 closing divider. Print every option before any choice widget. The next-step prompt goes above the
 block.
 
 If the PI answers with a ruling, the lead agent records it **verbatim** in `DECISIONS.md` and logs
-`python tools/log_event.py ruling --actor lead --ref R-NN`. Any change to a governing document that
+`python arpd/tools/log_event.py ruling --actor lead --ref R-NN`. Any change to a governing document that
 the ruling asks for goes through `/arpd-amend`; plan approvals and execution starts go through
 `/arpd-plan`. Offer to log the PI's active minutes for this check-in:
-`python tools/log_event.py pi_time --actor pi --minutes N`.
+`python arpd/tools/log_event.py pi_time --actor pi --minutes N`.

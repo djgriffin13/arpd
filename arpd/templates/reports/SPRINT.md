@@ -7,7 +7,7 @@
 - Part 2 is written at close.
 - After close the record is frozen. Corrections go in a later sprint's record.
 
-Auditors reconcile this record against git, `DECISIONS.md`, `REQUIREMENTS.md` and `logs/events.jsonl`.
+Auditors reconcile this record against git, `DECISIONS.md`, `REQUIREMENTS.md` and `arpd/logs/events.jsonl`.
 
 ---
 
@@ -35,7 +35,7 @@ check-in?" in place of the rows *Approved plan*, *Execution authorized by* and *
 Leave them as they are.
 
 In an imported project, the first sprint's Part 1 cites the import baseline
-(`reports/IMPORT-BASELINE-YYYY-MM-DD.md`) below the table. It does not copy it.
+(`reports/setup/IMPORT-BASELINE.md`) below the table. It does not copy it.
 
 ### Scope-change log
 
@@ -92,7 +92,7 @@ Record coordination or governance failures, with the rule proposed, if any.
 
 ### 2.7 Resource use
 
-Taken from `python tools/summarize_events.py --since <start> --until <close>` and the tooling.
+Taken from `python arpd/tools/summarize_events.py --since <start> --until <close>` and the tooling.
 Events exported to `reports/sprints/SPRINT-NN-events.jsonl` (same command, with `--export`), and
 committed with this record.
 

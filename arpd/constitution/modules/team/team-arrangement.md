@@ -44,15 +44,15 @@ another, and never deletes output it did not create.
 
 - **The lead agent:**
   - plans sprints;
-  - writes briefs (`reports/BRIEF.md`);
+  - writes briefs (*Brief format*, below);
   - is the **only writer** of `STATUS.md`, `MASTER_PLAN.md` and requirement states;
   - records rulings;
   - writes the sprint record;
   - brings consult-route decisions to the PI;
   - does not review its own work;
   - does not mark its own plans Verified.
-- **Implementer:** works one plan in its own scope. It runs targeted checks only, reports with
-  `reports/AGENT-REPORT.md`, and never sets requirement states or marks its own work complete.
+- **Implementer:** works one plan in its own scope. It runs targeted checks only, reports in the format of
+  `.claude/agents/implementer.md` (from `arpd/agents/`), and never sets requirement states or marks its own work complete.
 - **Reviewer:** did not write the change under review, and opens by saying so. It:
   - checks the change against the plan's acceptance criteria and the paradigm spec's invariants;
   - re-runs the stated checks;
@@ -68,3 +68,21 @@ another, and never deletes output it did not create.
   cannot be correct without it. Otherwise it builds against the published shape of that output and
   carries on.
 - **Lateral messages only at real dependencies.** Status and decisions go through the lead.
+
+### Brief format
+
+A brief goes from the lead to one team member. It is self-contained (the recipient starts with a
+cleared context), directs work, and never grants authority that `CLAUDE.md` does not. It names:
+
+- **To:** the role and session; **acknowledge with** `10-4 <task>`.
+- **Intent:** what the work is for, tied to the sprint objective (`STATUS.md` §2) and the
+  paradigm-spec items it touches.
+- **Task:** the plan path and the commit holding it, the branch, and the base commit.
+- **Invariants:** the INV items the work must respect, quoted.
+- **Do not:** edit `MASTER_PLAN.md`, `STATUS.md`, `REQUIREMENTS.md`, `DECISIONS.md` or
+  `PARADIGM-SPEC.md` (propose changes in the report); pursue discoveries (classify and report
+  them); mark the work complete or verified; plus any task-specific fences.
+- **Checks you may run,** and the time limit.
+- **Waits:** each with its correctness reason; if blocked, take the next queued item and tell the
+  lead.
+- **Report:** in the role's report format (`.claude/agents/`), saved to a named path.

@@ -36,7 +36,7 @@ decided.
   planning, before implementing <what>, before deployment, or a named sprint or plan). Open items
   from the Project Definition Report arrive here at adoption with their gate.
 - **Can continue meanwhile:** the work that does not depend on it. A pending decision blocks only
-  the work that depends on it (`kit/docs/INTERACTION.md`, *Dependency screen*).
+  the work that depends on it (`arpd/docs/INTERACTION.md`, *Dependency screen*).
 
 | # | Decision requested (plain language) | Pack | Affects (requirements, work) | Needed by | Can continue meanwhile | Recommendation |
 |---|---|---|---|---|---|---|
@@ -102,7 +102,7 @@ Every sprint boundary still gets its close-out, independent review and checks (C
 > "{{The PI's words adopting the report version, from the setup session}}"
 
 - **Given:** in the setup session
-- **Adopts:** `reports/PROJECT-DEFINITION.md` v{{N}}. The report is committed with this ruling, in
+- **Adopts:** `reports/setup/PROJECT-DEFINITION.md` v{{N}}. The report is committed with this ruling, in
   the adoption-first commit; a ruling cannot name its own commit, so `STATUS.md` records the SHA.
 - **Reading:** the report's Adopted-on-adoption items are adopted, with any proposals this ruling
   accepts ({{IDs, and how: "choice A" or named}}); its Delegated, Provisional, Open and Excluded items

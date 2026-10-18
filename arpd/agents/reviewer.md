@@ -36,3 +36,8 @@ failed check or a broken rule. Opinions go to the lead agent as notes, not as se
 
 Never edit code under review. Never edit governing files. Use the evidence vocabulary: read, ran,
 checked, not checked.
+
+Report to the lead agent with the verdict first, then: the change reviewed (branch and commits); each
+check you re-ran, with its outcome; each acceptance criterion and invariant, with the evidence and
+whether it holds; each finding, marked send-back (a failed check or broken rule) or note; and what
+you did **not** check.

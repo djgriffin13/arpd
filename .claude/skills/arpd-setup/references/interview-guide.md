@@ -41,7 +41,7 @@ The interview is adaptive; the resulting report is thorough.
 - **Batching.** Group only closely related, low-stakes items into one bounded choice, or state
   defaults ("Unless you say otherwise I will assume X, Y and Z"). Never ask two open questions in
   one turn. When an answer covers only part, record what is settled, and ask only the rest.
-- **No empty turns** (`kit/docs/INTERACTION.md` §5). Never spend a turn on a trivial item: the PI's
+- **No empty turns** (`arpd/docs/INTERACTION.md` §5). Never spend a turn on a trivial item: the PI's
   name in the records defaults to "PI".
 - **Do not lead.** When asking what would convince the PI, ask it open first. Offer your proposed
   check only if the PI is unsure, and label it as yours.
@@ -80,8 +80,8 @@ recommendation. Do not jump early into theory, languages or implementation detai
 
 Ask only when the description points to a theory, framework, mathematical model or set of
 assumptions that could shape the tool. Skip it for general software, and for tools whose scientific
-content lives entirely in material the PI supplies. Suggested lead-in, above the choice (its four
-options are in `SKILL.md`):
+content lives entirely in material the PI supplies. Ask once, as a `CHOICE FOR YOU (select one)`
+with the four options A–D below, after this suggested lead-in:
 
 > Is there a scientific theory, research framework, mathematical model or set of theoretical
 > assumptions that should inform this tool? If so, you can describe them or point me to documents.
@@ -89,12 +89,12 @@ options are in `SKILL.md`):
 Give no recommendation unless correctness clearly depends on it. Record the answer in the notes
 (*Theory context*); it goes to report §11 and, after adoption, to `STATUS.md` §8.
 
-| Choice | What you do |
-|---|---|
-| A | Record the context the tool must represent, in the PI's words. Ask only what correctness needs. No critique. |
-| B | Raise concerns briefly where they matter for the build or the claims, as labelled lead observations. The PI decides what to do with each one. |
-| C | Use the full method below, to the depth the PI wants. |
-| D | Record "theory out of scope (PI's choice)". Ask nothing further about it. |
+| Choice | Option as shown to the PI | What you do |
+|---|---|---|
+| A | Use it to guide implementation, without evaluating it | Record the context the tool must represent, in the PI's words. Ask only what correctness needs. No critique. |
+| B | Identify concerns | Raise concerns briefly where they matter for the build or the claims, as labelled lead observations. The PI decides what to do with each one. |
+| C | Help develop it | Use the full method below, to the depth the PI wants. |
+| D | Leave theory aside | Record "theory out of scope (PI's choice)". Ask nothing further about it. |
 
 **Ambiguity triage.** Classify each scientific ambiguity you notice:
 
@@ -141,7 +141,7 @@ an ARPD starter*.
 
 **Begin with the scope sequence** (`SKILL.md`, *Scope: three questions, once each*) once the product
 overview is clear. Record each answer verbatim in the notes, under the three tiers of
-`docs/discovery/SETUP.md` §5 *Scope* (minimum usable version; ideal version and features of
+`reports/setup/NOTES.md` §5 *Scope* (minimum usable version; ideal version and features of
 interest; nice-to-have, not in the initial release), with any exclusions. Priorities follow
 `SKILL.md`.
 
@@ -178,7 +178,7 @@ persists versus what is temporary; entities and relationships, and repeated obse
 sessions; integrity, provenance, versioning and compatibility; backup, recovery and export; privacy
 and security.
 
-**Data semantics are consequential** (`kit/constitution/CORE.md` §6). Raise them during
+**Data semantics are consequential** (`arpd/constitution/CORE.md` §6). Raise them during
 Requirements as ordinary product questions (one per turn, or naturally grouped), never saved for the
 adoption block, and never decide them silently. Ask the consequential ones; propose defaults for the
 rest. For a data-collection tool, most of these matter:
@@ -297,13 +297,13 @@ not left to the adoption assent. Never adopt an arrangement the PI was not asked
 
 Never recommend a large team for a simple tool; say in one sentence why the arrangement suits the
 task structure. If the PI chooses differently, record that it differs from your recommendation.
-Roles and coordination: `kit/constitution/modules/team/team-arrangement.md`.
+Roles and coordination: `arpd/constitution/modules/team/team-arrangement.md`.
 
 ### Authority and governance (report §11)
 
 Draft SA-01 from what you heard, in plain words with this project's examples, and ask the PI only to
-confirm or adjust it. Its fields are the `kit/templates/DECISIONS.md` SA-01 entry; the profiles are
-defined in `kit/constitution/CORE.md` §6 (propose one, [bounded autonomy], with each alternative in
+confirm or adjust it. Its fields are the `arpd/templates/DECISIONS.md` SA-01 entry; the profiles are
+defined in `arpd/constitution/CORE.md` §6 (propose one, [bounded autonomy], with each alternative in
 one line). In particular:
 
 - **Delegated:** implementation *mechanisms* only (code structure, libraries within the approved

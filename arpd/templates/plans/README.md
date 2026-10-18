@@ -3,7 +3,7 @@
 There is one numbered plan per scoped piece of work (`CLAUDE.md` §5). An approved plan is
 authoritative for executing its own scope. Priorities and order of work live in `MASTER_PLAN.md`; live progress lives in `STATUS.md`.
 
-- **Naming:** `NNN-kebab-slug.md`. Claim the number with `python tools/next_plan_number.py`. The
+- **Naming:** `NNN-kebab-slug.md`. Claim the number with `python arpd/tools/next_plan_number.py`. The
   script scans every branch, so parallel work never collides.
 - **Status:** Proposed → Approved → Active → Complete.
 - **Approval:**

@@ -18,9 +18,9 @@ cannot name its own commit.
 
 **If you are recovering** (the session that wrote this is gone): run
 `git log --oneline <base commit>..HEAD` and
-`python tools/summarize_events.py --since <the Last rewritten time> --sessions`, and quote their
+`python arpd/tools/summarize_events.py --since <the Last rewritten time> --sessions`, and quote their
 output in a `Recovered:` line at the top of this file (`CLAUDE.md` §9). Never describe the log from
-memory. If `logs/` is absent (a fresh clone or another machine), say so, and use the last exported
+memory. If `arpd/logs/` is absent (a fresh clone or another machine), say so, and use the last exported
 `reports/sprints/SPRINT-NN-events.jsonl` (`--log <that file>`) with `git log`.
 
 ---
@@ -36,7 +36,7 @@ PI the same next step.
 - **Planning:** {{not started | draft (PLAN-YYYY-MM-DD, vN) | approved (PLAN-YYYY-MM-DD, vN, R-NN)}}
 - **Execution:** {{not started | authorized (R-NN or SA-NN, scope) | in progress (S0N) | complete}}
 - **Next step:** {{finish setup | run /arpd-plan | review plan | begin implementation | check in | amend}}
-- **Adopted report:** `reports/PROJECT-DEFINITION.md` v{{N}} (R-{{NN}}, commit {{SHA of the adoption-first commit}})
+- **Adopted report:** `reports/setup/PROJECT-DEFINITION.md` v{{N}} (R-{{NN}}, commit {{SHA of the adoption-first commit}})
 
 ## 1. Read first
 

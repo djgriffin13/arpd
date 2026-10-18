@@ -1,1 +1,1 @@
-Read CLAUDE.md in full before doing anything else. Before setup it explains the kit; after setup it is the project's team charter.
+This is the ARPD kit, not a project. Run /arpd-setup to create a project in its own folder; never write project files here. Read CLAUDE.md in full before doing anything else: it explains the kit and the rules for developing it.

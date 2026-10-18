@@ -3,7 +3,7 @@
 > **Working notes — not governing; nothing here is adopted, approved or authorized.**
 > These notes record the setup interview as it goes, so that it can resume after an interruption.
 > Rulings, requirements and the charter exist only once the PI adopts the Project Definition Report
-> (`reports/PROJECT-DEFINITION.md`) by ruling (`DECISIONS.md`). An item here becomes binding only
+> (`reports/setup/PROJECT-DEFINITION.md`) by ruling (`DECISIONS.md`). An item here becomes binding only
 > through that adoption, never by being written here.
 
 **Never write here:** credentials, secrets, participant data, private datasets, or content from
@@ -28,11 +28,18 @@ other repositories or folders the PI did not point to.
 
 ## 1. Mode and consent
 
-- **Setup mode:** {{fresh / import <source> / install <repository>}}
-- **Consent to save these notes in the project:** {{not needed (fresh or import) / given, PI's words
+- **Setup mode:** {{new / import <source> / install <repository>}}
+- **Project folder:** {{absolute path}}; kit clone used: {{absolute path}}
+- **Consent to save these notes in the project:** {{not needed (new or import) / given, PI's words
   and date / declined: kept outside the repository (OS temp), so recovery is limited}}
 - **Commit status:** {{not committed / committed in their own commit <SHA>}}. Never pushed without the
   PI's authorization.
+
+## 1a. Opening answer (verbatim)
+
+The PI's answer to "What would you like to build?", exactly as given, with its UTC time.
+
+> {{the PI's words}}
 
 ## 2. Project classification
 
@@ -110,7 +117,7 @@ policy (or "none named"). Record what the PI said; do not ask questions only to 
 
 ## 10. Report version and state
 
-- **Report:** `reports/PROJECT-DEFINITION.md`, {{not started / Draft vN, presented <UTC time> / revision
+- **Report:** `reports/setup/PROJECT-DEFINITION.md`, {{not started / Draft vN, presented <UTC time> / revision
   requested: <what> / adopted by R-NN (vN)}}
 - **Completeness check:** {{not run / run for vN: gaps <list or "none">}}. Before showing any
   version, check for: ambiguous functionality; inconsistent requirements; missing inputs or outputs

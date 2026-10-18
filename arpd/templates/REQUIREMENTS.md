@@ -41,7 +41,7 @@ by the lead agent, and only on recorded evidence. *Validated* also needs the PI'
 | REQ-CORE-01 |  | OP-01 | Planned |  |
 
 <!-- The setup skill writes the requirements that the adopted Project Definition Report
-(reports/PROJECT-DEFINITION.md, sections 3 and 4) sends here under its status table, with the same
+(reports/setup/PROJECT-DEFINITION.md, sections 3 and 4) sends here under its status table, with the same
 IDs. Each is phrased as what the PI would observe, e.g. "A participant can play a
 full game against the partner agent and the game log records every action with its timestamp", not
 as an implementation task. -->

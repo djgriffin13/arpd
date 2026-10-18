@@ -8,7 +8,7 @@ document and grant no authority. Each skill keeps its own steps and its own prog
 
 | Kind | Example | What it does | Where it is recorded |
 |---|---|---|---|
-| 1. Interview answer | "I want a chat window for two players." | Informs the lead. Decides nothing. | Discovery or planning notes |
+| 1. Interview answer | "I want a chat window for two players." | Informs the lead. Decides nothing. | Setup or planning notes |
 | 2. Proposal or draft | A requirement the lead suggests; a plan draft | Nothing is adopted, scheduled or authorized | The draft, labelled as a proposal |
 | 3. Ruling or standing authorization | "Make light-touch review the default." | Binds, in the PI's words, within its scope. A direct instruction to change a rule is enough; `/arpd-amend` records it without a second approval. | `DECISIONS.md`, R-NN or SA-NN |
 | 4. Approved plan | "I approve PLAN-2026-10-20 v3." | Approves that version's scope. It does not start work. | R-NN citing file, version and commit |
@@ -73,7 +73,7 @@ A native choice widget can vanish from the transcript. Before you open one:
 4. mark any recommendation as "(recommended)". Never preselect an option silently.
 
 Then you may open the widget with the same question and options. Record the answer: in the
-discovery or planning notes for an ordinary answer, and verbatim in `DECISIONS.md` for a ruling or
+setup or planning notes for an ordinary answer, and verbatim in `DECISIONS.md` for a ruling or
 an approval. If the widget fails, the printed block stands and the PI can answer by letter.
 
 ```text
@@ -150,7 +150,7 @@ At each of these points, ask yourself one quick question:
 
 **One canonical list.** It is `DECISIONS.md` *Waiting on the PI*, with the columns *Affects*,
 *Needed by* and *Can continue meanwhile*. `STATUS.md` §5 summarizes it and points to it. Keep no
-other tracker. Before adoption, open questions live in the discovery notes; they move to *Waiting on
+other tracker. Before adoption, open questions live in the setup notes (`reports/setup/NOTES.md`); they move to *Waiting on
 the PI* at adoption.
 
 **Block only what depends on it.** A pending decision blocks only the work that depends on it, from
