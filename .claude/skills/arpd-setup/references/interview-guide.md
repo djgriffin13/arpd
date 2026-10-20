@@ -441,6 +441,26 @@ ___. Please correct the split, and place each of the rest on this scale." Ask on
 first release should be a proof of concept, a research-useful version, or a validated release;
 a working prototype is not yet a scientific instrument.
 
+**The first time you use the scale, show it to the PI in full, in plain words,** above the question
+that asks them to place items, as a short table like this one (adapted to the project's words), and
+say that two flags can be added to any item:
+
+| Level | What it means for you | What happens to it |
+|---|---|---|
+| **P1 Core** | The tool is not usable without it | Built first, in the first version |
+| **P2 Next** | Needed soon, but the first version works without it | Built right after the first version |
+| **P3 Planned** | You are committed to it, just not yet | Kept as a requirement for a later stage |
+| **P4 Wanted** | You would like it if there is time | Kept on the wish list; built only if time allows |
+| **P5 Idea** | Worth remembering; no commitment | Kept on the wish list as an idea |
+
+- *Needs checking first* (feasibility to investigate): the team must find out whether or how it can
+  be done before building it, whatever its level.
+- *Correctness-critical*: a mistake in it would corrupt data or results; it is never ranked below
+  anything that depends on it.
+
+Give a one-line example from this project for P1 and P4 when it helps. Afterwards, the level names
+alone are enough. The record keeps this mapping:
+
 | Priority | Meaning | Goes to at adoption |
 |---|---|---|
 | **P1 Core** | In the minimum usable version | `REQUIREMENTS.md`, milestone M1 |
