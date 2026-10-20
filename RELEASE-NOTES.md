@@ -1,10 +1,10 @@
-# Release notes: ARPD v0.6.0-rc.1 (release candidate)
+# Release notes: ARPD v0.7.0-rc.1 (release candidate)
 
-**Status: a release candidate, held for manual testing. Not a final release.** It restructures the kit so that
-every project is its own repository and everything copied from the kit sits in one `arpd/` folder.
-The setup interview, planning, check-in and amendment work as in v0.5; their paths change. A final
-release follows only after people have completed the manual tests
-([evaluation/manual-tests/GUIDE.md](evaluation/manual-tests/GUIDE.md)) and any blockers are fixed.
+**Status: a release candidate, held for manual testing. Not a final release.** It redesigns setup
+around the researcher: a research-aware interview in phases, each with defined information needs
+and a summary the PI confirms, run in the folder the PI cloned, with a goal-first `/arpd-plan`, and
+working without Python. A final release follows only after the manual walkthrough and the usability
+protocol ([evaluation/usability-v0.7/](evaluation/usability-v0.7/)) have been run and any blockers fixed.
 
 ## What ARPD is
 
@@ -13,52 +13,81 @@ A team-charter kit and four Claude Code skills (`/arpd-setup`, `/arpd-plan`, `/a
 coding agents building a research instrument, while keeping authority over every consequential
 scientific decision. See [README.md](README.md).
 
-## What changed since v0.5.0-rc.1
+## What changed since v0.6.0-rc.1
 
-- **The project is always a separate git repository.** The kit clone is never the project and can
-  be reused. `/arpd-setup` asks what you would like to build, proposes a project folder (by default
-  a sibling, `../<project-name>`), creates it, and asks you to reopen Claude Code there; the
-  interview continues in the project. The v0.5 machinery that moved the kit's own files aside
-  (`docs/arpd-kit/`, kit-file lists, fresh-mode detection by inventory) is gone.
-- **Import starts a new repository.** A git source is cloned with its history; its `origin` remote
-  is renamed `upstream`, with push disabled, so the project never pushes back. A plain folder is
-  listed first and copied only with the PI's agreement. Install still works in place.
-- **One `arpd/` folder.** The kit's `kit/` folder is renamed `arpd/` and copied whole into each
-  project: constitution, templates, tools, agents, settings, docs, and the event log
-  (`arpd/logs/`). There are no `tools/` or `reports/templates/` copies at the project root.
-- **`arpd/tools/install.py`** (standard library only) does the file work: `new`, `import`,
-  `install`, `update` (refresh a project's `arpd/` and skills from the kit, nothing committed) and
-  `owed` (install the hook settings, agent roles and missing skills). It writes `arpd/VERSION`. It
-  warns about OneDrive folders, instruction files in a parent folder, and nesting inside another
-  repository.
-- **`START-HERE.md` holds the map.** `INDEX.md` is gone; the governance checker reads the *Map*
-  section of `START-HERE.md`.
-- **Setup records in `reports/setup/`:** the working notes (`NOTES.md`) and the Project Definition
-  Report (`PROJECT-DEFINITION.md`), in place of `docs/discovery/SETUP.md` and
-  `reports/PROJECT-DEFINITION.md`.
-- **The guide travels.** `QUICKSTART.md` and `docs/OPERATIONS.md` are merged into
-  `arpd/docs/GUIDE.md`, which every project carries.
-- **The worked example is extracted** to its own repository, with its history. It is local for now
-  and is used through `/arpd-setup import <path>`.
-- **The kit's tests** moved out of the payload to `tests/`. A project's test command is plain
-  `python -m pytest`.
-- **Documentation.** The README is shorter; evidence is indexed in
-  [evaluation/README.md](evaluation/README.md); the manual-testing guide moved to
-  `evaluation/manual-tests/GUIDE.md` and covers the new flow.
+- **Setup works in place.** Clone or download ARPD, open Claude Code there, type `/arpd-setup`. After
+  the first answer setup asks where the project lives; the default turns this folder into the
+  project (`install.py convert`): ARPD's own development files are removed (the list is in
+  `.arpd-kit`), `arpd/` and the skills stay, every file of the PI's is kept, and the folder gets a
+  fresh git history with no remote; a verified git bundle backs up any local-only work first. The
+  interview continues in the same session. Existing repositories are still installed in place, with
+  their history and remote; a new folder or an import is still available.
+- **A setup-safe `CLAUDE.md`.** A fresh clone's `CLAUDE.md` says only that setup comes first; the
+  kit's development rules moved to `DEVELOPING.md`. During setup the skill governs; after adoption
+  the generated charter does. Because Claude Code loads `CLAUDE.md` only when a session starts, setup
+  re-reads the new charter before the handoff, and `/arpd-plan` recommends a fresh session before
+  implementation starts.
+- **A phased, research-aware interview:** Intake → Objectives → Constraints → Design → Development →
+  Definition Report. Each phase has required items (IN, OB, CS, DS, DV), each marked Confirmed,
+  Inferred, Open, Deferred or N.A.; setup asks only for what is open and confirms its inferences in a
+  phase summary. Every phase ends with its own closeout (continue / correct / go back). A
+  confirmation is not binding; adopting the report remains the only formal setup authorization.
+- **Intake restored,** without the v0.4 questionnaire feel: field, coding comfort and involvement
+  (kept apart), users and maintainers, location, stage, early constraints, and the agent's **role**
+  (build as specified; technical review; technical and theory-alignment review; co-design;
+  audit/extend existing code; exploration), recorded on a technical and a scientific axis.
+- **Theory when it matters.** Objectives covers the research domain and questions, traced to
+  capabilities and requirements, unless the PI asked for a technical-only focus (said once). A
+  researcher with no tool in view gets a short tool-opportunity discussion, then a clean exit with a
+  ready-to-paste prompt.
+- **Constraints and model commitments,** classed Must / Prefer / Model commitment (with epistemic
+  status) / Must hold / Open question, ending in a **commitments review** that flags contradictions,
+  circularity and questionable assumptions under every role and recommends reframing (a research
+  question, an outcome, a configurable model assumption) for the PI to decide. Citations only from
+  sources actually checked; otherwise labelled unverified.
+- **Design asks for the PI's design first,** adapts its depth to the PI's coding comfort, iterates as
+  long as needed, and closes with an explicit readiness question.
+- **Development:** the PI's own rules first; the minimum usable version; P1 Core / P2 Next / P3
+  Planned / P4 Wanted / P5 Idea, with separate *Feasibility* and *Correctness-critical* flags; the
+  agent workflow explained in full (cost included); and the rules Claude will follow, each with its
+  provenance (Core ARPD, PI, project-derived, agent-recommended) and status.
+- **A 14-section Project Definition Report** (intake, research context and traceability,
+  constraints and commitments, scope and priorities, requirements, architecture, decisions, data,
+  verification, roadmap, development process and rules, open decisions, what adoption authorizes).
+  `check_report.py` checks both the new and the older 13-section layout, and adds the dependency
+  and correctness-critical safeguards.
+- **`/arpd-plan` asks the PI's goal first** (or recommends one on request), then sizes the effort:
+  a targeted task, a feature, a sprint, several sprints, or a **bounded feasibility investigation**
+  whose deliverable is a finding, not product code. A goal that departs from the roadmap is said to,
+  with what it displaces; the roadmap is the record of direction, not proof it is right.
+- **Python is optional.** Without Python 3.8+, `arpd/tools/install.sh` (a shell twin of
+  `install.py`) does the file work, the agents read the report and records instead of running the
+  checkers (and say so, never reporting a PASS), and the event log is not kept
+  ([arpd/docs/NO-PYTHON.md](arpd/docs/NO-PYTHON.md)).
+- **Resuming older notes:** v0.4–v0.6 notes are mapped onto the new phases; an old theory choice
+  becomes the scientific axis; old scope answers become the starting point for priorities, never
+  asked again.
 
 ## Install
 
-Requirements: Claude Code (tested with 2.1.220), Git with `user.name` and `user.email` set, and
-Python 3.8+ on the PATH as `python`.
+Requirements: Claude Code (tested with 2.1.220) and Git with `user.name` and `user.email` set.
+Python 3.8+ is recommended (the automated checks and the event log), not required.
 
 ```bash
-git clone <repository URL> arpd-kit
-cd arpd-kit
+git clone <repository URL> my-project
+cd my-project
 claude
 ```
 
-Then type `/arpd-setup`, `/arpd-setup import <path or URL>` or `/arpd-setup install <path>`, and
-follow it into the project folder. Details: [arpd/docs/GUIDE.md](arpd/docs/GUIDE.md).
+Then type `/arpd-setup`. Details: [arpd/docs/GUIDE.md](arpd/docs/GUIDE.md).
+
+## Upgrading a project set up with v0.6
+
+Nothing forces a change: an adopted v0.6 project keeps working, and its 13-section report still
+passes `check_report.py`. To take the new skills and templates, run
+`python <a fresh kit clone>/arpd/tools/install.py update <project>` and commit; the charter changes
+only by the PI's ruling, through `/arpd-amend` (for example to add the sprint-autonomy line). A setup
+interrupted under v0.6 resumes under v0.7 from its notes.
 
 ## Upgrading a project set up with v0.5 or earlier
 
@@ -76,8 +105,11 @@ follow it into the project folder. Details: [arpd/docs/GUIDE.md](arpd/docs/GUIDE
 
 ## Known limitations
 
-See [docs/LIMITATIONS.md](docs/LIMITATIONS.md). New in this candidate: the relaunch step and
-`install.py` are covered by unit tests only, until the driven runs are recorded.
+See [docs/LIMITATIONS.md](docs/LIMITATIONS.md). New in this candidate: the phased interview has
+been exercised only in scripted driven runs (`evaluation/developer-tests/v0.7-runs-report.md`), not
+yet by a researcher; the no-Python path's read-throughs are weaker than the checkers they replace;
+whether Claude Code reloads `CLAUDE.md` mid-session is undocumented, so a fresh session is
+recommended before implementation.
 
 ## Licence
 
@@ -100,8 +132,8 @@ is requested in [CITATION.cff](CITATION.cff), separately from the licence terms.
 
 ## Before a public release
 
-- Record the v0.6 driven runs and an independent review, then tag `v0.6.0-rc.1`.
-- Complete the manual tests.
+- Complete the manual walkthrough and the v0.7 usability protocol with at least one researcher.
+- Run the no-Python path end to end on a machine without Python.
 - Confirm copyright ownership and the holder named in `LICENSE` (during anonymous review, "The ARPD
   authors"); then replace the anonymous author in `CITATION.cff` and add the framework paper.
 
@@ -115,3 +147,5 @@ Each earlier candidate is preserved under its tag.
   interaction conventions; readiness; developer tests DT-09 to DT-13.
 - `v0.5.0-rc.1` (2026-10-18): tool-first setup with scope questions, architecture alternatives and an
   adopted Project Definition Report; data semantics reserved to the PI; driven scenarios A to H.
+- `v0.6.0-rc.1` (2026-10-18): every project its own repository (setup in the kit, then a relaunch);
+  one `arpd/` payload folder; `install.py`; the example extracted; driven runs N, I, M, M2.

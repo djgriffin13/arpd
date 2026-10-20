@@ -10,11 +10,17 @@ step says otherwise.
 |---|---|---|
 | Claude Code (tested with 2.1.220) | Runs the agents, the skills and the hooks | `claude --version` |
 | Git, with your name and email set | Every project is a git repository; its history is part of the record | `git --version`, `git config user.name`, `git config user.email` |
-| Python 3.8 or later, on the PATH as `python` | The tools and the logging hooks are Python (standard library only) | `python --version` |
+| Python 3.8 or later, on the PATH as `python` or `python3` (recommended, not required) | The tools, the automated checks and the logging hooks are Python (standard library only). Without it, ARPD still works: see below | `python --version` |
 
 If git does not know your name and email, setup stops and prints the two `git config --global`
 commands to run. If `python` does not resolve, `install.py owed` writes `python3`, or else the full
 path of the Python that ran it, into the hooks in `.claude/settings.json`.
+
+**Without Python.** Setup, planning, check-ins and amendments all work. The file work is done by a
+shell twin of the installer (`arpd/tools/install.sh`), the two automated checks are replaced by a
+read-through the agent does and reports as such, and the event log is not kept. The agents say so
+once at the start of a session and record it in `STATUS.md`. Details: `arpd/docs/NO-PYTHON.md`. If
+you install Python later, run `python arpd/tools/install.py owed .` to add the logging hooks.
 
 **On Windows:** keep projects outside OneDrive or other synced folders where you can; syncing can
 lock or duplicate files while git and the agents work. Put quotes around paths with spaces.
@@ -48,6 +54,14 @@ shows you its plan, and acts only on your yes:
   (a git bundle, restorable with `git clone <bundle>`) is written beside the folder first;
 - a short `CLAUDE.md` says setup is in progress, until setup writes your project's charter.
 
+Setup shows you the full plan first and converts only on your yes, in a turn of its own. You can
+keep files out of git (for example participant data you put in the folder): they stay on disk but
+are never committed. Conversion cannot be undone, except from the backup and a fresh copy of ARPD.
+If the clone holds work of yours that is on no remote, setup lists it and converts only after you
+agree (it is backed up first). If you have no tool in mind yet, setup converts nothing: it keeps its
+notes beside the folder, discusses what tool might serve your question, and picks up from those
+notes when you come back.
+
 The other answers:
 
 | Choice | What happens |
@@ -77,6 +91,13 @@ Your own code and documents sit beside these. The project's test command is plai
 progress" stub) says only that setup comes first. During setup, the `/arpd-setup` skill governs the
 interview and keeps the working notes. Once you adopt the Project Definition Report, setup writes
 your project's charter as `CLAUDE.md`; from then on it governs planning and implementation.
+Claude Code's documentation describes `CLAUDE.md` as loaded when a session starts, with no
+mid-session reload except `/compact`, and newly installed agent roles as waiting for a new session.
+So after an in-place setup the setup session reads the new charter explicitly, and planning can
+continue in it. Implementation starts only once the charter is loaded as project memory and, if the
+team uses subagents, the agent roles are available: `/arpd-plan` tells you what to do, either type
+`/compact` (which reloads `CLAUDE.md`) or, when the agent roles were installed in the same session,
+start a fresh session, with the exact prompt.
 
 ## 3. The setup interview
 

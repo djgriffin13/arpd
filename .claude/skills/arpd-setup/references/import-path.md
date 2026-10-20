@@ -49,6 +49,10 @@ C. Your existing repository at <path>: ARPD is added there, keeping its history;
 
 ## Modes
 
+Without Python, every `python arpd/tools/install.py` below is `sh arpd/tools/install.sh` with the
+same arguments (`arpd/docs/NO-PYTHON.md` §3); a plain-folder import then needs Python or a copy by
+hand.
+
 | Mode | When | Command (from the current folder) | Result |
 |---|---|---|---|
 | **Convert** (default in a kit clone) | Choice A | `python arpd/tools/install.py convert .` (dry run), then `... convert . --yes` | This folder becomes the project, in place: the kit's development files removed, `arpd/` and the skills kept, the PI's files kept, a fresh history (branch main, no remote), one commit; setup continues in this session |
@@ -60,17 +64,27 @@ C. Your existing repository at <path>: ARPD is added there, keeping its history;
 
 1. Run the dry run: `python arpd/tools/install.py convert .`. Show its plan in full: the kit files it
    removes, the PI's files it keeps (including any inside kit folders), any kit files the PI changed
-   (kept), data-like and large files, and what happens to the history (a backup bundle outside the
-   folder when the clone holds local-only commits or stashes; otherwise the kit's history stays
-   available from its remote).
-2. If the PI's files include data-like files, ask whether they may be committed to the repository;
-   large files and environments are git-ignored.
-3. On the PI's yes to that plan (choice A already said what conversion does; the dry-run plan is the
-   detail), run `python arpd/tools/install.py convert . --yes` and show its output in full. Quote any
-   bundle path, and how to restore it.
-4. Write the notes (`SKILL.md`, *Start*, step 6) and continue Intake in this session. Every command
+   (kept), data-like and large files, any **local work** (commits, branches or a stash on no remote),
+   and what happens to the history (a backup bundle outside the folder when there is local work;
+   otherwise the kit's history stays available from its remote). It refuses a clone with other git
+   worktrees: that is a development checkout, not a fresh copy.
+2. **Local work** that looks like ARPD development (branches other than the default, commits that
+   change `arpd/` or the skills) means this is probably not a fresh copy: recommend a new folder
+   (choice B) or a fresh clone, and say why. Local work of the PI's own (their notes committed in
+   the clone) is backed up and converted with `--include-local-work`.
+3. End the turn with the conversion choice (`SKILL.md`, *Start*, step 7): convert as shown / change
+   something / do not convert. Ask there whether the data-like files the plan lists may be committed;
+   each the PI wants kept out becomes `--ignore <path>` (kept on disk, git-ignored, never committed).
+   Large files and environments are git-ignored anyway.
+4. In the next turn, on the PI's choice A, run `python arpd/tools/install.py convert . --yes` (with
+   `--ignore` and `--include-local-work` as decided) and show its output in full. Quote any bundle
+   path, and how to restore it.
+5. Write the notes (`SKILL.md`, *Start*, step 8) and continue Intake in this session. Every command
    from now on is project-relative (`python arpd/tools/...`). The kit's `CLAUDE.md` is gone; the stub
    `CLAUDE.md` says setup is in progress.
+6. **The PI's own code in the converted folder** (brought in before conversion, or copied in after
+   it) gets the same treatment as an install: *Existing repository review* below, and the import
+   baseline (*Steps for a non-ARPD project*, step 1) before anything is changed.
 
 A later ARPD update needs a separate, fresh clone of the kit (`install.py update . --kit <clone>`).
 
@@ -103,7 +117,7 @@ commands; never continue the interview in this session.
 duplicate files), inside another git repository (a nested repository), or below a folder holding
 `CLAUDE.md` or `AGENTS.md` (Claude Code would mix those instructions with the project's). Quote each,
 recommend a folder without the problem, go on only if the PI chooses to, and record the choice in
-the notes. It **refuses** without git's `user.name` and `user.email`: the PI runs the two
+the notes. `new`, `import` and `convert` **refuse** without git's `user.name` and `user.email`: the PI runs the two
 `git config --global` commands it prints, with their own details, then you rerun. A folder import
 first prints an inventory and copies nothing: show it, ask whether the data-like files may be kept in
 the repository, and rerun with `--yes` only on the PI's yes.
@@ -118,7 +132,7 @@ them authorizes nothing.
   adoption.
 - **Install:** the PI's repository may be shared or public. Before `install.py` runs, ask once
   (`CHOICE FOR YOU (select one)`) for consent to save both files in `reports/setup/`, and record
-  the answer in the notes' *Mode and consent*. With consent: there, uncommitted until adoption.
+  the answer in the notes' *Folder and consent*. With consent: there, uncommitted until adoption.
   Without: in `<parent of the target>/.arpd-setup-notes/<target name>/` (`NOTES.md` and the draft;
   never the session scratchpad), passed to `install.py install --notes` so the stub `CLAUDE.md`
   names it (if a `CLAUDE.md` exists, give the PI the printed line); at adoption the adopted report
@@ -126,7 +140,8 @@ them authorizes nothing.
 
 ## Existing repository review
 
-When the project already exists (an install, or an import of the PI's own code), setup is about the
+When the project already exists (an install, an import of the PI's own code, or a converted folder
+holding the PI's code), setup is about the
 **requested change**, not a re-creation. During Intake and Objectives:
 
 1. **Review what exists,** in plain words: architecture (languages, components, data formats, entry
@@ -160,8 +175,9 @@ only.
 
 **Nothing governing is written before adoption.** Steps 1–5 only read; steps 6–7 write, after it.
 
-1. **Inventory,** in the project folder: structure, languages, test commands. Run the existing
-   tests (`<command>; echo "exit=$?"`); keep each command, working directory, printed exit code and
+1. **Inventory,** in the project folder: structure, languages, test commands. Do not open data-like
+   files (the inventory lists them) without the PI's permission for that use, and never copy them
+   into a scratch folder. Run the existing tests (`<command>; echo "exit=$?"`); keep each command, working directory, printed exit code and
    full output **verbatim**, never trimmed, with the source's
    commit (`arpd/VERSION`, *Imported from*), outside the repository (OS temp or the session
    scratchpad), for `reports/setup/IMPORT-BASELINE.md` at generation. Never report the baseline as
@@ -254,7 +270,10 @@ is authorized. Check `git log --oneline -15`, `git status --short`, `reports/set
 stub `CLAUDE.md` names), any move- or remove-only commits, the commit "Record adoption ruling R-NN (setup in
 progress)", and which checklist files exist. Then:
 
-1. **Tell the PI** what you found (on a first relaunch, one line).
+1. **Tell the PI** what you found, in one or two lines (where the interview stopped: the phase, the
+   last confirmed closeout, the pending question), and ask in a `CHOICE FOR YOU (select one)`: A.
+   continue from there; B. review the notes' summary first; C. start the interview again (the
+   notes are kept, superseded).
 2. **Notes from an earlier kit version** (no required-item tables): read them, and fill the
    required items from what they record, each as Confirmed (the PI's words) or Inferred; never
    re-ask what they settle. An "Interview mode" line is obsolete and ignored (never ask for a mode).
@@ -262,9 +281,11 @@ progress)", and which checklist files exist. Then:
      Architecture → Design; Team & Governance → Development. v0.4 Intake, Research & Problem →
      Intake and Objectives; Product & Engineering → Objectives and Design; Governance & Handoff →
      Development.
-   - A theory-context choice maps to the scientific axis: A → respect as given; B → alignment
-     review; C → co-development; D → technical only. The role (IN-08) is then Inferred, confirmed in
-     the Intake summary.
+   - A theory-context choice maps to the scientific axis, never to a role letter (the old letters
+     mean something else): old A ("guide implementation without evaluating") → *respect as given*;
+     old B ("identify concerns") → *alignment review*; old C ("help develop") → *co-development*; old
+     D ("leave theory aside") → *technical only*. The role (IN-08) is then Inferred from the axis and
+     the project, and confirmed in the Intake summary; never copy the old letter.
    - The three scope answers become Development input: the minimum usable version → DV-02 and P1
      candidates; the ideal version → P2 or P3 candidates; nice-to-haves → P4 or P5. Confirm the
      placement in the Development summary; never ask the scope questions again.

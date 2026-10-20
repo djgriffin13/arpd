@@ -1,11 +1,13 @@
 # ARPD kit root marker. Its presence tells the ARPD tools that this folder is the kit, not a project
-# (check_governance.py stops; install.py refuses to create a project inside it). Do not copy it into a project.
+# (check_governance.py stops; install.py refuses to create a project inside it, except by converting this
+# folder itself with install.py convert). Do not copy it into a project.
 #
 # It is also the manifest of kit-development material: the top-level paths below are what
 #     python arpd/tools/install.py convert .
 # removes when a fresh kit clone becomes a research project in place. Everything else is kept:
 # arpd/ and .claude/skills/arpd-* are the ARPD payload; anything else belongs to the project.
 .arpd-kit
+.arpd-kit-files
 AGENTS.md
 CITATION.cff
 CLAUDE.md

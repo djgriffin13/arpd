@@ -65,7 +65,7 @@ Rules:
 
 ```text
 SETUP  ✓ Intake → ✓ Objectives → ✓ Constraints → ● Design → ○ Development → ○ Definition Report
-✓ DS-01 Your design  ✓ DS-02 Workflow  ◉ DS-06 Data semantics  ○ DS-07 Exports
+4 confirmed | 1 inferred | 4 open; next: DS-06 Data semantics
 
 ────────────────────────────────
 QUESTION FOR YOU
@@ -100,13 +100,15 @@ C. Go back to Objectives first.
 
 ## 4. Progress lines
 
-Show the skill's progress line above the block on every interview turn.
+Show the skill's progress line above the block on every interview turn, as plain text (never in a
+code fence, like the block itself).
 
 - **Setup:**
   `SETUP  ● Intake → ○ Objectives → ○ Constraints → ○ Design → ○ Development → ○ Definition Report`
   (two spaces after `SETUP`; ✓ done, ● current, ○ to come). Under it, list the current phase's
-  required items (◉ marks the current focus). With more than about six, show the counts line
-  instead: `3 confirmed | 2 inferred | 4 open; next: <item>`, and add "Full phase list on request."
+  required items: ✓ confirmed, ~ inferred, ○ open, ◉ the current focus (deferred and N.A. items are
+  not listed). With more than about six, show the counts line instead:
+  `3 confirmed | 2 inferred | 4 open; next: <item>`, and add "Full phase list on request."
   A phase is ✓ only after its closeout was confirmed.
 - **Plan:** `PLAN  ✓ Review → ● Goal → ○ Scope → ○ Draft → ○ Approval → ○ Handoff`. Add topics
   (goal, scope, dependencies, review level, exit evidence) when they help.
@@ -140,8 +142,9 @@ nothing more.
   reason in one plain sentence.
 - Say once what the process will do. After that the progress line carries it: do not narrate the
   process on every turn.
-- Do not ask questions just to establish the PI's expertise. Infer it from how the PI writes, and
-  adjust when they correct you.
+- Do not quiz the PI about their expertise. Setup asks once, plainly, how comfortable the PI is with
+  code and how involved they want to be (Intake, IN-03), unless they already said; beyond that, adjust
+  to how the PI writes, and when they correct you.
 
 ## 7. Dependency screen
 

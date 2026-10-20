@@ -8,9 +8,9 @@ imported or installed:
 - `templates/`: the governing-document, report, plan and setup-notes templates, including
   `START-HERE.md`;
 - `tools/`: the governance and report checkers, plan numbering, the event logger and summarizer,
-  the hook script, and `install.py`;
-- `docs/`: `GUIDE.md` (the user's guide), `EVENTS.md` (what the event log records) and
-  `INTERACTION.md` (how the agents talk to you);
+  the hook script, `install.py`, and its no-Python twin `install.sh`;
+- `docs/`: `GUIDE.md` (the user's guide), `EVENTS.md` (what the event log records),
+  `INTERACTION.md` (how the agents talk to you) and `NO-PYTHON.md` (running without Python);
 - `agents/` and `settings/`: the agent roles and hook settings, installed into `.claude/` by
   `python arpd/tools/install.py owed .`;
 - `logs/`: the event log (git-ignored);

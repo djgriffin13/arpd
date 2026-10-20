@@ -41,7 +41,7 @@ Each requirement, decision and open item has one status, mapped onto the kit's e
 
 **Provenance:** the PI's words verbatim ("PI: ..."); otherwise Normalized, Lead's derivation, Lead's
 recommendation, or "PI accepted: '...'". Each phase summary the PI confirmed is cited by its time in
-the notes; a confirmation is not adoption.
+the notes; a confirmation is not adoption, accepts no proposal, and is never a requirement's Source.
 
 **Priorities:** P1 Core (the minimum usable version) · P2 Next · P3 Planned · P4 Wanted · P5 Idea.
 Two flags apply at any priority: *Feasibility* (established / to investigate: <what> (<gate>)) and

@@ -50,8 +50,8 @@ testing and plan-update steps.
 New items enter as Backlogged. Filing does not schedule them (`CLAUDE.md` §5). An item is pulled into
 a sprint only by a recorded decision that names the requirement it serves and why it matters now.
 
-| ID | Item | Class | Discovery category (1–6) | Serves | State |
-|---|---|---|---|---|---|
+| ID | Item | Class | Priority (P4 / P5; feasibility) | Discovery category (1–6) | Serves | State |
+|---|---|---|---|---|---|---|
 
 **Class:**
 

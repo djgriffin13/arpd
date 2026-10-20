@@ -69,6 +69,17 @@ How an invariant differs from a requirement and an acceptance criterion: `REQUIR
 - "Every event carries an integer millisecond timestamp, and intervals are half-open."
 - "Participants in different conditions see identical instructions except for the manipulated text." -->
 
+## 5a. Assumptions and model commitments
+
+What the model assumes, with its epistemic status, kept apart from the invariants above (what the code
+must never violate) and the open questions below (what the project investigates). A hypothesis the
+project studies is an open question or an outcome the tool measures, never an invariant or a fixed
+rule. From report §3 and the commitments review.
+
+| ID | Commitment or assumption | Epistemic status | Source | Configurable? | Reframing decided |
+|---|---|---|---|---|---|
+| ASM-01 |  | {{established (verified source) / assumed for this model / hypothesis to test / framing choice}} |  | {{no / yes: parameter or condition}} | {{none / the PI's decision, R-NN or "PI accepted: '...'"}} |
+
 ## 6. Claims
 
 ### 6.1 Claims the instrument is meant to support

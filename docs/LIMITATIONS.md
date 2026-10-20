@@ -1,4 +1,4 @@
-# Known limitations (release candidate v0.6.0-rc.1)
+# Known limitations (release candidate v0.7.0-rc.1)
 
 These are stated openly so that users and reviewers know what the kit does and does not establish.
 The evidence behind them is indexed in [evaluation/README.md](../evaluation/README.md).
@@ -21,6 +21,25 @@ The evidence behind them is indexed in [evaluation/README.md](../evaluation/READ
   A session without web access cannot check, and must say "not verified".
 - **Widgets and symbols.** The native choice widget is untested. The progress symbols may not
   render in some Windows output; the ASCII form is applied by judgement.
+
+## New in v0.7
+
+- **The phased interview is new.** Its required items, phase closeouts, role choice, commitments
+  review and P1–P5 priorities have been exercised only in driven runs with scripted answers
+  (`evaluation/developer-tests/v0.7-runs-report.md`). Whether a researcher finds the phases
+  proportionate is untested; the usability protocol is written to test it.
+- **The commitments review rests on the model's judgement.** It may miss a circular or questionable
+  assumption, or flag one that is fine; the PI decides each. Citations are verified only when the
+  session can reach sources; otherwise claims are labelled unverified.
+- **In-place conversion deletes the kit's git history** (by design: the PI's ruling). Local-only work
+  is backed up to a bundle first; work already on a remote is not, since it can be fetched again.
+- **`CLAUDE.md` is loaded only when a session starts** (Claude Code does not document a mid-session
+  reload). After an in-place setup the charter is read explicitly, and a fresh session is recommended
+  before implementation.
+- **Without Python** the checkers are replaced by read-throughs, which are weaker and depend on the
+  model; there is no event log; `install.sh` mirrors `install.py` but cannot import a plain folder.
+  The no-Python path is covered by unit tests of `install.sh` run under bash, not yet by a run on a
+  machine without Python.
 
 ## New in v0.6
 

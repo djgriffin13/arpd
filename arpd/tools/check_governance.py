@@ -323,13 +323,20 @@ def check_adopted_report():
     step(name, "ADVISORY" if notes else "PASS", notes or ok)
 
 
+# Folders that only the old kit's copies of examples/ and evaluation/ held: a project's own examples/ or
+# evaluation/ (a converted clone keeps the PI's files there) is never called a kit leftover.
+LEGACY_KIT_MARKS = {"examples": ("march-1991",),
+                    "evaluation": ("developer-tests", "study1-comparative", "study2-usability", "feasibility-demo")}
+
+
 def _legacy_kit_folders():
     """Old kit copies a v0.5 project may still hold after moving to arpd/ (removed by a remove-only
     commit): docs/arpd-kit/ always; examples/ and evaluation/ only when arpd/VERSION or kit/ marks
-    the project as set up from the kit."""
+    the project as set up from the kit and the folder holds what the old kit's copy held."""
     found = ["docs/arpd-kit/"] if os.path.isdir(os.path.join(ROOT, "docs", "arpd-kit")) else []
     if os.path.isfile(os.path.join(ROOT, "arpd", "VERSION")) or os.path.isdir(os.path.join(ROOT, "kit")):
-        found += [d + "/" for d in ("examples", "evaluation") if os.path.isdir(os.path.join(ROOT, d))]
+        found += [d + "/" for d, marks in sorted(LEGACY_KIT_MARKS.items())
+                  if any(os.path.isdir(os.path.join(ROOT, d, m)) for m in marks)]
     return found
 
 

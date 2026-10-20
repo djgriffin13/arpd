@@ -68,8 +68,8 @@ The opening question (`SKILL.md`, *Start*) usually fills IN-01, IN-06 and IN-07,
 |---|---|---|---|
 | IN-01 | State of the work: existing documents, code or data, and where they are | What to read and reuse; the mode | From the folder assessment and the PI's answer. Read what the PI points to. |
 | IN-02 | Academic field and high-level theoretical scope | How theory-aware the next phases are; vocabulary; modules | One or two sentences is enough. |
-| IN-03 | The PI's coding comfort, and how involved they want to be in technical decisions | Depth of the Design phase; how much is proposed versus asked; review depth | Two answers. Usually visible from how the PI writes; ask only if unclear, and never as a test. |
-| IN-04 | The tool's eventual users, and who will run and maintain it afterwards | Interface, distribution, language and documentation choices | The PI is often not the only user. |
+| IN-03 | The PI's coding comfort, and how involved they want to be in technical decisions | Depth of the Design phase; how much is proposed versus asked; review depth | Two answers, both Confirmed only from the PI's words. Ask once, plainly, when the PI has not said it ("How comfortable are you with code: do you write it, run scripts others wrote, or prefer not to touch it?"), never as a test; a reading of how the PI writes is at most Inferred, and stated in the Intake summary for the PI to correct. |
+| IN-04 | The tool's eventual users, and who will run and maintain it afterwards | Interface, distribution, language and documentation choices | The PI is often not the only user. Ask unless the PI said; never infer users the PI did not mention. |
 | IN-05 | Where the project lives | The folder preparation | Asked right after the opening answer (`import-path.md`, *Where the project lives*). |
 | IN-06 | The main goal of this effort, and what is to be built, at a high level | Everything after | Build, extend, review or explore. |
 | IN-07 | Where the PI is in development: idea, specified, prototype, working code, mature | Which phases are long or short | Usually inferred. |
@@ -105,7 +105,10 @@ Or describe another role.
 ────────────────────────────────
 ```
 
-Recommend one when the opening answer points to it, with the reason. Record the role on two axes:
+Print all six options with exactly these letters, in this order, every time: the letters are the
+role codes recorded in the notes, the report and the charter, so never reorder, re-letter or drop
+one (mark the recommended one instead). Recommend one when the opening answer points to it, with the
+reason. Record the role on two axes:
 
 | Role | Technical axis | Scientific axis [inferred default] |
 |---|---|---|
@@ -225,7 +228,9 @@ tool's use and (unless technical only) the theory, with contradictions resolved 
 Then follow up: open ("You said ___; can you say more?") or bounded ("This looks like a constraint.
 Should I A. treat it as a requirement, B. treat it as a preference, C. drop it?").
 
-**Part B: theory** (skipped, and said to be skipped, when technical only):
+**Part B: theory** (skipped, and said to be skipped, when technical only; then CS-06 is N.A. by the
+PI's choice, and CS-07 still runs on any invariant or commitment that correctness-critical semantics
+or the PI's own words introduce):
 
 > Are there constraints on the theoretical side of this project? For example, frameworks or bodies of
 > work it should draw on or avoid, assumptions the model must make, or things it must not try to
@@ -287,7 +292,8 @@ with what it affects.
 **Objective:** a design the PI agrees with, or an explicitly provisional one, covering architecture
 and the technical specifics, with every material decision explored (`architecture-guide.md`).
 
-**Always ask first, before proposing anything:**
+**Ask first, before proposing anything** (unless DS-01 is already settled; for a simple tool it may
+be a stated default inside the first design question, `SKILL.md`, *Fast lane*):
 
 > Do you already have a design or architecture in mind: languages, frameworks, platforms, how the
 > parts fit together? You can describe one, give your preferences, or ask me to propose one.
@@ -373,7 +379,8 @@ test"), labelled a proposed default.
 **Objective:** the first version and the priority of everything else, and how the agent team will
 work: arrangement, autonomy, review, authority and the rules it will follow, all agreed.
 
-**Open with the PI's rules,** before proposing anything:
+**Open with the PI's rules,** before proposing anything (unless DV-01 is already settled; for a
+simple tool, fold it into the first Development question as a stated default):
 
 > Before I propose how the agents should work, do you have rules or preferences for how they
 > work, communicate, test, review, make decisions and involve you? For example: separate developer
@@ -395,7 +402,8 @@ work: arrangement, autonomy, review, authority and the rules it will follow, all
 
 ### The minimum usable version and priorities
 
-For a substantial project, say it plainly: "You have described a tool that ___. This is a
+For a substantial project (for a simple tool, record the whole tool as the minimum, Inferred, and
+skip DV-03), say it plainly: "You have described a tool that ___. This is a
 substantial build and is best developed in stages. What is the simplest version of it that you could
 actually use?" Then: "These features and research questions fit that version: ___. These do not:
 ___. Please correct the split, and place each of the rest on this scale." Ask once (DV-03) whether the
@@ -500,8 +508,8 @@ ceremony. Core ARPD rules are not removed in setup (a change goes through `/arpd
 
 ### Open decisions and gates (report §13)
 
-For every unresolved item, record what it affects, its **gate** (before planning, before
-implementing <a named feature>, or before deployment), what can continue meanwhile, and your
+For every unresolved item, record what it affects, its **gate** (before planning: before any plan
+that includes the work it affects; before implementing <a named feature>; or before deployment), what can continue meanwhile, and your
 recommendation. An item without a gate is not allowed. Never invent a binding default to get a
 clean list.
 
@@ -557,19 +565,25 @@ an ARPD starter*.
 Turn answers into an implementable specification, not a restatement. "It exports the answers as
 CSV" is insufficient. Better:
 
-> **REQ-EXPORT-01: Export stored records.** The tool exports every locally stored record to one
-> CSV file, without altering the recorded content.
-> Acceptance criteria:
-> - every required field appears, with the header row in the order given in §9;
-> - identifiers are preserved exactly;
-> - each stored record appears once: none duplicated, none omitted, across repeated exports;
-> - free text containing commas, quotation marks, line breaks and non-ASCII characters survives
->   intact;
-> - a test export, re-imported, matches the stored records field by field.
->
-> Priority: P1 Core. Correctness-critical: yes: a lost or duplicated record corrupts the analysis.
-> Status: Proposed (the lead's derivation from the PI's "export as a CSV file"). The column layout
-> stays provisional until the PI approves it, or delegates it with bounds.
+```markdown
+#### REQ-EXPORT-01: Export stored records
+
+- **Description:** The tool exports every locally stored record to one CSV file, without altering
+  the recorded content.
+- **Acceptance criteria:**
+  - every required field appears, with the header row in the order given in §9;
+  - identifiers are preserved exactly;
+  - each stored record appears once: none duplicated, none omitted, across repeated exports;
+  - free text containing commas, quotation marks, line breaks and non-ASCII characters survives
+    intact;
+  - a test export, re-imported, matches the stored records field by field.
+- **Priority:** P1 Core
+- **Correctness-critical:** yes: a lost or duplicated record corrupts the analysis
+- **Dependencies:** REQ-DATA-01
+- **Source:** Lead's derivation from the PI's "export as a CSV file"
+- **Status:** Proposed (the column layout stays provisional until the PI approves it, or delegates
+  it with bounds)
+```
 
 Detail is proportional to complexity and risk; do not pad trivial requirements. Candidate
 requirements accumulate from Objectives on; their priorities are set in Development. You may propose

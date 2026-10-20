@@ -24,6 +24,12 @@ documents it points to.
 - **PI (the researcher):** {{PI_NAME}}. The PI holds the research question, the scientific
   decisions and final acceptance.
 - **What we are building:** {{INSTRUMENT_ONE_LINE}}
+- **The agents' role** (chosen at setup, report §1): {{AGENT_ROLE}}. On the scientific side this means
+  {{SCIENTIFIC_AXIS_MEANING}}: under *technical only*, the team implements the specified science and
+  raises no theory questions beyond correctness; under *respect as given*, it does not critique the
+  theory but always flags contradictions and circular assumptions; under *alignment review*, it also
+  raises labelled concerns where the theory and the design meet; under *co-development*, it helps
+  develop the science, every proposal labelled as its own and decided by the PI.
 - **Why:** {{QUESTION_ONE_LINE}}. The PI's own wording is in `PARADIGM-SPEC.md` §1 and ruling R-01.
 - **Team arrangement:** {{TEAM_ARRANGEMENT}}. **Workspace arrangement:** {{WORKSPACE_ARRANGEMENT}}
   (see Part B, module B.T-TEAM).
@@ -300,6 +306,11 @@ Each requirement moves through these states. The evidence for each state is reco
   Agents rehearse it first.
 
 ## 9. Sessions, memory and handoff
+
+- **Tools without Python.** Every `python arpd/tools/...` command in this charter and the skills needs
+  Python 3.8+. Without it, follow `arpd/docs/NO-PYTHON.md`: `sh arpd/tools/install.sh` for the file
+  work, read-throughs instead of the checkers (never reported as a checker's result), no event log.
+  `STATUS.md` §6 records which applies.
 
 - **The repository is authoritative, not agent memory.**
 - **`STATUS.md` is the handoff.** Its one writer, the lead agent, rewrites it at sprint boundaries,

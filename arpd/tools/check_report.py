@@ -108,7 +108,9 @@ LEAD_ONLY = re.compile(r"\b(?:lead|derived|derivation|recommend\w*|inferred)\b",
 INHERITED = re.compile(r"adopted\s*\(\s*inherited\b", re.I)
 INHERITED_OK = re.compile(r"adopted\s*\(\s*inherited\s*[,;:]?\s*R-\d+\s*\)", re.I)
 # Section 12: an open item gated "before planning" is asked before the report is shown, unless the PI deferred it.
-BEFORE_PLANNING = re.compile(r"\bbefore\s+(?:%s\s*)*(?:planning|plan)\b" % DETERMINER, re.I)
+BEFORE_PLANNING = re.compile(r"\bbefore\s+(?:%s\s*)*(?:planning|plan)\b(?!\s+(?:(?:of|for)\s+)?(?:%s\s*)*"
+                             r"(?:(?:next|later|following|second|third)\s+)?(?:milestone|M\d|S\d|sprint|release|v\d|phase))"
+                             % (DETERMINER, DETERMINER), re.I)
 PI_DEFERRED = re.compile(r"\bdeferred\s+by\s+the\s+PI\b", re.I)
 # Section 12: an item is closed only by a leading marker, or (in a table) by a Status or Gate cell saying so.
 CLOSED_MARK = re.compile(r"^\W*(?:resolved|closed|excluded)\W*:", re.I)
@@ -497,6 +499,25 @@ def check(text, stage="draft"):
     hit = next((x for x in sentences if re.search(r"\b(?:not|no|never)\b", x, re.I) and re.search(r"implement", x, re.I)), None)
     out.append(("PASS", name, short(hit)) if hit else
                ("FAIL", name, "section %d does not say that adoption does not authorize implementation" % sa))
+
+    # (k) v0.7 section 3: a hypothesis is never a Must hold (circularity)
+    if lay["sections"] == 14 and 3 in found and not is_na(3):
+        name = "(k) section 3: no hypothesis held as an invariant"
+        problems = []
+        for header, rows, raw in tables(body_of(3)):
+            ccol = next((i for i, h in enumerate(header) if re.match(r"class\b", plain(h), re.I)), None)
+            if ccol is None:
+                continue
+            for cells, line in zip(rows, raw):
+                if cells is None:
+                    continue
+                cls = plain(cells[ccol])
+                rest = " ".join(plain(c) for i, c in enumerate(cells) if i != ccol)
+                if re.search(r"must\s+hold|invariant", cls, re.I) and re.search(r"\bhypothes[ie]s", rest, re.I):
+                    problems.append("a row classed %s is a hypothesis: a hypothesis the project studies is an "
+                                    "open question or an outcome, never an invariant (circularity): %s"
+                                    % (short(cls, 20), short(line, 80)))
+        out += [("FAIL", name, p) for p in problems] or [("PASS", name, "no Must hold row is a hypothesis")]
 
     # (h) completeness check
     name = "(h) completeness check subsection"

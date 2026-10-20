@@ -1,7 +1,7 @@
 # ARPD: Agentic Research Paradigm Development
 
 **A team-based framework for expanding organizational inquiry.** This is release candidate
-v0.6.0-rc.1, held for manual testing ([RELEASE-NOTES.md](RELEASE-NOTES.md)). ARPD is the research artifact
+v0.7.0-rc.1, held for manual testing ([RELEASE-NOTES.md](RELEASE-NOTES.md)). ARPD is the research artifact
 for a proposal to the *Organization Science* special issue "AI-Enabled Frontiers in Organizational
 Science."
 
@@ -27,7 +27,9 @@ benefits are proposed, not yet tested; the kit doubles as a test bed ([evaluatio
 
 ## Quick start
 
-You need Claude Code, Git (with your name and email set) and Python 3.8+ on the PATH as `python`.
+You need Claude Code and Git (with your name and email set). Python 3.8+ is recommended: it runs the
+automated checks and the event log; without it ARPD still works, with read-throughs in their place
+([arpd/docs/NO-PYTHON.md](arpd/docs/NO-PYTHON.md)).
 
 ```bash
 git clone <this repository> my-project

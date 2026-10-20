@@ -9,6 +9,11 @@ argument-hint: "[ruling | authorization [SA-id] | charter | spec | default | roa
 Governing documents change **only** by the PI's words (`CLAUDE.md` §3). This skill makes that easy
 and auditable.
 
+**Python.** Before the first `python arpd/tools/...` command in a session, check for Python 3.8+
+(`arpd/docs/NO-PYTHON.md` §1). Without it, use `sh arpd/tools/install.sh` in place of
+`install.py`, and do what `arpd/docs/NO-PYTHON.md` says for every other tool command; nothing else
+in this skill changes, and a read-through is never reported as a checker's PASS.
+
 ## What goes where
 
 | The PI asks for | Route |

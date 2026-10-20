@@ -34,7 +34,9 @@ other repositories or folders the PI did not point to.
   <source> → <path>}}; kit used: {{path, version}}; any backup bundle: {{path / none needed}}
 - **Project folder:** {{absolute path}}
 - **Consent to save these notes in the project:** {{not needed (convert, new, import) / given, PI's
-  words and date / declined: kept at <parent of the target>/.arpd-setup-notes/<target name>/}}
+  words and date / declined: kept at <parent of the target>/.arpd-setup-notes/<target name>/ / not
+  yet prepared: no tool in view (kept at <parent>/.arpd-setup-notes/<folder name>/)}}
+- **Python:** {{available (version) / not available: arpd/docs/NO-PYTHON.md applies}}
 - **Commit status:** {{not committed / committed in their own commit <SHA>}}. Never pushed without the
   PI's authorization.
 
@@ -70,7 +72,10 @@ reopened 2026-10-20T15:10Z for OB-04}}
 One table per phase, with every required item of `interview-guide.md` (add rows for anything else
 that matters). A status is set from everything the PI has said, not only from the question asked.
 
-**Status values:** Confirmed / Inferred / Open / Deferred / N.A.
+**Status values:** Confirmed / Inferred / Open / Deferred / N.A. Inferred is only ever a reading of the
+PI's own words or of the folder; the lead's proposals, defaults and data-semantics items are never
+Inferred: they stay in *5. Candidate requirements* or *7. Open questions* as Proposed or Open until the
+PI accepts each in words.
 
 ### Intake
 

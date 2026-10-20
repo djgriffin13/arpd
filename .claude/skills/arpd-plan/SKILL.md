@@ -33,6 +33,11 @@ plan or technical edit need the PI.
 - A closing turn that does not wait for the PI ends with the next step and its exact prompt, and no
   block.
 
+**Python.** Before the first `python arpd/tools/...` command in a session, check for Python 3.8+
+(`arpd/docs/NO-PYTHON.md` §1). Without it, use `sh arpd/tools/install.sh` in place of
+`install.py`, and do what `arpd/docs/NO-PYTHON.md` says for every other tool command; nothing else
+in this skill changes, and a read-through is never reported as a checker's PASS.
+
 Read before you start:
 
 - `arpd/docs/INTERACTION.md`: the labelled blocks, choices printed before any widget, the progress
@@ -200,7 +205,10 @@ labelled provisional with what may change them (`references/planning-guide.md`).
 
 **Dependency screen** (`references/planning-guide.md` §5): the plan cites *Waiting on the PI* rows
 and does not restate them; only dependent work is blocked. Respect each row's gate: one needed
-"before planning" is put to the PI before approval (or deferred by ruling); one needed "before
+"before planning" blocks approval of a plan whose work depends on it: put it to the PI before
+approval (or defer it by ruling); a plan whose work does not depend on it may be approved while it
+stays open, and the plan says so, citing the row ("Waiting #3: open; this plan does not depend on
+it"); one needed "before
 implementing X" is scheduled to be decided before X's work package; one needed "before deployment"
 blocks only release work. Decisions put to the PI (a decision pack included) end with a labelled
 block, `CHOICE FOR YOU` or `APPROVAL REQUIRED` (`INTERACTION.md` §2), never in prose. Set
@@ -265,9 +273,24 @@ names the series and the SA (`references/multi-sprint-and-handoff.md` §3).
   the sprint (§4 there: Part 1 of `reports/sprints/SPRINT-NN.md` from the approved plan, STATUS,
   `sprint_start`) and follow the charter: task plans under `CLAUDE.md` §5, independent review,
   close-out.
-- **Later.** Set Readiness `Execution: not started`, `Next step: begin implementation`. Put the
-  exact copyable start prompt in `START-HERE.md` and in chat. Log `handoff`, commit, and stop (§6
-  there).
+- **Prerequisite for implementation: the adopted charter and the agent roles are live in this
+  session.** Before starting any sprint (Now, or a later start prompt), check both:
+  1. **The charter** is in this session's project memory, not only a file you read: the session
+     started after the charter was written, or the PI has run `/compact` since (Claude Code's
+     documentation says `/compact` re-reads `CLAUDE.md` from disk). You can tell: the charter's text
+     appears in your loaded project memory.
+  2. **The agent roles,** when the team arrangement uses subagents: `.claude/agents/` existed when
+     this session started (the documentation says roles in a folder created during the session are
+     picked up only by a new session).
+
+  After an in-place setup, setup and planning usually ran in one session, so check this before the
+  Step G block and say in two sentences what is missing. If anything is: record the execution ruling
+  as usual, start nothing, and end as a closing turn with exactly what the PI does: type `/compact`,
+  then the start prompt (when only the charter is missing); or quit and start a fresh session
+  (`claude`, then the start prompt from `START-HERE.md`) when the agent roles were installed in this
+  session. Never start implementation with the charter only read as a file, and never substitute a
+  general subagent for a missing installed role. The new session (or the one after `/compact`)
+  checks both again before starting.
 
 Either way, refresh `STATUS.md` §4 *On deck* with the handoff (the sprint now open, or the start
 prompt); never leave it at "Run /arpd-plan".

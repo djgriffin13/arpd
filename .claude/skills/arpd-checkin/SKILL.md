@@ -7,6 +7,11 @@ description: Give the PI a plain-language check-in on an ARPD project. Covers re
 
 Write a short, plain-language check-in for the PI. It should fit on one screen.
 
+**Python.** Before the first `python arpd/tools/...` command in a session, check for Python 3.8+
+(`arpd/docs/NO-PYTHON.md` §1). Without it, use `sh arpd/tools/install.sh` in place of
+`install.py`, and do what `arpd/docs/NO-PYTHON.md` says for every other tool command; nothing else
+in this skill changes, and a read-through is never reported as a checker's PASS.
+
 **A check-in changes no governing file except recording a ruling the PI gives in `DECISIONS.md`**
 (last section). Otherwise it only reads and runs the two tools below.
 
