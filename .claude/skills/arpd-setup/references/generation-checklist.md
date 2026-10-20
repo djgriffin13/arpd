@@ -210,14 +210,28 @@ updated in place.
 Last (for an ARPD starter, only its remove-only commit follows), as one step on its own, so a
 refusal blocks nothing else.
 
-1. **Tell the PI first** what each item is for, and ask
-   (`CHOICE FOR YOU (select one)`: install them now / skip them for now, and they are owed):
-   - "Event logging: a small script records, for each event, its time and type (a prompt was sent,
-     a tool ran, a turn ended). It records no prompt text and no file contents."
-   - "Agent roles: the definitions of the reviewer and implementer the lead delegates to."
+1. **Tell the PI first** what each item is for, and that both are plain files ARPD already ships in
+   `arpd/`, copied into `.claude/`: nothing is downloaded or installed. Do not call this step
+   "installing" to the PI (`arpd/docs/INTERACTION.md` §6). Then ask, for example:
+
+   ```text
+   ────────────────────────────────
+   CHOICE FOR YOU (select one)
+   Approve including the event-logging and agent-role files in this project? (Plain files ARPD
+   already has, copied from arpd/ into .claude/; nothing is downloaded or installed.)
+   A. Yes, include both now.
+   B. Not now: I note them as still to add, with the command for you to run later.
+   ────────────────────────────────
+   ```
+
+   - "Event logging: a small script that is already in the project records, for each event, its
+     time and type (a prompt was sent, a tool ran, a turn ended). It records no prompt text and no
+     file contents. It needs Python; without Python it is left out."
+   - "Agent roles: plain-text definitions of the reviewer, implementer and tester the lead delegates
+     to." Say which ones the team arrangement uses.
 2. **Run `python arpd/tools/install.py owed .` only after the PI says yes in the chat,** whatever
    the tool allows; if Claude Code also asks, the PI approves there too. Quote its output, then
-   `git add .claude && git commit -m "Install ARPD .claude files"`. Never choose a method because it
+   `git add .claude && git commit -m "Add ARPD .claude files (logging settings, agent roles)"`. Never choose a method because it
    avoids a permission prompt.
 
 If the PI declines, or the command is blocked or exits 2: record a DEC titled "event logging not

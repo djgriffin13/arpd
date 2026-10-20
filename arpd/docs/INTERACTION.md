@@ -136,6 +136,10 @@ nothing more.
 
 - Use language suited to the PI. Gloss a technical term the first time it matters, and stop once
   the PI shows they know it. Never infer low research expertise from low coding experience.
+- **Say "install" only when something external is brought in** (a package, a program, a download).
+  Copying ARPD's own files into the project (the agent roles, the logging settings, the skills) is
+  *adding* or *including* them: "Approve including the agent-role files?", not "Install the agent
+  roles?".
 - Explain an important engineering concept (where data live, what a dependency costs, what an
   approval changes) when a decision depends on it, in one or two sentences, above the block.
 - For a consequential choice, give the options, their trade-offs and your recommendation, with the
