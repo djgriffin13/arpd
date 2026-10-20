@@ -65,7 +65,7 @@ Rules:
 
 ```text
 SETUP  ✓ Intake → ✓ Objectives → ✓ Constraints → ● Design → ○ Development → ○ Definition Report
-4 confirmed | 1 inferred | 4 open; next: DS-06 Data semantics
+4 confirmed | 1 inferred | 4 open; next: DS-06 Data semantics. Full phase list on request.
 
 ────────────────────────────────
 QUESTION FOR YOU

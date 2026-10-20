@@ -24,9 +24,11 @@ scientific decision. See [README.md](README.md).
   their history and remote; a new folder or an import is still available.
 - **A setup-safe `CLAUDE.md`.** A fresh clone's `CLAUDE.md` says only that setup comes first; the
   kit's development rules moved to `DEVELOPING.md`. During setup the skill governs; after adoption
-  the generated charter does. Because Claude Code loads `CLAUDE.md` only when a session starts, setup
-  re-reads the new charter before the handoff, and `/arpd-plan` recommends a fresh session before
-  implementation starts.
+  the generated charter does. Claude Code documents loading `CLAUDE.md` at session start, with no mid-session
+  reload except `/compact`; so setup re-reads the new charter before the handoff, and implementation
+  starts only once the charter is loaded (`/compact`, or a fresh session when agent roles were
+  installed in the same session) and the agent roles exist: `/arpd-plan` checks this before any
+  sprint starts.
 - **A phased, research-aware interview:** Intake → Objectives → Constraints → Design → Development →
   Definition Report. Each phase has required items (IN, OB, CS, DS, DV), each marked Confirmed,
   Inferred, Open, Deferred or N.A.; setup asks only for what is open and confirms its inferences in a
@@ -108,8 +110,9 @@ interrupted under v0.6 resumes under v0.7 from its notes.
 See [docs/LIMITATIONS.md](docs/LIMITATIONS.md). New in this candidate: the phased interview has
 been exercised only in scripted driven runs (`evaluation/developer-tests/v0.7-runs-report.md`), not
 yet by a researcher; the no-Python path's read-throughs are weaker than the checkers they replace;
-whether Claude Code reloads `CLAUDE.md` mid-session is undocumented, so a fresh session is
-recommended before implementation.
+Claude Code documents no mid-session reload of `CLAUDE.md` except `/compact`, so `/arpd-plan` makes the
+loaded charter (and the agent roles) a prerequisite for implementation; this was checked in scripted
+runs, where each turn is a new process, and still needs the interactive walkthrough.
 
 ## Licence
 

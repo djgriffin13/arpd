@@ -14,9 +14,9 @@ fails or is older than 3.8, `python3 --version`.
 
 - **Python 3.8+ found:** use it for every tool command (write `python3` where the text says
   `python`, if only `python3` works). This file does not apply.
-- **Neither works:** this session runs **without Python**. Say so once, in one sentence, with what is
-  skipped (the event log, the automated checks, ARPD's own tests) and that the PI can install Python
-  later. Record it: during setup in the notes' §1 (*Python: not available; arpd/docs/NO-PYTHON.md*),
+- **Neither works:** this session runs **without Python**. Say so once, in the turn in which you found
+  it out (usually the first), in one sentence naming all three things skipped (the event log, the
+  automated checks, ARPD's own tests) and that the PI can install Python later. Record it: during setup in the notes' §1 (*Python: not available; arpd/docs/NO-PYTHON.md*),
   and after adoption in `STATUS.md` §6 *Owed* (*Python not available: event log not kept;
   checkers replaced by read-throughs; see arpd/docs/NO-PYTHON.md*) and in `START-HERE.md` *Known
   gaps* (*No event log and no automated checks: Python is not available. Records were checked by
@@ -77,15 +77,18 @@ Python), vN: <breaches fixed, or none found>". Never write that `check_report.py
    Consequences; every row names alternatives (or "none credible: <reason>"); an Open row names a
    gate.
 6. **§13:** every open item names a gate ("before" plus a stage); a closed one starts with
-   "Resolved:", "Closed:" or "Excluded:". An item gated "before planning" was asked, or says
-   "deferred by the PI".
+   "Resolved:", "Closed:" or "Excluded:". An item gated "before planning" (not "before planning
+   <a later milestone or sprint>") was asked, or says "deferred by the PI".
+6a. **§3:** no row classed Must hold (an invariant) is a hypothesis, unless it says it was "kept by
+   the PI after the commitments review".
 7. **§14** says adoption does not authorize implementation.
 8. A *Completeness check* section exists.
 
 ## 5. The governance read-through (instead of `check_governance.py`)
 
-Where a skill says to run the checker and quote its OVERALL line, read the records instead and quote
-this line exactly: "`check_governance.py` not run (no Python). Read-through: <what was checked>;
+Where a skill says to run the checker and quote its OVERALL line (including `START-HERE.md`'s
+*Governance check* line and an older starter's `python tools/check_governance.py`), read the records
+instead and quote this line exactly: "`check_governance.py` not run (no Python). Read-through: <what was checked>;
 <problems found, or 'no problem found'>." Never write PASS, FAIL or INCOMPLETE as if the checker ran.
 Check, in proportion to what changed:
 

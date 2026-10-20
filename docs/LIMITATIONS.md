@@ -33,9 +33,11 @@ The evidence behind them is indexed in [evaluation/README.md](../evaluation/READ
   session can reach sources; otherwise claims are labelled unverified.
 - **In-place conversion deletes the kit's git history** (by design: the PI's ruling). Local-only work
   is backed up to a bundle first; work already on a remote is not, since it can be fetched again.
-- **`CLAUDE.md` is loaded only when a session starts** (Claude Code does not document a mid-session
-  reload). After an in-place setup the charter is read explicitly, and a fresh session is recommended
-  before implementation.
+- **`CLAUDE.md` is loaded when a session starts;** Claude Code documents no mid-session reload except
+  `/compact`. After an in-place setup the charter is read explicitly, and `/arpd-plan` starts
+  implementation only once the charter is loaded (`/compact`, or a fresh session when agent roles
+  were installed in the same session). Scripted runs cannot show the in-session behaviour (each turn
+  there is a new process); the interactive walkthrough must.
 - **Without Python** the checkers are replaced by read-throughs, which are weaker and depend on the
   model; there is no event log; `install.sh` mirrors `install.py` but cannot import a plain folder.
   The no-Python path is covered by unit tests of `install.sh` run under bash, not yet by a run on a

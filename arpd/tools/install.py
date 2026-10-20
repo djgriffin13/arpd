@@ -147,20 +147,31 @@ def kit_version(kit):
     return FALLBACK_VERSION
 
 
+def kit_base(kit):
+    """(sha, local commits): the kit's own commit, the newest commit on HEAD that is on a remote (the
+    parent of the oldest local-only commit), else HEAD; and the local-only commits on top of it."""
+    head = git(["rev-parse", "HEAD"], kit, check=False)
+    if head.returncode != 0:
+        return None, []
+    sha = head.stdout.strip()
+    if not git(["remote"], kit, check=False).stdout.split():
+        return sha, []
+    local = git(["rev-list", "HEAD", "--not", "--remotes"], kit, check=False).stdout.split()
+    if local:
+        base = git(["rev-parse", "-q", "--verify", local[-1] + "^"], kit, check=False)
+        if base.returncode == 0 and base.stdout.strip():
+            return base.stdout.strip(), local
+    return sha, local
+
+
 def kit_commit(kit, untracked=True):
     """The kit commit: the newest commit on HEAD that is also on a remote (so a PI's local commits on top
     are not mistaken for the kit's), else HEAD; noting local commits and uncommitted changes (to tracked
     files only, when not untracked)."""
-    p = git(["rev-parse", "HEAD"], kit, check=False)
-    if p.returncode != 0:
+    sha, local = kit_base(kit)
+    if sha is None:
         return "unknown (the kit is not a git clone)"
-    sha, note = p.stdout.strip(), ""
-    if git(["remote"], kit, check=False).stdout.split():
-        local = git(["rev-list", "HEAD", "--not", "--remotes"], kit, check=False).stdout.split()
-        if local:
-            base = git(["rev-parse", local[-1] + "^"], kit, check=False)
-            if base.returncode == 0 and base.stdout.strip():
-                sha, note = base.stdout.strip(), " with %d local commit(s) of the PI's on top" % len(local)
+    note = " with %d local commit(s) of the PI's on top" % len(local) if local else ""
     dirty = git(["status", "--porcelain"] + ([] if untracked else ["--untracked-files=no"]), kit, check=False)
     return sha + note + (" with uncommitted changes" if dirty.returncode == 0 and dirty.stdout.strip() else "")
 
@@ -217,18 +228,19 @@ def git_init(path):
         git(["symbolic-ref", "HEAD", "refs/heads/main"], path)
 
 
-def commit_all(path, message, exclude=(), force_add=False):
+def commit_all(path, message, exclude=(), force_add=False, recover=None):
     """Stage everything (minus `exclude`) and commit. force_add also stages arpd/ and the ARPD skills
-    even if a .gitignore excludes them."""
+    even if a .gitignore excludes them. recover replaces the advice printed if the commit fails."""
     git(["add", "-A", "--", "."] + [":(exclude,literal)" + x for x in exclude], path)
     if force_add:
         skills = [".claude/skills/" + x for x in kit_skills(path)]
         git(["add", "-f", "--", PAYLOAD] + skills + [":(exclude)arpd/logs", ":(exclude)**/__pycache__"], path)
     p = git(["commit", "-q", "--allow-empty", "-m", message], path, check=False)
     if p.returncode != 0:
-        raise Refused("git commit failed in %s: %s\nThe files are in place but not committed. To recover, either "
-                      "delete the folder %s and rerun, or fix the signing or identity problem git reports and "
-                      "run  git commit -m \"%s\"  in %s." % (path, (p.stderr or p.stdout).strip(), path, message, path))
+        advice = recover or ("To recover, either delete the folder %s and rerun, or fix the signing or identity "
+                             "problem git reports and run  git commit -m \"%s\"  in %s." % (path, message, path))
+        raise Refused("git commit failed in %s: %s\nThe files are in place but not committed. %s"
+                      % (path, (p.stderr or p.stdout).strip(), advice))
     return git(["rev-parse", "--short", "HEAD"], path).stdout.strip()
 
 
@@ -495,7 +507,7 @@ def print_inventory(src, inv, convert=False):
               ("Large files (%d MB or more), %s" % (LARGE_MB, verbs[2]), ["%s (%s)" % (r, mb(s)) for r, s in inv["large"]]),
               ("Data-like files, %s (check that they may be kept in the repository)" % verbs[2], inv["data"])]
     for title, items in groups:
-        print_list(title, items)
+        print_list(title, items, limit=None if convert else LIST_MAX)
 
 
 def copy_folder(src, dest):
@@ -840,7 +852,7 @@ def kit_files_text(root):
     """The kit file list for the kit at root: every tracked file under the manifest entries (except the list
     itself and the marker), hashed as git would store its working-tree content."""
     manifest = kit_manifest(root)
-    tracked = sorted(r for r in git_paths(["ls-files", "-z"], root)
+    tracked = sorted(r for r in git_paths(["ls-files", "-z", "--cached", "--others", "--exclude-standard"], root)
                      if under(r, manifest) and r not in (KIT_FILES, KIT_MARKER) and not is_cache(r)
                      and os.path.isfile(os.path.join(root, *r.split("/"))))
     shas = hash_files(root, tracked)
@@ -869,8 +881,11 @@ def convert_plan(root):
         raise Refused("%s has a .git that git cannot read (%s); repair or remove it and rerun. Nothing was "
                       "changed." % (root, (cdup.stderr or cdup.stdout).strip()))
     has_head = is_git and git(["rev-parse", "-q", "--verify", "HEAD"], root, check=False).returncode == 0
-    kit_files = git_paths(["ls-tree", "-r", "-z", "--name-only", "HEAD"], root) if has_head else None
-    changed = git_paths(["diff", "--name-only", "-z", "HEAD"], root) if has_head else set()
+    # The kit's files are those of the kit's own commit, never of the PI's local commits on top of it: a file
+    # the PI committed under a kit folder, or a kit file the PI changed in a commit, is the PI's (kept).
+    base = kit_base(root)[0] if has_head else None
+    kit_files = git_paths(["ls-tree", "-r", "-z", "--name-only", base], root) if has_head else None
+    changed = git_paths(["diff", "--name-only", "-z", base], root) if has_head else set()
     listed = None if is_git else read_kit_files(root)
     if listed is not None:  # a download: a file is the kit's only if the list names it with the same content
         candidates = []
@@ -942,6 +957,15 @@ def local_work(root):
     return reasons, remotes, details
 
 
+def remote_urls(root):
+    """["<name> <url>"] for every remote, credentials stripped."""
+    out = []
+    for name in git(["remote"], root, check=False).stdout.split():
+        url = clean_url(git(["remote", "get-url", name], root, check=False).stdout.strip())
+        out.append("%s %s" % (name, url))
+    return out
+
+
 def other_worktrees(root):
     """Paths of this clone's other git worktrees (deleting .git would orphan them)."""
     p = git(["worktree", "list", "--porcelain"], root, check=False)
@@ -990,6 +1014,10 @@ def print_convert_plan(path, plan, version, commit, reasons, remotes, origin, de
     if plan["git"]:
         say("It is a git clone at %s, %s." % (commit, "remote origin " + origin if origin else
                                                "remotes " + ", ".join(remotes) if remotes else "with no remote"))
+        others = [r for r in remote_urls(path) if not r.startswith("origin ")]
+        if others:
+            print_list("Other remotes, removed with the kit's history (note them to add back with git remote add)",
+                       others, limit=None)
     else:
         if plan.get("listed"):
             say("It is a download, not a git clone: the kit's files are recognized from %s; any other file, or a "
@@ -1043,17 +1071,23 @@ def cmd_convert(a):
         others = other_worktrees(path)
         if others:
             raise Refused("this clone has other git worktrees (%s); converting would delete the history they "
-                          "depend on. Remove them (git worktree remove <path>) or convert a fresh clone. Nothing "
+                          "depend on. Remove them (git worktree remove <path>; git worktree prune for one whose folder is gone) or "
+                          "convert a fresh clone. Nothing "
                           "was changed." % ", ".join(others))
     version, commit = kit_version(path), kit_commit(path, untracked=False)  # the PI's new files are expected
     reasons, remotes, details = local_work(path) if plan["git"] else ([], [], [])
     origin = clean_url(git(["remote", "get-url", "origin"], path, check=False).stdout.strip()) \
         if "origin" in remotes else ""
-    ignores = [x.replace("\\", "/").strip("/") + ("/" if os.path.isdir(os.path.join(path, x)) else "")
-               for x in (a.ignore or [])]
+    ignores = ["/" + re.sub(r"([*?\[\]!#])", r"\\\1", x.replace("\\", "/").strip("/"))
+               + ("/" if os.path.isdir(os.path.join(path, x)) else "") for x in (a.ignore or [])]
+    chosen = [x.replace("\\", "/").strip("/") for x in (a.ignore or [])]
+    for key in ("data", "large"):
+        plan["inv"][key] = [i for i in plan["inv"][key]
+                            if not any((i[0] if isinstance(i, tuple) else i) == c or
+                                       (i[0] if isinstance(i, tuple) else i).startswith(c + "/") for c in chosen)]
     print_convert_plan(path, plan, version, commit, reasons, remotes, origin, details, ignores)
-    for x in ignores:
-        if not os.path.lexists(os.path.join(path, *x.strip("/").split("/"))):
+    for x, c in zip(ignores, chosen):
+        if not os.path.lexists(os.path.join(path, *c.split("/"))):
             warn("--ignore %s: no such file or folder here; it is added to .gitignore anyway." % x)
     location_warnings(path)
     if not a.yes:
@@ -1068,6 +1102,7 @@ def cmd_convert(a):
                       "to back it up and convert. Nothing was changed." % "; ".join(reasons))
     check_git(path)
     identity = [(k, git(["config", "--get", k], path, check=False).stdout.strip()) for k in ("user.name", "user.email")]
+    all_remotes = remote_urls(path) if plan["git"] else []
     say()
     bundle = write_bundle(path) if plan["git"] and reasons else None
     if bundle:
@@ -1119,8 +1154,13 @@ def cmd_convert(a):
     stub = write_stub_claude(path)
     source = ("Converted from: the ARPD kit clone (%s) at %s" % (origin or "no remote", commit) if plan["git"]
               else "Converted from: an ARPD kit download (not a git clone)")
-    write_version(path, path, "convert", version=version, commit=commit, extra_lines=[source])
-    sha = commit_all(path, "Start ARPD project in place (setup in progress)", force_add=True)  # extra: in .gitignore
+    lines = [source] + ["Remote removed at conversion: " + r for r in all_remotes if not r.startswith("origin ")]
+    write_version(path, path, "convert", version=version, commit=commit, extra_lines=lines)
+    message = "Start ARPD project in place (setup in progress)"
+    sha = commit_all(path, message, force_add=True, recover=(  # extra: already in .gitignore
+        "Do NOT delete this folder: it holds your files, and the conversion is otherwise done (do not rerun "
+        "convert). Fix the signing or identity problem git reports, then run  git add -A  and  "
+        "git commit -m \"%s\"  in %s." % (message, path)))
     if plan["changed_kit"]:
         left.append("review the kit files you changed, kept and committed: " + ", ".join(plan["changed_kit"]))
     if plan["payload_changed"]:

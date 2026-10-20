@@ -175,7 +175,8 @@ only.
 
 **Nothing governing is written before adoption.** Steps 1–5 only read; steps 6–7 write, after it.
 
-1. **Inventory,** in the project folder: structure, languages, test commands. Do not open data-like
+1. **Inventory,** in the project folder, during Intake or Objectives and **before the report is
+   drafted**: structure, languages, test commands. Do not open data-like
    files (the inventory lists them) without the PI's permission for that use, and never copy them
    into a scratch folder. Run the existing tests (`<command>; echo "exit=$?"`); keep each command, working directory, printed exit code and
    full output **verbatim**, never trimmed, with the source's
@@ -265,7 +266,9 @@ Worked case: the March example, from its own repository (`/arpd-setup import <it
 ## Resuming an interrupted setup
 
 A relaunched session resumes; so does one after a lost session or an error. The record decides what
-is authorized. Check `git log --oneline -15`, `git status --short`, `reports/setup/NOTES.md` and
+is authorized. Check `git log --oneline -15`, `git status --short`, `reports/setup/NOTES.md` (or the
+notes beside an unprepared folder, `<parent>/.arpd-setup-notes/<folder name>/NOTES.md`: then the
+folder is still a kit clone, and *Start* steps 5–8 follow once a tool is in view) and
 `reports/setup/PROJECT-DEFINITION.md` (tracked or not; install mode without consent: the path the
 stub `CLAUDE.md` names), any move- or remove-only commits, the commit "Record adoption ruling R-NN (setup in
 progress)", and which checklist files exist. Then:

@@ -25,7 +25,9 @@ template's guidance says what each section holds). Also:
   choice"), and the traceability table: every research question or objective has a capability and
   requirements, and every P1 requirement serves one.
 - §3: every constraint by class; every model commitment with its epistemic status; the
-  commitments review's findings and the PI's decisions. Never a hypothesis as a Must hold.
+  commitments review's findings and the PI's decisions. Never a hypothesis as a Must hold, unless
+  the PI kept it so after the review flagged it ("kept by the PI after the commitments review:
+  '<words>'", with the consequence stated).
 - §4–5: the minimum usable version, first-release type, exclusions and workflows in the PI's
   words; each requirement's Priority from Development (P1–P5), with Feasibility and
   Correctness-critical where they apply; a P1 requirement always has acceptance criteria ("pending
@@ -36,6 +38,10 @@ template's guidance says what each section holds). Also:
   data-semantics rule, and the modules with why.
 - Citations: only sources actually checked; anything else labelled "unverified", with no invented
   bibliographic detail.
+- **Existing code** (install, import, or a converted folder holding the PI's code): the baseline run
+  (`import-path.md`, *Steps for a non-ARPD project*, step 1) is done before the first version is
+  shown, and §10 states its result in one or two lines (what ran, what passed or failed, what was
+  not run and why); the PI never adopts without seeing it. Its record names the commit it ran at.
 
 **Statuses** are the template's. An item is **Adopted-on-adoption** only when the PI stated or
 accepted it in words, quoted in its *Source*; your derivations and recommendations are **Proposed**

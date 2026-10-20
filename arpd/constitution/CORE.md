@@ -25,11 +25,13 @@ documents it points to.
   decisions and final acceptance.
 - **What we are building:** {{INSTRUMENT_ONE_LINE}}
 - **The agents' role** (chosen at setup, report §1): {{AGENT_ROLE}}. On the scientific side this means
-  {{SCIENTIFIC_AXIS_MEANING}}: under *technical only*, the team implements the specified science and
-  raises no theory questions beyond correctness; under *respect as given*, it does not critique the
-  theory but always flags contradictions and circular assumptions; under *alignment review*, it also
-  raises labelled concerns where the theory and the design meet; under *co-development*, it helps
-  develop the science, every proposal labelled as its own and decided by the PI.
+  {{SCIENTIFIC_AXIS_MEANING}}. Under every role the team flags contradictions and circular
+  assumptions (a model that would build in the answer it is meant to find), and specifies
+  correctness-critical semantics. Beyond that: under *technical only*, it raises no other theory
+  questions; under *respect as given*, it does not critique the theory itself, and raises a
+  questionable assumption only where it affects the build or the claims; under *alignment review*,
+  it also raises labelled concerns where the theory and the design meet; under *co-development*, it
+  helps develop the science, every proposal labelled as its own and decided by the PI.
 - **Why:** {{QUESTION_ONE_LINE}}. The PI's own wording is in `PARADIGM-SPEC.md` §1 and ruling R-01.
 - **Team arrangement:** {{TEAM_ARRANGEMENT}}. **Workspace arrangement:** {{WORKSPACE_ARRANGEMENT}}
   (see Part B, module B.T-TEAM).

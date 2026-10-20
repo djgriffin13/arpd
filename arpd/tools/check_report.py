@@ -60,6 +60,10 @@ v0.7 only (a v0.5 report is checked exactly as above):
       report with a lower priority (a higher P number) FAILs, since it cannot be scheduled before what
       it depends on (open priorities are skipped); a dependency ID not in the report WARNs;
   (j) a correctness-critical requirement at P4 or P5 WARNs: such requirements are rarely optional.
+  (k) section 3 (v0.7): a row classed Must hold (an invariant) whose epistemic-status cell says it is a
+      hypothesis FAILs (circularity), unless the row says it was "kept by the PI" after the review.
+  An item gated "before planning" in (f) means before any plan of the work it affects; "before
+  planning <a later milestone, sprint or release>" names that later stage and is not asked first.
 
 Exit code 0 if no check FAILs (WARN does not fail), 1 otherwise, 2 for a usage or read error.
 It checks structure and authority only: not whether the requirements are right, the report is
@@ -512,8 +516,12 @@ def check(text, stage="draft"):
                 if cells is None:
                     continue
                 cls = plain(cells[ccol])
-                rest = " ".join(plain(c) for i, c in enumerate(cells) if i != ccol)
-                if re.search(r"must\s+hold|invariant", cls, re.I) and re.search(r"\bhypothes[ie]s", rest, re.I):
+                scol = next((i for i, h in enumerate(header) if re.search(r"epistemic", plain(h), re.I)), None)
+                status = plain(cells[scol]) if scol is not None else ""
+                status = re.sub(r"\b(?:not|no|never)\s+(?:an?\s+)?hypothes\w*", "", status, flags=re.I)  # "a rule, not a hypothesis"
+                kept = re.search(r"kept\s+by\s+the\s+PI", " ".join(plain(c) for c in cells), re.I)
+                if re.search(r"must\s+hold|invariant", cls, re.I) and re.search(r"\bhypothes[ie]s", status, re.I) \
+                        and not kept:
                     problems.append("a row classed %s is a hypothesis: a hypothesis the project studies is an "
                                     "open question or an outcome, never an invariant (circularity): %s"
                                     % (short(cls, 20), short(line, 80)))

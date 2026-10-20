@@ -203,16 +203,24 @@ kit_version() {
     printf '%s\n' "${_v:-$FALLBACK_VERSION}"
 }
 
-kit_commit() {  # kit [no]: HEAD, noting uncommitted changes (to tracked files only with "no")
-    _sha=$(git -C "$1" rev-parse HEAD 2>/dev/null) || { say "unknown (the kit is not a git clone)"; return 0; }
-    # The newest commit on HEAD that is also on a remote, so a PI's local commits are not taken for the kit's.
-    if [ -n "$(git -C "$1" remote 2>/dev/null)" ]; then
-        git -C "$1" rev-list HEAD --not --remotes > "$TMPD/kc.local" 2>/dev/null || : > "$TMPD/kc.local"
-        if [ -s "$TMPD/kc.local" ]; then
-            _base=$(git -C "$1" rev-parse "$(tail -n 1 "$TMPD/kc.local")^" 2>/dev/null) || _base=
-            [ -n "$_base" ] && _sha="$_base with $(count "$TMPD/kc.local") local commit(s) of the PI's on top"
-        fi
-    fi
+kit_base() {  # kit: KB_SHA = the kit's own commit (the newest on HEAD that is on a remote: the parent of the
+    # oldest local-only commit), else HEAD; empty when there is no HEAD. KB_LOCAL = the local-only commits on top.
+    KB_SHA=; KB_LOCAL=0
+    KB_SHA=$(git -C "$1" rev-parse HEAD 2>/dev/null) || { KB_SHA=; return 0; }
+    [ -n "$(git -C "$1" remote 2>/dev/null)" ] || return 0
+    git -C "$1" rev-list HEAD --not --remotes > "$TMPD/kb.local" 2>/dev/null || : > "$TMPD/kb.local"
+    [ -s "$TMPD/kb.local" ] || return 0
+    KB_LOCAL=$(count "$TMPD/kb.local")
+    _kbb=$(git -C "$1" rev-parse -q --verify "$(tail -n 1 "$TMPD/kb.local")^" 2>/dev/null) || _kbb=
+    [ -n "$_kbb" ] && KB_SHA=$_kbb
+    return 0
+}
+
+kit_commit() {  # kit [no]: the kit's own commit, noting the PI's local commits and uncommitted changes (to tracked files only with "no")
+    kit_base "$1"
+    [ -n "$KB_SHA" ] || { say "unknown (the kit is not a git clone)"; return 0; }
+    _sha=$KB_SHA
+    [ "$KB_LOCAL" -gt 0 ] && _sha="$_sha with $KB_LOCAL local commit(s) of the PI's on top"
     if [ "$2" = no ]; then _st=$(git -C "$1" status --porcelain --untracked-files=no 2>/dev/null)
     else _st=$(git -C "$1" status --porcelain 2>/dev/null); fi
     if [ $? -eq 0 ] && [ -n "$_st" ]; then say "$_sha with uncommitted changes"; else say "$_sha"; fi
@@ -273,8 +281,9 @@ git_init() {
     gitc "$1" symbolic-ref HEAD refs/heads/main
 }
 
-commit_all() {  # path message [force]: stage everything (force: also arpd/ and the skills) and commit; sets SHA
-    _cp=$1; _cmsg=$2; _cf=$3
+commit_all() {  # path message [force] [recover]: stage everything (force: also arpd/ and the skills) and commit; sets SHA
+    # recover replaces the advice printed if the commit fails.
+    _cp=$1; _cmsg=$2; _cf=$3; _crec=$4
     gitc "$_cp" add -A -- .
     if [ -n "$_cf" ]; then
         kit_skills "$_cp" > "$TMPD/cskills"
@@ -283,8 +292,9 @@ commit_all() {  # path message [force]: stage everything (force: also arpd/ and 
         gitc "$_cp" add -f -- "$@" ':(exclude)arpd/logs' ':(exclude)**/__pycache__'
     fi
     if ! _co=$(git -C "$_cp" commit -q --allow-empty -m "$_cmsg" 2>&1); then
+        [ -n "$_crec" ] || _crec="To recover, either delete the folder $_cp and rerun, or fix the signing or identity problem git reports and run  git commit -m \"$_cmsg\"  in $_cp."
         refuse "git commit failed in $_cp: $_co
-The files are in place but not committed. To recover, either delete the folder $_cp and rerun, or fix the signing or identity problem git reports and run  git commit -m \"$_cmsg\"  in $_cp."
+The files are in place but not committed. $_crec"
     fi
     SHA=$(git -C "$_cp" rev-parse --short HEAD)
 }
@@ -730,8 +740,11 @@ convert_plan() {  # in $CPATH (the current folder): $TMPD/p.* lists and PLAN_* s
     if [ -n "$PLAN_GIT" ]; then
         if git -C "$CPATH" rev-parse -q --verify HEAD >/dev/null 2>&1; then
             _nohead=
-            git -C "$CPATH" -c core.quotepath=off ls-tree -r --name-only HEAD > "$TMPD/kitfiles" 2>/dev/null || : > "$TMPD/kitfiles"
-            git -C "$CPATH" -c core.quotepath=off diff --name-only HEAD > "$TMPD/changed" 2>/dev/null || : > "$TMPD/changed"
+            # The kit's files are those of the kit's own commit, never of the PI's local commits on top of it: a
+            # file the PI committed under a kit folder, or a kit file the PI changed in a commit, is the PI's (kept).
+            kit_base "$CPATH"
+            git -C "$CPATH" -c core.quotepath=off ls-tree -r --name-only "$KB_SHA" > "$TMPD/kitfiles" 2>/dev/null || : > "$TMPD/kitfiles"
+            git -C "$CPATH" -c core.quotepath=off diff --name-only "$KB_SHA" > "$TMPD/changed" 2>/dev/null || : > "$TMPD/changed"
         fi
     elif [ -f "$CPATH/$KIT_FILES" ]; then
         # A download with the kit file list: a file is the kit's only if listed with the same content.
@@ -818,7 +831,7 @@ convert_plan() {  # in $CPATH (the current folder): $TMPD/p.* lists and PLAN_* s
 
 local_work() {  # REASONS ("; "-joined), $TMPD/remotes, $TMPD/details
     REASONS=; ORIGIN=
-    : > "$TMPD/remotes"; : > "$TMPD/details"
+    : > "$TMPD/remotes"; : > "$TMPD/details"; : > "$TMPD/other.remotes"
     [ -n "$PLAN_GIT" ] || return 0
     git -C "$CPATH" remote > "$TMPD/remotes" 2>/dev/null
     if [ -s "$TMPD/remotes" ]; then set -- --exclude=refs/stash --all --not --remotes
@@ -845,6 +858,11 @@ local_work() {  # REASONS ("; "-joined), $TMPD/remotes, $TMPD/details
     if grep -qx origin "$TMPD/remotes"; then
         ORIGIN=$(git -C "$CPATH" remote get-url origin 2>/dev/null | clean_url)
     fi
+    : > "$TMPD/other.remotes"   # "<name> <url>" for every remote but origin, credentials stripped
+    while IFS= read -r _rn <&3; do
+        [ "$_rn" = origin ] && continue
+        printf '%s %s\n' "$_rn" "$(git -C "$CPATH" remote get-url "$_rn" 2>/dev/null | clean_url)" >> "$TMPD/other.remotes"
+    done 3< "$TMPD/remotes"
 }
 
 refuse_other_worktrees() {
@@ -854,7 +872,7 @@ refuse_other_worktrees() {
         same_path "$_w" "$CPATH" || printf '%s\n' "$_w" >> "$TMPD/wt.other"
     done 3< "$TMPD/wt"
     [ -s "$TMPD/wt.other" ] || return 0
-    refuse "this clone has other git worktrees ($(join_lines "$TMPD/wt.other")); converting would delete the history they depend on. Remove them (git worktree remove <path>) or convert a fresh clone. Nothing was changed."
+    refuse "this clone has other git worktrees ($(join_lines "$TMPD/wt.other")); converting would delete the history they depend on. Remove them (git worktree remove <path>; git worktree prune for one whose folder is gone) or convert a fresh clone. Nothing was changed."
 }
 
 write_bundle() {  # BUNDLE: every ref, in a verified bundle beside the folder
@@ -877,6 +895,7 @@ print_convert_plan() {
         elif [ -s "$TMPD/remotes" ]; then _w="remotes $(join_lines "$TMPD/remotes")"
         else _w="with no remote"; fi
         say "It is a git clone at $COMMIT_, $_w."
+        print_list "Other remotes, removed with the kit's history (note them to add back with git remote add)" "$TMPD/other.remotes" all
     elif [ -n "$PLAN_LISTED" ]; then
         say "It is a download, not a git clone: the kit's files are recognized from $KIT_FILES; any other file, or a kit file whose content you changed, is kept."
     else
@@ -897,10 +916,10 @@ print_convert_plan() {
     fi
     if [ "$INV_FILES" -gt 0 ] || [ -s "$TMPD/p.E" ]; then
         say "Your material (kept): $INV_FILES file(s), $(mb "$INV_BYTES")."
-        print_list "Environments and repositories, kept on disk but git-ignored (not committed)" "$TMPD/p.E"
-        print_list "Files of 50 MB or more, kept but git-ignored" "$TMPD/i.ignore.fmt"
-        print_list "Large files (10 MB or more), kept and committed" "$TMPD/i.large.fmt"
-        print_list "Data-like files, kept and committed (check that they may be kept in the repository)" "$TMPD/i.data"
+        print_list "Environments and repositories, kept on disk but git-ignored (not committed)" "$TMPD/p.E" all
+        print_list "Files of 50 MB or more, kept but git-ignored" "$TMPD/i.ignore.fmt" all
+        print_list "Large files (10 MB or more), kept and committed" "$TMPD/i.large.fmt" all
+        print_list "Data-like files, kept and committed (check that they may be kept in the repository)" "$TMPD/i.data" all
     else
         say "Your material: none besides the kit."
     fi
@@ -936,17 +955,29 @@ cmd_convert() {
     [ -n "$PLAN_GIT" ] && refuse_other_worktrees
     VERSION_=$(kit_version "$CPATH"); COMMIT_=$(kit_commit "$CPATH" no)   # the PI's new files are expected
     local_work
-    : > "$TMPD/ignores"
+    # --ignore: "/" + the path (glob characters escaped), + "/" for a folder; such paths leave the inventory lists.
+    : > "$TMPD/ignores"; : > "$TMPD/chosen"
     while IFS= read -r _x <&3; do
         _n=$(printf '%s\n' "$_x" | sed -e 's#\\#/#g' -e 's#^/*##' -e 's#/*$##')
-        if [ -d "./$_n" ]; then _n=$_n/; fi
-        printf '%s\n' "$_n" >> "$TMPD/ignores"
+        printf '%s\n' "$_n" >> "$TMPD/chosen"
+        _g=/$(printf '%s\n' "$_n" | sed 's/[][*?!#]/\\&/g')
+        if [ -d "./$_n" ]; then _g=$_g/; fi
+        printf '%s\n' "$_g" >> "$TMPD/ignores"
     done 3< "$TMPD/args.ignore"
+    if [ -s "$TMPD/chosen" ]; then
+        awk -F "$TAB" 'part == 1 { c[++n] = $0; next }
+             { if ($1 == "L" || $1 == "D") for (i = 1; i <= n; i++) if ($2 == c[i] || index($2, c[i] "/") == 1) next
+               print }' part=1 "$TMPD/chosen" part=2 "$TMPD/inv" > "$TMPD/inv.kept"
+        awk -F "$TAB" '$1 == "L" { printf "%s (%.1f MB)\n", $2, $3 / 1048576 }' "$TMPD/inv.kept" > "$TMPD/i.large.fmt"
+        awk -F "$TAB" '$1 == "D" { print $2 }' "$TMPD/inv.kept" > "$TMPD/i.data"
+    fi
     print_convert_plan
-    while IFS= read -r _x <&3; do
-        _n=$(printf '%s\n' "$_x" | sed -e 's#^/*##' -e 's#/*$##')
-        { [ -e "./$_n" ] || [ -L "./$_n" ]; } || warn "--ignore $_x: no such file or folder here; it is added to .gitignore anyway."
-    done 3< "$TMPD/ignores"
+    exec 4< "$TMPD/ignores"
+    while IFS= read -r _n <&3; do
+        IFS= read -r _g <&4
+        { [ -e "./$_n" ] || [ -L "./$_n" ]; } || warn "--ignore $_g: no such file or folder here; it is added to .gitignore anyway."
+    done 3< "$TMPD/chosen"
+    exec 4<&-
     location_warnings "$CPATH"
     if [ -z "$YES" ]; then
         _m=$(identity_problem "$CPATH") || warn "$_m"
@@ -1010,8 +1041,11 @@ cmd_convert() {
     _stub=1; write_stub_claude "$CPATH" "$NOTES" || _stub=
     if [ -n "$PLAN_GIT" ]; then _src="Converted from: the ARPD kit clone (${ORIGIN:-no remote}) at $COMMIT_"
     else _src="Converted from: an ARPD kit download (not a git clone)"; fi
+    if [ -s "$TMPD/other.remotes" ]; then _src="$_src
+$(sed 's/^/Remote removed at conversion: /' "$TMPD/other.remotes")"; fi
     write_version "$CPATH" convert "$VERSION_" "$COMMIT_" - "$_src"
-    commit_all "$CPATH" "Start ARPD project in place (setup in progress)" force   # extra: in .gitignore
+    _msg="Start ARPD project in place (setup in progress)"
+    commit_all "$CPATH" "$_msg" force "Do NOT delete this folder: it holds your files, and the conversion is otherwise done (do not rerun convert). Fix the signing or identity problem git reports, then run  git add -A  and  git commit -m \"$_msg\"  in $CPATH."   # extra: already in .gitignore
     [ -s "$TMPD/p.C" ] && say "review the kit files you changed, kept and committed: $(join_lines "$TMPD/p.C")" >> "$TMPD/left"
     [ -s "$TMPD/p.payload" ] && say "your changes to ARPD files are kept, but a later update from a kit will overwrite them: $(join_lines "$TMPD/p.payload")" >> "$TMPD/left"
     say "Removed $REMOVED kit file(s) and the kit's git history and remote."

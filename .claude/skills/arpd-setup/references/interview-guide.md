@@ -175,7 +175,7 @@ one at a time, until the items are filled.
 | OB-05 | The links: research purpose → capability → requirement | Traceability (report §2); priorities later |
 | OB-06 | How the outputs will be used: exploration, teaching, publication, operations, decisions | Validation, reproducibility, provenance and versioning requirements |
 | OB-07 | What would convince the PI it works | Acceptance criteria; report §10 |
-| OB-08 | What the tool will not do (exclusions) | Scope boundary; `PARADIGM-SPEC.md` §8 |
+| OB-08 | What the tool will not do (exclusions): ask, unless the PI named them; a policy on something else is not an exclusion | Scope boundary; `PARADIGM-SPEC.md` §8 |
 
 - **Questions are not requirements.** A research question says why a capability matters; a
   requirement says what must be implemented and how it is checked. Keep the three levels apart and
@@ -279,7 +279,11 @@ For each, recommend where appropriate a **reframing**, for the PI to accept or d
 becomes a **research question** or an **outcome the tool measures**; a fixed rule becomes a
 **configurable model assumption** (a parameter or condition, with a sensitivity analysis available);
 an invariant that is really an assumption becomes a Model commitment. Nothing is reframed without
-the PI's words; a declined recommendation is recorded with the PI's reason.
+the PI's words; a declined recommendation is recorded with the PI's reason. If the PI keeps a
+flagged commitment as it is (for example as a fixed rule of the model), it keeps the class the PI
+chose, its row says "kept by the PI after the commitments review: '<the PI's words>'", and the
+report's §3 and *Completeness check* name the consequence (what the tool can no longer find out);
+it is never silently reclassified either way.
 
 **Constraints summary:** every constraint by class, stated ones with the PI's words and inferred ones
 marked "proposed"; the commitments review's findings and the PI's decisions; anything unresolved,
@@ -390,7 +394,7 @@ simple tool, fold it into the first Development question as a stated default):
 | ID | Required item | Feeds |
 |---|---|---|
 | DV-01 | The PI's rules and preferences for the agents' work (asked first) | The rules summary; SA-01 |
-| DV-02 | The minimum usable version: the simplest version the PI could actually use | P1; milestone M1 |
+| DV-02 | The minimum usable version: the simplest version the PI could actually use. It keeps every requirement the PI already called firm, required or a must; list those before asking, and never move one out without the PI's words | P1; milestone M1 |
 | DV-03 | What the first release is: a proof of concept, a research-useful version, or a validated release | Exit evidence of M1; verification depth |
 | DV-04 | The priority of every other feature and research question (P1–P5), with feasibility and correctness-critical flags | Requirements; roadmap |
 | DV-05 | Team arrangement and workspace | Report §12; charter |

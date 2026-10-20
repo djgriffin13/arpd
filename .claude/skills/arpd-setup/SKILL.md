@@ -42,7 +42,9 @@ in this skill changes, and a read-through is never reported as a checker's PASS.
    this first: an adopted project keeps its frozen notes. **Setup in progress** (otherwise, if
    `reports/setup/NOTES.md` exists, or notes kept beside the folder at
    `<parent>/.arpd-setup-notes/<folder name>/NOTES.md`): resume (`import-path.md`, *Resuming*); skip
-   the rest of *Start*.
+   the rest of *Start*, except that notes kept beside a folder that was never prepared ("not yet
+   prepared: no tool in view") resume the tool-opportunity discussion, and once a tool is in view
+   continue with steps 5–8 here (location, preparation, notes moved in).
 3. **First turn.** One sentence on what you found, one on what setup produces (a short interview in
    phases, a report for you to approve, then the governing documents; nothing is built), then the
    **opening question**, fitted to what you found, in a `QUESTION FOR YOU` block. It asks for the
@@ -55,8 +57,10 @@ in this skill changes, and a read-through is never reported as a checker's PASS.
    - code found: "I see code for ___ but no ARPD setup. Would you like me to continue that work? Tell
      me what you want to accomplish."
 
-   Ask nothing else in this turn. Never assume the project is a study, an app or a package before
-   you hear it, and read nothing into the folder's name.
+   Ask nothing else in this turn. If the message that invoked setup already states the goal, do not
+   ask for it again: say in one sentence what you understood, and ask only what it leaves open (often
+   the state of the work). Never assume the project is a study, an app or a package before you hear
+   it, and read nothing into the folder's name.
 4. **No tool in view.** If the opening answer says there is no tool or platform in mind yet (often
    an exploration), prepare nothing and convert nothing: write the notes beside the folder, at
    `<parent>/.arpd-setup-notes/<folder name>/NOTES.md` (the opening answer verbatim, *Folder and
@@ -77,7 +81,9 @@ in this skill changes, and a read-through is never reported as a checker's PASS.
    without Python, `sh arpd/tools/install.sh` with the same arguments): `convert .`, `install`,
    `new` or `import`. Show the output in full (never piped through `tail` or `head`); quote every
    `WARNING:`, `REFUSED:`, `CONFLICTS:` and `Left to you:` line and help the PI act on it.
-   - **Convert:** the dry run first, shown in full, and then a turn of its own ending with
+   - **Convert:** the dry run first, shown in full (paste its lines as printed, in a code block if
+     long; a summary is not enough, since it is the PI's only look at what will be removed), and
+     then a turn of its own ending with
      `CHOICE FOR YOU (select one)`: A. Convert as shown; B. Change something first (for example,
      keep data files out of git); C. Do not convert. **Never run `--yes` in the turn that shows the
      dry run.** Pass `--ignore <path>` for each file or folder the PI wants kept out of git (ask about
@@ -236,7 +242,9 @@ Follow `arpd/docs/INTERACTION.md`. In short:
   are still asked).
 - **Be explicit about what you are doing** when it matters: name the phase, the item you are
   filling, and why the question matters, in a sentence; describe proposed agent workflows in full.
-- **Every time you write** comes from `date -u +%Y-%m-%dT%H:%MZ` run in that step, marked UTC.
+- **Every time you write** comes from `date -u +%Y-%m-%dT%H:%MZ` run in that step, marked UTC: copy
+  the value it printed. Never type, round, estimate or compute a time, not even inside the same
+  command (`date -u` and a typed time side by side is the error to avoid).
 - `APPROVAL REQUIRED` is only for adopting the report; interview choices and phase closeouts are
   `CHOICE FOR YOU`.
 
@@ -274,7 +282,8 @@ final edit** and quote its output verbatim, "not checked" lines included.
 ## Closeout and handoff
 
 0. **Read the generated `CLAUDE.md` in full** before the closeout, and say in one sentence that it now
-   governs planning and implementation. This session started before the charter existed, and
+   governs planning and implementation. Do not claim when it was loaded; if you mention it, say only
+   whether its text is now in your loaded project memory. This session started before the charter existed, and
    Claude Code documents no mid-session reload of `CLAUDE.md` except `/compact`; agent roles in a
    newly created `.claude/agents/` are documented as waiting for a new session. Planning may continue
    here (`/arpd-plan` reads the charter itself); implementation needs the charter, and any agent
