@@ -34,7 +34,7 @@ PI the same next step.
 
 - **Setup:** {{in progress | adopted (R-NN)}}
 - **Planning:** {{not started | draft (PLAN-YYYY-MM-DD, vN) | approved (PLAN-YYYY-MM-DD, vN, R-NN)}}
-- **Execution:** {{not started | authorized (R-NN or SA-NN, scope) | in progress (S0N) | complete}}
+- **Execution:** {{not started | authorized (R-NN or SA-NN, scope) | authorized (R-NN), not started: waiting for <"/compact" | a fresh session | the owed agent roles> | in progress (S0N) | complete}}
 - **Next step:** {{finish setup | run /arpd-plan | review plan | begin implementation | check in | amend}}
 - **Adopted report:** `reports/setup/PROJECT-DEFINITION.md` v{{N}} (R-{{NN}}, commit {{SHA of the adoption-first commit}})
 

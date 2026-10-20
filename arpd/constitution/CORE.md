@@ -127,6 +127,9 @@ Breaking any of these is a defect, whether or not the tests pass.
    - its acceptance criteria and the evidence that will show they are met;
    - its non-goals.
 3. **Approval.**
+   - Never commit a governance-check failure your own change caused: run the check (or, without
+     Python, its read-through) before committing a change to the governing records, and fix the
+     failure first.
    - A plan that makes a consequential choice (§6) needs the PI's approval, unless a standing
      authorization covers it.
    - Other plans are approved by the lead agent within the PI's standing direction.

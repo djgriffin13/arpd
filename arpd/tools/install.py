@@ -886,6 +886,27 @@ def convert_plan(root):
     base = kit_base(root)[0] if has_head else None
     kit_files = git_paths(["ls-tree", "-r", "-z", "--name-only", base], root) if has_head else None
     changed = git_paths(["diff", "--name-only", "-z", base], root) if has_head else set()
+    if has_head:
+        # The kit's own file list, as the base commit holds it, has the last word: a file is the kit's only if
+        # the list names it with the content the base commit holds. So a file the PI committed under a kit
+        # folder stays the PI's even when the base cannot be told apart from the PI's commits (no remote, or
+        # the PI's commits pushed to a remote of their own).
+        shown = git(["show", "%s:%s" % (base, KIT_FILES)], root, check=False)
+        if shown.returncode == 0:
+            base_list = {}
+            for line in shown.stdout.splitlines():
+                parts = line.strip().split(" ", 1)
+                if len(parts) == 2 and re.match(r"^[0-9a-f]{40}$", parts[0]):
+                    base_list[parts[1]] = parts[0]
+            tree = {}
+            for entry in git(["ls-tree", "-r", "-z", base], root, check=False).stdout.split("\0"):
+                meta, _, rel = entry.partition("\t")
+                if rel and len(meta.split()) == 3:
+                    tree[rel] = meta.split()[2]
+            unlisted = {r for r in kit_files if under(r, manifest) and r not in (KIT_MARKER, KIT_FILES)
+                        and not is_cache(r) and r not in base_list}
+            kit_files = kit_files - unlisted  # committed by the PI: theirs
+            changed |= {r for r in kit_files if r in base_list and tree.get(r) != base_list[r]}
     listed = None if is_git else read_kit_files(root)
     if listed is not None:  # a download: a file is the kit's only if the list names it with the same content
         candidates = []

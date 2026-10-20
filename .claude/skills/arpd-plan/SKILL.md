@@ -75,7 +75,8 @@ Read before you start:
 4. **An approved plan not yet started?** Do not re-plan it by default. If Readiness already says
    `Execution: authorized (R-NN), not started: waiting for …` (Step G, *Now, a prerequisite
    missing*), the start is already authorized: check the prerequisites (Step G) and, if met, start
-   the sprint under R-NN, recording no new ruling. Otherwise, if the PI's message gives the start
+   the sprint under R-NN, recording no new ruling; if one is still missing, say what, record
+   nothing, and end as a closing turn with what the PI does (as Step G says). Otherwise, if the PI's message gives the start
    (the prompt left in `START-HERE.md`), record it as the execution ruling and go to Step G "now".
    Otherwise offer to start it or to revise it (a new version needs a new approval).
 5. **An open sprint?** (a `SPRINT-NN.md` with Part 1 and no Part 2 *Closed* line.) Never renumber it
@@ -254,6 +255,10 @@ naming R-NN. If not approved, keep the draft and return to Step E.
 
 ### Step G: Handoff
 
+If the approval in Step F already authorized execution (the PI's words covered S0N's execution), do
+not ask now or later again and record no new ruling: check the prerequisite below, then go to *Now*
+(prerequisites met, or a prerequisite missing) under that ruling.
+
 **Prerequisite for implementation: first, before the block below,** check that the adopted charter
 and the agent roles are live in this session. Before starting any sprint (Now, or a later start
 prompt), check both:
@@ -262,14 +267,19 @@ prompt), check both:
    started after the charter was written, or the PI has run `/compact` since (Claude Code's
    documentation says `/compact` re-reads `CLAUDE.md` from disk). You can tell: the charter's text
    appears in your loaded project memory.
-2. **The agent roles** the team arrangement uses (`implementer`, `reviewer`, and `tester` if a
-   tester is named) exist as files in `.claude/agents/` **and** appear among the agents available
-   to you now, not only as files (the documentation says roles added during a session usually
+2. **The agent roles,** when the team arrangement uses subagents (*Lead with subagents*, *Peers*;
+   not *Solo*, whose fresh-subagent reviewer needs no installed role): the roles it uses
+   (`implementer`, `reviewer`, and `tester` if a tester is named) exist as files in `.claude/agents/`
+   **and** appear among the agents available to you now, not only as files (the documentation says roles added during a session usually
    appear only in a new session). Judge both items by what you can see loaded, never by when you
    think the conversation began. If they do not exist at all (declined or owed at setup), say so and offer the owed step
    first (`python arpd/tools/install.py owed .`, on the PI's yes; `CLAUDE.md` §9 without Python): a
-   new session alone will not help.
+   new session alone will not help. If the PI declines, implementation needs a changed arrangement
+   (`/arpd-amend`, for example to *Solo*); say so, and start nothing.
 
+**Say the result in one line before you record or start anything**, every time (also on a resumed
+or waiting start), for example: "Prerequisites: the charter is loaded in this session; implementer
+and reviewer are available." When the sprint starts, the same line goes into Part 1's progress log.
 After an in-place setup, setup and planning usually ran in one session, so one of these is often
 missing. Say in two sentences what is missing, if anything, then show the block, adapted:
 
@@ -291,7 +301,8 @@ authorizes the start". The start option always says what it authorizes and which
 for a series it names the series and the SA (`references/multi-sprint-and-handoff.md` §3).
 
 - **Now, prerequisites met.** The PI's words are the execution authorization: record them verbatim
-  as an R-NN (the approval ruling, if given in the same message), plus the continuation SA for a
+  as an R-NN, unless they are already recorded (Entry 4, or an approval that authorized execution)
+  (the approval ruling, if given in the same message), plus the continuation SA for a
   series, as `references/multi-sprint-and-handoff.md` §3 says (including a bare letter's
   read-back). Then start the sprint (§4 there: Part 1 of `reports/sprints/SPRINT-NN.md` from the
   approved plan, STATUS, `sprint_start`) and follow the charter: task plans under `CLAUDE.md` §5,
@@ -299,7 +310,8 @@ for a series it names the series and the SA (`references/multi-sprint-and-handof
 - **Now, a prerequisite missing.** Record the execution ruling exactly as above, but start nothing.
   Set Readiness `Execution: authorized (R-NN), not started: waiting for <"/compact" | a fresh
   session | the owed agent roles>`, `Next step: begin implementation`; put the exact start prompt in
-  `START-HERE.md` *Next step* ("Start S04 under PLAN-… vN, authorized by R-NN"); commit; and end as a
+  `START-HERE.md` *Next step* ("/arpd-plan resume. Start S04 under PLAN-… vN, authorized by R-NN.");
+  commit; and end as a
   closing turn with exactly what the PI does: type `/compact`, then that prompt (when only the
   charter is missing); or quit and start a fresh session (`claude`, then that prompt) when the agent
   roles were installed in this session. Never start implementation with the charter only read as a

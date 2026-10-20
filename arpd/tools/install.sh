@@ -745,6 +745,35 @@ convert_plan() {  # in $CPATH (the current folder): $TMPD/p.* lists and PLAN_* s
             kit_base "$CPATH"
             git -C "$CPATH" -c core.quotepath=off ls-tree -r --name-only "$KB_SHA" > "$TMPD/kitfiles" 2>/dev/null || : > "$TMPD/kitfiles"
             git -C "$CPATH" -c core.quotepath=off diff --name-only "$KB_SHA" > "$TMPD/changed" 2>/dev/null || : > "$TMPD/changed"
+            # The kit's own file list, as the base commit holds it, has the last word: a file is the kit's only if
+            # the list names it with the content the base commit holds. So a file the PI committed under a kit
+            # folder stays the PI's even when the base cannot be told apart from the PI's commits (no remote, or
+            # the PI's commits pushed to a remote of their own).
+            if git -C "$CPATH" show "$KB_SHA:$KIT_FILES" > "$TMPD/blist.raw" 2>/dev/null; then
+                awk '{ l = $0; gsub(/^[ \t\r]+/, "", l); gsub(/[ \t\r]+$/, "", l); i = index(l, " ")
+                       if (i == 41) { s = substr(l, 1, 40); if (s !~ /[^0-9a-f]/) print s "\t" substr(l, 42) } }' \
+                    "$TMPD/blist.raw" > "$TMPD/blist"
+                git -C "$CPATH" -c core.quotepath=off ls-tree -r "$KB_SHA" > "$TMPD/btree" 2>/dev/null || : > "$TMPD/btree"
+                AW_K="$TMPD/kitfiles.listed" AW_C="$TMPD/changed.listed" awk -F "$TAB" -v marker="$KIT_MARKER" -v list="$KIT_FILES" '
+                    function under(r,  i) { for (i = 1; i <= nm; i++) if (r == m[i] || index(r, m[i] "/") == 1) return 1; return 0 }
+                    function iscache(r,  n, c, i) {
+                        if (r ~ /\.pyc$/) return 1
+                        n = split(r, c, "/")
+                        for (i = 1; i < n; i++) if (c[i] == "__pycache__" || c[i] == ".pytest_cache" || c[i] == ".mypy_cache") return 1
+                        return 0 }
+                    BEGIN { ko = ENVIRON["AW_K"]; co = ENVIRON["AW_C"]; printf "" > ko; printf "" > co }
+                    part == "m" { m[++nm] = $0; next }
+                    part == "b" { bl[$2] = $1; next }
+                    part == "t" { n = split($1, meta, " "); if (n == 3) blob[$2] = meta[3]; next }
+                    part == "k" { r = $0
+                                  if (under(r) && r != marker && r != list && !iscache(r) && !(r in bl)) next  # committed by the PI: theirs
+                                  print r > ko
+                                  if ((r in bl) && blob[r] != bl[r]) print r > co }' \
+                    part=m "$TMPD/manifest" part=b "$TMPD/blist" part=t "$TMPD/btree" part=k "$TMPD/kitfiles"
+                cat "$TMPD/kitfiles.listed" > "$TMPD/kitfiles"
+                cat "$TMPD/changed" "$TMPD/changed.listed" | sort -u > "$TMPD/changed.all"
+                cat "$TMPD/changed.all" > "$TMPD/changed"
+            fi
         fi
     elif [ -f "$CPATH/$KIT_FILES" ]; then
         # A download with the kit file list: a file is the kit's only if listed with the same content.

@@ -517,7 +517,8 @@ def check(text, stage="draft"):
                     continue
                 cls = plain(cells[ccol])
                 scol = next((i for i, h in enumerate(header) if re.search(r"epistemic", plain(h), re.I)), None)
-                status = plain(cells[scol]) if scol is not None else ""
+                status = plain(cells[scol]) if scol is not None else \
+                    " ".join(plain(c) for i, c in enumerate(cells) if i != ccol)  # no epistemic column: the row
                 status = re.sub(r"\b(?:not|no|never)\s+(?:an?\s+)?hypothes\w*", "", status, flags=re.I)  # "a rule, not a hypothesis"
                 kept = re.search(r"kept\s+by\s+the\s+PI", " ".join(plain(c) for c in cells), re.I)
                 if re.search(r"must\s+hold|invariant", cls, re.I) and re.search(r"\bhypothes[ie]s", status, re.I) \
