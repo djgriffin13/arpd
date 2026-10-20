@@ -142,8 +142,9 @@ an execution start), and the continuation SA. Log each: `python arpd/tools/log_e
 - Log `python arpd/tools/log_event.py handoff --actor lead --note "PLAN-… vN approved; execution later"`,
   commit, and stop. Do not start anything.
 
-When the prompt arrives (for a start authorized but waiting, `SKILL.md` Step G: the ruling already
-exists, and nothing new is recorded), `/arpd-plan` (Entry step 4) records the PI's words as the execution ruling
+When the prompt arrives, `/arpd-plan` (Entry step 4) records the PI's words as the execution ruling
+(for a start already authorized and waiting, `SKILL.md` Step G, the ruling exists and nothing new is
+recorded)
 and starts the sprint (§4). If the plan was revised after approval, the prompt is stale: set
 Readiness back to `Planning: draft (PLAN-…, vN)` and `Next step: review plan`, and replace the
 prompt in `START-HERE.md`.

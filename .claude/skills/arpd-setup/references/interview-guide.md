@@ -383,21 +383,45 @@ test"), labelled a proposed default.
 **Objective:** the first version and the priority of everything else, and how the agent team will
 work: arrangement, autonomy, review, authority and the rules it will follow, all agreed.
 
-**Open with the PI's rules,** before proposing anything (unless DV-01 is already settled; for a
-simple tool, fold it into the first Development question as a stated default):
+**Open with how the agents will work (DV-05), as a bounded choice,** unless the PI already said.
+Above the block, describe each arrangement in plain words, as *The agent workflow* (below) says: who
+writes the code, who reviews and tests it, whether agents work one at a time or in parallel, and what
+each costs in agent credit use and in the PI's attention. Recommend one from the task structure and
+the PI's constraints (CS-02), with the reason in a sentence:
 
-> Before I propose how the agents should work, do you have rules or preferences for how they
-> work, communicate, test, review, make decisions and involve you? For example: separate developer
-> and reviewer agents, your approval before certain kinds of change, a limit on credit use, or how
-> far the team may go on its own.
+```text
+────────────────────────────────
+CHOICE FOR YOU (select one)
+How should the agents work on this project?
+A. One agent builds; a fresh reviewer agent that did not write the code checks each change.
+   Simplest and cheapest.
+B. A lead agent with helpers: an implementer writes, a separate reviewer checks, and a tester
+   writes tests from the specification when the science needs it. More independent checking;
+   more credit use.
+C. Several agents in parallel on separate parts, each in its own copy of the project, under a lead,
+   with an independent tester. For large work that splits cleanly; the most to keep track of.
+D. Recommend one for me.
+────────────────────────────────
+```
+
+Mark the recommended option "(recommended)"; for a simple tool, A. Then **one open follow-up (DV-01)**,
+before proposing anything else:
+
+> Is there anything more you want to set about how the agents run? For example: rules they must
+> follow, how changes are reviewed or tested, what needs your approval, how far they may go on
+> their own, or a limit on credit use.
+
+Record the answer in the PI's words; "nothing more" is an answer. For a simple tool, the follow-up
+may be a stated default inside the next question ("Unless you want to add rules, I'll use ARPD's
+standard ones").
 
 | ID | Required item | Feeds |
 |---|---|---|
-| DV-01 | The PI's rules and preferences for the agents' work (asked first) | The rules summary; SA-01 |
-| DV-02 | The minimum usable version: the simplest version the PI could actually use. It keeps every requirement the PI already called firm, required or a must; list those before asking, and never move one out without the PI's words | P1; milestone M1 |
+| DV-05 | Team arrangement and workspace (asked first, as a choice) | Report §12; charter |
+| DV-01 | The PI's rules and preferences for the agents' work (the open follow-up) | The rules summary; SA-01 |
+| DV-02 | The minimum usable version: the simplest version the PI could actually use. It keeps every requirement the PI already called firm, required or a must; list those before asking, and never move one out without the PI's words. Not asked for a very small project (the whole tool is the minimum, Inferred) | P1; milestone M1 |
 | DV-03 | What the first release is: a proof of concept, a research-useful version, or a validated release | Exit evidence of M1; verification depth |
 | DV-04 | The priority of every other feature and research question (P1–P5), with feasibility and correctness-critical flags | Requirements; roadmap |
-| DV-05 | Team arrangement and workspace | Report §12; charter |
 | DV-06 | Sprint autonomy: one task at a time as planned, one sprint at a time, or several sprints with a full post-action review and decision log | Charter §8 cadence; `/arpd-plan` |
 | DV-07 | Review depth and check-in cadence | SA-01; `STATUS.md` §8 |
 | DV-08 | Authority profile (SA-01), the data-semantics policy, and limits on time, compute and cost | SA-01 |
@@ -406,8 +430,11 @@ simple tool, fold it into the first Development question as a stated default):
 
 ### The minimum usable version and priorities
 
-For a substantial project (for a simple tool, record the whole tool as the minimum, Inferred, and
-skip DV-03), say it plainly: "You have described a tool that ___. This is a
+**If the proposed project is already very small** (one tool doing one job, nothing to stage), do not
+ask about a minimum usable version or the first-release type at all: record the whole tool as the
+minimum (DV-02 and DV-03 Inferred, stated in the Development summary for the PI to correct) and go
+straight to placing anything else the PI mentioned on the priority scale. Otherwise, for a
+substantial project, say it plainly: "You have described a tool that ___. This is a
 substantial build and is best developed in stages. What is the simplest version of it that you could
 actually use?" Then: "These features and research questions fit that version: ___. These do not:
 ___. Please correct the split, and place each of the rest on this scale." Ask once (DV-03) whether the
@@ -442,11 +469,11 @@ parallel in separate worktrees, what the PI sees and approves, and what it costs
 the PI's attention). Say how the PI's constraints (for example, "keep credit use low", CS-02) shaped
 the recommendation.
 
-Ask about the **task structure**, not about agents: can the work split into parts built and tested
-independently? Then put the recommended arrangement and one short alternative in a `CHOICE FOR YOU`,
-with sprint autonomy, review depth, check-in cadence, the authority profile and each proposed module
-in the same block (or two blocks, for a complex project), not left to the adoption assent. Never
-adopt an arrangement, review depth or profile the PI was not asked about.
+Judge the **task structure** for the recommendation: can the work split into parts built and tested
+independently? The arrangement is asked first (above). Sprint autonomy, review depth, check-in
+cadence, the authority profile and each proposed module come later in the phase, in one bounded
+choice (or two, for a complex project), not left to the adoption assent. Never adopt an arrangement,
+review depth or profile the PI was not asked about.
 
 | Situation | Team arrangement | Workspace |
 |---|---|---|

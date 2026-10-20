@@ -1,7 +1,7 @@
 #!/bin/sh
 # install.sh: the no-Python twin of arpd/tools/install.py.
 #
-#     sh arpd/tools/install.sh convert <path> [--yes [--include-local-work]] [--ignore <path> ...]
+#     sh arpd/tools/install.sh convert <path> [--dry-run | --yes [--include-local-work]] [--ignore <path> ...]
 #     sh arpd/tools/install.sh new <path> [--kit <kit>]
 #     sh arpd/tools/install.sh import <git path or URL> <path> [--force] [--kit <kit>]
 #     sh arpd/tools/install.sh install <path> [--force] [--notes <path>] [--kit <kit>]
@@ -44,13 +44,12 @@ TAB=$(printf '\t')
 KIT_MARKER=.arpd-kit
 KIT_FILES=.arpd-kit-files
 TOOL=arpd/tools/install.sh
-FALLBACK_VERSION=v0.7.0-rc.1      # as install.py's FALLBACK_VERSION
+FALLBACK_VERSION=v0.7.0-rc.2      # as install.py's FALLBACK_VERSION
 DEFAULT_MANIFEST=".arpd-kit .arpd-kit-files AGENTS.md CITATION.cff CLAUDE.md LICENSE README.md RELEASE-NOTES.md .gitattributes .gitignore docs evaluation tests"
 DEFAULT_SKILLS="arpd-setup arpd-plan arpd-checkin arpd-amend"
 NOTES=reports/setup/NOTES.md
 IGNORE_BYTES=52428800             # 50 MB: git-ignored
 LARGE_BYTES=10485760              # 10 MB: listed
-OLD_GIT=.git-arpd-old
 DATA_EXT=".csv .tsv .xlsx .xls .parquet .feather .h5 .hdf5 .sav .dta .rds .rdata .pkl .pickle .npy .npz .mat .db .sqlite .zip .gz .tar .7z .jsonl"
 
 TMPD=$(mktemp -d 2>/dev/null) || TMPD=
@@ -84,7 +83,7 @@ usage() {
     cat <<'EOF'
 usage: sh arpd/tools/install.sh <command> ...
 
-    convert <path> [--yes [--include-local-work]] [--ignore <path> ...]   (run in a fresh kit clone)
+    convert <path> [--dry-run | --yes [--include-local-work]] [--ignore <path> ...]   (in a fresh kit clone)
     new <path> [--kit <kit>]                                               (run from the kit clone)
     import <git path or URL> <path> [--force] [--kit <kit>]                (run from the kit clone)
     install <path> [--force] [--notes <path>] [--kit <kit>]                (run from the kit clone)
@@ -904,17 +903,47 @@ refuse_other_worktrees() {
     refuse "this clone has other git worktrees ($(join_lines "$TMPD/wt.other")); converting would delete the history they depend on. Remove them (git worktree remove <path>; git worktree prune for one whose folder is gone) or convert a fresh clone. Nothing was changed."
 }
 
-write_bundle() {  # BUNDLE: every ref, in a verified bundle beside the folder
+backup_var() {  # BACKUP = a new folder beside the project: <name>-pre-arpd-backup-<UTC time>[-n]
     parent_var "$CPATH"
-    _stem=$(join_path "$PARENT" "$(base_of "$CPATH")-pre-arpd-history-$(date -u +%Y%m%dT%H%MZ)")
-    BUNDLE=$_stem.bundle; _i=2
-    while [ -e "$BUNDLE" ]; do BUNDLE=$_stem-$_i.bundle; _i=$((_i + 1)); done
-    if _o=$(git -C "$CPATH" bundle create "$BUNDLE" --all 2>&1); then
-        _o=$(git -C "$CPATH" bundle verify "$BUNDLE" 2>&1) && return 0
-    fi
-    rm -f "$BUNDLE"
-    refuse "could not write a verified backup of this clone's history to $BUNDLE: $_o
-Nothing was deleted."
+    join_var "$PARENT" "$(base_of "$CPATH")-pre-arpd-backup-$(date -u +%Y%m%dT%H%MZ)"
+    BACKUP=$JOINED; _i=2
+    while [ -e "$BACKUP" ]; do BACKUP=$JOINED-$_i; _i=$((_i + 1)); done
+}
+
+write_restore() {  # has_git: $BACKUP/RESTORE.md, as install.py's RESTORE_TEXT
+    _note=
+    [ -n "$1" ] && _note=' and its git history (`.git`: every branch, tag and stash, including any local commits)'
+    _p=$(printf '%s\n' "$CPATH" | sed 's#\\#/#g'); _b=$(printf '%s\n' "$BACKUP" | sed 's#\\#/#g')
+    cat > "$BACKUP/RESTORE.md" <<EOF
+# Restoring the ARPD kit clone
+
+This folder holds what \`convert\` moved out of
+
+    $_p
+
+on $(date -u +%Y-%m-%dT%H:%MZ): the kit's own files$_note. Nothing was deleted.
+
+## To undo the conversion
+
+Do this soon after converting, before you have committed work you want to keep: it replaces the
+project's new history. In the project folder, in Git Bash or another shell:
+
+    cd "$_p"
+    rm -rf .git
+    cp -a "$_b/." .
+    rm -f RESTORE.md
+    git status
+
+\`git status\` then shows what you added since the conversion (and \`arpd/VERSION\`). If you have
+committed work since, copy it out first.
+
+## To recover something from the kit's history later
+
+    git -C "$_b" log --all --oneline
+    git -C "$_b" show <commit>:<path>
+
+The project does not need this folder. Delete it whenever you no longer want the backup.
+EOF
 }
 
 print_convert_plan() {
@@ -924,18 +953,18 @@ print_convert_plan() {
         elif [ -s "$TMPD/remotes" ]; then _w="remotes $(join_lines "$TMPD/remotes")"
         else _w="with no remote"; fi
         say "It is a git clone at $COMMIT_, $_w."
-        print_list "Other remotes, removed with the kit's history (note them to add back with git remote add)" "$TMPD/other.remotes" all
+        print_list "Other remotes, which go with the kit's history to the backup (note them to add back with git remote add)" "$TMPD/other.remotes" all
     elif [ -n "$PLAN_LISTED" ]; then
         say "It is a download, not a git clone: the kit's files are recognized from $KIT_FILES; any other file, or a kit file whose content you changed, is kept."
     else
-        say "It is a download, not a git clone, and has no $KIT_FILES list: every file under the kit entries of $KIT_MARKER is removed."
-        warn "files you added inside the kit's folders cannot be told apart from the kit's own and would be removed; move them out of those folders first."
+        say "It is a download, not a git clone, and has no $KIT_FILES list: every file under the kit entries of $KIT_MARKER is moved to the backup folder."
+        warn "files you added inside the kit's folders cannot be told apart from the kit's own and would be moved to the backup folder with them; move them out of those folders first."
     fi
     say ""
-    print_list "Kit files to remove ($(count "$TMPD/p.R"))" "$TMPD/p.R" all
+    print_list "Kit files to move to the backup folder ($(count "$TMPD/p.R"))" "$TMPD/p.R" all
     _sk=$(kit_skills "$CPATH" | awk '{ printf "%s.claude/skills/%s/", (NR > 1 ? ", " : ""), $0 } END { if (NR == 0) printf "no skills" }')
     say "Kept as they are (the ARPD infrastructure): arpd/ and $_sk."
-    print_list "Kit files you changed: kept, not removed ($(count "$TMPD/p.C"); review them)" "$TMPD/p.C" all
+    print_list "Kit files you changed: kept, not moved ($(count "$TMPD/p.C"); review them)" "$TMPD/p.C" all
     print_list "Your files inside kit folders: kept ($(count "$TMPD/p.K"))" "$TMPD/p.K" all
     print_list "Your other files: kept ($(count "$TMPD/p.P"))" "$TMPD/p.P" all
     print_list "Will be git-ignored (your choice; kept on disk, not committed)" "$TMPD/ignores"
@@ -953,25 +982,31 @@ print_convert_plan() {
         say "Your material: none besides the kit."
     fi
     say ""
-    say "Git history: the kit's history is removed; the project starts a fresh history (branch main) with no remote."
-    if [ -z "$PLAN_GIT" ]; then
-        say "There is no git history to keep (not a git clone)."
-    elif [ -n "$REASONS" ]; then
-        print_list "Local work in this clone (on no remote)" "$TMPD/details"
-        parent_var "$CPATH"
-        say "Safeguard: this clone holds work that is on no remote ($REASONS). Converting needs --include-local-work as well as --yes; a backup bundle is then written outside the folder, in $PARENT, and verified before anything is deleted. If this is a checkout where ARPD itself is developed, do not convert it: use a fresh clone."
+    parent_var "$CPATH"
+    _h=; [ -n "$PLAN_GIT" ] && _h=" and the kit's git history (.git, with every branch, tag and stash)"
+    say "Backup: nothing is deleted. The kit files above$_h are moved to a new folder beside this one, <name>-pre-arpd-backup-<time> in $PARENT, with a RESTORE.md that says how to undo the conversion; delete that folder whenever you no longer need it."
+    if [ -n "$PLAN_GIT" ]; then
+        say "Git history: the project starts a fresh history (branch main) with no remote."
     else
-        say "Safeguard: every commit is on the remote, so the kit's history remains available from ${ORIGIN:-its remote}. No backup is needed."
+        say "Git history: there is none yet (not a git clone); the project starts one (branch main) with no remote."
+    fi
+    if [ -n "$REASONS" ]; then
+        print_list "Local work in this clone (on no remote)" "$TMPD/details"
+        say "This clone holds work that is on no remote ($REASONS). It is kept in the backup folder's history, but converting needs --include-local-work as well as --yes. If this is a checkout where ARPD itself is developed, do not convert it: use a fresh clone."
     fi
 }
 
-remove_batch() {  # relative paths: remove them, counting REMOVED and listing failures in left
-    if rm -f -- "$@" 2>/dev/null; then REMOVED=$((REMOVED + $#)); return 0; fi
-    for _f in "$@"; do
-        if _e=$(rm -f -- "$_f" 2>&1) && [ ! -e "$_f" ]; then
-            REMOVED=$((REMOVED + 1))
+move_group() {  # dst_folder relative paths...: move them into the folder, counting MOVED and listing failures in left
+    _md=$1; shift
+    if [ -d "$_md" ] || mkdir -p "$_md" 2>/dev/null; then
+        if mv -- "$@" "$_md/" 2>/dev/null; then MOVED=$((MOVED + $#)); return 0; fi
+    fi
+    for _f in "$@"; do   # find the files that would not move
+        [ -e "$_f" ] || [ -L "$_f" ] || { MOVED=$((MOVED + 1)); continue; }   # moved by the batch above
+        if _e=$({ mkdir -p "$_md" && mv -- "$_f" "$_md/"; } 2>&1) && [ ! -e "$_f" ]; then
+            MOVED=$((MOVED + 1))
         else
-            say "could not remove the kit file $_f ($(printf '%s\n' "$_e" | head -n 1)); delete it yourself" >> "$TMPD/left"
+            say "could not move the kit file $_f to the backup folder ($(printf '%s\n' "$_e" | head -n 1)); it is still here: move or delete it yourself" >> "$TMPD/left"
         fi
     done
 }
@@ -1008,6 +1043,9 @@ cmd_convert() {
     done 3< "$TMPD/chosen"
     exec 4<&-
     location_warnings "$CPATH"
+    if [ -n "$YES" ] && [ -n "$DRY_RUN" ]; then
+        refuse "--yes and --dry-run cannot be used together. Nothing was changed."
+    fi
     if [ -z "$YES" ]; then
         _m=$(identity_problem "$CPATH") || warn "$_m"
         say ""
@@ -1015,53 +1053,41 @@ cmd_convert() {
         exit 0
     fi
     if [ -n "$REASONS" ] && [ -z "$INCLUDE_LOCAL" ]; then
-        refuse "this clone holds local work ($REASONS); review it above and rerun with --yes --include-local-work to back it up and convert. Nothing was changed."
+        refuse "this clone holds local work ($REASONS); review it above and rerun with --yes --include-local-work to keep it in the backup folder and convert. Nothing was changed."
     fi
     check_git "$CPATH"
     ID_NAME=$(git -C "$CPATH" config --get user.name 2>/dev/null)
     ID_EMAIL=$(git -C "$CPATH" config --get user.email 2>/dev/null)
     say ""
-    BUNDLE=
-    if [ -n "$PLAN_GIT" ] && [ -n "$REASONS" ]; then
-        write_bundle
-        say "Backed up this clone's history (every branch, tag and stash) to $BUNDLE (verified)."
-        say "    To restore it:  git clone \"$BUNDLE\" <folder>"
-        case "; $REASONS" in
-            *"; a stash"*) say "    The stash is in the bundle too; to get it back in that clone:  git -C <folder> fetch \"$BUNDLE\" refs/stash  then  git -C <folder> stash apply FETCH_HEAD" ;;
-        esac
-    elif [ -n "$PLAN_GIT" ]; then
-        say "No local-only work; the kit's history remains available from ${ORIGIN:-its remote}."
-    fi
     : > "$TMPD/left"
-    OLD=
-    if [ -e .git ] || [ -L .git ]; then
-        OLD=$CPATH/$OLD_GIT
-        _e=; _fail=
-        if [ -e "$OLD" ] || [ -L "$OLD" ]; then _e=$(rm -rf "$OLD" 2>&1) || _fail=1; fi
-        if [ -z "$_fail" ]; then _e=$(mv .git "$OLD" 2>&1) || _fail=1; fi
-        if [ -n "$_fail" ]; then
-            _kept=; [ -n "$BUNDLE" ] && _kept="; the backup bundle is kept"
-            refuse "cannot move the kit's .git aside ($(printf '%s\n' "$_e" | head -n 1)); close any program using this folder (an editor, a terminal running git) and rerun. Nothing was deleted$_kept."
+    backup_var
+    _e=$(mkdir "$BACKUP" 2>&1) || refuse "cannot create the backup folder $BACKUP ($(printf '%s\n' "$_e" | head -n 1)). Nothing was changed."
+    HAS_GIT=
+    if [ -e .git ] || [ -L .git ]; then   # first, so that a locked file stops everything before any kit file moves
+        HAS_GIT=1
+        if ! _e=$(mv .git "$BACKUP/.git" 2>&1); then
+            rmdir "$BACKUP" 2>/dev/null
+            refuse "cannot move the kit's .git to the backup folder ($(printf '%s\n' "$_e" | head -n 1)); close any program using this folder (an editor, a terminal running git) and rerun. Nothing was changed."
         fi
     fi
-    REMOVED=0
-    set --
-    while IFS= read -r _r <&3; do
-        set -- "$@" "$_r"
-        if [ $# -ge 100 ]; then remove_batch "$@"; set --; fi
-    done 3< "$TMPD/p.R"
-    if [ $# -gt 0 ]; then remove_batch "$@"; fi
+    # Move the kit files to <backup>/<rel>, one mv per destination folder.
+    MOVED=0
+    AW_B=$BACKUP awk '{ d = ""; if (match($0, /\/[^\/]*$/)) d = "/" substr($0, 1, RSTART - 1); print ENVIRON["AW_B"] d "\t" $0 }' \
+        "$TMPD/p.R" | sort -t "$TAB" -k1,1 > "$TMPD/moves"
+    _mg=; set --
+    while IFS="$TAB" read -r _mdir _mrel <&3; do
+        if [ "$_mdir" != "$_mg" ]; then
+            [ $# -gt 0 ] && move_group "$_mg" "$@"
+            set --; _mg=$_mdir
+        fi
+        set -- "$@" "$_mrel"
+    done 3< "$TMPD/moves"
+    [ $# -gt 0 ] && move_group "$_mg" "$@"
     while IFS= read -r _e <&3; do   # only empty folders
         if [ -d "./$_e" ]; then find "./$_e" -depth -type d -exec rmdir {} \; 2>/dev/null; fi
     done 3< "$TMPD/manifest"
+    write_restore "$HAS_GIT"
     cat "$TMPD/i.ignore" "$TMPD/p.E" "$TMPD/ignores" > "$TMPD/extra"
-    if [ -n "$OLD" ]; then
-        _e=$(rm -rf "$OLD" 2>&1); _rc=$?
-        if [ $_rc -ne 0 ] || [ -e "$OLD" ]; then
-            say "$OLD_GIT/" >> "$TMPD/extra"
-            say "could not delete $OLD_GIT, the kit's old git history ($(printf '%s\n' "$_e" | head -n 1)); close any program using it and delete the folder yourself" >> "$TMPD/left"
-        fi
-    fi
     git_init "$CPATH"
     # An identity set only in the kit clone's own config went with its .git.
     if [ -n "$ID_NAME" ] && [ -z "$(git -C "$CPATH" config --get user.name 2>/dev/null)" ]; then gitc "$CPATH" config user.name "$ID_NAME"; fi
@@ -1077,7 +1103,9 @@ $(sed 's/^/Remote removed at conversion: /' "$TMPD/other.remotes")"; fi
     commit_all "$CPATH" "$_msg" force "Do NOT delete this folder: it holds your files, and the conversion is otherwise done (do not rerun convert). Fix the signing or identity problem git reports, then run  git add -A  and  git commit -m \"$_msg\"  in $CPATH."   # extra: already in .gitignore
     [ -s "$TMPD/p.C" ] && say "review the kit files you changed, kept and committed: $(join_lines "$TMPD/p.C")" >> "$TMPD/left"
     [ -s "$TMPD/p.payload" ] && say "your changes to ARPD files are kept, but a later update from a kit will overwrite them: $(join_lines "$TMPD/p.payload")" >> "$TMPD/left"
-    say "Removed $REMOVED kit file(s) and the kit's git history and remote."
+    _h=; [ -n "$HAS_GIT" ] && _h=" and the kit's git history (every branch, tag and stash)"
+    say "Moved $MOVED kit file(s)$_h to the backup folder $BACKUP. Nothing was deleted."
+    say "    To undo the conversion, follow $BACKUP/RESTORE.md; delete that folder when you no longer need it."
     _nc=$(count "$TMPD/p.C"); _x=
     [ "$_nc" -gt 0 ] && _x=", and $_nc kit file(s) you changed"
     say "Kept: arpd/, the ARPD skills and your material ($INV_FILES file(s))$_x."
@@ -1104,7 +1132,7 @@ case $CMD in
     convert | new | import | install | update | owed) ;;
     *) usage_error "argument command: invalid choice: '$CMD'" ;;
 esac
-POS1= POS2= NPOS=0 YES= FORCE= PRUNE= KITARG= NOTES_ARG= INCLUDE_LOCAL= OPTS=
+POS1= POS2= NPOS=0 YES= FORCE= PRUNE= KITARG= NOTES_ARG= INCLUDE_LOCAL= DRY_RUN= OPTS=
 : > "$TMPD/args.ignore"
 need() { [ "$1" -ge 2 ] || usage_error "argument $2: expected one argument"; }
 while [ $# -gt 0 ]; do
@@ -1113,6 +1141,7 @@ while [ $# -gt 0 ]; do
         --force) FORCE=1; OPTS="$OPTS force" ;;
         --prune) PRUNE=1; OPTS="$OPTS prune" ;;
         --include-local-work) INCLUDE_LOCAL=1; OPTS="$OPTS include" ;;
+        --dry-run) DRY_RUN=1; OPTS="$OPTS dryrun" ;;
         --kit) need $# --kit; KITARG=$2; OPTS="$OPTS kit"; shift ;;
         --kit=*) KITARG=${1#--kit=}; OPTS="$OPTS kit" ;;
         --notes) need $# --notes; NOTES_ARG=$2; OPTS="$OPTS notes"; shift ;;
@@ -1127,7 +1156,7 @@ while [ $# -gt 0 ]; do
     shift
 done
 case $CMD in
-    convert) ALLOWED="yes include ignore"; WANT=1 ;;
+    convert) ALLOWED="yes include ignore dryrun"; WANT=1 ;;
     new) ALLOWED="kit"; WANT=1 ;;
     import) ALLOWED="yes force kit"; WANT=2 ;;
     install) ALLOWED="force notes kit"; WANT=1 ;;

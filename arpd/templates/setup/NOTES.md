@@ -31,7 +31,7 @@ other repositories or folders the PI did not point to.
 - **What the folder held at the start:** {{fresh kit clone / kit clone with the PI's material /
   existing repository / ARPD starter / download without git}}, with what inspection found
 - **How it was prepared:** {{convert (in place) / install <repository> / new <path> / import
-  <source> → <path>}}; kit used: {{path, version}}; any backup bundle: {{path / none needed}}
+  <source> → <path>}}; kit used: {{path, version}}; backup folder: {{path / none (not converted)}}
 - **Project folder:** {{absolute path}}
 - **Consent to save these notes in the project:** {{not needed (convert, new, import) / given, PI's
   words and date / declined: kept at <parent of the target>/.arpd-setup-notes/<target name>/ / not

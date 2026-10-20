@@ -44,7 +44,7 @@ a condition of continuing.
 `arpd/tools/install.sh` is the no-Python twin of `install.py`, in plain shell and git (which Claude
 Code already needs). `convert`, `new`, `install`, `import` (git sources only), `update` and `owed`
 take the same arguments, print the same plans, warnings and refusals, and leave the same result,
-including the backup bundle before a conversion removes a git history. Run it as
+including the backup folder a conversion moves the kit's files and old git history into. Run it as
 `sh arpd/tools/install.sh <command> ...` from the same folder the skill names. Differences:
 
 - **No hooks:** `owed` installs the agent roles and skills, and reports the hooks as not installed

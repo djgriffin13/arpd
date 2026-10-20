@@ -1,10 +1,22 @@
-# Release notes: ARPD v0.7.0-rc.1 (release candidate)
+# Release notes: ARPD v0.7.0-rc.2 (release candidate)
 
 **Status: a release candidate, held for manual testing. Not a final release.** It redesigns setup
 around the researcher: a research-aware interview in phases, each with defined information needs
 and a summary the PI confirms, run in the folder the PI cloned, with a goal-first `/arpd-plan`, and
 working without Python. A final release follows only after the manual walkthrough and the usability
 protocol ([evaluation/usability-v0.7/](evaluation/usability-v0.7/)) have been run and any blockers fixed.
+
+**rc.2 (after the PI's first walkthrough attempt):** conversion no longer deletes anything. The kit's
+files and the clone's old git history move to a backup folder beside the project, with a
+`RESTORE.md` to undo it; the dry run has an explicit `--dry-run`; and when Claude Code's auto-mode
+safety check blocks the command, setup hands the PI one line to type (`! python …` or, without
+Python, `! sh …`) instead of improvising. The local-work bundle is gone (the moved `.git` keeps every
+branch, tag and stash). The architecture guide now favours standard scientific libraries (numpy,
+scipy, the tidyverse) for computational work, keeps the preference for few dependencies for less
+established ones, and sizes the workload with a rough count, never a benchmark, when speed matters. The Development phase now opens with a
+choice of how the agents work (one agent with an independent reviewer, a lead with helpers, or
+parallel agents), then an open follow-up on anything more about how they run; a very small project
+skips the minimum-usable-version question and goes straight to priorities.
 
 ## What ARPD is
 
@@ -19,7 +31,8 @@ scientific decision. See [README.md](README.md).
   the first answer setup asks where the project lives; the default turns this folder into the
   project (`install.py convert`): ARPD's own development files are removed (the list is in
   `.arpd-kit`), `arpd/` and the skills stay, every file of the PI's is kept, and the folder gets a
-  fresh git history with no remote; a verified git bundle backs up any local-only work first. The
+  fresh git history with no remote; the kit's files and old history go to a backup folder, nothing
+  deleted. The
   interview continues in the same session. Existing repositories are still installed in place, with
   their history and remote; a new folder or an import is still available.
 - **A setup-safe `CLAUDE.md`.** A fresh clone's `CLAUDE.md` says only that setup comes first; the

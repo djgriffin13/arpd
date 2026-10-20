@@ -43,22 +43,27 @@ accomplish and whether you have existing documents, code or notes it should buil
 
 **Where the project lives.** Right after your first answer, setup asks where the project should be.
 The usual answer is **here**: the copy of ARPD you just cloned becomes your project, in place, and
-the interview continues in the same session. Setup runs `python arpd/tools/install.py convert .`,
-shows you its plan, and acts only on your yes:
+the interview continues in the same session. Setup runs `python arpd/tools/install.py convert .`
+(or, without Python, `sh arpd/tools/install.sh convert .`), shows you its plan, and acts only on your
+yes:
 
-- ARPD's own development files (its tests, evaluation material, documentation, README and
-  development instructions) are removed; `arpd/` and the skills in `.claude/skills/arpd-*` stay;
-- every file of yours is kept, including files you put inside the kit's folders;
+- **nothing is deleted:** ARPD's own development files (its tests, evaluation material,
+  documentation, README and development instructions) and the clone's old git history (every
+  branch, tag and stash, including anything you committed) move to a backup folder beside this one,
+  `<folder>-pre-arpd-backup-<time>`, with a `RESTORE.md` saying how to undo the conversion; delete
+  that folder whenever you no longer want it;
+- `arpd/` and the skills in `.claude/skills/arpd-*` stay, and every file of yours is kept, including
+  files you put inside the kit's folders;
 - the folder gets a **fresh git history with no remote**, so nothing of yours can be pushed to the
-  ARPD repository. If the clone held commits or stashes of yours that exist nowhere else, a backup
-  (a git bundle, restorable with `git clone <bundle>`) is written beside the folder first;
+  ARPD repository;
 - a short `CLAUDE.md` says setup is in progress, until setup writes your project's charter.
 
 Setup shows you the full plan first and converts only on your yes, in a turn of its own. You can
 keep files out of git (for example participant data you put in the folder): they stay on disk but
-are never committed. Conversion cannot be undone, except from the backup and a fresh copy of ARPD.
-If the clone holds work of yours that is on no remote, setup lists it and converts only after you
-agree (it is backed up first). If you have no tool in mind yet, setup converts nothing: it keeps its
+are never committed. If the clone holds work of yours that is on no remote, setup lists it and
+converts only after you agree (it goes to the backup folder with the old history). Claude Code's own
+safety check may block the conversion command when it runs in auto mode; then setup gives you one
+line to type at the prompt (it starts with `!`), and carries on from its output. If you have no tool in mind yet, setup converts nothing: it keeps its
 notes beside the folder, discusses what tool might serve your question, and picks up from those
 notes when you come back.
 
@@ -132,10 +137,12 @@ answer can fill several. Expect about 30–90 minutes, depending on the project.
   architecture and the technical details with you (data, workflow, export, platform, language),
   with alternatives and trade-offs, for as many rounds as you need. Its depth follows your comfort
   with code.
-- **Development:** your own rules for how the agents work; the **minimum usable version** and the
-  priority of everything else; how the agents are arranged, how much they do on their own, review
-  and check-ins; and the list of rules the agents will follow, each marked as ARPD's, yours, derived
-  from the project, or recommended.
+- **Development:** first a choice of how the agents work (one agent with an independent reviewer,
+  a lead with helpers, or several in parallel), then anything more you want to set about how they
+  run; the **minimum usable version** (skipped for a very small tool, which is its own minimum) and
+  the priority of everything else; how much the agents do on their own, review and check-ins; and
+  the list of rules the agents will follow, each marked as ARPD's, yours, derived from the project,
+  or recommended.
 - **Definition Report:** the agent writes the report and checks it for gaps; you adopt it.
 
 **Every phase ends with a summary for you to confirm.** You can confirm it, correct it, or go back

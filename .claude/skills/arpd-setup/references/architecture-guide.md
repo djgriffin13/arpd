@@ -63,6 +63,11 @@ program".
 4. **Trade-offs.** For each, the advantages and disadvantages that matter to *this* PI. Cover
    development effort, distribution and updates, data location and safety, cost and licensing,
    maintainability by the people who will maintain it, and fit with the PI's community and tools.
+   **When speed is part of the trade-off, size the workload first** with a rough count from what
+   the PI said (for a simulation: agents × dimensions × steps × repetitions × parameter settings;
+   for an analysis: rows × models × resamples), and say what it implies ("a Figure 1-style sweep is
+   on the order of 10^9 updates: hours in pure Python, minutes with numpy"). A count in a sentence
+   is enough: never benchmark or time code during the interview.
 5. **Recommendation, with reasons** tied to the requirements.
 6. **Consequences** for future development: what the choice makes easy, what it makes hard, and
    what would force a change later. For a model, simulation or experiment platform, include what
@@ -118,8 +123,18 @@ gate before implementing. It does not get pushed silently into sprint planning.
 - **Concurrency and parallelism.** Only when the workload needs it, for example bootstrap resamples
   or many simulation runs.
 - **Compute and deployment.** A laptop, a lab server, the cloud, or a cluster.
-- **Dependencies.** Few, well known, and permissively licensed. A dependency with licence or cost
-  implications is consequential (CORE §6).
+- **Dependencies.** Prefer few, but weigh them by how established they are:
+  - **Standard scientific libraries are favoured** where they fit the work: in Python numpy,
+    scipy and pandas (and matplotlib for plots); in R the tidyverse and the standard modelling
+    packages; their equivalents elsewhere. They are widely used, tested and maintained, and the
+    research community expects them, so "one more dependency" counts against them only very
+    weakly: never recommend hand-written numerical code or the standard library alone over them
+    just to avoid an install, for computational work they suit.
+  - **Untested, little-used or moderately established packages** are where the preference for few
+    dependencies applies in full: use one only when it saves real work, and say what it would cost
+    to replace.
+  - Keep the total small either way, permissively licensed; a dependency with licence or cost
+    implications is consequential (CORE §6).
 - **Open-source versus proprietary components,** and **licensing or cost.**
 - **Distribution and updates:**
   - how users receive the software;
@@ -194,4 +209,6 @@ These are routine. State them in the report §6 or §7; do not ask about them.
 - Outputs go to a git-ignored `output/` folder, unless a ruling makes them part of the record.
 - No real participant data in the repository.
 - Nothing the PI would need a developer to maintain (containers, microservices, GPU, cloud
-  deployment), unless the requirements call for it.
+  deployment), unless the requirements call for it. Standard scientific libraries (numpy, scipy,
+  the tidyverse, …) are not in this class: they are listed in a requirements file and installed
+  with one command.

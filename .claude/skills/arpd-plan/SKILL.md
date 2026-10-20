@@ -301,8 +301,8 @@ authorizes the start". The start option always says what it authorizes and which
 for a series it names the series and the SA (`references/multi-sprint-and-handoff.md` §3).
 
 - **Now, prerequisites met.** The PI's words are the execution authorization: record them verbatim
-  as an R-NN, unless they are already recorded (Entry 4, or an approval that authorized execution)
-  (the approval ruling, if given in the same message), plus the continuation SA for a
+  as an R-NN (with the approval ruling, if given in the same message), unless already recorded
+  (Entry 4, or an approval that authorized execution), plus the continuation SA for a
   series, as `references/multi-sprint-and-handoff.md` §3 says (including a bare letter's
   read-back). Then start the sprint (§4 there: Part 1 of `reports/sprints/SPRINT-NN.md` from the
   approved plan, STATUS, `sprint_start`) and follow the charter: task plans under `CLAUDE.md` §5,

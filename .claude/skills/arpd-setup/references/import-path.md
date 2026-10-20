@@ -33,7 +33,8 @@ Where should the project live?
 A. Here, in this folder (recommended). I turn this copy of ARPD into your project: ARPD's own
    development files (its tests, evaluation, documentation and README) are removed, arpd/ and the
    setup skills stay, every file of yours is kept, and the folder gets a fresh git history with no
-   connection to the ARPD repository. Any local-only git work is backed up first.
+   connection to the ARPD repository. Nothing is deleted: ARPD's files and the old git history go
+   to a backup folder beside this one, with instructions to undo it.
 B. A new folder: <absolute path>. This copy stays as it is; you then open Claude Code there.
 C. Your existing repository at <path>: ARPD is added there, keeping its history; you then open
    Claude Code there.
@@ -62,23 +63,25 @@ hand.
 
 ### Converting a kit clone (choice A)
 
-1. Run the dry run: `python arpd/tools/install.py convert .`. Show its plan in full: the kit files it
-   removes, the PI's files it keeps (including any inside kit folders), any kit files the PI changed
-   (kept), data-like and large files, any **local work** (commits, branches or a stash on no remote),
-   and what happens to the history (a backup bundle outside the folder when there is local work;
-   otherwise the kit's history stays available from its remote). It refuses a clone with other git
+1. Run the dry run: `python arpd/tools/install.py convert . --dry-run`. Show its plan in full: the
+   kit files it moves to the backup folder, the PI's files it keeps (including any inside kit
+   folders), any kit files the PI changed (kept), data-like and large files, any **local work**
+   (commits, branches or a stash on no remote), and the backup: the kit's files and its whole `.git`
+   move to `<name>-pre-arpd-backup-<time>` beside the folder, with a `RESTORE.md`; nothing is
+   deleted. It refuses a clone with other git
    worktrees: that is a development checkout, not a fresh copy.
 2. **Local work** that looks like ARPD development (branches other than the default, commits that
    change `arpd/` or the skills) means this is probably not a fresh copy: recommend a new folder
    (choice B) or a fresh clone, and say why. Local work of the PI's own (their notes committed in
-   the clone) is backed up and converted with `--include-local-work`.
+   the clone) is kept in the backup folder's history and converted with `--include-local-work`.
 3. End the turn with the conversion choice (`SKILL.md`, *Start*, step 7): convert as shown / change
    something / do not convert. Ask there whether the data-like files the plan lists may be committed;
    each the PI wants kept out becomes `--ignore <path>` (kept on disk, git-ignored, never committed).
    Large files and environments are git-ignored anyway.
 4. In the next turn, on the PI's choice A, run `python arpd/tools/install.py convert . --yes` (with
-   `--ignore` and `--include-local-work` as decided) and show its output in full. Quote any bundle
-   path, and how to restore it.
+   `--ignore` and `--include-local-work` as decided) and show its output in full. Quote the backup
+   folder's path and its `RESTORE.md`. If Claude Code's safety check blocks the command, hand the PI
+   the exact `!` line (`SKILL.md`, *Start*, step 7).
 5. Write the notes (`SKILL.md`, *Start*, step 8) and continue Intake in this session. Every command
    from now on is project-relative (`python arpd/tools/...`). The kit's `CLAUDE.md` is gone; the stub
    `CLAUDE.md` says setup is in progress.

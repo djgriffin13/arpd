@@ -31,8 +31,10 @@ The evidence behind them is indexed in [evaluation/README.md](../evaluation/READ
 - **The commitments review rests on the model's judgement.** It may miss a circular or questionable
   assumption, or flag one that is fine; the PI decides each. Citations are verified only when the
   session can reach sources; otherwise claims are labelled unverified.
-- **In-place conversion deletes the kit's git history** (by design: the PI's ruling). Local-only work
-  is backed up to a bundle first; work already on a remote is not, since it can be fetched again.
+- **In-place conversion moves the kit's git history out of the project** (by design: the PI's
+  ruling): it goes, with the kit's files, to a backup folder beside the project, nothing deleted;
+  `RESTORE.md` there undoes the conversion if followed before new work is committed. Claude Code's
+  auto-mode safety check may still block the command; setup then hands the PI one line to type.
 - **`CLAUDE.md` is loaded when a session starts;** Claude Code documents no mid-session reload except
   `/compact`. After an in-place setup the charter is read explicitly, and `/arpd-plan` starts
   implementation only once the charter is loaded (`/compact`, or a fresh session when agent roles

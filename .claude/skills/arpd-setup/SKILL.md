@@ -74,21 +74,30 @@ in this skill changes, and a read-through is never reported as a checker's PASS.
 6. **Where the project lives (IN-05),** before any file is written in the folder: a `CHOICE FOR YOU
    (select one)` from `import-path.md`, *Where the project lives*. In a fresh kit clone the
    recommended option is **here**: the folder becomes the project. Say what conversion does in plain
-   words (it removes ARPD's own development files, keeps `arpd/`, the skills and every file of
-   yours, and starts a fresh git history with no remote; local-only work is backed up first), and
-   that it cannot be undone except from that backup and a fresh copy of ARPD.
+   words (it moves ARPD's own development files and the kit's git history into a backup folder
+   beside this one, deleting nothing, keeps `arpd/`, the skills and every file of yours, and starts
+   a fresh git history with no remote), and that the backup folder's `RESTORE.md` says how to undo
+   it.
 7. **Prepare the folder,** on the PI's choice, with `arpd/tools/install.py` (`import-path.md`;
    without Python, `sh arpd/tools/install.sh` with the same arguments): `convert .`, `install`,
    `new` or `import`. Show the output in full (never piped through `tail` or `head`); quote every
    `WARNING:`, `REFUSED:`, `CONFLICTS:` and `Left to you:` line and help the PI act on it.
-   - **Convert:** the dry run first, shown in full (paste its lines as printed, in a code block if
-     long; a summary is not enough, since it is the PI's only look at what will be removed), and
-     then a turn of its own ending with
+   - **Convert:** the dry run first (`convert . --dry-run`), shown in full (paste its lines as
+     printed, in a code block if long; a summary is not enough, since it is the PI's only look at
+     what will be moved), and then a turn of its own ending with
      `CHOICE FOR YOU (select one)`: A. Convert as shown; B. Change something first (for example,
      keep data files out of git); C. Do not convert. **Never run `--yes` in the turn that shows the
      dry run.** Pass `--ignore <path>` for each file or folder the PI wants kept out of git (ask about
      the data-like files the plan lists); pass `--include-local-work` only when the plan lists local
      work and the PI chose A after seeing it.
+   - **If Claude Code's own safety check blocks the command** (for example "Denied by auto mode
+     classifier"), never work around it and never ask the PI to change permission settings. It is
+     not ARPD and not the PI's answer: say so in one sentence, then give the PI the one line to type
+     at the prompt, exactly, with the flags decided: `! python arpd/tools/install.py convert . --yes
+     …`, or without Python `! sh arpd/tools/install.sh convert . --yes …` (if `sh` is not found:
+     `! bash arpd/tools/install.sh convert . --yes …`). The output then appears in the session: read
+     it, quote its lines as for any run, and continue. The same applies to the dry run, with
+     `--dry-run`.
    - Only `new`, `import` and an `install` elsewhere need a new Claude Code session in the other
      folder (end that turn as a closing turn with the exact commands; never continue the interview
      in the kit session); `convert` and an install into the current folder continue here.
@@ -131,8 +140,9 @@ them, not to ask questions. Keep each phase's table in the notes, each item with
   opening question ("Do you have a design in mind?", "Any rules for how the agents work?") is asked
   only when the answer is not already settled, and may be folded into the phase's first real
   question as a stated default ("Unless you have a design in mind, I propose X; does that fit?").
-  The minimum-usable-version and first-release questions are for substantial projects; for a small
-  tool, the minimum is usually the whole tool, recorded as Inferred. The phase closeouts stay.
+  The minimum-usable-version and first-release questions are for substantial projects; for a very
+  small one, skip them and go straight to priorities (the whole tool is the minimum, recorded as
+  Inferred). The phase closeouts stay.
 
 **Phase closeout.** A phase ends when every required item is Confirmed, Inferred, Deferred, N.A.,
 or Open with a gate, and no consequential item is untouched. Then show the **phase summary**: the
@@ -184,7 +194,9 @@ Phase-specific conduct is in `interview-guide.md`. In particular:
 - **Design** always asks first whether the PI has a design or architecture in mind, adapts its
   depth to the PI's coding comfort (IN-03), iterates as long as the PI needs, and closes with an
   explicit readiness question as its phase closeout.
-- **Development** first asks for the PI's own rules for how the agents work; asks for the simplest
+- **Development** first asks, as a choice, how the agents will work (one agent with an independent
+  reviewer, a lead with helpers, or parallel agents), then openly for anything more about how they
+  run (rules, review, approvals, autonomy, credit use); asks for the simplest
   usable version only here; places every other feature on the P1–P5 scale; explains the proposed
   workflow in full; and closes with the rules summary.
 
