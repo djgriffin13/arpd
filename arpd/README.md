@@ -1,7 +1,8 @@
 # arpd/: the ARPD kit's copy
 
-This folder is everything a project uses from the ARPD kit, copied whole by
-`arpd/tools/install.py` when the project was created, imported or installed:
+This folder is everything a project uses from the ARPD kit: kept in place when a fresh kit clone was
+converted into the project, or copied whole by `arpd/tools/install.py` when the project was created,
+imported or installed:
 
 - `constitution/`: the charter template (`CORE.md`) and the modules;
 - `templates/`: the governing-document, report, plan and setup-notes templates, including

@@ -1,22 +1,94 @@
-# Modes, existing code and resuming
+# Where the project lives, existing code and resuming
 
-The project is always its own git repository; the kit clone is never the project. **Preserve
-existing work. Never silently merge or overwrite instructions.**
+**Preserve existing work. Never silently merge or overwrite instructions, and never remove a file of
+the PI's.** Reusable ARPD infrastructure (`arpd/`, `.claude/skills/arpd-*`) stays separate from the
+project's own documents.
+
+## Assessing the folder
+
+Before the first question, look (read only) and classify:
+
+| Found | Signs | Then |
+|---|---|---|
+| **Setup in progress** | `reports/setup/NOTES.md` (or an older `docs/discovery/SETUP.md`) | *Resuming* |
+| **Configured ARPD project** | `CLAUDE.md` names an adoption ruling in `DECISIONS.md` | Not setup: offer `/arpd-plan` or `/arpd-amend` |
+| **Fresh kit clone or download** | `.arpd-kit` with only the kit's own files | Opening question for a fresh start; recommend converting it here |
+| **Kit clone with the PI's material added** | `.arpd-kit`, plus untracked files (`git status`) that are not the kit's | Read them; the opening question names them; converting keeps them |
+| **Existing research repository** (ARPD not set up) | Code, documents or history of the PI's, `arpd/` absent or only a stub `CLAUDE.md` | *Existing repository review*; install in place |
+| **ARPD starter** | `PARADIGM-SPEC.md` and governing documents from an earlier ARPD project | *Steps for an ARPD starter* |
+
+Also run `git remote -v`: a fresh kit clone's `origin` points at the ARPD repository, and nothing of
+the PI's may ever be pushed there. Label findings as claimed by a document, seen by inspection, or
+shown by a test run.
+
+## Where the project lives (IN-05)
+
+Ask right after the opening answer, before writing anything, as a `CHOICE FOR YOU (select one)`,
+with only the options that fit. In a fresh kit clone, for example:
+
+```text
+────────────────────────────────
+CHOICE FOR YOU (select one)
+Where should the project live?
+A. Here, in this folder (recommended). I turn this copy of ARPD into your project: ARPD's own
+   development files (its tests, evaluation, documentation and README) are removed, arpd/ and the
+   setup skills stay, every file of yours is kept, and the folder gets a fresh git history with no
+   connection to the ARPD repository. Any local-only git work is backed up first.
+B. A new folder: <absolute path>. This copy stays as it is; you then open Claude Code there.
+C. Your existing repository at <path>: ARPD is added there, keeping its history; you then open
+   Claude Code there.
+────────────────────────────────
+```
+
+- If the PI's existing work is elsewhere: ask where it is (unless they said). **Documents** can be
+  read where they are, or copied in on the PI's yes (into `docs/source/`, in a commit of their own,
+  "Add the PI's source materials (no changes)"). **A code repository the PI keeps working in** is
+  better set up in place there (C), which keeps its history; **code that is small or not the PI's**
+  (a published model, an ARPD starter) can be imported as a copy (a new folder, below).
+- The folder may hold a fresh download without git: converting it runs `git init`.
 
 ## Modes
 
-| Mode | In the kit | Bootstrap: `python arpd/tools/install.py` | Result |
+| Mode | When | Command (from the current folder) | Result |
 |---|---|---|---|
-| **New** | `/arpd-setup` | `new "<path>"` | An empty project repository with `arpd/`, the skills and a stub `CLAUDE.md`, committed |
-| **Import** | `/arpd-setup import <path-or-url>` | `import <source> "<path>"` | A new repository from existing code: a git source cloned with its history (remote renamed `upstream`, push disabled), or a folder copied after its inventory (`--yes`); committed |
-| **Install** | `/arpd-setup install <path>` | `install "<path>"` | The PI's existing repository, in place; a stub `CLAUDE.md` only if none exists; nothing committed |
+| **Convert** (default in a kit clone) | Choice A | `python arpd/tools/install.py convert .` (dry run), then `... convert . --yes` | This folder becomes the project, in place: the kit's development files removed, `arpd/` and the skills kept, the PI's files kept, a fresh history (branch main, no remote), one commit; setup continues in this session |
+| **Install** | An existing repository (choice C), or a session already started in the PI's repository | `python <kit>/arpd/tools/install.py install "<path>"` | ARPD added in place; its history kept; a stub `CLAUDE.md` only if none exists; nothing committed. Continues here if `<path>` is the current folder; otherwise in a new session there |
+| **New** | Choice B | `python arpd/tools/install.py new "<path>"` | An empty project repository with `arpd/`, the skills and a stub `CLAUDE.md`, committed; continues in a new session there |
+| **Import** | Existing code copied into a new folder (`/arpd-setup import <path-or-url>`) | `python arpd/tools/install.py import <source> "<path>"` | A new repository from existing code: a git source cloned with its history (remote renamed `upstream`, push disabled), or a folder copied after its inventory (`--yes`); committed; continues in a new session there |
 
-- **Import** suits code that is small or not under the PI's control (a published model, an ARPD
-  starter such as the March example). **Install** suits the PI's own ongoing repository. Ask if
-  unclear. Install never overwrites a differing file: show the PI the conflicts, and use `--force`
-  only on their yes.
+### Converting a kit clone (choice A)
+
+1. Run the dry run: `python arpd/tools/install.py convert .`. Show its plan in full: the kit files it
+   removes, the PI's files it keeps (including any inside kit folders), any kit files the PI changed
+   (kept), data-like and large files, and what happens to the history (a backup bundle outside the
+   folder when the clone holds local-only commits or stashes; otherwise the kit's history stays
+   available from its remote).
+2. If the PI's files include data-like files, ask whether they may be committed to the repository;
+   large files and environments are git-ignored.
+3. On the PI's yes to that plan (choice A already said what conversion does; the dry-run plan is the
+   detail), run `python arpd/tools/install.py convert . --yes` and show its output in full. Quote any
+   bundle path, and how to restore it.
+4. Write the notes (`SKILL.md`, *Start*, step 6) and continue Intake in this session. Every command
+   from now on is project-relative (`python arpd/tools/...`). The kit's `CLAUDE.md` is gone; the stub
+   `CLAUDE.md` says setup is in progress.
+
+A later ARPD update needs a separate, fresh clone of the kit (`install.py update . --kit <clone>`).
+
+### New, import, or install elsewhere (choices B, C)
+
+Propose a short project name and an **absolute** path (for a new folder, by default a sibling of
+this folder), showing it in full. **Install mode:** before writing anything, ask the notes-consent
+question (*Working files*). Run the command, show its output in full, and write the notes into the
+target (`reports/setup/NOTES.md`, or the notes path without consent). Then end as a closing turn, no
+block, telling the PI exactly: in a new terminal, `cd "<absolute path>"`, then `claude`, then
+`/arpd-setup` (or open the folder in the Claude Code desktop app; accept the folder-trust prompt);
+the interview continues there from the notes. If the PI replies here after that turn, repeat the
+commands; never continue the interview in this session.
+
+- Install never overwrites a differing file: show the PI the conflicts, and use `--force` only on
+  their yes.
 - **A project set up with an earlier kit** (no `arpd/`; `update` refuses it) is not set up again:
-  `python arpd/tools/install.py install "<project>" --force` from the kit, then, in the project,
+  `python <kit>/arpd/tools/install.py install "<project>" --force`, then, in the project,
   `python arpd/tools/install.py owed .` and `/arpd-amend` for the charter's paths. Then
   remove the old kit leftovers (`docs/arpd-kit/`, `examples/`, `evaluation/`, root `kit/`, `tools/`,
   `reports/templates/`, `docs/EVENTS.md`) in one remove-only commit, recorded by a DEC under the
@@ -41,8 +113,9 @@ the repository, and rerun with `--yes` only on the PI's yes.
 The notes and the draft report are the only writes before adoption, both non-governing; writing
 them authorizes nothing.
 
-- **New and import:** the notes go into the new project at bootstrap, committed alone ("Setup notes
-  (non-governing)"); later updates and the draft report stay uncommitted until adoption.
+- **Convert, new and import:** the notes go into the project when it is prepared, committed alone
+  ("Setup notes (non-governing)"); later updates and the draft report stay uncommitted until
+  adoption.
 - **Install:** the PI's repository may be shared or public. Before `install.py` runs, ask once
   (`CHOICE FOR YOU (select one)`) for consent to save both files in `reports/setup/`, and record
   the answer in the notes' *Mode and consent*. With consent: there, uncommitted until adoption.
@@ -54,20 +127,24 @@ them authorizes nothing.
 ## Existing repository review
 
 When the project already exists (an install, or an import of the PI's own code), setup is about the
-**requested change**, not a re-creation. In the Project phase:
+**requested change**, not a re-creation. During Intake and Objectives:
 
 1. **Review what exists,** in plain words: architecture (languages, components, data formats, entry
    points); the tests and the baseline run; governance (prior instructions, any `DECISIONS.md`,
    documented choices); users and outputs that depend on current behaviour. Name what the change can
-   reuse unchanged and what it must modify.
+   reuse unchanged and what it must modify. Keep apart what the documents claim, what inspection
+   shows, what the tests establish, and what the PI confirms: a passing unit test is not parameter
+   recovery, construct validity or a reproduced published result.
 2. **Never overwrite a valid existing decision.** A documented choice, an established output format
-   or a calculation the PI wants kept is a **retained** capability in report §3, with a regression
+   or a calculation the PI wants kept is a **retained** capability in report §5, with a regression
    criterion ("the existing outputs are reproduced exactly on the existing test data"). Changing one
-   is a decision for the PI, raised explicitly.
-3. **Investigate only what the change touches;** the scope sequence applies to the change.
+   is a decision for the PI, raised explicitly. Existing decisions are preserved, not immune from
+   criticism: a concern about one is raised as a labelled observation.
+3. **Investigate only what the change touches;** Development's minimum usable version and priorities
+   apply to the change.
 4. **Compatibility and migration** (formats, callers, tests, dependencies, whether old outputs must
-   stay producible) each become a requirement, a decision or a gated open item; the report's §5, §6
-   and §9 give the modification plan (direction only).
+   stay producible) each become a requirement, a decision or a gated open item; the report's §7, §8
+   and §11 give the modification plan (direction only).
 
 ## Numbering: never hard-code IDs
 
@@ -98,9 +175,9 @@ only.
    behaviour, is a defect; known-answer tests are never deleted or weakened.
 4. **Reconcile the prior instructions:** each rule is *same* (dropped), a *compatible addition*
    (proposed as a Part B project rule) or a *conflict*.
-5. **Interview** (the five phases, with the review above). The PI confirms each inferred spec item
+5. **Interview** (the phases, with the review above). The PI confirms each inferred spec item
    with scientific meaning; where code and intent differ, record a defect or assumption, never
-   quietly align them. Conflicts and additions go in report §11–12 for the PI to rule on.
+   quietly align them. Conflicts and additions go in report §12–13 for the PI to rule on.
 6. **Move the prior instruction files** to `docs/prior-instructions/<original-name>` in a move-only
    commit (`generation-checklist.md`, *Commit order*). The charter is the new `CLAUDE.md`.
 7. **Generate** (`generation-checklist.md`); where a prior file of the same name exists, write the
@@ -178,13 +255,28 @@ stub `CLAUDE.md` names), any move- or remove-only commits, the commit "Record ad
 progress)", and which checklist files exist. Then:
 
 1. **Tell the PI** what you found (on a first relaunch, one line).
-2. **Notes from an earlier kit version:** an "Interview mode" line is obsolete and ignored (never ask
-   for a mode); old phases map (Intake, Research & Problem → Project; Product & Engineering →
-   Requirements and Architecture; Governance & Handoff → Team & Governance, then Definition Report);
-   an old `docs/discovery/SETUP.md` is read, then moved to `reports/setup/NOTES.md` by `git mv` alone.
+2. **Notes from an earlier kit version** (no required-item tables): read them, and fill the
+   required items from what they record, each as Confirmed (the PI's words) or Inferred; never
+   re-ask what they settle. An "Interview mode" line is obsolete and ignored (never ask for a mode).
+   - Phases map: v0.5–v0.6 Project → Intake and Objectives; Requirements → Objectives and Design;
+     Architecture → Design; Team & Governance → Development. v0.4 Intake, Research & Problem →
+     Intake and Objectives; Product & Engineering → Objectives and Design; Governance & Handoff →
+     Development.
+   - A theory-context choice maps to the scientific axis: A → respect as given; B → alignment
+     review; C → co-development; D → technical only. The role (IN-08) is then Inferred, confirmed in
+     the Intake summary.
+   - The three scope answers become Development input: the minimum usable version → DV-02 and P1
+     candidates; the ideal version → P2 or P3 candidates; nice-to-haves → P4 or P5. Confirm the
+     placement in the Development summary; never ask the scope questions again.
+   - An old `docs/discovery/SETUP.md` is read, then moved to `reports/setup/NOTES.md` by `git mv`
+     alone.
+   - Confirmed phases are those whose closeout the notes record; earlier notes record none, so each
+     phase is summarized and confirmed as it is reached.
 3. **No adoption ruling:** nothing generated is authorized and nothing in the notes or a draft is
-   adopted. Summarize what the notes gathered and continue from the next open topic without
-   re-asking. Re-present an existing draft as it is (vN+1 only for later answers). Without notes,
+   adopted. Summarize what the notes gathered and continue from the next Open required item without
+   re-asking. Re-present an existing draft as it is (vN+1 only for later answers); a draft in the
+   older 13-section layout is redrafted in the current one as vN+1, once Development has set the
+   priorities, with a *Change history* row saying so. Without notes,
    earlier answers count only if the PI confirms them. Keep committed moves; ask before discarding
    an uncommitted generated file.
 4. **Adoption ruling recorded:** it and the version it cites are the authority. Continue the

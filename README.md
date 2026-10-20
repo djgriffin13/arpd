@@ -30,20 +30,20 @@ benefits are proposed, not yet tested; the kit doubles as a test bed ([evaluatio
 You need Claude Code, Git (with your name and email set) and Python 3.8+ on the PATH as `python`.
 
 ```bash
-git clone <this repository> arpd-kit
-cd arpd-kit
-claude                      # then type /arpd-setup and say what you would like to build
-# setup proposes a project folder (default ../<name>) and creates it as a separate git repository
-cd "<project folder>"       # in a new terminal, as setup tells you
-claude                      # then type /arpd-setup again; the interview continues there
-# adopt the Project Definition Report; setup writes the governing documents
-/arpd-plan                  # plan the first sprint; work starts only when you say so
+git clone <this repository> my-project
+cd my-project
+claude                      # then type /arpd-setup and say what you would like to accomplish
+# setup turns this folder into your project, in place (a fresh git history, no remote),
+# and interviews you in phases; adopt the Project Definition Report and it writes the
+# governing documents
+/arpd-plan                  # plan the first piece of work; work starts only when you say so
 ```
 
-The kit clone is never the project. Keep it, and start further projects from it. To bring existing
-code, use `/arpd-setup import <path or git URL>` (a new project, cloned with its history) or
-`/arpd-setup install <path>` (an existing repository, in place). The full guide for the PI travels
-with every project: [arpd/docs/GUIDE.md](arpd/docs/GUIDE.md).
+Setup can instead add ARPD to an existing repository in place (its history and remote kept), start
+a new folder, or start a new folder from existing code (`/arpd-setup import <path or git URL>`).
+Converting a clone removes ARPD's own development files (this README, `tests/`, `evaluation/`,
+`docs/`; the list is in `.arpd-kit`); to work on ARPD itself, see [DEVELOPING.md](DEVELOPING.md).
+The full guide for the PI travels with every project: [arpd/docs/GUIDE.md](arpd/docs/GUIDE.md).
 
 ## The parts
 
@@ -51,8 +51,8 @@ with every project: [arpd/docs/GUIDE.md](arpd/docs/GUIDE.md).
 |---|---|
 | **Team charter** (`arpd/constitution/CORE.md` → the project's `CLAUDE.md`) | Authority by subject; data semantics reserved to the PI; rulings recorded verbatim; decision routes by scientific consequence and delegated authority; requirement states (*Implemented*, *Verified*, *Validated*); sprints with auditable close-outs; a learning loop |
 | **Paradigm specification** (`arpd/templates/PARADIGM-SPEC.md`) | Research question → constructs → operationalizations → invariants → claims → validation evidence, to the depth the project needs |
-| **Setup** (`/arpd-setup`) | A tool-first interview in five phases, ending in a Project Definition Report the PI adopts; only then the governing documents. New, import or install |
-| **Planning** (`/arpd-plan`) | One sprint or a series, a versioned draft, approval of an exact version, then begin now or later |
+| **Setup** (`/arpd-setup`) | A research-aware interview in phases (Intake, Objectives, Constraints, Design, Development), each with required answers and a summary the PI confirms, ending in a Project Definition Report the PI adopts; only then the governing documents. In place by default |
+| **Planning** (`/arpd-plan`) | The PI's goal first; the effort sized (task, feature, sprint, series, feasibility investigation); a versioned draft, approval of an exact version, then begin now or later |
 | **Check-in and amendment** (`/arpd-checkin`, `/arpd-amend`) | Where things stand and what needs the PI; rulings, standing authorizations and charter changes |
 | **Tools** (`arpd/tools/`) | Project creation and updates (`install.py`), governance and report checkers, event logging and summary |
 | **Modules** (`arpd/constitution/modules/`) | Built: computational model, team arrangement. Five untested drafts |

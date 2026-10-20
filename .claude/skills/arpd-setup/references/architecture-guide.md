@@ -1,9 +1,28 @@
 # Architecture guide
 
-Helping the PI understand the meaningful engineering options is one of setup's main jobs. This
-guide says when a decision deserves exploration, how to explore it, and what to record. The
-alternatives below are illustrations, not mandatory lists. Recommend from the project's actual
-requirements.
+Helping the PI understand the meaningful engineering options is one of setup's main jobs, in the
+Design phase. This guide says when a decision deserves exploration, how to explore it, and what to
+record. The alternatives below are illustrations, not mandatory lists. Recommend from the project's
+actual requirements and constraints (the Constraints phase's Must and Prefer items).
+
+## Start from the PI's design
+
+Before any recommendation, ask whether the PI has a design or architecture in mind
+(`interview-guide.md`, Design, DS-01). It is collaborative design, not a verdict:
+
+- **A design from the PI** is the starting point. Read it back, give its strengths and your concerns,
+  and run the procedure below on its material decisions with the PI's choice as one alternative,
+  described fairly. Recommend a change only where a requirement or constraint calls for it, and say
+  which.
+- **No design:** propose one, in plain words first (what runs where, what the user sees, where the
+  data go), then the procedure for each material decision.
+- **Rounds.** Revise in response to the PI's questions and ideas for as many rounds as the PI needs;
+  a fixed number of rounds is not the aim, and neither is speed. Close only through the Design
+  readiness question.
+- **Depth follows the PI's coding comfort (IN-03).** For a proficient coder, discuss components,
+  interfaces, persistence and testing strategy directly, and ask about them. Otherwise, propose and
+  explain, and ask about consequences the PI can judge (cost, where data live, what users must
+  install, what later changes would need).
 
 ## Which decisions are material
 
@@ -46,13 +65,15 @@ program".
    maintainability by the people who will maintain it, and fit with the PI's community and tools.
 5. **Recommendation, with reasons** tied to the requirements.
 6. **Consequences** for future development: what the choice makes easy, what it makes hard, and
-   what would force a change later.
+   what would force a change later. For a model, simulation or experiment platform, include what
+   the choice means for research: which models, conditions, measurements or analyses it can support
+   later, and which it would rule out.
 7. **The PI's choice**, when the decision is material. Use a `CHOICE FOR YOU (select one)`, with the
    recommendation marked. Include an option to hear more before deciding. The PI's pick is recorded
    with their words. It is a preference until the report is adopted.
 8. **Record** the selected option and the rejected alternatives with their reasons:
    - in the notes, *Architecture alternatives explored*;
-   - then in the report §6, with the columns Decision | Alternatives considered | Recommendation |
+   - then in the report §8, with the columns Decision | Alternatives considered | Recommendation |
      Rationale | Status | Consequences;
    - after adoption, in `ARCHITECTURE.md`, *Architecture decisions*.
 
@@ -165,7 +186,7 @@ maintenance.
 
 ## Defaults that apply to every platform
 
-These are routine. State them in the report §4 or §5; do not ask about them.
+These are routine. State them in the report §6 or §7; do not ask about them.
 
 - Git from day one, with small commits that explain *why*.
 - One command runs the project's tests (`generation-checklist.md`, *The project's test command*).

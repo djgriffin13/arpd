@@ -64,8 +64,8 @@ Rules:
   at once, without a second confirmation.
 
 ```text
-SETUP  ✓ Project → ● Requirements → ○ Architecture → ○ Team & Governance → ○ Definition Report
-✓ Who uses it  ✓ Main workflow  ◉ Saved entries  ○ Exports
+SETUP  ✓ Intake → ✓ Objectives → ✓ Constraints → ● Design → ○ Development → ○ Definition Report
+✓ DS-01 Your design  ✓ DS-02 Workflow  ◉ DS-06 Data semantics  ○ DS-07 Exports
 
 ────────────────────────────────
 QUESTION FOR YOU
@@ -91,11 +91,10 @@ an approval. If the widget fails, the printed block stands and the PI can answer
 ```text
 ────────────────────────────────
 CHOICE FOR YOU (select one)
-How should the team treat the theory behind this estimator?
-A. Use it to guide implementation, without evaluating it.
-B. Identify theoretical or methodological concerns as we go.
-C. Help me develop it.
-D. Leave theory aside.
+Is this summary of the Constraints phase right?
+A. Yes, continue to Design.
+B. Correct or add something (say what).
+C. Go back to Objectives first.
 ────────────────────────────────
 ```
 
@@ -104,12 +103,13 @@ D. Leave theory aside.
 Show the skill's progress line above the block on every interview turn.
 
 - **Setup:**
-  `SETUP  ● Project → ○ Requirements → ○ Architecture → ○ Team & Governance → ○ Definition Report`
-  (two spaces after `SETUP`; ✓ done, ● current, ○ to come). Under it, list the current phase's topics (◉ marks the current
-  focus). With more than about six topics, show the counts line instead:
-  `3 complete | 2 partial | 6 open; next: <topic>`, and add "Full phase plan on request."
-- **Plan:** `PLAN  ✓ Review → ● Priorities → ○ Draft → ○ Approval → ○ Handoff`. Add topics
-  (priorities, scope, dependencies, review level, exit evidence) when they help.
+  `SETUP  ● Intake → ○ Objectives → ○ Constraints → ○ Design → ○ Development → ○ Definition Report`
+  (two spaces after `SETUP`; ✓ done, ● current, ○ to come). Under it, list the current phase's
+  required items (◉ marks the current focus). With more than about six, show the counts line
+  instead: `3 confirmed | 2 inferred | 4 open; next: <item>`, and add "Full phase list on request."
+  A phase is ✓ only after its closeout was confirmed.
+- **Plan:** `PLAN  ✓ Review → ● Goal → ○ Scope → ○ Draft → ○ Approval → ○ Handoff`. Add topics
+  (goal, scope, dependencies, review level, exit evidence) when they help.
 
 Progress is honest:
 
@@ -127,7 +127,8 @@ offer to move on, if any, sits inside that question's block (for example, as its
 
 The PI may ask to keep exploring. A phase ends when the understanding is enough to act on, not
 when a list is full. Record deferred items with what they affect. Moving on is ordinary agreement,
-not adoption of anything.
+not adoption of anything; in setup, a phase's closeout confirmation says the summary is right and
+nothing more.
 
 ## 6. Explain when needed
 
@@ -185,4 +186,4 @@ files), or when the PI asks.
 | → | `->` |
 
 The labels and the option letters stay the same. The setup line in ASCII:
-`SETUP  [>] Project -> [ ] Requirements -> [ ] Architecture -> [ ] Team & Governance -> [ ] Definition Report`
+`SETUP  [>] Intake -> [ ] Objectives -> [ ] Constraints -> [ ] Design -> [ ] Development -> [ ] Definition Report`

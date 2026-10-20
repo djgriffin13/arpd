@@ -29,6 +29,8 @@ ruling names. -->
 
 | Field | Value |
 |---|---|
+| Effort | {{targeted task / feature / sprint / several sprints / feasibility investigation}}, and why |
+| The PI's goal | {{the PI's words, or "the lead's recommendation, accepted: '<words>'"}} |
 | Proposed sprint numbers | {{S0N, or S0N–S0M}} |
 | Scope of authorization sought | {{planning only / execution of S0N / execution of series S0N–S0M under an SA}} |
 | Based on | `MASTER_PLAN.md` §3 row(s), `STATUS.md` *Readiness*, last sprint record |
@@ -44,6 +46,7 @@ Keep it minimal but sufficient. A simple sprint needs no long task list or specu
 | Scope | Work packages, in order, with the expected task plans (`plans/NNN-…`) |
 | Dependencies | What must exist first; pending decisions (`DECISIONS.md` *Waiting on the PI*); blockers; work that can go ahead regardless |
 | Exit | Exit criteria (when the sprint is done), each with the evidence or test expected. Task-plan acceptance criteria (`plans/NNN`) are drawn from the requirements' criteria |
+| Feasibility (only for a feasibility investigation) | The question and the requirement or idea it unblocks; the bound (time or effort); the deliverable (a finding: feasible / not feasible / feasible with conditions / still unknown, with evidence); where prototype code lives |
 | Boundaries | Non-goals; risks; constraints; time, compute or cost limits where relevant |
 | Workflow | Team arrangement; independent review and test gates; resources |
 | Authority | Decisions reserved to the PI; choices delegated; the execution authority requested |

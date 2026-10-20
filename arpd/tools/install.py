@@ -1,15 +1,29 @@
 #!/usr/bin/env python3
-"""Create, import, install, update or repair an ARPD project from the kit.
+"""Create, convert, import, install, update or repair an ARPD project from the kit.
 
+    python arpd/tools/install.py convert <path> [--yes]          (run in a fresh kit clone)
     python arpd/tools/install.py new <path>                      (run from the kit clone)
     python arpd/tools/install.py import <source> <path> [--yes]  (run from the kit clone)
     python arpd/tools/install.py install <path> [--force] [--notes <path>]  (run from the kit clone)
     python arpd/tools/install.py update <path> [--kit <kit>] [--prune]
     python arpd/tools/install.py owed <path> [--kit <kit>] [--force]
 
-The project is always its own git repository; the kit clone is never the project. Everything copied
-from the kit goes into the project's arpd/ folder, except the skills (.claude/skills/arpd-*), which
-Claude Code needs in .claude/.
+A fresh kit clone becomes the project in place with convert (a fresh git history, no remote); new,
+import and install create or prepare a project elsewhere, in its own git repository. Everything from
+the kit goes into the project's arpd/ folder, except the skills (.claude/skills/arpd-*), which Claude
+Code needs in .claude/.
+
+convert  Turn a fresh kit clone (or a downloaded, unzipped kit) into the research project, in the same
+         folder. The kit-development material named in the .arpd-kit manifest (the kit's README,
+         CLAUDE.md, docs/, tests/, evaluation/, ...) is removed; arpd/ and .claude/skills/arpd-* are
+         kept, and so is everything else, which is the PI's. In a git clone only files the kit's commit
+         holds are removed: files the PI added under those folders, and kit files the PI changed, are
+         kept and listed. The plan is printed first and nothing changes without --yes. Before anything
+         is deleted, work that is on no remote (local commits, stashes) is saved to a verified git
+         bundle beside the folder. Then the kit's history and remote are removed, a fresh repository
+         (branch main) is started, environments and files of 50 MB or more are git-ignored, the stub
+         CLAUDE.md and arpd/VERSION are written, and everything is committed once. Needs git with
+         user.name and user.email set.
 
 new      Create an empty project folder with its own git repository: the arpd/ payload, the skills, a
          .gitignore, a stub CLAUDE.md ("setup in progress") and arpd/VERSION, committed. Refuses a
@@ -50,12 +64,17 @@ import json
 import os
 import re
 import shutil
+import stat
 import subprocess
 import sys
 
 KIT_MARKER = ".arpd-kit"
 PAYLOAD = "arpd"
-FALLBACK_VERSION = "v0.6.0-rc.1"  # used when the kit's RELEASE-NOTES.md names no version
+FALLBACK_VERSION = "v0.7.0-rc.1"  # used when the kit's RELEASE-NOTES.md names no version
+# Kit-development material that convert removes, when the .arpd-kit manifest lists none (older kits).
+DEFAULT_MANIFEST = (".arpd-kit", "AGENTS.md", "CITATION.cff", "CLAUDE.md", "LICENSE", "README.md",
+                    "RELEASE-NOTES.md", ".gitattributes", ".gitignore", "docs/", "evaluation/", "tests/")
+CACHE_DIRS = {"__pycache__", ".pytest_cache", ".mypy_cache"}  # debris convert removes from kit folders
 PAYLOAD_SKIP_DIRS = {"logs", "__pycache__", ".pytest_cache"}
 PAYLOAD_SKIP_ROOT_FILES = {"VERSION"}
 GITIGNORE_LINES = ["arpd/logs/", "output/", "__pycache__/", ".claude/settings.local.json"]
@@ -122,13 +141,36 @@ def kit_version(kit):
     return FALLBACK_VERSION
 
 
-def kit_commit(kit):
+def kit_commit(kit, untracked=True):
+    """The kit's HEAD commit, noting uncommitted changes (to tracked files only, when not untracked)."""
     p = git(["rev-parse", "HEAD"], kit, check=False)
     if p.returncode != 0:
         return "unknown (the kit is not a git clone)"
     sha = p.stdout.strip()
-    dirty = git(["status", "--porcelain"], kit, check=False)
+    dirty = git(["status", "--porcelain"] + ([] if untracked else ["--untracked-files=no"]), kit, check=False)
     return sha + (" with uncommitted changes" if dirty.returncode == 0 and dirty.stdout.strip() else "")
+
+
+def kit_manifest(root):
+    """The top-level paths of kit-development material (without a trailing /) listed in the .arpd-kit
+    marker: one per line; blank lines, # comments and prose lines (with spaces) are skipped. Entries
+    that are not plain top-level kit paths (the payload, .claude, .git, absolute or ..) are dropped.
+    Falls back to DEFAULT_MANIFEST when the marker lists none (an older kit)."""
+    try:
+        lines = io.open(os.path.join(root, KIT_MARKER), encoding="utf-8").read().splitlines()
+    except (IOError, OSError, UnicodeDecodeError):
+        lines = []
+    out = []
+    for line in lines:
+        e = line.strip().replace("\\", "/").rstrip("/")
+        if not e or e.startswith("#") or re.search(r"\s", e):
+            continue
+        top = e.split("/")[0]
+        if os.path.isabs(e) or ".." in e.split("/") or top in (PAYLOAD, ".claude", ".git", ""):
+            continue
+        if e not in out:
+            out.append(e)
+    return out or [e.rstrip("/") for e in DEFAULT_MANIFEST]
 
 
 # --- git ------------------------------------------------------------------------------------------
@@ -327,16 +369,22 @@ def write_stub_claude(project, notes=None):
     return True
 
 
-def write_version(project, kit, how, imported=None):
+def write_version(project, kit, how, imported=None, version=None, commit=None, extra_lines=()):
+    """Write arpd/VERSION. version and commit default to the kit's (pass them when the kit's files or
+    history are gone by then, as in convert); extra_lines are appended."""
     path = os.path.join(project, PAYLOAD, "VERSION")
-    if imported is None and os.path.exists(path):  # keep the record of where an imported project came from
+    kept = []
+    if imported is None and os.path.exists(path):  # keep the record of where the project came from
         for line in io.open(path, encoding="utf-8").read().splitlines():
             if line.startswith("Imported from:"):
                 imported = line[len("Imported from:"):].strip()
-    lines = ["ARPD %s (kit commit %s)" % (kit_version(kit), kit_commit(kit)),
+            elif line.startswith("Converted from:"):
+                kept.append(line)
+    lines = ["ARPD %s (kit commit %s)" % (version or kit_version(kit), commit or kit_commit(kit)),
              "Installed by: arpd/tools/install.py %s, %s" % (how, datetime.date.today().isoformat())]
     if imported:
         lines.append("Imported from: " + imported)
+    lines += [l for l in list(extra_lines) + kept if l not in lines]
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with io.open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write("\n".join(lines) + "\n")
@@ -373,9 +421,26 @@ def is_env_dir(path, name):
     return name in ENV_DIRS or name == ".git" or os.path.isfile(os.path.join(path, "pyvenv.cfg"))
 
 
+def new_inventory():
+    return {"files": 0, "bytes": 0, "envs": [], "large": [], "ignore": [], "data": []}
+
+
+def inventory_add(inv, rel, full):
+    """Count one file in inv: its size, whether it is large or to be git-ignored, and data-like."""
+    size = os.path.getsize(full)
+    inv["files"] += 1
+    inv["bytes"] += size
+    if size >= IGNORE_MB * 1024 * 1024:
+        inv["ignore"].append((rel, size))
+    elif size >= LARGE_MB * 1024 * 1024:
+        inv["large"].append((rel, size))
+    if os.path.splitext(rel)[1].lower() in DATA_EXT:
+        inv["data"].append(rel)
+
+
 def inventory(src):
     """{files, bytes, envs, large, ignore, data}: what a folder import would copy and skip."""
-    inv = {"files": 0, "bytes": 0, "envs": [], "large": [], "ignore": [], "data": []}
+    inv = new_inventory()
     for d, dirs, files in os.walk(src):
         keep = []
         for x in sorted(dirs):
@@ -385,34 +450,37 @@ def inventory(src):
         dirs[:] = keep
         for f in sorted(files):
             full = os.path.join(d, f)
-            rel = os.path.relpath(full, src).replace(os.sep, "/")
-            size = os.path.getsize(full)
-            inv["files"] += 1
-            inv["bytes"] += size
-            if size >= IGNORE_MB * 1024 * 1024:
-                inv["ignore"].append((rel, size))
-            elif size >= LARGE_MB * 1024 * 1024:
-                inv["large"].append((rel, size))
-            if os.path.splitext(f)[1].lower() in DATA_EXT:
-                inv["data"].append(rel)
+            inventory_add(inv, os.path.relpath(full, src).replace(os.sep, "/"), full)
     return inv
 
 
-def print_inventory(src, inv):
-    def mb(n):
-        return "%.1f MB" % (n / 1048576.0)
-    say("Inventory of %s: %d file(s), %s." % (src, inv["files"], mb(inv["bytes"])))
-    groups = [("Environments and repositories, NOT copied", inv["envs"]),
-              ("Files of %d MB or more, copied but git-ignored" % IGNORE_MB, ["%s (%s)" % (r, mb(s)) for r, s in inv["ignore"]]),
-              ("Large files (%d MB or more), copied and committed" % LARGE_MB, ["%s (%s)" % (r, mb(s)) for r, s in inv["large"]]),
-              ("Data-like files, copied and committed (check that they may be kept in the repository)", inv["data"])]
+def mb(n):
+    return "%.1f MB" % (n / 1048576.0)
+
+
+def print_list(title, items):
+    if items:
+        say("%s:" % title)
+        for i in items[:LIST_MAX]:
+            say("    " + i)
+        if len(items) > LIST_MAX:
+            say("    ... and %d more" % (len(items) - LIST_MAX))
+
+
+def print_inventory(src, inv, convert=False):
+    """List what a folder import copies and skips (or, with convert, what conversion keeps)."""
+    if convert:
+        say("Your material (kept): %d file(s), %s." % (inv["files"], mb(inv["bytes"])))
+        verbs = ("kept on disk but git-ignored (not committed)", "kept but git-ignored", "kept and committed")
+    else:
+        say("Inventory of %s: %d file(s), %s." % (src, inv["files"], mb(inv["bytes"])))
+        verbs = ("NOT copied", "copied but git-ignored", "copied and committed")
+    groups = [("Environments and repositories, " + verbs[0], inv["envs"]),
+              ("Files of %d MB or more, %s" % (IGNORE_MB, verbs[1]), ["%s (%s)" % (r, mb(s)) for r, s in inv["ignore"]]),
+              ("Large files (%d MB or more), %s" % (LARGE_MB, verbs[2]), ["%s (%s)" % (r, mb(s)) for r, s in inv["large"]]),
+              ("Data-like files, %s (check that they may be kept in the repository)" % verbs[2], inv["data"])]
     for title, items in groups:
-        if items:
-            say("%s:" % title)
-            for i in items[:LIST_MAX]:
-                say("    " + i)
-            if len(items) > LIST_MAX:
-                say("    ... and %d more" % (len(items) - LIST_MAX))
+        print_list(title, items)
 
 
 def copy_folder(src, dest):
@@ -697,6 +765,262 @@ def cmd_owed(a):
     return 0
 
 
+# --- convert: a fresh kit clone becomes the project in place --------------------------------------
+
+OLD_GIT = ".git-arpd-old"  # the kit's .git is moved here first (so a locked file stops before any deletion)
+
+
+def under(rel, entries):
+    return any(rel == e or rel.startswith(e + "/") for e in entries)
+
+
+def is_payload_path(rel):
+    return under(rel, [PAYLOAD]) or bool(re.match(r"^\.claude/skills/arpd-[^/]+(/|$)", rel))
+
+
+def is_cache(rel):
+    return rel.endswith(".pyc") or any(x in CACHE_DIRS for x in rel.split("/")[:-1])
+
+
+def git_paths(args, cwd):
+    p = git(args, cwd, check=False)
+    return {x for x in p.stdout.split("\0") if x} if p.returncode == 0 else set()
+
+
+def clean_url(url):
+    """url without a user:password@ part, so a token in a remote URL is never printed or committed."""
+    return re.sub(r"^([A-Za-z][A-Za-z0-9+.-]*://)[^/@]*@", r"\1", url)
+
+
+def convert_plan(root):
+    """What convert removes and keeps. In a git clone the kit's files are those in its HEAD commit; files
+    under the manifest entries that the PI changed or added are kept (caches there are removed)."""
+    manifest = kit_manifest(root)
+    cdup = git(["rev-parse", "--show-cdup"], root, check=False)
+    is_git = cdup.returncode == 0 and cdup.stdout.strip() == ""
+    if not is_git and os.path.lexists(os.path.join(root, ".git")):
+        raise Refused("%s has a .git that git cannot read (%s); repair or remove it and rerun. Nothing was "
+                      "changed." % (root, (cdup.stderr or cdup.stdout).strip()))
+    has_head = is_git and git(["rev-parse", "-q", "--verify", "HEAD"], root, check=False).returncode == 0
+    kit_files = git_paths(["ls-tree", "-r", "-z", "--name-only", "HEAD"], root) if has_head else None
+    changed = git_paths(["diff", "--name-only", "-z", "HEAD"], root) if has_head else set()
+    plan = {"manifest": manifest, "git": is_git, "remove": [], "changed_kit": [], "pi_in_kit": [], "pi": [],
+            "payload_changed": sorted(r for r in changed if is_payload_path(r) and
+                                      os.path.exists(os.path.join(root, *r.split("/")))),
+            "inv": new_inventory()}
+    for d, dirs, files in os.walk(root):
+        rd = os.path.relpath(d, root).replace(os.sep, "/")
+        rd = "" if rd == "." else rd + "/"
+        keep = []
+        for x in sorted(dirs):
+            rel = rd + x
+            if (not rd and x == ".git") or is_payload_path(rel):
+                continue
+            kit_area = under(rel, manifest) or any(e.startswith(rel + "/") for e in manifest)
+            if not kit_area and is_env_dir(os.path.join(d, x), x):
+                plan["inv"]["envs"].append(rel + "/")
+                continue
+            keep.append(x)
+        dirs[:] = keep
+        for f in sorted(files):
+            rel, full = rd + f, os.path.join(d, f)
+            if not under(rel, manifest):
+                plan["pi"].append(rel)
+                inventory_add(plan["inv"], rel, full)
+            elif rel == KIT_MARKER or kit_files is None or (rel in kit_files and rel not in changed) or \
+                    (rel not in kit_files and is_cache(rel)):
+                plan["remove"].append(rel)
+            elif rel in kit_files:
+                plan["changed_kit"].append(rel)
+            else:
+                plan["pi_in_kit"].append(rel)
+                inventory_add(plan["inv"], rel, full)
+    return plan
+
+
+def local_work(root):
+    """(reasons, remotes): why the clone holds work that is on no remote (local-only commits, a stash)."""
+    remotes = git(["remote"], root, check=False).stdout.split()
+    p = git(["rev-list", "--count", "--exclude=refs/stash", "--all"] + (["--not", "--remotes"] if remotes else []),
+            root, check=False)
+    n = int(p.stdout.strip() or 0) if p.returncode == 0 else 0
+    reasons = ["%d commit(s) not on any remote%s" % (n, "" if remotes else " (the clone has no remote)")] if n else []
+    if git(["rev-parse", "-q", "--verify", "refs/stash"], root, check=False).returncode == 0:
+        reasons.append("a stash")
+    return reasons, remotes
+
+
+def write_bundle(root):
+    """Back up every ref (branches, tags, remote-tracking refs, the stash) to a verified bundle beside root."""
+    parent, name = os.path.split(root)
+    stem = os.path.join(parent, "%s-pre-arpd-history-%s" % (
+        name, datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%MZ")))
+    path, n = stem + ".bundle", 2
+    while os.path.exists(path):
+        path, n = "%s-%d.bundle" % (stem, n), n + 1
+    p = git(["bundle", "create", path, "--all"], root, check=False)
+    v = git(["bundle", "verify", path], root, check=False) if p.returncode == 0 else p
+    if v.returncode != 0:
+        if os.path.exists(path):
+            os.remove(path)
+        raise Refused("could not write a verified backup of this clone's history to %s: %s\nNothing was deleted."
+                      % (path, (v.stderr or v.stdout).strip()))
+    return path
+
+
+def _force_remove(func, path, _exc):
+    os.chmod(path, stat.S_IWRITE)  # git's pack files are read-only on Windows
+    func(path)
+
+
+def remove_path(path):
+    if os.path.isdir(path) and not os.path.islink(path):
+        if sys.version_info >= (3, 12):
+            shutil.rmtree(path, onexc=_force_remove)
+        else:
+            shutil.rmtree(path, onerror=_force_remove)
+    else:
+        try:
+            os.remove(path)
+        except OSError:
+            _force_remove(os.remove, path, None)
+
+
+def print_convert_plan(path, plan, version, commit, reasons, remotes, origin):
+    say("Convert %s (ARPD %s) into the research project, in place." % (path, version))
+    if plan["git"]:
+        say("It is a git clone at %s, %s." % (commit, "remote origin " + origin if origin else
+                                               "remotes " + ", ".join(remotes) if remotes else "with no remote"))
+    else:
+        say("It is a download, not a git clone: every file under the kit entries of %s is removed, including "
+            "any you added there (move those out first)." % KIT_MARKER)
+    say()
+    print_list("Kit files to remove (%d)" % len(plan["remove"]), plan["remove"])
+    say("Kept as they are (the ARPD infrastructure): arpd/ and %s." % (
+        ", ".join(".claude/skills/%s/" % s for s in kit_skills(path)) or "no skills"))
+    print_list("Kit files you changed: kept, not removed (%d; review them)" % len(plan["changed_kit"]),
+               plan["changed_kit"])
+    print_list("Your files inside kit folders: kept (%d)" % len(plan["pi_in_kit"]), plan["pi_in_kit"])
+    print_list("Your other files: kept (%d)" % len(plan["pi"]), plan["pi"])
+    if plan["payload_changed"]:
+        warn("you changed %d ARPD file(s) in arpd/ or .claude/skills/arpd-*; they are kept as they are, but a "
+             "later update from a kit will overwrite them:" % len(plan["payload_changed"]))
+        print_list("Changed ARPD files", plan["payload_changed"])
+    if plan["inv"]["files"] or plan["inv"]["envs"]:
+        print_inventory(path, plan["inv"], convert=True)
+    else:
+        say("Your material: none besides the kit.")
+    say()
+    say("Git history: the kit's history is removed; the project starts a fresh history (branch main) with no remote.")
+    if not plan["git"]:
+        say("There is no git history to keep (not a git clone).")
+    elif reasons:
+        say("Safeguard: this clone holds work that is on no remote (%s), so a backup bundle will be written "
+            "outside the folder, in %s, and verified before anything is deleted." % ("; ".join(reasons),
+                                                                                  os.path.dirname(path)))
+    else:
+        say("Safeguard: every commit is on the remote, so the kit's history remains available from %s. "
+            "No backup is needed." % (origin or "its remote"))
+
+
+def cmd_convert(a):
+    path = os.path.abspath(a.path)
+    if not is_kit(path):
+        raise Refused("%s is not an ARPD kit (no %s marker and arpd/ folder there). convert works only on a fresh "
+                      "ARPD kit clone or download; for an existing repository use install, for a new folder use "
+                      "new." % (path, KIT_MARKER))
+    plan = convert_plan(path)
+    version, commit = kit_version(path), kit_commit(path, untracked=False)  # the PI's new files are expected
+    reasons, remotes = local_work(path) if plan["git"] else ([], [])
+    origin = clean_url(git(["remote", "get-url", "origin"], path, check=False).stdout.strip()) \
+        if "origin" in remotes else ""
+    print_convert_plan(path, plan, version, commit, reasons, remotes, origin)
+    location_warnings(path)
+    if not a.yes:
+        try:
+            check_git(path)
+        except Refused as exc:
+            warn("%s" % exc)
+        say("\nReview the plan above: nothing changed yet; rerun with --yes to convert this folder.")
+        return 0
+    check_git(path)
+    identity = [(k, git(["config", "--get", k], path, check=False).stdout.strip()) for k in ("user.name", "user.email")]
+    say()
+    bundle = write_bundle(path) if plan["git"] and reasons else None
+    if bundle:
+        say("Backed up this clone's history (every branch, tag and stash) to %s (verified)." % bundle)
+        say('    To restore it:  git clone "%s" <folder>' % bundle)
+    elif plan["git"]:
+        say("No local-only work; the kit's history remains available from %s." % (origin or "its remote"))
+    left, old = [], None
+    if os.path.lexists(os.path.join(path, ".git")):
+        old = os.path.join(path, OLD_GIT)
+        try:
+            if os.path.lexists(old):
+                remove_path(old)
+            os.rename(os.path.join(path, ".git"), old)
+        except OSError as exc:
+            raise Refused("cannot move the kit's .git aside (%s); close any program using this folder (an editor, "
+                          "a terminal running git) and rerun. Nothing was deleted%s." % (
+                              exc, "; the backup bundle is kept" if bundle else ""))
+    removed = []
+    for rel in plan["remove"]:
+        try:
+            remove_path(os.path.join(path, *rel.split("/")))
+            removed.append(rel)
+        except OSError as exc:
+            left.append("could not remove the kit file %s (%s); delete it yourself" % (rel, exc))
+    for entry in plan["manifest"]:
+        top = os.path.join(path, *entry.split("/"))
+        for d, _, _ in (os.walk(top, topdown=False) if os.path.isdir(top) else ()):
+            try:
+                os.rmdir(d)  # only empty folders
+            except OSError:
+                pass
+    extra = [r for r, _ in plan["inv"]["ignore"]] + plan["inv"]["envs"]
+    if old:
+        try:
+            remove_path(old)
+        except OSError as exc:
+            extra.append(OLD_GIT + "/")
+            left.append("could not delete %s, the kit's old git history (%s); close any program using it and "
+                        "delete the folder yourself" % (OLD_GIT, exc))
+    git_init(path)
+    for key, value in identity:  # an identity set only in the kit clone's own config went with its .git
+        if value and not git(["config", "--get", key], path, check=False).stdout.strip():
+            git(["config", key, value], path)
+    ensure_gitignore(path, extra)
+    stub = write_stub_claude(path)
+    source = ("Converted from: the ARPD kit clone (%s) at %s" % (origin or "no remote", commit) if plan["git"]
+              else "Converted from: an ARPD kit download (not a git clone)")
+    write_version(path, path, "convert", version=version, commit=commit, extra_lines=[source])
+    sha = commit_all(path, "Start ARPD project in place (setup in progress)", force_add=True)  # extra: in .gitignore
+    if plan["changed_kit"]:
+        left.append("review the kit files you changed, kept and committed: " + ", ".join(plan["changed_kit"]))
+    if plan["payload_changed"]:
+        left.append("your changes to ARPD files are kept, but a later update from a kit will overwrite them: " +
+                    ", ".join(plan["payload_changed"]))
+    say("Removed %d kit file(s) and the kit's git history and remote." % len(removed))
+    say("Kept: arpd/, the ARPD skills and your material (%d file(s))%s." % (
+        plan["inv"]["files"], ", and %d kit file(s) you changed" % len(plan["changed_kit"])
+        if plan["changed_kit"] else ""))
+    if extra:
+        say("Git-ignored (kept on disk, not committed): " + ", ".join(extra))
+    if stub:
+        say("Wrote the stub CLAUDE.md (setup in progress).")
+    else:
+        say("The existing CLAUDE.md was kept (you changed it) and not replaced by the setup stub; review it.")
+    say("Started a fresh git repository (branch main) and committed %s: Start ARPD project in place "
+        "(setup in progress)." % sha)
+    say("No remote is configured; nothing was pushed.")
+    if left:
+        say("Left to you:")
+        for item in left:
+            say("    " + item)
+    say("Setup continues in this session.")
+    return 2 if left else 0
+
+
 def main(argv=None):
     try:
         sys.stdout.reconfigure(errors="replace")
@@ -704,6 +1028,9 @@ def main(argv=None):
         pass
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="command")
+    p = sub.add_parser("convert", help="turn a fresh kit clone into the project in place (fresh history)")
+    p.add_argument("path")
+    p.add_argument("--yes", action="store_true", help="convert after reviewing the plan")
     p = sub.add_parser("new", help="create a new project folder and repository")
     p.add_argument("path")
     p = sub.add_parser("import", help="start a new project from existing code (git path or URL, or a folder)")
@@ -721,14 +1048,15 @@ def main(argv=None):
     p = sub.add_parser("owed", help="install the hook settings, agent files and missing skills")
     p.add_argument("path")
     p.add_argument("--force", action="store_true", help="overwrite agent files that differ")
-    for p in sub.choices.values():
-        p.add_argument("--kit", help="path to the kit clone (needed when running a project's copy)")
+    for name, p in sub.choices.items():
+        if name != "convert":  # convert's kit is the folder itself
+            p.add_argument("--kit", help="path to the kit clone (needed when running a project's copy)")
     a = ap.parse_args(argv)
     if not a.command:
         ap.print_help()
         return 1
     try:
-        return {"new": cmd_new, "import": cmd_import, "install": cmd_install, "update": cmd_update,
+        return {"convert": cmd_convert, "new": cmd_new, "import": cmd_import, "install": cmd_install, "update": cmd_update,
                 "owed": cmd_owed}[a.command](a)
     except Refused as exc:
         say("REFUSED: %s" % exc)

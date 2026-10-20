@@ -282,6 +282,10 @@ Each requirement moves through these states. The evidence for each state is reco
   gets its close-out, independent review, checks and plan update. Each sprint's Part 1 records its
   approved plan, its execution authority and its transition policy, and is committed with `STATUS.md`
   when the sprint starts.
+- **This project's sprint autonomy** (set at setup, report §12): {{SPRINT_AUTONOMY}}. It is the
+  default `/arpd-plan` starts from; "several sprints" still takes effect only through an SA in the
+  PI's words when execution is authorized, and "one task at a time" means the team stops after each
+  planned task for the PI.
 - **Dependencies.** At planning, review, close-out, check-in and the other points listed in
   `arpd/docs/INTERACTION.md`, run its quick dependency screen. A pending decision blocks only the work that depends on it.
 - **Explain through science.** Anything brought to the PI states what it changes about what the

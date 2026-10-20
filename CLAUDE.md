@@ -1,23 +1,13 @@
-# CLAUDE.md: the ARPD kit
+# CLAUDE.md: a fresh copy of ARPD
 
-**This is the ARPD kit, not a project. Run `/arpd-setup` to create a project in its own folder;
-never write project files here.**
+This folder is a fresh copy of the ARPD kit, not yet a research project.
 
-- To start a project, import existing code or install ARPD into an existing repository, run the
-  `/arpd-setup` skill. Setup creates or prepares a separate git repository (by default a sibling
-  folder, `../<project-name>`) with `python arpd/tools/install.py`, then asks the user to reopen
-  Claude Code there to continue. Do not build anything before setup is complete.
-- Setup ends with planning pending. Sprints are planned with `/arpd-plan`, and work starts only from
-  a plan the user has approved and their direction to begin.
-- The worked example (March, 1991) is in its own repository; it is used through
-  `/arpd-setup import <path>`.
-- The user's guide is `arpd/docs/GUIDE.md`.
-
-**Developing the kit itself:**
-
-- keep `arpd/` (charter, modules, templates, agents) generic, with no project- or person-specific
-  content;
-- keep every file free of author, institution or project names and of local paths (the repository
-  is anonymous for review);
-- modules marked *draft* stay drafts until tested;
-- the kit's own tests are in `tests/` (`python -m pytest tests`); evidence goes in `evaluation/`.
+- **To start a project, run `/arpd-setup`.** Setup assesses this folder, interviews the researcher (the
+  PI), and by default turns this folder into the project in place: it removes ARPD's own development
+  files, keeps `arpd/`, the setup skills and every file of the PI's, and starts a fresh git history
+  with no remote. It continues in this same session.
+- **Do not build, plan or change anything before setup is complete**, and never push this folder to
+  the ARPD repository it was cloned from. Until the PI adopts the Project Definition Report, the
+  `/arpd-setup` skill governs the work; after adoption, the generated `CLAUDE.md` charter does.
+- The PI's guide is `arpd/docs/GUIDE.md`.
+- Only if you are asked to change ARPD itself, read `DEVELOPING.md` first.

@@ -1,10 +1,20 @@
 #!/usr/bin/env python3
 """Check a Project Definition Report (reports/setup/PROJECT-DEFINITION.md; in projects set up before
-v0.6, reports/PROJECT-DEFINITION.md) against the v0.5 contract.
+v0.6, reports/PROJECT-DEFINITION.md) against its contract, in either layout.
 
     python arpd/tools/check_report.py <report.md> [--stage draft|adopted]      (from the project root)
 
 Each check is reported PASS, FAIL or WARN with what it rests on. HTML comments are ignored.
+
+Layouts. A report is the v0.7 layout (14 sections) if it has a "## 14." heading or its "## 3."
+heading mentions constraints (v0.7 section 3 is "Constraints and model commitments"); otherwise it is
+the v0.5 layout (13 sections). The layout is reported first and sets the section numbers below:
+
+            sections  decision table  open items  what adoption authorizes
+    v0.5    1-13      section 6       section 12  section 13
+    v0.7    1-14      section 8       section 13  section 14
+
+The checks, with the v0.5 section numbers (v0.7 messages use the v0.7 numbers):
 
   (a) header (the text before the first "## " heading): a "Version" line with vN and a "Status"
       line. --stage draft (the default): the Status says Draft, a DRAFT banner is present, and
@@ -38,6 +48,19 @@ Each check is reported PASS, FAIL or WARN with what it rests on. HTML comments a
       never and "implement");
   (h) a "Completeness check" subsection is present (WARN if absent).
 
+v0.7 only (a v0.5 report is checked exactly as above):
+  (c) Priority is P1 Core (in the minimum usable version), P2 Next, P3 Planned, P4 Wanted or P5 Idea:
+      "P1" to "P5", optionally followed by the level name in any form (P1 Core, P1 (Core), P2: Next;
+      a name contradicting its number WARNs), or "open (O-NN)". The v0.5 values FAIL with the mapping
+      (required -> P1 Core; desired -> P2 Next or P3 Planned; future -> P4 Wanted or P5 Idea).
+      Feasibility, a status separate from priority, is optional: "established", or
+      "to investigate: <what> (<gate>)" (no gate WARNs; anything else FAILs). Correctness-critical is
+      optional: "yes: <why>" (yes without a reason WARNs) or "no" (anything else FAILs);
+  (i) priorities respect dependencies: a requirement whose Dependencies name a requirement of this
+      report with a lower priority (a higher P number) FAILs, since it cannot be scheduled before what
+      it depends on (open priorities are skipped); a dependency ID not in the report WARNs;
+  (j) a correctness-critical requirement at P4 or P5 WARNs: such requirements are rarely optional.
+
 Exit code 0 if no check FAILs (WARN does not fail), 1 otherwise, 2 for a usage or read error.
 It checks structure and authority only: not whether the requirements are right, the report is
 complete, or the prose is good. It rewards no length and, beyond (g), no particular wording.
@@ -47,11 +70,13 @@ import argparse
 import re
 import sys
 
-SECTIONS = range(1, 14)
+# The section numbers each layout uses (see the module docstring).
+LAYOUTS = {"v0.5": {"sections": 13, "decisions": 6, "open": 12, "authorizes": 13},
+           "v0.7": {"sections": 14, "decisions": 8, "open": 13, "authorizes": 14}}
 DECISION_COLUMNS = ("Decision", "Alternatives considered", "Recommendation", "Rationale", "Status",
                     "Consequences")
 FIELDS = (r"Description|Behaviou?r|Inputs?\s*(?:/|and)\s*outputs?|Constraints|Acceptance criteria|Priority"
-          r"|Dependencies|Source|Status|Notes?|Target|Rationale")
+          r"|Dependencies|Source|Status|Notes?|Target|Rationale|Feasibility|Correctness[\s-]*critical")
 FIELD = re.compile(r"^ ?(?:[-*]\s+)?\**\s*(" + FIELDS + r")\s*\**\s*:\s*\**\s*(.*)$", re.I)
 BULLET = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+\S")
 REQ_HEAD = re.compile(r"^(#{1,6})\s+\**(REQ-[A-Z0-9]+-\d+)\b\**\s*:?\s*(.*)$")
@@ -66,6 +91,11 @@ STAGE = re.compile(r"\bbefore\s+(?:%s\s*)*(?:planning|plan\b|implement\w*|build\
                    r"release\w*|launch\w*|go-live|data collection|collect\w*|pilot\w*|use\b|adoption|"
                    r"(?:the\s+)?(?:first\s+|next\s+)?(?:sprint|milestone|roadmap)|S\d+|M\d+|v\d)" % DETERMINER, re.I)
 PRIORITIES = ("required", "desired", "future")
+# v0.7: P1 Core ... P5 Idea; the level name is optional and may be written in any form.
+P_LEVELS = {1: "Core", 2: "Next", 3: "Planned", 4: "Wanted", 5: "Idea"}
+P_PRIORITY = re.compile(r"p([1-5])(?!\d)\W*([a-z]*)", re.I)
+OLD_PRIORITY_HINT = "required -> P1 Core; desired -> P2 Next or P3 Planned; future -> P4 Wanted or P5 Idea"
+REQ_ID = re.compile(r"\bREQ-[A-Z0-9]+-\d+\b")
 # A priority the PI left open names the open decision that will set it: "open (O-NN)".
 OPEN_PRIORITY = re.compile(r"open\s*\(\s*O-\d+\b", re.I)
 # A quotation: double, single or typographic quotes. A single quote opens only where no letter precedes it
@@ -164,8 +194,26 @@ def not_applicable(body):
     return (True, bool(m.group(1).strip())) if m else (False, False)
 
 
+def layout_of(text):
+    """'v0.7' if the report has a "## 14." heading or its "## 3." heading mentions constraints, else 'v0.5'."""
+    text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+    for line in text.split("\n"):
+        line = line.rstrip("\r")
+        m = SECTION_HEAD.match(line)
+        if m and (m.group(1) == "14" or (m.group(1) == "3" and re.search(r"constraint", line, re.I))):
+            return "v0.7"
+    return "v0.5"
+
+
+def priority_level(value):
+    """The P number (1-5) of a v0.7 Priority value, or None (open, missing or not a P value)."""
+    m = P_PRIORITY.match(plain(value))
+    return int(m.group(1)) if m else None
+
+
 def requirements(lines):
-    """[(id, heading level, line number, {field: value}, acceptance bullets)] for each REQ heading."""
+    """[(id, heading level, line number, {field: value}, acceptance bullets, {field: full text})] for each
+    REQ heading; the full text adds a field's continuation lines (a Dependencies list, for example)."""
     reqs = []
     for i, line in enumerate(lines):
         m = REQ_HEAD.match(line)
@@ -176,17 +224,23 @@ def requirements(lines):
             if re.match(r"^#{1,6}\s", nxt):
                 break
             body.append(nxt)
-        fields, bullets, current = {}, 0, None
+        fields, texts, bullets, current = {}, {}, 0, None
         for b in body:
             f = FIELD.match(b)
             if f:
                 current = re.sub(r"\s+", " ", f.group(1).lower())
+                current = re.sub(r"^correctness[\s-]*critical$", "correctness-critical", current)
                 fields.setdefault(current, f.group(2).strip())
+                texts.setdefault(current, []).append(f.group(2))
                 if current == "acceptance criteria" and BULLET.match(f.group(2) or ""):
                     bullets += 1
-            elif current == "acceptance criteria" and BULLET.match(b):
-                bullets += 1
-        reqs.append((m.group(2), len(m.group(1)), i, fields, bullets))
+            else:
+                if current is not None:
+                    texts[current].append(b)
+                if current == "acceptance criteria" and BULLET.match(b):
+                    bullets += 1
+        reqs.append((m.group(2), len(m.group(1)), i, fields, bullets,
+                     {k: "\n".join(v) for k, v in texts.items()}))
     return reqs
 
 
@@ -240,7 +294,11 @@ def check(text, stage="draft"):
     """[(status, check, evidence)] for one report's text."""
     text = re.sub(r"<!--.*?-->", "", text.replace("﻿", ""), flags=re.S)
     lines = [l.rstrip("\r") for l in text.split("\n")]
-    out = []
+    layout = layout_of(text)
+    lay = LAYOUTS[layout]
+    v07 = layout == "v0.7"
+    numbers = range(1, lay["sections"] + 1)
+    out = [("PASS", "layout", "%s (%d sections)" % (layout, lay["sections"]))]
 
     # (a) header
     first = next((i for i, l in enumerate(lines) if l.startswith("## ")), len(lines))
@@ -281,10 +339,10 @@ def check(text, stage="draft"):
 
     # (b) sections
     found, dupes = sections(lines)
-    name = "(b) sections 1-13 present, each with content or 'Not applicable: <reason>'"
-    problems = ["section %d missing (expected a heading '## %d. ...')" % (n, n) for n in SECTIONS if n not in found]
+    name = "(b) sections 1-%d present, each with content or 'Not applicable: <reason>'" % lay["sections"]
+    problems = ["section %d missing (expected a heading '## %d. ...')" % (n, n) for n in numbers if n not in found]
     problems += ["section %d appears more than once" % n for n in dupes]
-    for n in SECTIONS:
+    for n in numbers:
         if n not in found:
             continue
         heading, body = found[n]
@@ -293,7 +351,7 @@ def check(text, stage="draft"):
             problems.append("section %d says 'Not applicable' without a reason" % n)
         elif not na and not any(l.strip() for l in body):
             problems.append("section %d is empty: write it, or 'Not applicable: <reason>'" % n)
-    order = [n for n in found if n in SECTIONS]
+    order = [n for n in found if n in numbers]
     if order != sorted(order):
         out.append(("WARN", name, "sections out of order: " + ", ".join(map(str, order))))
     placeholders = sorted(set(re.findall(r"\{\{[^{}]*\}\}", text)))
@@ -310,10 +368,10 @@ def check(text, stage="draft"):
     reqs = requirements(lines)
     name_c = "(c) requirements: acceptance criteria, priority, source, status"
     name_d = "(d) a draft cannot adopt"
-    problems, adopt_problems, seen = [], [], {}
+    problems, adopt_problems, seen, warns = [], [], {}, []
     if not reqs:
         problems.append("no requirement headings '#### REQ-<AREA>-NN: <name>'")
-    for rid, level, at, fields, bullets in reqs:
+    for rid, level, at, fields, bullets, _texts in reqs:
         if level != 4:
             problems.append("%s: heading level %d; requirements are '#### REQ-<AREA>-NN: <name>'" % (rid, level))
         if rid in seen:
@@ -326,9 +384,13 @@ def check(text, stage="draft"):
         prio = plain(fields.get("priority", "")).lower()
         if not prio:
             problems.append("%s: no Priority" % rid)
+        elif v07:
+            problems += v07_priority_problems(rid, prio, warns)
         elif not re.match(r"(%s)\b" % "|".join(PRIORITIES), prio) and not OPEN_PRIORITY.match(prio):
             problems.append("%s: Priority '%s' is not required / desired / future, or open (O-NN) when the PI "
                             "left the scope open" % (rid, short(prio, 30)))
+        if v07:
+            problems += v07_field_problems(rid, fields, warns)
         source = fields.get("source", "")
         if not plain(source):
             problems.append("%s: no Source" % rid)
@@ -341,17 +403,19 @@ def check(text, stage="draft"):
             elif why:
                 problems.append("%s: %s" % (rid, why))
     out += [("FAIL", name_c, p) for p in problems] or [("PASS", name_c, "%d requirement(s)" % len(reqs))]
+    out += [("WARN", name_c, w) for w in warns]
     out += [("FAIL", name_d, p) for p in adopt_problems] or [("PASS", name_d, "no requirement adopted by a draft"
                                                                if stage == "draft" else "stage adopted")]
 
-    # (e) section 6 decision table
-    name = "(e) section 6: decision table with alternatives"
+    # (e) the decision table (v0.5 section 6, v0.7 section 8)
+    sd = lay["decisions"]
+    name = "(e) section %d: decision table with alternatives" % sd
     problems = []
-    if 6 in found and is_na(6):
-        out.append(("WARN", name, "section 6 says Not applicable: no architecture decisions recorded"))
-    elif 6 in found:
+    if sd in found and is_na(sd):
+        out.append(("WARN", name, "section %d says Not applicable: no architecture decisions recorded" % sd))
+    elif sd in found:
         want = [c.lower() for c in DECISION_COLUMNS]
-        candidates = tables(body_of(6))
+        candidates = tables(body_of(sd))
         table = next((t for t in candidates if all(any(h.lower().startswith(w) for h in t[0]) for w in want)), None)
         if not table:
             problems.append("no table with the columns " + " | ".join(DECISION_COLUMNS))
@@ -377,14 +441,15 @@ def check(text, stage="draft"):
             if not problems:
                 out.append(("PASS", name, "%d decision row(s)" % len(rows)))
     else:
-        problems.append("section 6 missing")
+        problems.append("section %d missing" % sd)
     out += [("FAIL", name, p) for p in problems]
 
-    # (f) section 12 open items name a gate
-    name = "(f) section 12: every open item names a gate"
+    # (f) open items name a gate (v0.5 section 12, v0.7 section 13)
+    so = lay["open"]
+    name = "(f) section %d: every open item names a gate" % so
     problems, items, planning = [], 0, 0
-    if 12 in found and not is_na(12):
-        body = body_of(12)
+    if so in found and not is_na(so):
+        body = body_of(so)
         table_lines = set()
         for header, rows, raw in tables(body):
             gate_col = next((i for i, h in enumerate(header) if re.search(r"gate|needed by", h, re.I)), None)
@@ -425,18 +490,103 @@ def check(text, stage="draft"):
                     "gate wording does not name a project stage (planning, implementing <what>, deployment, a "
                     "sprint, milestone or release): " + ", ".join(short(g, 40) for g in odd)))
 
-    # (g) section 13: adoption does not authorize implementation
-    name = "(g) section 13: adoption does not authorize implementation"
-    s13 = " ".join(body_of(13))
-    sentences = re.split(r"(?<=[.;:!?])\s+", s13)
+    # (g) what adoption authorizes (v0.5 section 13, v0.7 section 14): not implementation
+    sa = lay["authorizes"]
+    name = "(g) section %d: adoption does not authorize implementation" % sa
+    sentences = re.split(r"(?<=[.;:!?])\s+", " ".join(body_of(sa)))
     hit = next((x for x in sentences if re.search(r"\b(?:not|no|never)\b", x, re.I) and re.search(r"implement", x, re.I)), None)
     out.append(("PASS", name, short(hit)) if hit else
-               ("FAIL", name, "section 13 does not say that adoption does not authorize implementation"))
+               ("FAIL", name, "section %d does not say that adoption does not authorize implementation" % sa))
 
     # (h) completeness check
     name = "(h) completeness check subsection"
     cc = next((l for l in lines if re.match(r"^#{2,4}\s+.*completeness check", l, re.I)), None)
     out.append(("PASS", name, short(cc)) if cc else ("WARN", name, "no 'Completeness check' subsection"))
+    if v07:
+        out += dependency_checks(reqs)
+    return out
+
+
+def v07_priority_problems(rid, prio, warns):
+    """(c) v0.7: P1-P5 with an optional level name, or open (O-NN). Problems returned; warnings appended."""
+    m = P_PRIORITY.match(prio)
+    if m:
+        n, word = int(m.group(1)), m.group(2).lower()
+        names = {v.lower(): k for k, v in P_LEVELS.items()}
+        if word in names and names[word] != n:
+            warns.append("%s: Priority '%s': P%d is %s and %s is P%d; say which the PI chose"
+                         % (rid, short(prio, 30), n, P_LEVELS[n], P_LEVELS[names[word]], names[word]))
+        return []
+    if OPEN_PRIORITY.match(prio):
+        return []
+    if re.match(r"(%s)\b" % "|".join(PRIORITIES), prio):
+        return ["%s: Priority '%s' is the v0.5 scale; a v0.7 report uses P1 Core, P2 Next, P3 Planned, P4 Wanted, "
+                "P5 Idea (%s)" % (rid, short(prio, 30), OLD_PRIORITY_HINT)]
+    return ["%s: Priority '%s' is not P1 Core / P2 Next / P3 Planned / P4 Wanted / P5 Idea, or open (O-NN) when the "
+            "PI left it open" % (rid, short(prio, 30))]
+
+
+def v07_field_problems(rid, fields, warns):
+    """(c) v0.7: the optional Feasibility and Correctness-critical fields. Problems returned; warnings appended."""
+    problems = []
+    if "feasibility" in fields:
+        feas = plain(fields["feasibility"])
+        inv = re.match(r"to\s+investigate\b\W*(.*)", feas, re.I)
+        if re.match(r"established\b", feas, re.I):
+            pass
+        elif inv and re.search(r"[A-Za-z0-9]", inv.group(1)):
+            if not GATE.search(inv.group(1)):
+                warns.append("%s: Feasibility 'to investigate' names no gate: to investigate: <what> (%s)"
+                             % (rid, GATE_HINT))
+        else:
+            problems.append("%s: Feasibility '%s' is not 'established' or 'to investigate: <what> (<gate>)'"
+                            % (rid, short(feas, 40)))
+    if "correctness-critical" in fields:
+        cc = plain(fields["correctness-critical"])
+        m = re.match(r"(yes|no)\b(.*)", cc, re.I)
+        if not m:
+            problems.append("%s: Correctness-critical '%s' is not 'yes: <why>' or 'no'" % (rid, short(cc, 40)))
+        elif m.group(1).lower() == "yes" and not re.search(r"[A-Za-z0-9]", m.group(2)):
+            warns.append("%s: Correctness-critical 'yes' without a reason: yes: <why it is critical>" % rid)
+    return problems
+
+
+def dependency_checks(reqs):
+    """v0.7 (i) priorities respect dependencies; (j) correctness-critical requirements are not left optional."""
+    out, levels = [], {}
+    for rid, _level, _at, fields, _bullets, _texts in reqs:
+        levels.setdefault(rid, priority_level(fields.get("priority", "")))
+    name = "(i) priorities respect dependencies"
+    problems, warns, links = [], [], 0
+    for rid, _level, _at, _fields, _bullets, texts in reqs:
+        deps = []
+        for d in REQ_ID.findall(texts.get("dependencies", "")):
+            if d != rid and d not in deps:
+                deps.append(d)
+        for dep in deps:
+            if dep not in levels:
+                warns.append("%s depends on %s, which is not in this report (a requirement defined elsewhere? "
+                             "check the ID)" % (rid, dep))
+                continue
+            links += 1
+            a, b = levels[rid], levels[dep]
+            if a is not None and b is not None and b > a:
+                problems.append("%s (P%d) depends on %s (P%d): a requirement cannot be scheduled before what it "
+                                "depends on; raise %s or lower %s" % (rid, a, dep, b, dep, rid))
+    out += [("FAIL", name, p) for p in problems] or [("PASS", name, "%d dependency link(s) within the report" % links)]
+    out += [("WARN", name, w) for w in warns]
+    name = "(j) correctness-critical requirements"
+    critical, warns = 0, []
+    for rid, _level, _at, fields, _bullets, _texts in reqs:
+        if not re.match(r"yes\b", plain(fields.get("correctness-critical", "")), re.I):
+            continue
+        critical += 1
+        n = levels.get(rid)
+        if n is not None and n >= 4:
+            warns.append("%s is correctness-critical at P%d %s: correctness-critical requirements are rarely "
+                         "optional; confirm the PI chose this" % (rid, n, P_LEVELS[n]))
+    out += [("WARN", name, w) for w in warns] or [
+        ("PASS", name, "%d correctness-critical requirement(s), none at P4 or P5" % critical)]
     return out
 
 

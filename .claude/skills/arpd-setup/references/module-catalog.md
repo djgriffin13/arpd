@@ -5,11 +5,11 @@ benefit, while project-specific, non-standard rules are what help (Gloaguen et a
 every teamwork module can hurt (Mishra et al., 2025).
 
 Select a module only when this project needs it: for the instrument actually requested, and for the
-scientific help the PI asked for (the theory-context choice). Never select one "just in case". For
+scientific help the PI asked for (the role's scientific axis). Never select one "just in case". For
 product-only work, the team-arrangement module may be the only one, plus human-subjects data when
 real data about people are collected. A science module's candidate invariants are proposed only
-when the science is in scope (`interview-guide.md`, *Theory context*), or when correctness depends
-on its semantics. Say in report §11 which modules were selected, and why, and summarize the rules
+when the science is in scope (`interview-guide.md`, *Roles*), or when correctness depends
+on its semantics. Say in report §12 which modules were selected, and why, and summarize the rules
 each one adds, so the PI sees what the charter will contain.
 
 | Module | File (`arpd/constitution/modules/`) | Status | Recommend when | Candidate invariants to propose (in scientific language) |

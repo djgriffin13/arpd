@@ -56,7 +56,11 @@ like a change to the requirement's wording.
 ### REQ-AREA-NN: short name
 - **Acceptance criteria:**
   - an observable check an independent tester could run
-- **Priority:** required / desired (a future-priority item is in MASTER_PLAN.md, not here)
+- **Priority:** P1 Core / P2 Next / P3 Planned (P4 Wanted and P5 Idea items are in the MASTER_PLAN.md
+  backlog, not here; projects set up before v0.7 use required / desired)
+- **Feasibility:** established / to investigate: what, and its gate (only when it applies)
+- **Correctness-critical:** yes: why / no (only when it applies)
+- **Serves:** the research question or objective (only when it applies)
 - **Dependencies:** REQ IDs, architecture decisions (D-NN), Waiting on the PI rows, or "none"
 -->
 
@@ -64,7 +68,7 @@ like a change to the requirement's wording.
 
 - **Acceptance criteria:**
   - {{an observable check}}
-- **Priority:** {{required / desired}}
+- **Priority:** {{P1 Core / P2 Next / P3 Planned}}
 - **Dependencies:** {{REQ IDs, D-NN, Waiting on the PI rows, or "none"}}
 
 Milestones (sets of requirements with a walkthrough exit) are defined in `MASTER_PLAN.md` §2, not

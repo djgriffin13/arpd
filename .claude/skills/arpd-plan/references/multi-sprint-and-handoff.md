@@ -9,7 +9,7 @@ Plan approval, execution authorization and task-plan approval are separate (`arp
 §1, kinds 4 and 5; task plans under `CLAUDE.md` §5). A multi-sprint plan can be approved without
 authorizing anything beyond its first sprint.
 
-## 2. Transition policies (Step B)
+## 2. Transition policies (Step C)
 
 Ask once per planning effort, after the PI chooses several sprints:
 
@@ -30,7 +30,9 @@ Above the block, say:
 - every sprint still gets its close-out record, independent review and tests, whichever is chosen;
 - the charter's default (`CLAUDE.md` §8) is a check-in at every sprint boundary, so A changes
   nothing, and B or C take effect only through the PI's words when execution is authorized;
-- if an SA in force already authorizes consecutive sprints, show it as "(recommended)".
+- if an SA in force already authorizes consecutive sprints, or the charter's sprint autonomy (set at
+  setup) is "several sprints", show C as "(recommended)"; it still takes effect only through the
+  PI's words when execution is authorized.
 
 At a **light check-in**, the lead gives a short check-in (as `/arpd-checkin` does) and waits for the
 PI's go-ahead. It is not a re-approval of the plan. Silence is not a go-ahead.

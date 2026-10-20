@@ -1,17 +1,20 @@
 # Interview guide
 
-Each phase below gives a **menu of coverage domains**, not a questionnaire. Pick what matters for
-this project, add your own, and skip what the materials or earlier answers already settle (say what
-you found instead). The wording is a suggestion. Defaults appear in **[brackets]**.
+Each phase below lists its **required items**: the answers setup needs before the phase can close.
+They are a coverage list, not a questionnaire. Fill them from the folder, the PI's materials and
+earlier answers first; ask only for what is still Open (`SKILL.md`, *The interview*). The wording of
+each question is a suggestion. Defaults appear in **[brackets]**. The **Feeds** column says what each
+item is for: an item that feeds nothing in this project is N.A., not asked.
 
 **Depth follows the project.**
 
-- **Simple tools** (a file converter, a CSV cleaner): a few questions on the workflow and data, one
-  or two architecture decisions, light governance; typically under a dozen exchanges.
+- **Simple tools** (a file converter, a CSV cleaner): most items are filled by the opening answer;
+  short phases, one or two architecture decisions, light governance.
 - **Ordinary applications and data collection:** workflow, data semantics, persistence and export in
   real detail; the material architecture decisions explored; the rest defaulted.
-- **Complex research software** (estimators, simulations, experimental platforms): equations,
-  assumptions, edge cases, validation, performance; several decisions; perhaps parallel streams.
+- **Complex research software** (estimators, simulations, experimental platforms): research
+  questions, model commitments, equations, edge cases, validation and performance in depth; several
+  design decisions; perhaps parallel streams.
 
 The interview is adaptive; the resulting report is thorough.
 
@@ -20,18 +23,19 @@ The interview is adaptive; the resulting report is thorough.
 ## Interview principles
 
 1. Ask broad questions early, and targeted ones as the project becomes clear.
-2. Do not ask for information already supplied, in the conversation or in the materials.
-3. Do not ask the PI to confirm obvious implications of earlier answers. Record them as your
-   interpretation and move on.
+2. Do not ask for information already supplied, in the conversation, the folder or the materials.
+3. Do not ask the PI to confirm obvious implications one by one. Record them as Inferred; the phase
+   summary confirms them together.
 4. Explain why a question matters when that is not apparent. Before a sensitive question (ethics
    approval, personal data, institutional access), work out what the answer would change, and say
    so in one sentence. If the PI asks why, explain, and drop or narrow the question.
 5. For a technical decision, present meaningful options, with what each means for the PI in practice.
 6. Recommend a default when a reasoned one exists, with the reason in one plain sentence.
 7. Accept open-ended answers, "please recommend", and changes to earlier answers. A change
-   supersedes the earlier answer in the notes; the earlier words stay for provenance.
+   supersedes the earlier answer in the notes; the earlier words stay for provenance. A change may
+   reopen an earlier phase: say which items it reopens.
 8. Respect requests to narrow scope or move forward, immediately. Keep what was already gathered.
-9. Revisit a deferred question only when a later decision needs it, and say which decision.
+9. Revisit a deferred item only when a later decision needs it, and say which decision.
 
 **Further rules:**
 
@@ -45,15 +49,76 @@ The interview is adaptive; the resulting report is thorough.
   name in the records defaults to "PI".
 - **Do not lead.** When asking what would convince the PI, ask it open first. Offer your proposed
   check only if the PI is unsure, and label it as yours.
-- **Spend words where they pay:** a paragraph of trade-offs for architecture, data semantics and
-  governance; none for trivia. Gloss a term once. Do not narrate the process.
+- **Spend words where they pay:** a paragraph of trade-offs for architecture, data semantics,
+  model commitments and the agent workflow; none for trivia. Gloss a term once.
+- **Never infer one thing about the PI from another:** coding comfort says nothing about research
+  expertise, and neither says how involved the PI wants to be.
 
 ---
 
-## Project phase
+## Phase 1: Intake
 
-Read the materials the PI points to: a proposal, a specification, design notes, code, earlier
-decisions. A new repository does not mean the idea is new.
+**Objective:** you can say who the PI is (as far as it matters), what is being done at a high level,
+what the agent's role is, where the project lives, and what the next phases must explore; enough to
+prepare the project folder and to know which kinds of questions follow.
+
+The opening question (`SKILL.md`, *Start*) usually fills IN-01, IN-06 and IN-07, and often more.
+
+| ID | Required item | Feeds | Notes |
+|---|---|---|---|
+| IN-01 | State of the work: existing documents, code or data, and where they are | What to read and reuse; the mode | From the folder assessment and the PI's answer. Read what the PI points to. |
+| IN-02 | Academic field and high-level theoretical scope | How theory-aware the next phases are; vocabulary; modules | One or two sentences is enough. |
+| IN-03 | The PI's coding comfort, and how involved they want to be in technical decisions | Depth of the Design phase; how much is proposed versus asked; review depth | Two answers. Usually visible from how the PI writes; ask only if unclear, and never as a test. |
+| IN-04 | The tool's eventual users, and who will run and maintain it afterwards | Interface, distribution, language and documentation choices | The PI is often not the only user. |
+| IN-05 | Where the project lives | The folder preparation | Asked right after the opening answer (`import-path.md`, *Where the project lives*). |
+| IN-06 | The main goal of this effort, and what is to be built, at a high level | Everything after | Build, extend, review or explore. |
+| IN-07 | Where the PI is in development: idea, specified, prototype, working code, mature | Which phases are long or short | Usually inferred. |
+| IN-08 | The agent's role (*Roles*, below), and from it the scientific axis | How far you go in design and in the science | One choice; the scientific axis is inferred from it and confirmed in the summary. |
+| IN-09 | Known constraints or preferences, each marked must or prefer | Early routing; opens the Constraints phase | One open question (below). Not the full constraints interview. |
+| IN-10 | Timeline or deadline | Proportionality; the roadmap | Only when the rest suggests it matters, or the PI mentions it. |
+
+**IN-09, suggested wording:**
+
+> Are there any important project or system constraints or preferences I should know about at this
+> point? For example: programming languages, operating systems, internet access, costs or credit
+> use, deadlines, data access, institutional rules, or theoretical frameworks. Please say which are
+> requirements and which are preferences.
+
+Do not ask at intake which features are essential and which desirable; that belongs to Development.
+
+### Roles (IN-08)
+
+Ask as one `CHOICE FOR YOU (select one)`, after the PI's goal is clear:
+
+```text
+────────────────────────────────
+CHOICE FOR YOU (select one)
+What role would you like me to play in this project?
+A. Build what you specify. I raise only problems that would stop it working.
+B. Review your technical plan, then build it. The research ideas are taken as you give them.
+C. Review the technical plan and how well it fits the theory or research question, then build it.
+D. Help you work out what to build for your research question: design the tool, and help develop
+   the science behind it, with you.
+E. Audit, repair or extend existing code, and bring it under ARPD's way of working.
+F. Explore ideas with you; there is no particular tool in mind yet.
+Or describe another role.
+────────────────────────────────
+```
+
+Recommend one when the opening answer points to it, with the reason. Record the role on two axes:
+
+| Role | Technical axis | Scientific axis [inferred default] |
+|---|---|---|
+| A | Builder | **Technical only** |
+| B | Reviewer and builder | **Respect as given**: the science guides the implementation, without critique |
+| C | Reviewer and builder | **Alignment review**: labelled concerns where theory and design meet |
+| D | Co-designer | **Co-development**: the full paradigm method, to the depth the PI wants |
+| E | Auditor and builder | Ask in the summary: usually *respect as given* |
+| F | Exploration | Co-development, then *No tool in view* (`SKILL.md`) |
+| Other | From the PI's words | From the PI's words |
+
+Whatever the role: correctness-critical semantics are specified, and contradictions and circularity
+in the model commitments are flagged (`SKILL.md`, *Science*).
 
 ### Classification and routing
 
@@ -62,126 +127,210 @@ classification*). Never ask the PI to pick a class. Several may apply; re-classi
 
 | Situation | Emphasize | Usually light or skipped |
 |---|---|---|
-| New project, broad idea | Purpose, users, one typical session (propose one if the PI is unsure) | Fine performance targets |
-| Developed requirements, or an existing project with documents | Read them; summarize; ask only about gaps and contradictions; reach Architecture sooner | Re-eliciting what is written |
+| New project, broad idea | Objectives and research purpose; one typical session (propose one if the PI is unsure) | Fine performance targets |
+| Developed requirements, or documents | Read them; summarize; ask only about gaps and contradictions; reach Design sooner | Re-eliciting what is written |
 | Existing repository to extend or modify | `import-path.md`, *Existing repository review* | Re-deciding valid existing choices |
-| Computational or statistical method | *Correctness-critical semantics* (below); known answers; performance; the theory-context choice | UI detail |
+| Computational or statistical method | *Correctness-critical semantics*; known answers; performance; model commitments | UI detail |
 | Data collection or research infrastructure | Who enters what, when; form configuration; identifiers; data semantics; persistence; export; privacy; distribution | Theory (the boundary is usually "constructs live in the PI's questions") |
-| Simulation or experimental platform | Rules, timing and order; conditions; randomization and seeds; what participants see; logging; validation | Generic UX questions |
-| General application | Users and roles, workflows, data, nonfunctional needs, distribution | The theory question (skip it) |
-| Integration or automation tool | External interfaces, credentials, scheduling, failures and retries, idempotence; whether an existing tool can be configured instead | UI |
+| Simulation or experimental platform | Rules, timing and order; conditions; randomization and seeds; what participants see; logging; validation; model commitments | Generic UX questions |
+| General application | Users and roles, workflows, data, nonfunctional needs, distribution | Theory |
+| Integration or automation tool | External interfaces, credentials, scheduling, failures and retries; whether an existing tool can be configured instead | UI |
 | Mixed | Split it into components, and route each | — |
 
-**The objective of the phase:** you can say what is being built, why, for whom, what it should
-accomplish, what already exists, and which parts are understood, uncertain, or open to your
-recommendation. Do not jump early into theory, languages or implementation detail.
-
-### Theory context (only when relevant)
-
-Ask only when the description points to a theory, framework, mathematical model or set of
-assumptions that could shape the tool. Skip it for general software, and for tools whose scientific
-content lives entirely in material the PI supplies. Ask once, as a `CHOICE FOR YOU (select one)`
-with the four options A–D below, after this suggested lead-in:
-
-> Is there a scientific theory, research framework, mathematical model or set of theoretical
-> assumptions that should inform this tool? If so, you can describe them or point me to documents.
-
-Give no recommendation unless correctness clearly depends on it. Record the answer in the notes
-(*Theory context*); it goes to report §11 and, after adoption, to `STATUS.md` §8.
-
-| Choice | Option as shown to the PI | What you do |
-|---|---|---|
-| A | Use it to guide implementation, without evaluating it | Record the context the tool must represent, in the PI's words. Ask only what correctness needs. No critique. |
-| B | Identify concerns | Raise concerns briefly where they matter for the build or the claims, as labelled lead observations. The PI decides what to do with each one. |
-| C | Help develop it | Use the full method below, to the depth the PI wants. |
-| D | Leave theory aside | Record "theory out of scope (PI's choice)". Ask nothing further about it. |
-
-**Ambiguity triage.** Classify each scientific ambiguity you notice:
-
-| Kind | Example | In setup |
-|---|---|---|
-| 1. Affects the implementation | Which formula, which unit of analysis, whether an item may be skipped | **Pursue** |
-| 2. Affects only later analysis | How the PI will model the collected answers | Record it in the notes; do not pursue |
-| 3. Prevents a valid design | Two requirements that cannot both hold; an estimator undefined for the stated data | **Pursue** |
-| 4. Deferred by the PI | "I'll define that later" | Record it with what it affects and its gate |
-
-**Boundary rule.** If the PI says the tool only collects data, and the constructs live in questions
-they will supply, record the boundary in the PI's words, put analysis and interpretation in the
-exclusions, and move on to the product; do not return to the constructs. Read the signals early: "I
-want to build the tool to help me do that" means product work now. Confirm it in passing inside the
-next product question; do not defer the confirmation or keep exploring the theory meanwhile.
-
-**Correctness-critical semantics.** For an estimator, a simulation, a measurement pipeline or any
-theory-dependent model, the mathematics *is* the specification. Whatever the A–D answer, cover:
-equations and definitions; assumptions; edge cases (empty groups, ties, out-of-range values,
-non-convergence); numerical precision and tolerances; randomness and seeds; what the method refuses
-to compute. Each becomes a requirement with acceptance criteria, usually known-answer or recovery
-tests.
-
-### The full paradigm-specification method (C, correctness-critical work, or on request)
-
-1. **Constructs** (CON-NN): "What are the key constructs or mechanisms? How would you define each?"
-   Verbatim. Offer a draft only after hearing the PI's view, labelled as yours.
-2. **Operationalizations** (OP-NN): what the tool manipulates, records or computes, at what level and
-   timing.
-3. **Invariants** (INV-NN): propose three to eight from `module-catalog.md`, in scientific language;
-   the PI accepts, edits or rejects each. Then ask: "Is there anything that, if the code got it
-   wrong, would make the results meaningless?"
-4. **Claims** (CLM-NN), and two to four claims not to make (NCL-NN).
-5. **Assumptions** (ASM-NN): where a source is ambiguous, list the readings; record the PI's choice.
-6. **Validation** (VAL-NN): *Verification*, under Requirements.
-
-Label every item's origin (the PI's words, or drafted by the lead) and status. Silence is not
-consent to a new scientific model. Draft wording on import: `import-path.md`, step 2 of *Steps for
-an ARPD starter*.
+**Intake summary** (the closeout) states, at a minimum: who the PI is as far as it matters (field,
+coding comfort, involvement), the tool's users and maintainers, what will be built at a high level,
+the state of the work, the role and its scientific axis, where the project lives, the known
+constraints (must / prefer), and what Objectives, Constraints and Design will need to explore.
 
 ---
 
-## Requirements phase: coverage domains
+## Phase 2: Objectives
 
-**Begin with the scope sequence** (`SKILL.md`, *Scope: three questions, once each*) once the product
-overview is clear. Record each answer verbatim in the notes, under the three tiers of
-`reports/setup/NOTES.md` §5 *Scope* (minimum usable version; ideal version and features of
-interest; nice-to-have, not in the initial release), with any exclusions. Priorities follow
-`SKILL.md`.
+**Objective:** a list of specific objectives, capabilities and candidate requirements, and, unless
+the role is technical only, a description of the research domain and the research questions the tool
+serves, each linked to what it requires of the tool.
 
-Then draw topics from the domains below. They are a menu: choose what bears on this project. Do not
-invent user groups, features or constraints. A detail you supply is a labelled proposal.
+**Technical only:** open the phase by saying once that research questions and theoretical alignment
+are out of focus because the PI asked for a technical tool, and that they can ask for more attention
+to the theoretical foundations at any time. OB-01 and OB-02 are then N.A.
 
-### 1. Purpose and intended users
+**Opening question** (adapt it; skip what is already known):
 
-The problem; the users and their roles; the main scenarios; what users accomplish; the outputs; how
-success would be recognized; the kind of use (personal, research, teaching, organizational).
+> Tell me about the project in your own words. What do you want to do with this tool? What research
+> or theoretical questions should it help answer, and how? What do you want me to accomplish, and
+> what tool or tools do you picture?
 
-### 2. Workflows and user experience
+Then narrow: objective and feature questions, and research-domain and research-question questions,
+one at a time, until the items are filled.
 
-- **A typical session, end to end.** For a substantial product, ask: "Walk me through one complete
-  use, from the moment someone starts it to the moment you have what you need." If the PI is unsure,
-  propose a workflow for review, labelled as yours.
-- the interface (graphical, command line, API, browser, desktop) and its main interactions;
-- roles and permissions, where several kinds of user exist;
-- errors and exceptions: wrong input, interruption, a crash mid-entry, a lost file;
-- interactive, batch, automated or real-time operation.
+| ID | Required item | Feeds |
+|---|---|---|
+| OB-01 | The research domain: phenomena, constructs or problems the tool is about | `PARADIGM-SPEC.md` §1; report §2 |
+| OB-02 | Research questions: specific ones, or, for a general platform, illustrative ones it must support | The capabilities; the claims the tool may support |
+| OB-03 | Objectives: what the PI wants to achieve with the tool, in their words | Milestones; the roadmap |
+| OB-04 | Capabilities and features: what users must be able to do | Functional requirements |
+| OB-05 | The links: research purpose → capability → requirement | Traceability (report §2); priorities later |
+| OB-06 | How the outputs will be used: exploration, teaching, publication, operations, decisions | Validation, reproducibility, provenance and versioning requirements |
+| OB-07 | What would convince the PI it works | Acceptance criteria; report §10 |
+| OB-08 | What the tool will not do (exclusions) | Scope boundary; `PARADIGM-SPEC.md` §8 |
 
-### 3. Functional requirements
+- **Questions are not requirements.** A research question says why a capability matters; a
+  requirement says what must be implemented and how it is checked. Keep the three levels apart and
+  linked: "When does decentralized coordination outperform centralized coordination?" (question) →
+  "set up teams with different communication structures and decision rights" (capability) → "the
+  simulator implements both information-sharing rules and logs every decision with its condition and
+  seed" (requirement).
+- **Do not force a narrow question onto a general platform.** A statistical package or experiment
+  platform may serve many studies; illustrative questions are enough unless the design depends on a
+  particular one.
+- **Turn intended use into requirements.** "For publication" usually means reproducible runs,
+  recorded versions and seeds, and outputs a reader can check; "for teaching" may mean defaults and
+  explanations. Say what the use implies, as proposals.
+- **Brainstorming is welcome here,** within the role: possible capabilities, alternative ways a tool
+  could address the question, what different theories would need it to represent. Label what is
+  established (with a verified source), what is a plausible but unverified idea, and what is your
+  speculation (`SKILL.md`, *Sources*).
+- **Verification, asked openly first** (OB-07): "What would convince you that it works?" Then keep
+  two things apart:
+  - **Implementation correctness (Verified):** unit, integration and regression tests; known
+    answers; round trips for data; independent review; a walkthrough.
+  - **Scientific validity (Validated), only when the science is in scope:** a published result
+    reproduced; parameter recovery; a hand-checkable reference calculation; comparison with an
+    established implementation; a pilot.
 
-Sort every capability by the scope tiers (`SKILL.md`). Also: an explicitly excluded one goes to
-report §2's exclusions; an existing capability to retain gets a regression acceptance criterion; one
-that depends on an external system or data names the dependency, and goes to §12 if unresolved.
-Avoid vague entries such as "supports data export": each requirement is numbered and testable
-(*Requirements quality*, below).
+  When validation comes up, say once: "The team can show the code matches the specification and
+  reproduces known answers. Only you can judge whether the specification captures what you mean, and
+  whether a result is meaningful." Keep four things distinct throughout: the PI's **intent**, the
+  **specification**, the **implementation**, and **empirical validation**.
 
-### 4. Data and persistence (when relevant)
+**No tool in view:** `SKILL.md`. **Objectives summary:** the domain and questions (or "technical
+only, by the PI's choice"), the objectives, the capabilities with their links, the intended use and
+what it implies, the success evidence, and the exclusions.
+
+---
+
+## Phase 3: Constraints
+
+**Objective:** a clear, classified list of every constraint, stated or inferred, on the system, the
+tool's use and (unless technical only) the theory, with contradictions resolved or recorded.
+
+**Part A: system and tool.** Open from IN-09 ("You mentioned X and Y"), then ask once, broadly:
+
+> Please give me as complete a picture as you can of the constraints you know about. For example:
+> must it work offline or can it use the internet? Must it be free to use? Is there a required
+> language or version (say, Python 3.8)? Must it run on Windows and Mac? Are there limits on cost,
+> computing or agent credit use? Where may data be stored? Are there institutional, ethics or licence
+> rules?
+
+Then follow up: open ("You said ___; can you say more?") or bounded ("This looks like a constraint.
+Should I A. treat it as a requirement, B. treat it as a preference, C. drop it?").
+
+**Part B: theory** (skipped, and said to be skipped, when technical only):
+
+> Are there constraints on the theoretical side of this project? For example, frameworks or bodies of
+> work it should draw on or avoid, assumptions the model must make, or things it must not try to
+> represent.
+
+| ID | Required item | Feeds |
+|---|---|---|
+| CS-01 | Platform and environment: operating systems, offline or online, managed machines | Platform decision; distribution |
+| CS-02 | Resources and cost: free to use, budget, compute, agent credit use | Architecture; the team arrangement and review depth (Development) |
+| CS-03 | Technology: required or preferred languages, versions, libraries, existing tools | Architecture alternatives |
+| CS-04 | Data and institution: where data may live, privacy, ethics approval, licences, institutional rules | Storage; modules; gates |
+| CS-05 | Use: who uses it, where, when, how often; deadlines | Workflow; nonfunctional targets; roadmap |
+| CS-06 | Theory: frameworks to draw on or avoid, required assumptions, what not to model | Model commitments; `PARADIGM-SPEC.md` |
+| CS-07 | The commitments review, done and decided (below) | Invariants, assumptions and research questions |
+
+**Classes shown to the PI:**
+
+| Class | Meaning | Example |
+|---|---|---|
+| **Must** | A hard constraint: the design may not violate it | Runs offline on Windows and macOS |
+| **Prefer** | A preference: alternatives may be discussed | Python, because students know it |
+| **Model commitment** | An assumption, framework or exclusion the model adopts, with its epistemic status: *established* (with a verified source), *assumed for this model*, or *a hypothesis to test* | Actors use only information available at the time; personality is not modelled |
+| **Must hold** | An invariant the code must never violate (INV-NN); never a hypothesis | Future observations never influence earlier decisions |
+| **Open question** | Something the project will investigate, not a rule | Whether coordination emerges from local rules |
+
+A theoretical exclusion ("does not model personality") is a scope boundary, not a claim that the
+excluded thing is irrelevant. A preference to draw on or avoid a body of work is a **framing choice**:
+record it as such, and say once that it delimits the model; it is not an instruction to ignore
+relevant contrary evidence when the PI asks what the literature says.
+
+### Commitments review (before the Constraints closeout)
+
+Review every model commitment, invariant and theory constraint critically, at the depth the role
+allows, and present the result as labelled observations:
+
+1. **Contradiction:** two commitments that cannot both hold, or a commitment that conflicts with a
+   requirement or constraint. *Flagged under every role.*
+2. **Circularity:** the tool would build in the answer it is meant to find, for example a hypothesis
+   ("more communication always improves performance") written as a fixed rule or invariant of a
+   simulation meant to study it. *Flagged under every role.*
+3. **Questionable assumption:** unsupported, much stronger than needed, or at odds with established
+   findings (cite only a verified source; otherwise say "unverified"). Under *respect as given*,
+   raised only where it affects the build or the claims.
+
+For each, recommend where appropriate a **reframing**, for the PI to accept or decline: a hypothesis
+becomes a **research question** or an **outcome the tool measures**; a fixed rule becomes a
+**configurable model assumption** (a parameter or condition, with a sensitivity analysis available);
+an invariant that is really an assumption becomes a Model commitment. Nothing is reframed without
+the PI's words; a declined recommendation is recorded with the PI's reason.
+
+**Constraints summary:** every constraint by class, stated ones with the PI's words and inferred ones
+marked "proposed"; the commitments review's findings and the PI's decisions; anything unresolved,
+with what it affects.
+
+---
+
+## Phase 4: Design
+
+**Objective:** a design the PI agrees with, or an explicitly provisional one, covering architecture
+and the technical specifics, with every material decision explored (`architecture-guide.md`).
+
+**Always ask first, before proposing anything:**
+
+> Do you already have a design or architecture in mind: languages, frameworks, platforms, how the
+> parts fit together? You can describe one, give your preferences, or ask me to propose one.
+
+- **The PI has a design:** read it back as you understand it, say what is strong about it and what
+  concerns you, and discuss credible alternatives without trying to replace it by default.
+- **No design:** "Based on the requirements, here is a design that makes sense to me," with the
+  alternatives and trade-offs (`architecture-guide.md`); then "Any questions or thoughts on this?"
+- **Iterate** as long as the PI needs: a round is a revision of the design in response to the PI.
+  Do not fix a number of rounds, and do not move on while the PI is still exploring.
+- **Depth follows IN-03.** A proficient coder gets specific architecture questions (components,
+  interfaces, persistence, testing strategy); a PI less comfortable with code gets clear proposals,
+  explained in plain words, and is asked about consequences, not mechanisms.
+
+| ID | Required item | Feeds |
+|---|---|---|
+| DS-01 | The PI's own design or preferences (asked first) | The starting point |
+| DS-02 | The user's workflow, end to end: one complete use, start to result | Workflows; functional requirements |
+| DS-03 | Platform and delivery: where it runs, how users get it and its updates | Architecture decision |
+| DS-04 | Language, frameworks, dependencies, licences | Architecture decision; costs |
+| DS-05 | Data storage and persistence | Architecture; recovery |
+| DS-06 | Data semantics (*Data and persistence*, below) | Data contracts (report §9) |
+| DS-07 | Inputs, exports, connectivity and interfaces to other systems | Interface contracts |
+| DS-08 | Nonfunctional targets, where relevant: performance, reliability, reproducibility | Nonfunctional requirements |
+| DS-09 | Every material decision: alternatives, recommendation, the PI's choice or a gate | Report §8; `ARCHITECTURE.md` |
+
+**Design closeout = the readiness gate.** The phase summary (the design in plain words, each
+decision with its status, what is provisional and how it will be settled) ends with the closeout
+choice phrased explicitly: "Are you ready to move on from the design to how the agents will build
+it, or would you like to explore or revise any part first?" A provisional part is allowed; it
+becomes an Open item with a gate.
+
+### Data and persistence (when relevant)
 
 Cover, as relevant: the kinds of data, and input and output formats; where data are stored, and what
 persists versus what is temporary; entities and relationships, and repeated observations or
 sessions; integrity, provenance, versioning and compatibility; backup, recovery and export; privacy
 and security.
 
-**Data semantics are consequential** (`arpd/constitution/CORE.md` §6). Raise them during
-Requirements as ordinary product questions (one per turn, or naturally grouped), never saved for the
-adoption block, and never decide them silently. Ask the consequential ones; propose defaults for the
-rest. For a data-collection tool, most of these matter:
+**Data semantics are consequential** (`arpd/constitution/CORE.md` §6). Raise them as ordinary product
+questions (one per turn, or naturally grouped), never saved for the adoption block, and never
+decided silently. Ask the consequential ones; propose defaults for the rest. For a data-collection
+tool, most of these matter:
 
 - **ask these first, whenever they change the data:** when people take part in groups or sessions,
   how a record identifies its class, session, group or site; how often an entry is made, and whether
@@ -202,97 +351,94 @@ rest. For a data-collection tool, most of these matter:
   the output reaches the PI.
 
 Not data semantics: reliability behaviours (autosave, crash recovery, export determinism) are
-ordinary requirements with acceptance criteria, adopted with the report; storage location, file
-names and similar mechanics are implementation defaults (delegable). Data details that change the
-data (timestamps and time zone, what a repeated export contains, what identifying fields are
-excluded) are asked here, during Requirements, not first raised in the approval block.
+ordinary requirements with acceptance criteria; storage location, file names and similar mechanics
+are implementation defaults (delegable).
 
 **Input adequacy.** Check that the inputs carry every quantity each output needs ("present but
 silent" versus "absent" needs a roster, not only a log). An unresolved gap is an open item with a gate.
 
 **Sensitive data.** Raise ethics or approval questions only when real data about people are
-involved, and only once you know what the answer changes (for example, whether a consent screen is
-in scope). Ethics approval gates collecting real data, not building and testing with synthetic
-data. Real data about people means selecting the human-subjects module.
+involved, and only once you know what the answer changes. Ethics approval gates collecting real
+data, not building and testing with synthetic data. Real data about people means selecting the
+human-subjects module.
 
-### 5. Performance, reliability and operating constraints (only where relevant)
-
-Workload, runtime, number of users; memory, storage and compute limits; offline or online,
-operating systems, managed or locked-down machines; recovery and reproducibility; maintainability.
-
-Never demand numbers the PI has no basis for: propose a **provisional target and how to measure
-it** ("10,000 records exported in under 5 seconds, by a timed test"), labelled a proposed default.
-
-### 6. Future direction
-
-The three scope answers already give the direction; do not ask about it again. Use them for one
-architecture question only: which flexibility is genuinely needed now (for example, a data format
-that must survive the ideal version's features). Keep the first version tractable.
-
-### Verification
-
-Ask openly first: "What would convince you that it works?" Then keep two things apart:
-
-- **Implementation correctness (Verified):** unit, integration and regression tests; known answers;
-  round trips for data (write, export, re-import, compare); independent review; a walkthrough.
-- **Scientific validity (Validated), only when the science is in scope:** a published result
-  reproduced; parameter recovery; a hand-checkable reference calculation; comparison with an
-  established implementation; a pilot. For data collection it usually does not apply; accurate
-  capture, persistence, export, recovery and integrity still do.
-
-When validation comes up, say once: "The team can show the code matches the specification and
-reproduces known answers. Only you can judge whether the specification captures what you mean, and
-whether a result is meaningful."
-
-### Requirements quality
-
-Turn answers into an implementable specification, not a restatement. "It exports the answers as
-CSV" is insufficient. Better:
-
-> **REQ-EXPORT-01: Export stored records.** The tool exports every locally stored record to one
-> CSV file, without altering the recorded content.
-> Acceptance criteria:
-> - every required field appears, with the header row in the order given in §7;
-> - identifiers are preserved exactly;
-> - each stored record appears once: none duplicated, none omitted, across repeated exports;
-> - free text containing commas, quotation marks, line breaks and non-ASCII characters survives
->   intact;
-> - a test export, re-imported, matches the stored records field by field.
->
-> Status: Proposed (the lead's derivation from the PI's "export as a CSV file"). The column layout
-> stays provisional until the PI approves it, or delegates it with bounds.
-
-Detail is proportional to complexity and risk; do not pad trivial requirements. You may propose
-requirements and acceptance criteria, but **never silently convert a proposal into a PI-approved
-requirement**: it stays Proposed until the PI accepts it in words.
+**Performance and reliability.** Never demand numbers the PI has no basis for: propose a
+**provisional target and how to measure it** ("10,000 records exported in under 5 seconds, by a timed
+test"), labelled a proposed default.
 
 ---
 
-## Architecture phase
+## Phase 5: Development
 
-Follow `architecture-guide.md`. Start a decision once the requirements that drive it are known; for
-the platform that is often mid-Requirements, because distribution and storage depend on it.
+**Objective:** the first version and the priority of everything else, and how the agent team will
+work: arrangement, autonomy, review, authority and the rules it will follow, all agreed.
 
----
+**Open with the PI's rules,** before proposing anything:
 
-## Team & Governance phase
+> Before I propose how the agents should work, do you have rules or preferences for how they
+> work, communicate, test, review, make decisions and involve you? For example: separate developer
+> and reviewer agents, your approval before certain kinds of change, a limit on credit use, or how
+> far the team may go on its own.
 
-Carry forward what the PI has already said about review depth, autonomy, check-ins and scientific
-help. Draft from it; do not re-ask it. Ask only what is missing, preferably as one bounded choice
-with defaults.
+| ID | Required item | Feeds |
+|---|---|---|
+| DV-01 | The PI's rules and preferences for the agents' work (asked first) | The rules summary; SA-01 |
+| DV-02 | The minimum usable version: the simplest version the PI could actually use | P1; milestone M1 |
+| DV-03 | What the first release is: a proof of concept, a research-useful version, or a validated release | Exit evidence of M1; verification depth |
+| DV-04 | The priority of every other feature and research question (P1–P5), with feasibility and correctness-critical flags | Requirements; roadmap |
+| DV-05 | Team arrangement and workspace | Report §12; charter |
+| DV-06 | Sprint autonomy: one task at a time as planned, one sprint at a time, or several sprints with a full post-action review and decision log | Charter §8 cadence; `/arpd-plan` |
+| DV-07 | Review depth and check-in cadence | SA-01; `STATUS.md` §8 |
+| DV-08 | Authority profile (SA-01), the data-semantics policy, and limits on time, compute and cost | SA-01 |
+| DV-09 | Modules | Charter Part B |
+| DV-10 | The rules summary, reviewed and confirmed; open decisions with their gates | Charter; *Waiting on the PI* |
 
-### Agent team arrangement (report §10)
+### The minimum usable version and priorities
+
+For a substantial project, say it plainly: "You have described a tool that ___. This is a
+substantial build and is best developed in stages. What is the simplest version of it that you could
+actually use?" Then: "These features and research questions fit that version: ___. These do not:
+___. Please correct the split, and place each of the rest on this scale." Ask once (DV-03) whether the
+first release should be a proof of concept, a research-useful version, or a validated release;
+a working prototype is not yet a scientific instrument.
+
+| Priority | Meaning | Goes to at adoption |
+|---|---|---|
+| **P1 Core** | In the minimum usable version | `REQUIREMENTS.md`, milestone M1 |
+| **P2 Next** | The first work after the minimum | `REQUIREMENTS.md`, the next milestone |
+| **P3 Planned** | Committed, for a later milestone | `REQUIREMENTS.md`, a later milestone |
+| **P4 Wanted** | Wanted; scheduled only if time allows | `MASTER_PLAN.md` backlog |
+| **P5 Idea** | Worth keeping; not committed | `MASTER_PLAN.md` backlog |
+
+Two flags apply at **any** priority:
+
+- **Feasibility: to investigate** (what, and its gate): the team must first establish whether it can
+  be done or how; `/arpd-plan` schedules a bounded feasibility investigation before building it.
+  Otherwise **established**.
+- **Correctness-critical: yes** (why): data integrity, scientific semantics, protections. Never
+  ranked below a feature that depends on it; a correctness-critical item at P4 or P5 is questioned.
+
+**Safeguards:** a requirement is never ranked above a requirement it depends on; scientific
+correctness, data integrity and necessary protections are never demoted because they are not
+visible features. A feature hierarchy is not a correctness standard.
+
+### The agent workflow
+
+Describe the proposed workflow **in full and in plain words** before the PI chooses: who plans, who
+writes code, who reviews and tests, whether agents work one at a time in a shared checkout or in
+parallel in separate worktrees, what the PI sees and approves, and what it costs (agent credit use,
+the PI's attention). Say how the PI's constraints (for example, "keep credit use low", CS-02) shaped
+the recommendation.
 
 Ask about the **task structure**, not about agents: can the work split into parts built and tested
-independently? The arrangement is the **PI's choice**: put the recommended one (sized to the work,
-from the table) and one short alternative in a `CHOICE FOR YOU`, with the check-in cadence (if the
-PI has not stated it), the review depth (`arpd/docs/INTERACTION.md` §1), the authority profile
-(below) and each proposed module (for example, human-subjects data) in the same block, not left to
-the adoption assent. Never adopt an arrangement, review depth or profile the PI was not asked about.
+independently? Then put the recommended arrangement and one short alternative in a `CHOICE FOR YOU`,
+with sprint autonomy, review depth, check-in cadence, the authority profile and each proposed module
+in the same block (or two blocks, for a complex project), not left to the adoption assent. Never
+adopt an arrangement, review depth or profile the PI was not asked about.
 
 | Situation | Team arrangement | Workspace |
 |---|---|---|
-| Simple or tightly sequential | **Solo**, with review by a fresh subagent that did not write the code | Shared checkout |
+| Simple or tightly sequential; or cost must stay low | **Solo**, with review by a fresh subagent that did not write the code | Shared checkout |
 | Most projects | **Lead with subagents** (implementer, reviewer; tester when the specification is rich) | Shared checkout, one subagent at a time |
 | Clearly separable parallel streams, and a PI comfortable with more moving parts | **Peers** (two or three) under the lead, plus an independent tester when justified | **Worktrees**, with separate ports and output directories |
 
@@ -300,7 +446,16 @@ Never recommend a large team for a simple tool; say in one sentence why the arra
 task structure. If the PI chooses differently, record that it differs from your recommendation.
 Roles and coordination: `arpd/constitution/modules/team/team-arrangement.md`.
 
-### Authority and governance (report §11)
+**Sprint autonomy (DV-06)** sets the project default that `/arpd-plan` starts from:
+
+- **One task at a time:** the team does only the specific tasks planned and approved, and stops.
+- **One sprint at a time [default]:** a check-in at every sprint boundary before the next is planned.
+- **Several sprints:** the team may plan and carry out a series of sprints the PI approves as a
+  package, with independent review, a close-out record, a post-action review and a decision log at
+  every boundary, and pauses for a new scientific, scope or PI-reserved decision. It takes effect only
+  through the PI's words when execution is authorized (`/arpd-plan`).
+
+### Authority and governance (report §12)
 
 Draft SA-01 from what you heard, in plain words with this project's examples, and ask the PI only to
 confirm or adjust it. Its fields are the `arpd/templates/DECISIONS.md` SA-01 entry; the profiles are
@@ -309,27 +464,118 @@ one line). In particular:
 
 - **Delegated:** implementation *mechanisms* only (code structure, libraries within the approved
   stack, file layout, test design, error-message wording).
-- **Reserved:** data semantics are never delegated by default. Name this project's examples (how a
-  blank is stored and exported, duplicates, identifier meaning, and so on). Delegate one only if the
-  PI names a policy, and quote it. Add the standard triggers: a changed objective, exceeded scope or
-  resource limits, a contested interpretation.
-- **Review, cadence, limits:** review follows the PI's review depth (a PI who reads full drafts
-  gets full plans). [A check-in at every sprint boundary], asked with the arrangement.
+- **Reserved:** data semantics are never delegated by default. Name this project's examples. Delegate
+  one only if the PI names a policy, and quote it. Add the standard triggers: a changed objective,
+  exceeded scope or resource limits, a contested interpretation.
+- **Review, cadence, limits:** review follows the PI's review depth (`arpd/docs/INTERACTION.md` §1).
   Sprint plans are approved by the PI, changes independently reviewed, milestones closed with the
   PI's walkthrough; anything outside the adopted report needs a ruling. [The team does not run
   while the PI is away]; note any time, compute or cost limits.
 
-Never present your draft as the PI's words; how an assent is recorded is in
-`generation-checklist.md`, row 5. **Modules:** select only those this project needs
-(`module-catalog.md`), and say why in §11; human-subjects data whenever the tool collects data from
-or about people.
+**Modules:** select only those this project needs (`module-catalog.md`), and say why; human-subjects
+data whenever the tool collects data from or about people.
 
-### Open decisions and gates (report §12)
+### The rules summary (DV-10, the Development closeout)
+
+Before the closeout, run an internal **consistency and proportionality check** over every rule the
+team would follow: rules that conflict (approval of every change, yet full autonomy across sprints),
+rules the available agents cannot follow, and rules whose overhead outweighs their value for this
+project. Propose a workable reading for each conflict.
+
+Then present the **overall workflow summary** (the arrangement, how a piece of work moves from plan to
+review to the PI, autonomy, cadence, what the PI decides) and the **list of rules Claude will
+follow**, each with:
+
+| Provenance | Meaning |
+|---|---|
+| **Core ARPD** | A framework rule from `arpd/constitution/CORE.md` (for example: planning is not execution; the PI's words are recorded verbatim) |
+| **PI** | The PI's own rule, in their words |
+| **Project-derived** | Proposed because of this project's characteristics |
+| **Agent-recommended** | An improvement you suggest |
+
+and a status: accepted, proposed, provisional, excluded or unresolved. A recommended rule stays
+proposed until the PI accepts it. Push back selectively: explain the consequence of removing a
+safeguard that protects correctness, data or the PI's authority; accept routine preferences without
+ceremony. Core ARPD rules are not removed in setup (a change goes through `/arpd-amend` later).
+
+### Open decisions and gates (report §13)
 
 For every unresolved item, record what it affects, its **gate** (before planning, before
 implementing <a named feature>, or before deployment), what can continue meanwhile, and your
-recommendation. An item without a gate is not allowed: "non-blocking" alone conceals it. Never
-invent a binding default to get a clean list.
+recommendation. An item without a gate is not allowed. Never invent a binding default to get a
+clean list.
+
+---
+
+## The paradigm specification (theory and correctness)
+
+### Ambiguity triage
+
+| Kind | Example | In setup |
+|---|---|---|
+| 1. Affects the implementation | Which formula, which unit of analysis, whether an item may be skipped | **Pursue** |
+| 2. Affects only later analysis | How the PI will model the collected answers | Record it in the notes; do not pursue |
+| 3. Prevents a valid design | Two requirements that cannot both hold; an estimator undefined for the stated data | **Pursue** |
+| 4. Deferred by the PI | "I'll define that later" | Record it with what it affects and its gate |
+
+**Boundary rule.** If the PI says the tool only collects data, and the constructs live in questions
+they will supply, record the boundary in the PI's words, put analysis and interpretation in the
+exclusions, and move on to the product.
+
+**Correctness-critical semantics.** For an estimator, a simulation, a measurement pipeline or any
+theory-dependent model, the mathematics *is* the specification. Whatever the role, cover: equations
+and definitions; assumptions; edge cases (empty groups, ties, out-of-range values, non-convergence);
+numerical precision and tolerances; randomness and seeds; what the method refuses to compute. Each
+becomes a requirement with acceptance criteria (usually known-answer or recovery tests), marked
+correctness-critical.
+
+### The full paradigm-specification method (co-development, correctness-critical work, or on request)
+
+Across Objectives and Constraints:
+
+1. **Constructs** (CON-NN): "What are the key constructs or mechanisms? How would you define each?"
+   Verbatim. Offer a draft only after hearing the PI's view, labelled as yours.
+2. **Operationalizations** (OP-NN): what the tool manipulates, records or computes, at what level and
+   timing.
+3. **Invariants** (INV-NN): propose three to eight from `module-catalog.md`, in scientific language;
+   the PI accepts, edits or rejects each. Then ask: "Is there anything that, if the code got it
+   wrong, would make the results meaningless?" Each passes the commitments review: never a
+   hypothesis.
+4. **Claims** (CLM-NN), and two to four claims not to make (NCL-NN).
+5. **Assumptions** (ASM-NN): where a source is ambiguous, list the readings; record the PI's choice
+   and its epistemic status.
+6. **Validation** (VAL-NN): Objectives, OB-07.
+
+Label every item's origin (the PI's words, or drafted by the lead) and status. Silence is not
+consent to a new scientific model. Draft wording on import: `import-path.md`, step 2 of *Steps for
+an ARPD starter*.
+
+---
+
+## Requirements quality (every phase that produces requirements)
+
+Turn answers into an implementable specification, not a restatement. "It exports the answers as
+CSV" is insufficient. Better:
+
+> **REQ-EXPORT-01: Export stored records.** The tool exports every locally stored record to one
+> CSV file, without altering the recorded content.
+> Acceptance criteria:
+> - every required field appears, with the header row in the order given in §9;
+> - identifiers are preserved exactly;
+> - each stored record appears once: none duplicated, none omitted, across repeated exports;
+> - free text containing commas, quotation marks, line breaks and non-ASCII characters survives
+>   intact;
+> - a test export, re-imported, matches the stored records field by field.
+>
+> Priority: P1 Core. Correctness-critical: yes: a lost or duplicated record corrupts the analysis.
+> Status: Proposed (the lead's derivation from the PI's "export as a CSV file"). The column layout
+> stays provisional until the PI approves it, or delegates it with bounds.
+
+Detail is proportional to complexity and risk; do not pad trivial requirements. Candidate
+requirements accumulate from Objectives on; their priorities are set in Development. You may propose
+requirements and acceptance criteria, but **never silently convert a proposal into a PI-approved
+requirement**: it stays Proposed until the PI accepts it in words. Every requirement that serves a
+research question names it (OB-05).
 
 ---
 

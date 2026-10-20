@@ -15,7 +15,14 @@ dependencies and unknowns, the risk, the time or compute, and the autonomy the P
 
 Suggest several sprints when they would help coordinate dependencies. Never impose them.
 
-## 2. The read-back (Steps A and C)
+**The kind of effort** (`SKILL.md`, Step C) follows from the PI's goal and the records: a targeted
+task or a feature is a small or medium plan of one sprint; a feasibility investigation is one
+bounded sprint whose exit is a finding, scheduled before the work it unblocks (a requirement whose
+*Feasibility* is "to investigate" is not built until its investigation reports). A P1 requirement
+that needs a feasibility investigation makes that investigation the first priority, not a reason
+to lower the requirement.
+
+## 2. The read-back (Step A, and a recommendation in Step B)
 
 Keep it to one screen. Every claim has a source the PI could check.
 
@@ -26,7 +33,7 @@ Keep it to one screen. Every claim has a source the PI could check.
   say so.
 - **Blocked or waiting:** `DECISIONS.md` *Waiting on the PI*, with what each row affects and when it
   is needed.
-- **Recommended thrust:** what, why now, which milestone and requirements it serves, what you would
+- **Recommended thrust** (only when the PI asks for a recommendation, Step B): what, why now, which milestone and requirements it serves, what you would
   defer, and the main trade-off.
 
 Do not restate the charter or list routine coordination.
@@ -57,12 +64,13 @@ Content per sprint. Write each heading even when the answer is short; "none" is 
 
 | Topic | Minimum content |
 |---|---|
-| Identity | Proposed sprint number; draft file and version; authorization sought |
+| Identity | The kind of effort and the PI's goal; proposed sprint number; draft file and version; authorization sought |
 | Outcome | The objective in one sentence, and what the PI will observe |
 | Traceability | Milestone; requirement IDs and target states, with their acceptance criteria (`REQUIREMENTS.md` *Requirement details*); architecture decisions relied on (D-NN, noting any Provisional); paradigm-spec items, if any |
 | Scope | Work packages in order, each with the task plans it expects (`plans/NNN` are written at execution, not now) |
 | Dependencies | What must exist first; *Waiting on the PI* rows it relies on (cite the row number); work that is unaffected and can proceed |
 | Exit | Observable exit criteria (when the sprint is done), each with the test or check that will show it. Task-plan acceptance criteria (`plans/NNN`) are drawn from the requirements' criteria |
+| Feasibility | Only for a feasibility investigation: the question, the bound, the finding expected, where prototype code lives (`SKILL.md`, *Feasibility investigations*) |
 | Boundaries | Non-goals; risks; constraints; time, compute or cost limits where relevant |
 | Workflow | Team arrangement; independent review and test gates; resources |
 | Authority | Decisions reserved to the PI; choices delegated by an SA in force (name it); execution authority sought |

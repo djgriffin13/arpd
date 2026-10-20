@@ -1,6 +1,6 @@
 ---
 name: arpd-plan
-description: Plan the next sprint, or a series of sprints, for an ARPD project with the PI. Reviews where the project stands, agrees priorities, drafts a versioned plan in reports/planning/, gets the PI's approval of an exact version, and asks whether to begin implementation now or later. Use when the PI types /arpd-plan, or asks to "plan the next sprint", "plan sprints", re-plan, or resume a planning review.
+description: Plan the next piece of work for an ARPD project with the PI: a targeted task, a feature, a sprint, a series of sprints, or a bounded feasibility investigation. Reviews where the project stands, asks for the PI's goal first, sizes the effort, drafts a versioned plan in reports/planning/, gets the PI's approval of an exact version, and asks whether to begin implementation now or later. Use when the PI types /arpd-plan, or asks to "plan the next sprint", "plan sprints", re-plan, or resume a planning review.
 argument-hint: "[one | multiple | resume]"
 ---
 
@@ -25,7 +25,7 @@ plan or technical edit need the PI.
 
 **Every turn that waits for the PI** (`arpd/docs/INTERACTION.md` §2–§4, in short):
 
-- Start with the progress line `PLAN  ✓ Review → ● Priorities → ○ Draft → ○ Approval → ○ Handoff`
+- Start with the progress line `PLAN  ✓ Review → ● Goal → ○ Scope → ○ Draft → ○ Approval → ○ Handoff`
   (two spaces after `PLAN`; ✓ done, ● current, ○ to come; keep every arrow).
 - End with exactly one labelled block, written as plain text, never inside a code fence.
   **Nothing follows its closing divider**: not even a sentence about other options. Offers such as
@@ -57,8 +57,10 @@ Read before you start:
    notes in `reports/planning/` and `reports/setup/` (`docs/discovery/` in an older project)
    (context only, never authority: where they differ from
    a governing document, the governing document wins). Do not re-ask a preference that is already
-   recorded, and never re-ask scope: the minimum usable version, the ideal version and the
-   nice-to-haves come from the adopted report and the requirement priorities.
+   recorded, and never re-ask the project's scope: the minimum usable version and every
+   requirement's priority (P1–P5, with its feasibility and correctness-critical flags; required /
+   desired / future in a project set up before v0.7) come from the adopted report and
+   `REQUIREMENTS.md`.
 3. **A draft in progress?** A `reports/planning/PLAN-*.md` is approved only if its current Version
    line is the version an existing approval ruling names (*Approves:* line). Otherwise it is a
    draft: show its file and Version, say plainly that this version is **not approved** (naming any
@@ -81,36 +83,77 @@ C. Close S03 first, then plan the next sprint.
 ────────────────────────────────
 ```
 
-The argument `one` or `multiple` answers Step B in advance and nothing else: Steps A and C
-(the read-back and the priorities question) still run before any draft. `resume` goes to 3 or 4.
+The argument `one` or `multiple` answers the one-or-several choice (Step C) in advance and nothing
+else: the read-back, the goal and the scope still come before any draft. `resume` goes to 3 or 4.
+Any other text after `/arpd-plan` is the PI's goal (Step B).
 
 ## The conversation
 
-Add the topic list (priorities, scope, dependencies, review level, exit evidence) under the progress
+Add the topic list (goal, scope, dependencies, review level, exit evidence) under the progress
 line when it helps. **Explain when needed** (`INTERACTION.md` §6), at the PI's level. There is no mode to ask about; an
 interview mode an earlier kit version recorded is ignored (say so once; change nothing else).
 
-**Small projects stay small** (`references/planning-guide.md` §1): for a short utility, Steps A–C
-are one read-back and one block, the plan one page, the whole run four or five exchanges.
+**Small efforts stay small** (`references/planning-guide.md` §1): for a targeted task, Steps A–C
+are one read-back, the goal (often already given) and one scope block; the plan is half a page; the
+whole run four or five exchanges.
 
 ### Step A: Review
 
 Give a short, factual read-back: what was last completed, what demonstrably works (with evidence;
 never claim a test ran unless you ran it now or a record shows it), the roadmap, what is blocked,
-and the next thrust you recommend. Run `python arpd/tools/check_governance.py` and quote its OVERALL
-line.
+and any feasibility investigation the requirements are waiting on. Run
+`python arpd/tools/check_governance.py` and quote its OVERALL line. Do not lead with your own
+priorities: the PI's goal comes first (Step B).
 
-Use the inherited review and autonomy preferences; do not ask about overriding them. If the PI
-raises one, a this-time-only preference goes in the draft (non-governing); a new **project
-default** (review depth, transition policy, planning cadence) is a governing change: say what it
-would change, and record it through `/arpd-amend` from the PI's clear words.
+Use the inherited review and autonomy preferences (sprint autonomy, `CLAUDE.md` §8); do not ask about
+overriding them. If the PI raises one, a this-time-only preference goes in the draft (non-governing);
+a new **project default** (review depth, transition policy, planning cadence) is a governing change:
+say what it would change, and record it through `/arpd-amend` from the PI's clear words.
 
-### Step B: One sprint or several
+### Step B: The PI's goal
 
-The PI always chooses, explicitly. For a single-milestone or small project, do not spend a turn on
-it: state the recommendation ("one sprint") in the Step C read-back, and put the choice inside that
-block (for example: "Do these priorities match yours? I recommend planning one sprint; say if you
-would rather map out several."). Otherwise ask:
+Unless the invoking message already says what the PI wants next, ask, below the read-back:
+
+```text
+────────────────────────────────
+QUESTION FOR YOU
+Do you know what you would like to build or accomplish next? Or would you like me to examine the
+roadmap, the open requirements and where the project stands, and recommend the next priorities?
+────────────────────────────────
+```
+
+- **The PI names a goal:** record it verbatim in the draft's notes; go to Step C.
+- **The PI asks for a recommendation:** present the recommended thrust and the milestone it serves,
+  the intended deliverables, options and trade-offs, blockers and dependencies, what you would defer
+  (`references/planning-guide.md` §2), then go to Step C with it as the proposed goal.
+
+### Step C: Scope
+
+**Classify the effort** from the goal and the records (`references/planning-guide.md` §1), and say
+in a sentence which kind it is and why:
+
+| Effort | What it is | The plan |
+|---|---|---|
+| **Targeted task** | One scoped change: a fix, a small addition | One sprint of one work package; about half a page |
+| **Feature** | A bounded capability: a few related work packages | One sprint |
+| **Sprint** | A milestone's worth of work, or a mix | One sprint, with exit evidence, dependencies and review level |
+| **Several sprints** | A thrust larger than one sprint, with shared dependencies | A series, the first precise and later ones provisional |
+| **Feasibility investigation** | A question the build depends on (a requirement's *Feasibility: to investigate*, a new idea's viability, whether data carry what is needed) | One bounded sprint whose deliverable is a finding with its evidence, not product code (*Feasibility investigations*, below) |
+
+**Check alignment with `MASTER_PLAN.md`.** If the goal departs from the roadmap or a milestone, say
+plainly what it would displace or delay, which dependencies change, and whether it needs a
+milestone change (`/arpd-amend`, by ruling). The roadmap is the record of the current direction, not
+proof that the direction is right: new findings can justify changing it, and the PI decides. Never
+rewrite the roadmap silently.
+
+**Then settle the scope,** in one block when the effort is small (for example: "This is a targeted
+task: one sprint of one work package. Does this scope match what you want?"). For a sprint-sized
+effort or larger, present the deliverables, dependencies and what you would defer, and ask whether
+they match; in a complex project keep a short topic list and follow up until the scope is clear
+(question fuse).
+
+**One sprint or several: the PI always chooses, explicitly, when several are plausible.** A targeted
+task, a feature or a feasibility investigation is one sprint: state it, do not ask. Otherwise:
 
 ```text
 ────────────────────────────────
@@ -121,8 +164,9 @@ B. Several sprints as one coordinated effort.
 ────────────────────────────────
 ```
 
-For a complex project, say above the block why several may help (shared dependencies). An approved
-project default is shown as "(recommended)", never applied silently.
+For a complex project, say above the block why several may help (shared dependencies). The project's
+sprint autonomy default (`CLAUDE.md` §8, SA-01) is shown as "(recommended)" where it applies, never
+applied silently.
 
 If several, ask **once** per planning effort how transitions should work
 (`references/multi-sprint-and-handoff.md` §2). The answer is planning input: inherited cadence
@@ -130,21 +174,22 @@ If several, ask **once** per planning effort how transitions should work
 by the PI's words in Step F or G. For a single sprint, the plan's transition policy is the
 charter's default cadence ("per charter §8 / SA-01"), not recorded as a PI choice.
 
-### Step C: Priorities
+### Feasibility investigations
 
-Present: the recommended thrust and the milestone it serves, the intended deliverables, options
-and trade-offs, blockers and dependencies, and what you would defer. Then one open question:
+A feasibility investigation answers a stated question within a stated bound, so that a later plan
+can commit, or not, on evidence:
 
-```text
-────────────────────────────────
-QUESTION FOR YOU
-Do these priorities match yours? What would you change, and is there anything else we should
-consider before I draft the plan?
-────────────────────────────────
-```
-
-In a complex project, keep a short topic list and follow up until the scope is clear. Use the
-question fuse.
+- **The question and why it matters:** the requirement or idea it unblocks (its *Feasibility* field).
+- **The bound:** a time or effort limit in the plan; the investigation ends at the bound with what
+  was found, never extended without the PI.
+- **The deliverable:** a short finding (`reports/sprints/SPRINT-NN.md` Part 2, with any evidence
+  files beside it): what was tried, what the evidence shows, the answer (feasible / not feasible /
+  feasible with conditions / still unknown), and the recommendation.
+- **Prototype code** written to investigate is not product code: it lives where the plan says (for
+  example `spikes/`), and becomes product code only through a later plan, with tests and review.
+- **What follows:** the requirement's *Feasibility* becomes "established (S0N)" or stays "to
+  investigate", recorded as routine; any change to scope or priority the finding suggests goes to the
+  PI.
 
 ### Step D: Draft
 

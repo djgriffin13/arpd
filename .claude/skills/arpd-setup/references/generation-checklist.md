@@ -19,13 +19,23 @@ notes, outside the repository.
 **Quality over length:** the full specification, proportional to complexity and risk (the
 template's guidance says what each section holds). Also:
 
-- §1: a project name only if the PI gave one; otherwise a working name labelled as yours.
-- §2–3: scope tiers, exclusions and workflows in the PI's words; Priority follows the scope
-  answers; a required requirement always has acceptance criteria ("pending O-01: …" if they depend
-  on an Open decision).
-- §7: every data-semantics item raised in the interview has its decider, or is Open with a gate.
-- §11: every earlier PI preference carried forward (review depth, theory-context choice, autonomy,
-  check-ins), the data-semantics rule, and the modules with why.
+- §1: a project name only if the PI gave one; otherwise a working name labelled as yours. The
+  intake answers (role and both axes, the PI, users and maintainers, where the project lives).
+- §2: the research domain and questions in the PI's words (or "technical only, by the PI's
+  choice"), and the traceability table: every research question or objective has a capability and
+  requirements, and every P1 requirement serves one.
+- §3: every constraint by class; every model commitment with its epistemic status; the
+  commitments review's findings and the PI's decisions. Never a hypothesis as a Must hold.
+- §4–5: the minimum usable version, first-release type, exclusions and workflows in the PI's
+  words; each requirement's Priority from Development (P1–P5), with Feasibility and
+  Correctness-critical where they apply; a P1 requirement always has acceptance criteria ("pending
+  O-01: …" if they depend on an Open decision); no requirement ranked above one it depends on.
+- §9: every data-semantics item raised in the interview has its decider, or is Open with a gate.
+- §12: every earlier PI preference carried forward (review depth, the role and scientific axis,
+  sprint autonomy, check-ins), the PI's rules, the rules list with provenance and status, the
+  data-semantics rule, and the modules with why.
+- Citations: only sources actually checked; anything else labelled "unverified", with no invented
+  bibliographic detail.
 
 **Statuses** are the template's. An item is **Adopted-on-adoption** only when the PI stated or
 accepted it in words, quoted in its *Source*; your derivations and recommendations are **Proposed**
@@ -35,13 +45,15 @@ or **Provisional**. Never write "Adopted" or "Adopted by R-…" in a draft.
 
 Before showing **any** version, v2 and later included, run
 `python arpd/tools/check_report.py reports/setup/PROJECT-DEFINITION.md --stage draft` and fix every
-FAIL. Then run the whole check in the notes template (`arpd/templates/setup/NOTES.md` §10),
+FAIL (it reports the layout it detected: a new report is v0.7, 14 sections). Then run the whole
+check in the notes template (`arpd/templates/setup/NOTES.md` §9),
 consistency items included. **Report material gaps** in the report's *Completeness check: gaps
 found* and in the presentation; never manufacture detail. Record the result in the notes.
 
 ## A3. Present
 
-Show the major design and governance choices in a few lines each; the report's path and version
+Show the major research, design and governance choices in a few lines each (the phase summaries
+the PI confirmed are the basis; say what changed since); the report's path and version
 (offer to show any section); the consequential open decisions with their gates; the gaps; and the
 proposals awaiting acceptance (how many; the consequential ones by ID). Then ask
 (`CHOICE FOR YOU (select one)`):
@@ -66,7 +78,7 @@ choice A, and the ruling carries that acceptance. If the PI edits the file direc
   Proposed (not adopted; backlog). **Exception: a data-semantics proposal the PI has not accepted
   becomes Open**, gated "before implementing <the feature it affects>", with its own row in
   *Waiting on the PI*; it never goes to the backlog, and nothing that depends on it is built. An
-  O-NN is resolved only by the PI's answer to it ("Resolved:" in §12). A rejection: ask what to
+  O-NN is resolved only by the PI's answer to it ("Resolved:" in §13). A rejection: ask what to
   change; nothing is adopted.
 
 ## A5. Adoption
@@ -132,7 +144,7 @@ counts as Adopted-on-adoption, with the ruling as its source.
 3. **The notes, alone** (row 13), if in the project: a last update, then
    `git add reports/setup/NOTES.md && git commit -m "Setup notes (non-governing)"`. Then frozen; a
    correction gets its own commit ("Correct setup notes (non-governing)").
-4. **The import baseline, alone** (import and install; row 10), right after the notes:
+4. **The import baseline, alone** (import, install, or a conversion that kept code of the PI's; row 10), right after the notes:
    `git add reports/setup/IMPORT-BASELINE.md && git commit -m "Import baseline (non-governing)"`.
    Then the remaining files, committed at the end (*Then*).
 5. **`.claude/`** (*Permission prompts*).
@@ -155,16 +167,16 @@ updated in place.
 
 | # | File | How to fill it, and check |
 |---|---|---|
-| 1 | `CLAUDE.md` | From `arpd/constitution/CORE.md`, replacing the "Setup in progress" stub. Fill every `{{…}}` from report §1, §7, §10–11 (`{{AUTHORITY_PROFILE}}`: the name only). Append the selected modules under Part B (science first, then `team/team-arrangement.md` filled in; drafts marked "(draft module, untested)"); kept prior instructions as `B.P-PROJECT: Project rules`, quoted, with their DEC. §6 examples from §11, data semantics as consult unless a named policy delegates them. **Starter:** only the lines `import-path.md` names. |
-| 2 | `PARADIGM-SPEC.md` | By the theory-context choice. **Not relevant, or D:** §1 the PI's purpose verbatim; other sections "Not applicable for this project (R-NN)". **A:** the context in the PI's words. **B:** the concerns the PI kept, labelled. **C, or correctness-critical semantics:** the full CON…VAL items, verbatim. §8: report §2's exclusions. Never invent CON, OP or INV items. |
-| 3 | `REQUIREMENTS.md` | The requirements the status table sends here, same IDs: requirement, source (R-NN or spec item), state Planned (except imported Verified evidence), evidence; *Requirement details*: acceptance criteria, priority and dependencies from the report. *Check:* every row has details with at least one criterion; nothing Proposed (unless the *Reading* accepts it), Open or future-priority slipped in. |
-| 4 | `MASTER_PLAN.md` | Objective (§1); milestones from report §9; the broad order of work, each row "planning pending", no invented sprints; the backlog, each Backlogged and citing the report; risks (§12); cadence (§11). |
-| 5 | `DECISIONS.md` | **R-NN:** as A5. **SA-01:** every field from report §11, in the PI's words or "(drafted by the lead; PI assented: '<the PI's exact words>')"; data semantics delegated only under a quoted named policy. **DECs:** each adopted decision of report §6 (citing D-NN), the team arrangement, import, move or removal (citing `reports/setup/IMPORT-BASELINE.md` and the kit commit in `arpd/VERSION`), anything owed. **Waiting on the PI:** a row per Open or gated Provisional item; *Needed by* is the gate. |
-| 6 | `ARCHITECTURE.md` | Overview, platform table, components and data flow from report §5; *Architecture decisions*: the §6 rows the status table sends here, labelled; A-rules start as TARGET. *Check:* the platform table agrees with the decisions. |
-| 7 | `STATUS.md` | (an imported one is rewritten in this format) **Readiness** as `SKILL.md`, *Closeout*, plus the report version and commit. §2 "No sprint open"; §4 *On deck*: `/arpd-plan`; §5 points to *Waiting on the PI*; base commit, recovery block, UTC time; **§8** the PI's working style and review depth (as SA-01; no interview mode); **§6 *Owed*:** every item not installed, or "Nothing owed". |
+| 1 | `CLAUDE.md` | From `arpd/constitution/CORE.md`, replacing the "Setup in progress" stub. Fill every `{{…}}` from report §1, §2, §9, §12 (`{{AUTHORITY_PROFILE}}`: the name only). Append the selected modules under Part B (science first, then `team/team-arrangement.md` filled in; drafts marked "(draft module, untested)"); then `B.P-PROJECT: Project rules`: every accepted rule of report §12 that is not a Core ARPD rule, each with its provenance (PI rules quoted), and kept prior instructions, quoted, with their DEC. Proposed or excluded rules are not written. §6 examples from §12, data semantics as consult unless a named policy delegates them; `{{SPRINT_AUTONOMY}}` (§8) from the sprint autonomy in the PI's words ("several sprints" stays a check-in at each boundary until an SA authorizes a series through `/arpd-plan`). **Starter:** only the lines `import-path.md` names. |
+| 2 | `PARADIGM-SPEC.md` | By the scientific axis. **Technical only:** §1 the PI's purpose verbatim; other sections "Not applicable for this project (R-NN)", except correctness-critical semantics. **Respect as given:** the domain, questions and commitments in the PI's words. **Alignment review:** also the concerns the PI kept, labelled. **Co-development, or correctness-critical semantics:** the full CON…VAL items, verbatim. Model commitments from report §3 as ASM items with their epistemic status; Must hold items as INV; open questions as research questions, never invariants. §8: report §4's exclusions and §3's framing choices. Never invent CON, OP or INV items, or citations. |
+| 3 | `REQUIREMENTS.md` | The requirements the status table sends here (P1–P3), same IDs: requirement, source (R-NN or spec item), state Planned (except imported Verified evidence), evidence; *Requirement details*: acceptance criteria, priority, feasibility, correctness-critical flag, the research question served, and dependencies from the report. *Check:* every row has details with at least one criterion; nothing Proposed (unless the *Reading* accepts it), Open, P4 or P5 slipped in. |
+| 4 | `MASTER_PLAN.md` | Objective (§1–2); milestones from report §11 (M1 = the P1 requirements to the first-release standard); the broad order of work, feasibility investigations before what depends on them, each row "planning pending", no invented sprints; the backlog (P4, P5 and unaccepted proposals), each Backlogged with its priority and citing the report; risks (§13); cadence (§12). |
+| 5 | `DECISIONS.md` | **R-NN:** as A5. **SA-01:** every field from report §12, in the PI's words or "(drafted by the lead; PI assented: '<the PI's exact words>')"; data semantics delegated only under a quoted named policy. **DECs:** each adopted decision of report §8 (citing D-NN), the team arrangement, the folder's preparation (conversion, import, install, move or removal; citing `reports/setup/IMPORT-BASELINE.md` where one exists and the kit commit in `arpd/VERSION`), each reframing of a model commitment the PI accepted, anything owed. **Waiting on the PI:** a row per Open or gated Provisional item and per feasibility investigation; *Needed by* is the gate. |
+| 6 | `ARCHITECTURE.md` | Overview, platform table, components and data flow from report §7; *Architecture decisions*: the §8 rows the status table sends here, labelled; A-rules start as TARGET. *Check:* the platform table agrees with the decisions. |
+| 7 | `STATUS.md` | (an imported one is rewritten in this format) **Readiness** as `SKILL.md`, *Closeout*, plus the report version and commit. §2 "No sprint open"; §4 *On deck*: `/arpd-plan`; §5 points to *Waiting on the PI*; base commit, recovery block, UTC time; **§8** the PI's working style, role and scientific axis, sprint autonomy and review depth (as SA-01; no interview mode); **§6 *Owed*:** every item not installed, or "Nothing owed". |
 | 8 | `START-HERE.md` | From `arpd/templates/START-HERE.md` (a starter's is rewritten; its `INDEX.md` folded into the *Map* and removed), one screen, the template's sections: **Next step** holds the exact prompt `/arpd-plan` (current state only there); **Map** lists every top-level entry, one line each ("pending: <reason>" for a later one); **Known gaps** has exact commands, or "none". *Check:* the checker's map step passes. |
 | 9 | `AGENTS.md` | (a starter's is kept) One line: "Read CLAUDE.md in full before doing anything else; it is this project's team charter." |
-| 10 | `reports/setup/IMPORT-BASELINE.md` | **Import and install only,** from its template: each command (run as `<command>; echo "exit=$?"`) with its working directory, the printed exit code and the full output **verbatim**, never trimmed; what was not run. Committed alone after the notes (*Commit order* 4), then frozen; cited, never copied. |
+| 10 | `reports/setup/IMPORT-BASELINE.md` | **Import, install, or a conversion that kept code of the PI's, only,** from its template: each command (run as `<command>; echo "exit=$?"`) with its working directory, the printed exit code and the full output **verbatim**, never trimmed; what was not run. Committed alone after the notes (*Commit order* 4), then frozen; cited, never copied. |
 | 11 | `arpd/`, `.claude/skills/arpd-*` | Present since bootstrap. Verify that `arpd/VERSION` names the kit version, `arpd/tools/` holds `check_governance.py`, `check_report.py`, `log_event.py`, `summarize_events.py` and `next_plan_number.py`, and the four skills exist. If stale: `python arpd/tools/install.py update . --kit "<kit clone>"` on the PI's yes, recorded by a DEC. |
 | 12 | `.gitignore` | Written by `install.py`: verify `arpd/logs/`, `output/`, `__pycache__/`, `.claude/settings.local.json`; the project's own lines are kept. |
 | 13 | `reports/setup/NOTES.md` | The final update marks the report adopted by R-NN (vN), and says the ruling and governing documents, not the notes, are the authority. Committed alone (step 3). Never in install mode without consent. |

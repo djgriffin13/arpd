@@ -1,1 +1,1 @@
-This is the ARPD kit, not a project. Run /arpd-setup to create a project in its own folder; never write project files here. Read CLAUDE.md in full before doing anything else: it explains the kit and the rules for developing it.
+This folder is a fresh copy of ARPD, not yet a research project. Read CLAUDE.md in full before doing anything else; to start a project, run /arpd-setup.

@@ -9,7 +9,7 @@ step says otherwise.
 | Need | Why | Check |
 |---|---|---|
 | Claude Code (tested with 2.1.220) | Runs the agents, the skills and the hooks | `claude --version` |
-| Git, with your name and email set | Every project is its own git repository; its history is part of the record | `git --version`, `git config user.name`, `git config user.email` |
+| Git, with your name and email set | Every project is a git repository; its history is part of the record | `git --version`, `git config user.name`, `git config user.email` |
 | Python 3.8 or later, on the PATH as `python` | The tools and the logging hooks are Python (standard library only) | `python --version` |
 
 If git does not know your name and email, setup stops and prints the two `git config --global`
@@ -23,55 +23,41 @@ lock or duplicate files while git and the agents work. Put quotes around paths w
 
 ## 2. Starting a project
 
-You clone the ARPD kit once. **The kit clone is never your project.** Each project is a separate
-folder with its own git repository, and you can start any number of projects from the same clone.
+Clone or download the ARPD kit, open Claude Code in that folder, and run the setup skill:
 
 ```bash
-git clone <kit repository URL> arpd-kit
-cd arpd-kit
+git clone <kit repository URL> my-project
+cd my-project
 claude
 ```
 
-Then type one of:
+Then type `/arpd-setup` (or open the folder in the Claude Code desktop app, accept the folder-trust
+prompt, and type it there). Setup first looks at the folder, then asks what you would like to
+accomplish and whether you have existing documents, code or notes it should build on.
 
-| Command | What it does |
+**Where the project lives.** Right after your first answer, setup asks where the project should be.
+The usual answer is **here**: the copy of ARPD you just cloned becomes your project, in place, and
+the interview continues in the same session. Setup runs `python arpd/tools/install.py convert .`,
+shows you its plan, and acts only on your yes:
+
+- ARPD's own development files (its tests, evaluation material, documentation, README and
+  development instructions) are removed; `arpd/` and the skills in `.claude/skills/arpd-*` stay;
+- every file of yours is kept, including files you put inside the kit's folders;
+- the folder gets a **fresh git history with no remote**, so nothing of yours can be pushed to the
+  ARPD repository. If the clone held commits or stashes of yours that exist nowhere else, a backup
+  (a git bundle, restorable with `git clone <bundle>`) is written beside the folder first;
+- a short `CLAUDE.md` says setup is in progress, until setup writes your project's charter.
+
+The other answers:
+
+| Choice | What happens |
 |---|---|
-| `/arpd-setup` | A new project |
-| `/arpd-setup import <path or git URL>` | A new project that starts from existing code |
-| `/arpd-setup install <path>` | Adds ARPD to an existing repository, in place |
+| **Your existing repository** | `install.py install <path>` adds `arpd/`, the skills and (if you have none) a stub `CLAUDE.md`, in place. Your history, code, remote and instructions are kept; an existing file that differs is never overwritten (it is reported as a conflict); nothing is committed. Your instructions are reconciled with the charter by decision, never merged silently. If the repository is not the current folder, you then open Claude Code there and type `/arpd-setup` again |
+| **A new folder** | `install.py new <folder>` creates an empty project repository; this copy of ARPD stays as it is. You then open Claude Code there |
+| **A new folder from existing code** (`/arpd-setup import <path or git URL>`) | A git source is cloned with its history (its remote renamed `upstream`, push disabled); a plain folder is listed first (large files, environments, data-like files) and copied only after you agree. You then open Claude Code there |
 
-**A new project.** Setup first asks what you would like to build: an overview of the tool, who
-would use it, and what you imagine it doing. A rough idea, a detailed specification or a pointer to
-existing documents or code are all fine. Setup then proposes a project folder (by default a sibling
-of the kit clone, `../<project-name>`) and, with your agreement, runs
-`python arpd/tools/install.py new <folder>`. That creates the folder as a new git repository and
-commits a starting point: the `arpd/` folder, the skills in `.claude/skills/arpd-*`, a `.gitignore`
-and a stub `CLAUDE.md` saying setup is in progress.
-
-**Then you reopen Claude Code in the project.** Setup prints the commands:
-
-```bash
-cd "<project folder>"
-claude
-```
-
-(Or open the folder in the Claude Code desktop app; accept the folder-trust prompt.) Type
-`/arpd-setup` again. The interview continues there, from your first answer. Everything from
-here on is written in the project, never in the kit clone.
-
-**Importing existing code.** A git source (a path or a URL) is cloned into the new folder with its
-history. Its `origin` remote is renamed `upstream` and its push URL is disabled, so the project can
-fetch from the original but never pushes back to it. A plain folder is listed first (large files,
-environments, data-like files) and copied only after you agree. Environments such as `.venv` and
-`node_modules` are not copied, and files of 50 MB or more are git-ignored. Then you reopen Claude
-Code in the new folder, as above. Setup reviews what exists rather than running the full fresh
-interview.
-
-**Installing into your own repository.** `install.py install <path>` adds `arpd/`, the skills and
-(if you have none) a stub `CLAUDE.md` to the repository in place. It never overwrites an existing
-file that differs; it reports it as a conflict. It commits nothing. Then reopen Claude Code in that
-repository. Your existing instructions are kept and reconciled with the charter by decision, never
-merged silently.
+When setup needs another folder, it prints the exact commands (`cd "<folder>"`, `claude`,
+`/arpd-setup`) and the interview continues there from its notes.
 
 **What a project looks like after setup:**
 
@@ -80,38 +66,70 @@ merged silently.
 | `CLAUDE.md` | The team charter every agent follows. `AGENTS.md` points other tools to it |
 | `START-HERE.md` | One screen: what each file is for, the map of the project (its *Map* section), and your next step with its exact prompt |
 | `PARADIGM-SPEC.md`, `REQUIREMENTS.md`, `ARCHITECTURE.md`, `MASTER_PLAN.md`, `DECISIONS.md`, `STATUS.md` | The other governing documents |
-| `reports/setup/` | `NOTES.md` (the interview's working notes), `PROJECT-DEFINITION.md` (the report you adopted) and, after an import or install, `IMPORT-BASELINE.md` |
+| `reports/setup/` | `NOTES.md` (the interview's working notes), `PROJECT-DEFINITION.md` (the report you adopted) and, when existing code was brought in, `IMPORT-BASELINE.md` |
 | `reports/planning/`, `reports/sprints/`, `plans/` | Plan drafts, sprint records and task plans, as they are created |
 | `.claude/` | The skills, and (once approved) the logging hooks and the agent roles |
 | `arpd/` | Everything else from the kit: templates, tools, this guide, and the event log in `arpd/logs/` |
 
-Your own code sits beside these. The project's test command is plain `python -m pytest`.
+Your own code and documents sit beside these. The project's test command is plain `python -m pytest`.
+
+**Which instructions apply when.** Before setup, the kit's short `CLAUDE.md` (or the "setup in
+progress" stub) says only that setup comes first. During setup, the `/arpd-setup` skill governs the
+interview and keeps the working notes. Once you adopt the Project Definition Report, setup writes
+your project's charter as `CLAUDE.md`; from then on it governs planning and implementation.
 
 ## 3. The setup interview
 
-**Five visible phases.** A progress line at the top of each turn shows where you are:
+**Six visible phases.** A progress line at the top of each turn shows where you are:
 
 ```
-SETUP  ● Project → ○ Requirements → ○ Architecture → ○ Team & Governance → ○ Definition Report
+SETUP  ● Intake → ○ Objectives → ○ Constraints → ○ Design → ○ Development → ○ Definition Report
 ```
 
-Under it is a short list of the topics still open in the current phase. One answer can close
-several. Expect about 20–60 minutes, depending on the project.
+Each phase has a list of things setup needs to know (shown under the progress line). Setup fills
+them from what you have already said and from your documents, and asks only about the rest; one
+answer can fill several. Expect about 30–90 minutes, depending on the project.
 
-- **Project:** what you want to build and what already exists. If a theory or model should inform
-  the tool, you choose how the team treats it: use it to guide implementation without evaluating
-  it, identify concerns, help develop it, or leave theory aside. For a tool that only collects data,
-  the question is skipped.
-- **Requirements:** three scope questions, each asked once: the **minimum usable version**, the
-  **ideal version** (naming the features you care about), and **nice-to-have** features you do not
-  expect in the first release. Then workflows, data, and how well it must work. Each requirement
-  gets acceptance criteria: how anyone could check it was met.
-- **Architecture:** for each material choice, the credible alternatives and their trade-offs,
-  including existing tools that might avoid custom software, then a recommendation. You are not
-  asked to choose a technology cold.
-- **Team & Governance:** how the agents are arranged, how much they decide on their own, review and
-  check-ins, and the open decisions, each with the point by which it must be settled.
-- **Definition Report:** the agent writes the report and checks it for gaps.
+- **Intake:** what you want to accomplish and what already exists; your field; how comfortable you
+  are with code and how involved you want to be in technical decisions; who will use and maintain
+  the tool; where the project lives; any constraints or preferences you already know of; and the
+  **role** you want the agent to play: build what you specify; review your technical plan, then
+  build; review the technical plan and its fit with the theory, then build; help you work out what to
+  build for a research question; audit or extend existing code; or explore ideas.
+- **Objectives:** the research domain and questions the tool serves (skipped if you asked for a
+  technical-only focus; setup says so), your objectives, the capabilities you need, how the outputs
+  will be used, and what would convince you it works. Setup can brainstorm with you here. If no tool
+  emerges, it says so: ARPD is for building research tools.
+- **Constraints:** technical and practical limits (platforms, internet, cost and agent credit use,
+  languages and versions, data and institutional rules), then, unless you chose a technical focus,
+  constraints on the theory. Each is sorted into *must*, *prefer*, *model commitment*, *must hold*
+  (an invariant the code may never break) or *open question*. Setup reviews model commitments
+  critically: it flags contradictions, assumptions that would build in the answer the tool is meant
+  to find, and questionable assumptions, and suggests treating them as hypotheses, research
+  questions or configurable model assumptions. You decide each one.
+- **Design:** setup first asks whether you have a design in mind, then works through the
+  architecture and the technical details with you (data, workflow, export, platform, language),
+  with alternatives and trade-offs, for as many rounds as you need. Its depth follows your comfort
+  with code.
+- **Development:** your own rules for how the agents work; the **minimum usable version** and the
+  priority of everything else; how the agents are arranged, how much they do on their own, review
+  and check-ins; and the list of rules the agents will follow, each marked as ARPD's, yours, derived
+  from the project, or recommended.
+- **Definition Report:** the agent writes the report and checks it for gaps; you adopt it.
+
+**Every phase ends with a summary for you to confirm.** You can confirm it, correct it, or go back
+to an earlier phase. A confirmation means "you have understood me"; it is not an approval of
+anything, and any phase can be reopened later. The only formal approval in setup is adopting the
+report.
+
+**Priorities.** Each feature or research question gets one: **P1 Core** (in the minimum usable
+version), **P2 Next**, **P3 Planned** (committed, for a later milestone), **P4 Wanted** (only if time
+allows) or **P5 Idea**. Two flags apply at any priority: *feasibility to investigate* (the team must
+first find out whether or how it can be done) and *correctness-critical* (data integrity, scientific
+semantics or protections). Nothing is ranked above something it depends on.
+
+**Sources.** Setup never invents a reference. A source it cites was checked; anything else is
+labelled unverified.
 
 **One question at a time.** Each turn that waits for you ends with one labelled block:
 `QUESTION FOR YOU`, `CHOICE FOR YOU` or `APPROVAL REQUIRED`. Nothing comes after it. For a choice,
@@ -121,9 +139,9 @@ by letter. Where symbols do not render, an ASCII form is used (`[x]`, `[>]`, `[ 
 
 **Working notes are saved as you go,** in `reports/setup/NOTES.md`. They are **not governing**: they
 record what you said so that an interrupted setup can resume, and nothing in them is adopted. They
-never hold secrets or participant data, and are never pushed without your say-so. In install mode,
-setup asks your consent before saving them in your repository; without it they are kept beside
-it, in `../.arpd-setup-notes/<repository name>/`.
+never hold secrets or participant data, and are never pushed without your say-so. In an existing
+repository, setup asks your consent before saving them there; without it they are kept beside it,
+in `../.arpd-setup-notes/<repository name>/`.
 
 **Data semantics stay yours.** What a blank answer means, missing versus zero, duplicates and
 repeated submissions, what an identifier means, aggregation, numerical precision, changes to
@@ -137,15 +155,17 @@ compares alternatives, then brings you the decision). It is recorded as SA-01, a
 at any time.
 
 **Setup ends with planning pending.** It never builds anything and writes no sprint. The last
-question is a choice: plan the first sprint now, or finish and plan later with `/arpd-plan`.
+question is a choice: plan the first piece of work now, or finish and plan later with `/arpd-plan`.
 
 ## 4. What you adopt
 
 **The Project Definition Report** (`reports/setup/PROJECT-DEFINITION.md`) is the full
-specification: overview and scope, numbered requirements (`REQ-<AREA>-NN`, nonfunctional ones
-`REQ-NFR-NN`) with acceptance criteria, priority and status, the architecture and the alternatives
-considered, data and interface contracts, verification, a roadmap, the team, governance, and open
-decisions with their gates (before planning, before implementing something named, before
+specification: the intake summary, research context and objectives (traced to the capabilities
+and requirements they need), constraints and model commitments, scope and priorities, numbered
+requirements (`REQ-<AREA>-NN`, nonfunctional ones `REQ-NFR-NN`) with acceptance criteria,
+priority and status, the architecture and the alternatives considered, data and interface
+contracts, verification, a roadmap, the development process and its rules, and open decisions with
+their gates (before planning, before implementing something named, before
 deployment). Setup checks its form with `arpd/tools/check_report.py` before showing each version.
 
 Each item has a status:
@@ -201,12 +221,17 @@ lines against the records; when they disagree, the records win.
 
 Type `/arpd-plan` (in any session, after setup or between sprints). It reads the project's records,
 so you do not repeat yourself. Its progress line is
-`PLAN  ✓ Review → ● Priorities → ○ Draft → ○ Approval → ○ Handoff`.
+`PLAN  ✓ Review → ● Goal → ○ Scope → ○ Draft → ○ Approval → ○ Handoff`.
 
 1. **Review:** where the project stands, with the governance check's result.
-2. **One sprint or several:** you choose. For several, you also choose how the team moves from one
-   sprint to the next.
-3. **Priorities:** the agent proposes a focus; you correct it.
+2. **Goal:** you say what you would like to build or accomplish next, or ask the agent to examine
+   the roadmap, the open requirements and the project's state and recommend priorities. (Text
+   after `/arpd-plan` is taken as your goal.)
+3. **Scope:** the agent sizes the effort (a targeted task, a feature, a sprint, several sprints, or
+   a **feasibility investigation**: a bounded piece of work that answers whether or how something
+   can be done, with a written finding rather than product code) and says if it departs from the
+   roadmap and what it would displace. For a sprint-sized effort or larger you choose one sprint or
+   several; for several, also how the team moves from one sprint to the next.
 4. **Draft:** `reports/planning/PLAN-<date>.md`, marked DRAFT, with a version. It decides nothing.
 5. **Revise:** each revision is a new, committed version.
 6. **Approval:** you approve a **specific version**. Approving a plan does **not** start work.
@@ -297,17 +322,19 @@ says so and uses the last exported `reports/sprints/SPRINT-NN-events.jsonl`. Unf
 lost session is treated as unreviewed.
 
 **If setup was interrupted,** open Claude Code in the project folder, run `/arpd-setup` again and
-say the earlier session was lost. (If it was lost before the project folder existed, start again
-from the kit clone.)
+say the earlier session was lost. (If it was lost before the folder was prepared, simply start
+again.)
 
 - **Before you adopted the report:** nothing generated is authorized. The session shows what the
-  notes gathered and continues from the next open topic, without re-asking settled ones. A draft
+  notes gathered and continues from the next open item, without re-asking settled ones; phases you
+  already confirmed stay confirmed. A draft
   report is shown again as the draft it is. Without notes, earlier answers count only if you
   confirm them.
 - **After you adopted it:** your ruling and the version it names are the authority. Setup continues
   from the first missing file, without renumbering or rewriting completed work.
 - **Notes from an earlier kit version** are read the same way: an old "Interview mode" line is
-  ignored, and old phase names are mapped to the new ones.
+  ignored, old phase names are mapped to the new ones, an old theory choice becomes the matching
+  role, and old scope answers become the starting point for priorities (never asked again).
 
 **If a plan draft was interrupted,** run `/arpd-plan resume`. A plan without an "Approved by R-NN"
 marker is shown to you as a draft. An approved plan that has not started stays approved; it is never
@@ -315,7 +342,7 @@ treated as a start.
 
 ## 10. The import baseline
 
-When you import or install into existing code, setup runs the project's own tests (and its
+When you bring existing code into the project (import, install, or a converted folder that holds your code), setup runs the project's own tests (and its
 governance check, if it has one) before changing anything. After you adopt the report, it records
 the results **verbatim** in `reports/setup/IMPORT-BASELINE.md`: the source and commit, each
 command with its working directory, exit code and output, and what was not run. It is written once,
@@ -350,7 +377,9 @@ lists its limits on each run.
 
 ## 12. Updating the `arpd/` folder
 
-To bring a project's copy of the kit up to date, pull the kit clone, then run its copy of the tool:
+To bring a project's copy of the kit up to date, clone (or pull) a copy of the kit somewhere else,
+then run its copy of the tool. (A folder converted in place no longer has the kit's history or
+remote, so it is not itself a kit to pull.)
 
 ```bash
 python <kit clone>/arpd/tools/install.py update <project folder>
