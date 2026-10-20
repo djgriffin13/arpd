@@ -64,6 +64,9 @@ a recorded or exported value means: blanks, duplicates, identifiers, timestamps,
 precision, a changed variable) or **other**. Option A below names the data-semantics proposals by ID
 in its "Not included" note; if there are none, it says so.
 
+Whenever this step or the review loop asks the PI to place or change a priority, the question
+carries the one-line scale (on a five-point scale: P1 critical to the first working version, P2 needed next, P3 committed for later, P4 if time allows, P5 an idea) (`interview-guide.md`, Phase 5).
+
 Show the major research, design and governance choices in a few lines each (the phase summaries
 the PI confirmed are the basis; say what changed since); the report's path and version
 (offer to show any section); the consequential open decisions with their gates; the gaps; and the

@@ -102,6 +102,9 @@ Add the topic list (goal, scope, dependencies, review level, exit evidence) unde
 line when it helps. **Explain when needed** (`INTERACTION.md` §6), at the PI's level. There is no mode to ask about; an
 interview mode an earlier kit version recorded is ignored (say so once; change nothing else).
 
+**Priorities, when asked:** a question that asks the PI to place or change a requirement's priority
+carries the scale in one line (on a five-point scale: P1 critical to the first working version, P2 needed next, P3 committed for later, P4 if time allows, P5 an idea).
+
 **Small efforts stay small** (`references/planning-guide.md` §1): for a targeted task, Steps A–C
 are one read-back, the goal (often already given) and one scope block; the plan is half a page; the
 whole run four or five exchanges.

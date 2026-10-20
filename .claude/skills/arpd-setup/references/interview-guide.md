@@ -458,8 +458,11 @@ say that two flags can be added to any item:
 - *Correctness-critical*: a mistake in it would corrupt data or results; it is never ranked below
   anything that depends on it.
 
-Give a one-line example from this project for P1 and P4 when it helps. Afterwards, the level names
-alone are enough. The record keeps this mapping:
+Give a one-line example from this project for P1 and P4 when it helps. **Every later time** you
+ask the PI to place, confirm or change a priority (in this phase, in the report review, in
+`/arpd-plan`), put the scale in the question itself, in one line, for example: "Where should the
+drag-and-drop window go (on a five-point scale: P1 critical to the first working version, P2 needed next, P3 committed for later, P4 if time allows, P5 an idea)?" Never ask for a P-level without
+it. The record keeps this mapping:
 
 | Priority | Meaning | Goes to at adoption |
 |---|---|---|
