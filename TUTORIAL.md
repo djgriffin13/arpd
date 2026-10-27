@@ -120,6 +120,9 @@ trick so far. "Above 10" means J, Q, K or A. The bid count adds up its three par
 - If it bid nil: lead its lowest card; otherwise play its highest card that would not win, or, if
   every card would win, its highest card. Its partner plays normally.
 
+Aim for a first demonstration: as soon as there is a window I can click through, stop and ask me
+to try it, before refining or polishing anything.
+
 In the window: my hand as clickable cards, with only legal cards active; the four cards on the
 table; each player's bid and tricks; both teams' scores and bags; computer plays shown with a short
 pause; buttons to bid 0-13; a summary after each hand; a new-game button at the end.

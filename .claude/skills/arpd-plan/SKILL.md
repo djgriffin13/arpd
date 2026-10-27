@@ -25,8 +25,8 @@ plan or technical edit need the PI.
 
 **Every turn that waits for the PI** (`arpd/docs/INTERACTION.md` §2–§4, in short):
 
-- Start with the progress line `PLAN  ✓ Review → ● Goal → ○ Scope → ○ Draft → ○ Approval → ○ Handoff`
-  (two spaces after `PLAN`; ✓ done, ● current, ○ to come; keep every arrow).
+- Start with the progress line `**PLAN**  ✅ Review → 🔵 Goal → ⚪ Scope → ⚪ Draft → ⚪ Approval → ⚪ Handoff`
+  (`PLAN` in bold, two spaces after it; ✅ done, 🔵 current, ⚪ to come; keep every arrow).
 - End with exactly one labelled block, written as plain text, never inside a code fence.
   **Nothing follows its closing divider**: not even a sentence about other options. Offers such as
   "you can also edit it or ask for a review" go inside the block or above it.
@@ -84,7 +84,7 @@ Read before you start:
 
 ```text
 ────────────────────────────────
-CHOICE FOR YOU (select one)
+**🔘 CHOICE FOR YOU (select one)**
 Sprint S03 is still open. What would you like to plan?
 A. The sprint after S03 (S04), while S03 continues.
 B. A change to S03's scope, recorded in its scope-change log.
@@ -128,7 +128,7 @@ Unless the invoking message already says what the PI wants next, ask, below the 
 
 ```text
 ────────────────────────────────
-QUESTION FOR YOU
+**❓ QUESTION FOR YOU**
 Do you know what you would like to build or accomplish next? Or would you like me to examine the
 roadmap, the open requirements and where the project stands, and recommend the next priorities?
 ────────────────────────────────
@@ -169,7 +169,7 @@ task, a feature or a feasibility investigation is one sprint: state it, do not a
 
 ```text
 ────────────────────────────────
-CHOICE FOR YOU (select one)
+**🔘 CHOICE FOR YOU (select one)**
 Would you like to plan the next sprint only, or map out several sprints as one coordinated effort?
 A. The next sprint only.
 B. Several sprints as one coordinated effort.
@@ -238,7 +238,7 @@ When the PI is satisfied, ask in an `APPROVAL REQUIRED` block (never `CHOICE FOR
 
 ```text
 ────────────────────────────────
-APPROVAL REQUIRED
+**✋ APPROVAL REQUIRED**
 Approve reports/planning/PLAN-2026-10-20.md v3 (commit abc1234)?
 A yes approves this plan as the scope of S04 (planning only). It does not start work; I will ask
 next whether to begin now or later. Waiting decisions affecting it: DECISIONS Waiting #2 (blocks
@@ -288,7 +288,7 @@ missing. Say in two sentences what is missing, if anything, then show the block,
 
 ```text
 ────────────────────────────────
-CHOICE FOR YOU (select one)
+**🔘 CHOICE FOR YOU (select one)**
 Would you like to begin implementation now or later? This choice is an authorization: choosing A
 starts work.
 A. Now: start S04 only, under PLAN-2026-10-20 v3. Choosing A authorizes S04 and nothing after it;

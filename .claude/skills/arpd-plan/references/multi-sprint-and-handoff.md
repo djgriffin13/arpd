@@ -15,7 +15,7 @@ Ask once per planning effort, after the PI chooses several sprints:
 
 ```text
 ────────────────────────────────
-CHOICE FOR YOU (select one)
+**🔘 CHOICE FOR YOU (select one)**
 How should the team move from one sprint to the next?
 A. Check in with me and get my approval before each next sprint.
 B. A light check-in with me at the boundaries we agree (for example, after S03); continue at the

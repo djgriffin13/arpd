@@ -35,14 +35,21 @@ clarifying question.
 ## 2. The labelled block
 
 When you wait for the PI, end the turn with one labelled block. The block opens with a divider
-line, then the label alone on a line, then the question or choice, then a closing divider.
+line, then the label alone on a line, in bold with its marker, then the question or choice, then a
+closing divider. The marker makes the PI's turn easy to spot.
 
-- `QUESTION FOR YOU`: gathering information. It is not an approval.
-- `CHOICE FOR YOU (select one)` or `CHOICE FOR YOU (select one or more)`: a bounded choice. It is
-  not an approval unless it says so.
-- `APPROVAL REQUIRED`: a consequential, version-specific decision or governing change. In one or two
-  sentences, say what is approved, which records change, and what a yes authorizes. Never use it to
-  move to the next phase or to ask a preference.
+- `**❓ QUESTION FOR YOU**`: gathering information. It is not an approval.
+- `**🔘 CHOICE FOR YOU (select one)**` or `**🔘 CHOICE FOR YOU (select one or more)**`: a bounded
+  choice. It is not an approval unless it says so.
+- `**✋ APPROVAL REQUIRED**`: a consequential, version-specific decision or governing change. In one
+  or two sentences, say what is approved, which records change, and what a yes authorizes. Never use
+  it to move to the next phase or to ask a preference.
+
+**When work continues without the PI** (a reviewer or other agents running in the background, or a
+long step you will report on), end the turn with one line instead of a block, so the PI knows
+nothing is needed from them:
+
+`⏳ **WORKING** — nothing needed from you. <what is running, in a few words>; I'll report when it finishes.`
 
 Rules:
 
@@ -51,7 +58,8 @@ Rules:
   next turn. Explanation, progress and tool results all go above it. Write the block
   as plain text, not inside a code fence (the examples here are fenced only to show the layout).
 - **A closing turn has no block.** When the skill ends and does not wait for the PI (for example,
-  after "later"), end with the next step and the exact prompt instead.
+  after "later"), end with the next step and the exact prompt instead. A turn that ends while work
+  continues in the background ends with the ⏳ **WORKING** line.
 - **One primary open question per pause.** A bounded choice may allow several answers.
 - **Restate the active question.** If tools ran after you asked (you saved notes, ran a check),
   repeat the question at the end, in a new block.
@@ -64,11 +72,11 @@ Rules:
   at once, without a second confirmation.
 
 ```text
-SETUP  ✓ Intake → ✓ Objectives → ✓ Constraints → ● Design → ○ Development → ○ Definition Report
+**SETUP**  ✅ Intake → ✅ Objectives → ✅ Constraints → 🔵 Design → ⚪ Development → ⚪ Definition Report
 4 confirmed | 1 inferred | 4 open; next: DS-06 Data semantics. Full phase list on request.
 
 ────────────────────────────────
-QUESTION FOR YOU
+**❓ QUESTION FOR YOU**
 A student saves an entry, then notices a mistake in it. What should happen? (Your answer decides
 whether the export holds each entry once, or a history of its changes.)
 ────────────────────────────────
@@ -90,7 +98,7 @@ an approval. If the widget fails, the printed block stands and the PI can answer
 
 ```text
 ────────────────────────────────
-CHOICE FOR YOU (select one)
+**🔘 CHOICE FOR YOU (select one)**
 Is this summary of the Constraints phase right?
 A. Yes, continue to Design.
 B. Correct or add something (say what).
@@ -104,13 +112,13 @@ Show the skill's progress line above the block on every interview turn, as plain
 code fence, like the block itself).
 
 - **Setup:**
-  `SETUP  ● Intake → ○ Objectives → ○ Constraints → ○ Design → ○ Development → ○ Definition Report`
-  (two spaces after `SETUP`; ✓ done, ● current, ○ to come). Under it, list the current phase's
-  required items: ✓ confirmed, ~ inferred, ○ open, ◉ the current focus (deferred and N.A. items are
+  `**SETUP**  🔵 Intake → ⚪ Objectives → ⚪ Constraints → ⚪ Design → ⚪ Development → ⚪ Definition Report`
+  (`SETUP` in bold, two spaces after it; ✅ done, 🔵 current, ⚪ to come). Under it, list the current
+  phase's required items: ✅ confirmed, ~ inferred, ⚪ open, 👉 the current focus (deferred and N.A. items are
   not listed). With more than about six, show the counts line instead:
   `3 confirmed | 2 inferred | 4 open; next: <item>`, and add "Full phase list on request."
-  A phase is ✓ only after its closeout was confirmed.
-- **Plan:** `PLAN  ✓ Review → ● Goal → ○ Scope → ○ Draft → ○ Approval → ○ Handoff`. Add topics
+  A phase is ✅ only after its closeout was confirmed.
+- **Plan:** `**PLAN**  ✅ Review → 🔵 Goal → ⚪ Scope → ⚪ Draft → ⚪ Approval → ⚪ Handoff`. Add topics
   (goal, scope, dependencies, review level, exit evidence) when they help.
 
 Progress is honest:
@@ -186,11 +194,12 @@ files), or when the PI asks.
 | Unicode | ASCII |
 |---|---|
 | `────────────────────────────────` | `--------------------------------` |
-| ✓ | `[x]` |
-| ● | `[>]` |
-| ◉ | `[*]` |
-| ○ | `[ ]` |
+| ✅ | `[x]` |
+| 🔵 | `[>]` |
+| 👉 | `[*]` |
+| ⚪ | `[ ]` |
+| ❓ 🔘 ✋ ⏳ | left out |
 | → | `->` |
 
-The labels and the option letters stay the same. The setup line in ASCII:
+The label words and the option letters stay the same. The setup line in ASCII:
 `SETUP  [>] Intake -> [ ] Objectives -> [ ] Constraints -> [ ] Design -> [ ] Development -> [ ] Definition Report`

@@ -151,7 +151,7 @@ else learned that matters, and what the next phase will explore. End with:
 
 ```
 ────────────────────────────────
-CHOICE FOR YOU (select one)
+**🔘 CHOICE FOR YOU (select one)**
 Is this summary of <phase> right?
 A. Yes, continue to <next phase>.
 B. Correct or add something (say what).
@@ -159,7 +159,7 @@ C. Go back to <an earlier phase> first.
 ────────────────────────────────
 ```
 
-The closeout turn carries the progress line like any other (the phase still ●; it becomes ✓ only
+The closeout turn carries the progress line like any other (the phase still 🔵; it becomes ✅ only
 after the PI confirms). In the summary, label an answer **PI** only when it rests on the PI's own
 words, quoted in the notes; everything else is *inferred* or a proposal.
 
@@ -169,7 +169,7 @@ Every phase gets its own closeout; never fold two into one.
 
 ## Phases
 
-`SETUP  ● Intake → ○ Objectives → ○ Constraints → ○ Design → ○ Development → ○ Definition Report`
+`**SETUP**  🔵 Intake → ⚪ Objectives → ⚪ Constraints → ⚪ Design → ⚪ Development → ⚪ Definition Report`
 
 | Phase | Purpose | Required items |
 |---|---|---|
@@ -244,8 +244,9 @@ that `/arpd-setup` will pick up from them. End as a closing turn, no block.
 
 Follow `arpd/docs/INTERACTION.md`. In short:
 
-- The progress line above (two spaces after `SETUP`; ✓ done, ● current, ○ to come) with the current
-  phase's required items under it (◉ the current focus); with more than about six, the counts line.
+- The progress line above (`SETUP` in bold, two spaces after it; ✅ done, 🔵 current, ⚪ to come) with
+  the current phase's required items under it (👉 the current focus); with more than about six, the
+  counts line.
   Never a percentage.
 - End with **exactly one** labelled block, as plain text, not in a code fence. **Nothing follows its
   closing divider.** A closing turn ends with the next step and its exact prompt, and no block.
@@ -307,10 +308,10 @@ final edit** and quote its output verbatim, "not checked" lines included.
 3. End with the progress line and the choice:
 
    ```
-   SETUP  ✓ Intake → ✓ Objectives → ✓ Constraints → ✓ Design → ✓ Development → ● Definition Report
+   **SETUP**  ✅ Intake → ✅ Objectives → ✅ Constraints → ✅ Design → ✅ Development → 🔵 Definition Report
 
    ────────────────────────────────
-   CHOICE FOR YOU (select one)
+   **🔘 CHOICE FOR YOU (select one)**
    Setup is complete. Your Project Definition Report is adopted and the governing documents are written. What next?
    A. Plan the first piece of work now (I will start /arpd-plan)
    B. Finish here and plan later (type /arpd-plan when ready)

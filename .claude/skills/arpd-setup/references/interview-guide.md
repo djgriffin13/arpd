@@ -92,7 +92,7 @@ Ask as one `CHOICE FOR YOU (select one)`, after the PI's goal is clear:
 
 ```text
 ────────────────────────────────
-CHOICE FOR YOU (select one)
+**🔘 CHOICE FOR YOU (select one)**
 What role would you like me to play in this project?
 A. Build what you specify. I raise only problems that would stop it working.
 B. Review your technical plan, then build it. The research ideas are taken as you give them.
@@ -391,7 +391,7 @@ the PI's constraints (CS-02), with the reason in a sentence:
 
 ```text
 ────────────────────────────────
-CHOICE FOR YOU (select one)
+**🔘 CHOICE FOR YOU (select one)**
 How should the agents work on this project?
 A. One agent builds; a fresh reviewer agent that did not write the code checks each change.
    Simplest and cheapest.

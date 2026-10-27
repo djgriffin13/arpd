@@ -106,7 +106,7 @@ accepted"). For example:
 
 ```text
 ────────────────────────────────
-APPROVAL REQUIRED
+**✋ APPROVAL REQUIRED**
 Adopt reports/setup/PROJECT-DEFINITION.md v3? A yes, in your own words, becomes ruling R-01. It
 adopts the items marked Adopted-on-adoption and my other proposals (your choice A), and records the
 delegated, provisional, open and excluded items as such. These data-semantics proposals are
@@ -216,7 +216,7 @@ refusal blocks nothing else.
 
    ```text
    ────────────────────────────────
-   CHOICE FOR YOU (select one)
+   **🔘 CHOICE FOR YOU (select one)**
    Approve including the event-logging and agent-role files in this project? (Plain files ARPD
    already has, copied from arpd/ into .claude/; nothing is downloaded or installed.)
    A. Yes, include both now.

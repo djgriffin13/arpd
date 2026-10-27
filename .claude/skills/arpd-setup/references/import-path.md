@@ -28,7 +28,7 @@ with only the options that fit. In a fresh kit clone, for example:
 
 ```text
 ────────────────────────────────
-CHOICE FOR YOU (select one)
+**🔘 CHOICE FOR YOU (select one)**
 Where should the project live?
 A. Here, in this folder (recommended). I turn this copy of ARPD into your project: ARPD's own
    development files (its documentation and README) are removed, arpd/ and the

@@ -109,7 +109,7 @@ start a fresh session, with the exact prompt.
 **Six visible phases.** A progress line at the top of each turn shows where you are:
 
 ```
-SETUP  ● Intake → ○ Objectives → ○ Constraints → ○ Design → ○ Development → ○ Definition Report
+**SETUP**  🔵 Intake → ⚪ Objectives → ⚪ Constraints → ⚪ Design → ⚪ Development → ⚪ Definition Report
 ```
 
 Each phase has a list of things setup needs to know (shown under the progress line). Setup fills
@@ -249,7 +249,7 @@ lines against the records; when they disagree, the records win.
 
 Type `/arpd-plan` (in any session, after setup or between sprints). It reads the project's records,
 so you do not repeat yourself. Its progress line is
-`PLAN  ✓ Review → ● Goal → ○ Scope → ○ Draft → ○ Approval → ○ Handoff`.
+`**PLAN**  ✅ Review → 🔵 Goal → ⚪ Scope → ⚪ Draft → ⚪ Approval → ⚪ Handoff`.
 
 1. **Review:** where the project stands, with the governance check's result.
 2. **Goal:** you say what you would like to build or accomplish next, or ask the agent to examine

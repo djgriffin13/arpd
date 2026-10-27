@@ -54,7 +54,25 @@ STATUS is out of date. The checker compares only the *Execution* line with the s
 an advisory; it does not check *Setup*, *Planning* or *Next step*, so never cite it as proof of
 those.
 
-Cover:
+**Open with a progress checklist**, one line per stage, before anything else, so the PI sees the
+whole picture at a glance (✅ done, 🔵 in progress, ⚪ to come, ⚠️ blocked or failing):
+
+```text
+**Progress**
+✅ Setup: report adopted (R-01)
+✅ Plan: PLAN-2026-10-27 v1 approved (R-02)
+✅ S01, the game without the window: closed, review PASS
+🔵 S02, the window: in progress, 2 of 4 work packages done
+⚪ Your walkthrough of the first version
+**Right now:** ⏳ a reviewer agent is checking S02 (nothing needed from you)
+```
+
+Take every line from the records you reconciled below; name each sprint of the approved plan, and
+the milestone walkthrough when the plan has one. The *Right now* line is one of: ⏳ agents working
+(nothing needed), ❓ waiting for your answer (to what), or ⏸️ idle (the next prompt to type). Write
+the checklist as plain text, not in a code fence (the example is fenced only to show the layout).
+
+Then cover:
 
 1. **Readiness**, in one or two lines: setup, planning, execution, with the ruling or plan behind
    each. Name any plan draft awaiting review (file and version, "not approved"), and any approved

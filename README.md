@@ -76,7 +76,8 @@ it with your package manager (for example `python3-tk` on Ubuntu, `python-tk` on
 
 *Without Python (untested):* you can still follow the tutorial, but in your first message to ARPD
 replace "Use Python with its built-in Tkinter" with a language you have (for example R). The game
-will then be built differently, and the run commands later in the tutorial will not apply.
+will then be built differently, and the run commands later in the tutorial will not apply. ARPD's
+own checks then run as read-throughs instead ([arpd/docs/NO-PYTHON.md](arpd/docs/NO-PYTHON.md)).
 
 ### 5. Get ARPD
 
