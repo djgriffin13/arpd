@@ -1,51 +1,140 @@
 # ARPD: Agentic Research Paradigm Development
 
-**A team-based framework for expanding organizational inquiry.** This is release candidate
-v0.7.0-rc.1, held for manual testing ([RELEASE-NOTES.md](RELEASE-NOTES.md)). ARPD is the research artifact
-for a proposal to the *Organization Science* special issue "AI-Enabled Frontiers in Organizational
-Science."
+ARPD lets a researcher who is not a software developer direct a team of AI coding agents (in Claude
+Code) to build a research tool, **while keeping authority over every consequential decision**. It is
+a team charter, document templates and four Claude Code skills (`/arpd-setup`, `/arpd-plan`,
+`/arpd-checkin`, `/arpd-amend`). It is the research artifact for a proposal to the *Organization
+Science* special issue "AI-Enabled Frontiers in Organizational Science." This is a release
+candidate ([RELEASE-NOTES.md](RELEASE-NOTES.md)).
 
-## What it is for
+**To try it:** follow **Start here** below (about 15 minutes), then **[TUTORIAL.md](TUTORIAL.md)**,
+which walks you prompt by prompt through using ARPD to build a small Spades card game.
+
+## Start here
+
+### 1. What you need
+
+- A Claude **Pro, Max, Team or Enterprise** plan, or a **Claude Console (API)** account. The free
+  Claude plan does not include Claude Code.
+- Windows 10 or later, macOS 13 or later, or a recent Linux.
+- Time for the tutorial: *[to be measured]*, much of it the agents working while you wait.
+  Agent use: *[to be measured]*.
+
+### 2. Install Git
+
+- **Windows:** download and install Git for Windows from <https://git-scm.com/downloads/win>
+  (the default options are fine). Claude Code also uses the Git Bash it includes.
+- **macOS:** open Terminal and run `git --version`. If Git is missing, macOS offers to install the
+  command-line tools; accept.
+- **Linux:** install `git` with your package manager.
+
+Then tell Git your name and email (any values you like; they label your own commits):
+
+```bash
+git config --global user.name "Your Name"
+```
+
+```bash
+git config --global user.email "you@example.com"
+```
+
+### 3. Install Claude Code
+
+Use Anthropic's installer. Commands from <https://code.claude.com/docs/en/setup>:
+
+- **macOS / Linux** (Terminal):
+
+  ```bash
+  curl -fsSL https://claude.ai/install.sh | bash
+  ```
+
+- **Windows** (PowerShell):
+
+  ```powershell
+  irm https://claude.ai/install.ps1 | iex
+  ```
+
+Open a **new** terminal window and check that it worked:
+
+```bash
+claude --version
+```
+
+If `claude` is not found, see <https://code.claude.com/docs/en/troubleshoot-install>.
+
+### 4. Check Python and its window toolkit
+
+The tutorial builds a small windowed game in Python with Tkinter, which comes with most Python
+installations.
+
+- **Windows** (PowerShell): run `py --version`, then `py -m tkinter`.
+- **macOS / Linux**: run `python3 --version`, then `python3 -m tkinter`.
+
+The second command should open a small test window; close it. If Python is missing, install it
+from <https://www.python.org/downloads/>. Some Linux and Homebrew Pythons ship without Tkinter; add
+it with your package manager (for example `python3-tk` on Ubuntu, `python-tk` on Homebrew).
+
+*Without Python (untested):* you can still follow the tutorial, but in your first message to ARPD
+replace "Use Python with its built-in Tkinter" with a language you have (for example R). The game
+will then be built differently, and the run commands later in the tutorial will not apply.
+
+### 5. Get ARPD
+
+Clone the repository into a new folder named `spades-demo` and go into it:
+
+```bash
+git clone <URL of this repository> spades-demo
+```
+
+```bash
+cd spades-demo
+```
+
+If you have a ZIP download instead, unzip it, rename the folder `spades-demo` if you like, and
+open a terminal in that folder. ARPD works the same either way.
+
+### 6. Start Claude Code
+
+In that folder, run:
+
+```bash
+claude
+```
+
+The first time, Claude Code opens your browser to log in. When it asks whether you trust the files
+in this folder, answer **Yes**. You now see Claude Code's prompt.
+
+### 7. Open the tutorial
+
+Open **[TUTORIAL.md](TUTORIAL.md)** in your web browser (on the repository's page) and keep it open
+beside the terminal. Read it there, not in the folder: early in the tutorial, ARPD turns this folder
+into your project and moves its own files, including this README and the tutorial, into a backup
+folder beside it.
+
+## What ARPD is for
 
 Which questions organizational researchers can pursue is limited by the cost of building,
 validating and maintaining research instruments: experimental platforms, measurement systems,
 statistical tools and computational models. AI coding agents can lower those costs. But agent-built
 software can pass its own checks while measuring the wrong construct, and those who most need the
-help are least able to see that.
-
-ARPD lets a domain researcher who is not a software developer direct a **team** of AI agents to
-build and revise a research instrument, **while keeping authority over every consequential
-scientific decision**. Testing, review and explicit scientific validation are its core pillars.
+help are least able to see that. ARPD's answer is to organize the agents as a team the researcher
+leads: a charter, explicit decision authority, independent review and testing, and scientific
+validation as core pillars.
 
 The design draws on team science: process phases (Marks, Mathieu & Zaccaro, 2001), team charters
 (Mathieu & Rapp, 2009), coordination mechanisms (Okhuysen & Bechky, 2009), functional leadership
 (Morgeson, DeRue & Karam, 2010), reflexivity (Schippers, West & Dawson, 2015) and the human–LLM
 agent-team guidelines of Yurrita et al. (2026). Evaluations of multi-agent systems report mixed
 results (Kim et al., 2026; Gloaguen et al., 2026). **We do not claim the kit overcomes them.** Its
-benefits are proposed, not yet tested; the kit doubles as a test bed.
-[docs/DESIGN-RATIONALE.md](docs/DESIGN-RATIONALE.md) maps each mechanism to its sources.
+benefits are proposed, not yet tested. [docs/DESIGN-RATIONALE.md](docs/DESIGN-RATIONALE.md) maps
+each mechanism to its sources.
 
-## Quick start
+## Using ARPD for your own project
 
-You need Claude Code and Git (with your name and email set). Python 3.8+ is recommended: it runs the
-automated checks and the event log; without it ARPD still works, with read-throughs in their place
-([arpd/docs/NO-PYTHON.md](arpd/docs/NO-PYTHON.md)).
-
-```bash
-git clone <this repository> my-project
-cd my-project
-claude                      # then type /arpd-setup and say what you would like to accomplish
-# setup turns this folder into your project, in place (a fresh git history, no remote),
-# and interviews you in phases; adopt the Project Definition Report and it writes the
-# governing documents
-/arpd-plan                  # plan the first piece of work; work starts only when you say so
-```
-
-Setup can instead add ARPD to an existing repository in place (its history and remote kept), start
-a new folder, or start a new folder from existing code (`/arpd-setup import <path or git URL>`).
-Converting a clone moves ARPD's own files (this README, `docs/` and the rest listed in `.arpd-kit`)
-to a backup folder beside the project.
-The full guide for the PI travels with every project: [arpd/docs/GUIDE.md](arpd/docs/GUIDE.md).
+The tutorial's steps work for any project: run `/arpd-setup` in a fresh copy and describe what you
+want to build. Setup can also add ARPD to an existing repository in place (its history and remote
+kept), start a new folder, or start from existing code (`/arpd-setup import <path or git URL>`).
+The full guide travels with every project: [arpd/docs/GUIDE.md](arpd/docs/GUIDE.md).
 
 ## The parts
 
@@ -73,9 +162,8 @@ The researcher's own code sits beside these.
 
 ## The worked example
 
-A checked implementation of March's (1991) mutual-learning model is kept as a complete ARPD project
-(v0.3-format records) in its own repository, `arpd-example-march1991`. It is local for now and will
-be published later. To extend it, import it with `/arpd-setup import <path>`.
+A checked implementation of March's (1991) mutual-learning model, built as an ARPD project, is kept
+in its own repository and is not part of this one.
 
 ## Evidence and limitations
 
