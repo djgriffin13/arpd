@@ -143,7 +143,8 @@ The log holds only my own play on this computer, with no names.
 
 Tests: the rules, the scoring, each computer rule, the play log (a hand gives 4 bid rows and 52
 card rows, with the columns above), and a game played by four computer players to the end, which
-fails if no team has won within 200 hands.
+fails if no team has won within 200 hands. No test may open the window or wait for a click:
+test the game logic without the window.
 ```
 
 ### 2. Where the project lives
@@ -448,6 +449,7 @@ with it, and what you would add for a real study.
 | A command is blocked by Claude Code's safety check | Paste the one-line `!` command ARPD gives you |
 | The session closed or crashed | `claude` in the same folder, then `/arpd-checkin` |
 | You hit a usage limit | Wait for it to reset, then `claude` and `/arpd-checkin` |
+| Nothing happens for 10 minutes or more during the build | Close any game window that has opened. If still stuck, press Esc and type: `A command seems to be hanging, possibly a test that opened the game window. Stop it and continue.` |
 | ARPD asks something you don't understand | Ask it: `What does that mean, and what do you recommend?` |
 
 ## What to look at afterwards
