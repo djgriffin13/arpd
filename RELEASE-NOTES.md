@@ -1,4 +1,4 @@
-# Release notes: ARPD v0.7.0-rc.2 (release candidate)
+# Release notes: ARPD v0.7.0-rc.3 (release candidate)
 
 **Status: a release candidate, not a final release.** No researcher has yet completed a workflow
 with it; see [docs/LIMITATIONS.md](docs/LIMITATIONS.md).

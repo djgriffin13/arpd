@@ -32,7 +32,7 @@ approve a plan, and have the agents build and test it.
 **Before you start:** finish **Start here** in the [README](README.md). You should be in your
 `spades-demo` folder with Claude Code running.
 
-**Time:** *[to be measured]*. **Agent use:** *[to be measured]*.
+**Time:** about 1 hour. **Agent use:** about $7.50 in credits.
 
 ## How to use this tutorial
 

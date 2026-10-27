@@ -17,8 +17,8 @@ which walks you prompt by prompt through using ARPD to build a small Spades card
 - A Claude **Pro, Max, Team or Enterprise** plan, or a **Claude Console (API)** account. The free
   Claude plan does not include Claude Code.
 - Windows 10 or later, macOS 13 or later, or a recent Linux.
-- Time for the tutorial: *[to be measured]*, much of it the agents working while you wait.
-  Agent use: *[to be measured]*.
+- About 1 hour for the tutorial, much of it the agents working while you wait, and about $7.50 in
+  agent credits.
 
 ### 2. Install Git
 
@@ -83,7 +83,7 @@ will then be built differently, and the run commands later in the tutorial will 
 Clone the repository into a new folder named `spades-demo` and go into it:
 
 ```bash
-git clone <URL of this repository> spades-demo
+git clone https://github.com/djgriffin13/arpd.git spades-demo
 ```
 
 ```bash
@@ -106,7 +106,7 @@ in this folder, answer **Yes**. You now see Claude Code's prompt.
 
 ### 7. Open the tutorial
 
-Open **[TUTORIAL.md](TUTORIAL.md)** in your web browser (on the repository's page) and keep it open
+Open **[TUTORIAL.md](https://github.com/djgriffin13/arpd/blob/main/TUTORIAL.md)** in your web browser and keep it open
 beside the terminal. Read it there, not in the folder: early in the tutorial, ARPD turns this folder
 into your project and moves its own files, including this README and the tutorial, into a backup
 folder beside it.
