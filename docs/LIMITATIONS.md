@@ -1,7 +1,8 @@
-# Known limitations (release candidate v0.7.0-rc.1)
+# Known limitations (v0.7 release candidate)
 
 These are stated openly so that users and reviewers know what the kit does and does not establish.
-The evidence behind them is indexed in [evaluation/README.md](../evaluation/README.md).
+The development evidence behind them (unit tests of the tools, scripted developer runs and one
+manual test) is kept with the development records, outside this repository.
 
 ## Use with people
 
@@ -12,7 +13,7 @@ The evidence behind them is indexed in [evaluation/README.md](../evaluation/READ
   recognizing that an implementation choice changes data semantics; and asking the right question
   all rest on the model following the skills. When words are ambiguous, the skills record the
   narrower reading or ask.
-- **Form checkers, not quality checkers.** The turn checker (`tests/check_turn.py`) checks a turn's
+- **Form checkers, not quality checkers.** A developer turn checker checks a turn's
   shape: a labelled block last, choice options in the text, a progress line. The report checker
   (`arpd/tools/check_report.py`) checks a report's form: sections, acceptance criteria and status per
   requirement, a gate per open item, no adoption claimed by a draft. Neither judges whether the
@@ -25,9 +26,8 @@ The evidence behind them is indexed in [evaluation/README.md](../evaluation/READ
 ## New in v0.7
 
 - **The phased interview is new.** Its required items, phase closeouts, role choice, commitments
-  review and P1–P5 priorities have been exercised only in driven runs with scripted answers
-  (`evaluation/developer-tests/v0.7-runs-report.md`). Whether a researcher finds the phases
-  proportionate is untested; the usability protocol is written to test it.
+  review and P1–P5 priorities have been exercised only in driven runs with scripted answers.
+  Whether a researcher finds the phases proportionate is untested.
 - **The commitments review rests on the model's judgement.** It may miss a circular or questionable
   assumption, or flag one that is fine; the PI decides each. Citations are verified only when the
   session can reach sources; otherwise claims are labelled unverified.
@@ -49,9 +49,9 @@ The evidence behind them is indexed in [evaluation/README.md](../evaluation/READ
 
 - **The relaunch step and `install.py` are new.** Creating the project folder, reopening Claude Code
   there and continuing the interview, and the `new`, `import`, `install`, `update` and `owed`
-  commands, are covered by unit tests (`tests/test_install.py`). Driven runs with scripted answers covered
+  commands, are covered by unit tests. Driven runs with scripted answers covered
   a new project through `/arpd-plan`, check-in and amend, an install, and an import of the worked
-  example (`evaluation/developer-tests/v0.6-runs-report.md`); no person has done the relaunch yet.
+  example; no person has done the relaunch yet.
 - **Windows paths and OneDrive.** Synced folders can lock or duplicate files while git and agents
   work; `install.py` warns but does not refuse. Paths with spaces need quotes. A folder above the
   project holding `CLAUDE.md` or `AGENTS.md` adds instructions Claude Code also reads; again a
@@ -129,4 +129,4 @@ The evidence behind them is indexed in [evaluation/README.md](../evaluation/READ
 
 The kit's mechanisms rest on team-science theory, adjacent evidence and practitioner records
 ([DESIGN-RATIONALE.md](DESIGN-RATIONALE.md)). **None has yet been shown to improve outcomes
-compared with other workflows.** That is the purpose of the planned studies in `evaluation/`.
+compared with other workflows.** That is the purpose of the planned studies.

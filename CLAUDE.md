@@ -10,4 +10,5 @@ This folder is a fresh copy of the ARPD kit, not yet a research project.
   the ARPD repository it was cloned from. Until the PI adopts the Project Definition Report, the
   `/arpd-setup` skill governs the work; after adoption, the generated `CLAUDE.md` charter does.
 - The PI's guide is `arpd/docs/GUIDE.md`.
-- Only if you are asked to change ARPD itself, read `DEVELOPING.md` first.
+- ARPD's own development material (its kit tests and development rules) is not part of this
+  repository.

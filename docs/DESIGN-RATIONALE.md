@@ -16,7 +16,7 @@ Each mechanism in the kit is traced to:
 - **Practice:** observed in the practitioner records the kit was distilled from. These are the
   governing records of three agent-built research instruments, referred to here as Projects A–C.
   This is descriptive, not causal.
-- **Tested here:** evaluated in this project's own studies. **None yet.** See `evaluation/`.
+- **Tested here:** evaluated in this project's own studies. **None yet.**
 
 Nothing below is claimed to be effective. Each row is a design rationale and a hypothesis.
 

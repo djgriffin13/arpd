@@ -47,8 +47,8 @@ the interview continues in the same session. Setup runs `python arpd/tools/insta
 (or, without Python, `sh arpd/tools/install.sh convert .`), shows you its plan, and acts only on your
 yes:
 
-- **nothing is deleted:** ARPD's own development files (its tests, evaluation material,
-  documentation, README and development instructions) and the clone's old git history (every
+- **nothing is deleted:** ARPD's own development files (its documentation and
+  README) and the clone's old git history (every
   branch, tag and stash, including anything you committed) move to a backup folder beside this one,
   `<folder>-pre-arpd-backup-<time>`, with a `RESTORE.md` saying how to undo the conversion; delete
   that folder whenever you no longer want it;

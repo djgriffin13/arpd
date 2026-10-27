@@ -22,7 +22,7 @@ The design draws on team science: process phases (Marks, Mathieu & Zaccaro, 2001
 (Morgeson, DeRue & Karam, 2010), reflexivity (Schippers, West & Dawson, 2015) and the human–LLM
 agent-team guidelines of Yurrita et al. (2026). Evaluations of multi-agent systems report mixed
 results (Kim et al., 2026; Gloaguen et al., 2026). **We do not claim the kit overcomes them.** Its
-benefits are proposed, not yet tested; the kit doubles as a test bed ([evaluation/](evaluation/)).
+benefits are proposed, not yet tested; the kit doubles as a test bed.
 [docs/DESIGN-RATIONALE.md](docs/DESIGN-RATIONALE.md) maps each mechanism to its sources.
 
 ## Quick start
@@ -43,8 +43,8 @@ claude                      # then type /arpd-setup and say what you would like 
 
 Setup can instead add ARPD to an existing repository in place (its history and remote kept), start
 a new folder, or start a new folder from existing code (`/arpd-setup import <path or git URL>`).
-Converting a clone removes ARPD's own development files (this README, `tests/`, `evaluation/`,
-`docs/`; the list is in `.arpd-kit`); to work on ARPD itself, see [DEVELOPING.md](DEVELOPING.md).
+Converting a clone moves ARPD's own files (this README, `docs/` and the rest listed in `.arpd-kit`)
+to a backup folder beside the project.
 The full guide for the PI travels with every project: [arpd/docs/GUIDE.md](arpd/docs/GUIDE.md).
 
 ## The parts
@@ -79,9 +79,9 @@ be published later. To extend it, import it with `/arpd-setup import <path>`.
 
 ## Evidence and limitations
 
-Developer tests with scripted answers, one manual test, and the tested and draft components are
-indexed in [evaluation/README.md](evaluation/README.md). **No researcher has yet completed a
-workflow.** Known limitations are in [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
+The kit's tools have automated tests, and its workflows have been exercised in scripted developer
+runs and one manual test; those development records are kept outside this repository. **No
+researcher has yet completed a workflow.** Known limitations are in [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
 
 ## Licence
 

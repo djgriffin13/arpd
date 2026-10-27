@@ -31,7 +31,7 @@ with only the options that fit. In a fresh kit clone, for example:
 CHOICE FOR YOU (select one)
 Where should the project live?
 A. Here, in this folder (recommended). I turn this copy of ARPD into your project: ARPD's own
-   development files (its tests, evaluation, documentation and README) are removed, arpd/ and the
+   development files (its documentation and README) are removed, arpd/ and the
    setup skills stay, every file of yours is kept, and the folder gets a fresh git history with no
    connection to the ARPD repository. Nothing is deleted: ARPD's files and the old git history go
    to a backup folder beside this one, with instructions to undo it.

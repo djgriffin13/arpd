@@ -18,5 +18,4 @@ RELEASE-NOTES.md
 .gitattributes
 .gitignore
 docs/
-evaluation/
 tests/
