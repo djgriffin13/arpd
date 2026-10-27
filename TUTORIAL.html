@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARPD tutorial: build a Spades game</title>
+<style>
+:root{--bg:#f7f7f4;--panel:#ffffff;--ink:#1d1d1b;--muted:#5f5f5a;--line:#e3e2dc;--accent:#2f6f4f;--accent-soft:#e6f1ea;
+--q:#2b5fa8;--q-soft:#e8eef8;--c:#7a4fb0;--c-soft:#f0eaf7;--a:#b5561f;--a-soft:#fbede4;--code:#f1f0ea;--mark:#fff1a8}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#161714;--panel:#1f201c;--ink:#ecebe6;--muted:#a8a79f;
+--line:#34352f;--accent:#7cc39b;--accent-soft:#22362a;--q:#8fb4ee;--q-soft:#1f2b3d;--c:#c3a2ea;--c-soft:#2c2338;--a:#f0a173;
+--a-soft:#3a2619;--code:#262722;--mark:#5a4f13}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:10px 16px;
+background:var(--panel);border-bottom:1px solid var(--line)}
+header h1{font-size:17px;margin:0 auto 0 0}
+#search{flex:1 1 220px;max-width:420px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+header button,.pager button{font:inherit;padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+#stuck{background:var(--a-soft);border-color:var(--a);color:var(--a);font-weight:600}
+.wrap{display:flex;max-width:1180px;margin:0 auto}
+aside{width:250px;flex:none;padding:18px 12px;position:sticky;top:58px;align-self:flex-start;max-height:calc(100vh - 60px);overflow:auto}
+aside a{display:block;padding:7px 10px;border-radius:7px;color:var(--ink);text-decoration:none;font-size:15px}
+aside a.on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+main{flex:1;min-width:0;padding:18px 16px 60px}
+.page{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:6px 22px 18px;margin-bottom:18px}
+.page h2{font-size:24px;margin:16px 0 8px}
+h3{font-size:19px;margin:22px 0 6px}h4{font-size:16px;margin:16px 0 4px}
+code{background:var(--code);padding:1px 5px;border-radius:5px;font-size:.92em}
+blockquote{margin:12px 0;padding:8px 14px;border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0}
+.tablewrap{overflow-x:auto}table{border-collapse:collapse;margin:10px 0;width:100%}th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+.copy{position:relative;margin:6px 0 12px}
+.copy pre{margin:0;background:var(--code);border:1px solid var(--line);border-radius:8px;padding:12px 70px 12px 12px;white-space:pre-wrap;word-break:break-word;font-size:14px}
+.copybtn{position:absolute;top:7px;right:7px;font:13px system-ui,sans-serif;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.copybtn.done{background:var(--accent);color:var(--panel);border-color:var(--accent)}
+.cards{margin:8px 0 14px}
+details.card{border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:9px;margin:8px 0;background:var(--panel)}
+details.card>summary{list-style:none;cursor:pointer;display:flex;gap:10px;align-items:center;padding:10px 12px}
+details.card>summary::-webkit-details-marker{display:none}
+details.card>summary::after{content:"▸";margin-left:6px;color:var(--muted)}details.card[open]>summary::after{content:"▾"}
+.num{flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+.ttl{flex:1;font-weight:600}
+details.card .body{padding:0 14px 8px}
+.lbl{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:8px 0 2px}
+.paste{color:var(--accent);font-weight:700}
+ul.asked{margin:2px 0 6px;padding-left:20px;color:var(--muted);font-style:italic}
+.note{color:var(--muted);font-size:15px}
+.filter{width:100%;max-width:420px;padding:7px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;margin:2px 0 6px}
+details.rare{margin:10px 0}details.rare>summary{cursor:pointer;color:var(--muted);font-weight:600;padding:6px 0}
+.pager{display:flex;justify-content:space-between;margin-top:18px}
+.hidden{display:none!important}mark{background:var(--mark);color:inherit}
+#count{font-size:13px;color:var(--muted)}
+@media (max-width:820px){aside{display:none}.page{padding:4px 14px 14px}header h1{font-size:15px;width:100%}}
+</style>
+</head>
+<body>
+<header>
+  <h1>ARPD tutorial: build a Spades game</h1>
+  <input id="search" type="search" placeholder="Search questions and answers…" aria-label="Search">
+  <span id="count"></span>
+  <button type="button" id="all">Show all</button>
+  <button type="button" id="stuck">Stuck? Resume</button>
+</header>
+<div class="wrap">
+  <aside><nav id="nav"><a href="#p-start" data-page="0">Start</a>
+<a href="#p-install-and-start" data-page="1">Install and start</a>
+<a href="#p-before-you-begin" data-page="2">Before you begin</a>
+<a href="#p-how-to-answer" data-page="3">How to answer</a>
+<a href="#p-why-a-card-game" data-page="4">Why a card game?</a>
+<a href="#p-1-start-setup" data-page="5">1 · Start setup</a>
+<a href="#p-2-setup-about-you-and-the-project" data-page="6">2 · Setup: about you and the project</a>
+<a href="#p-3-setup-what-it-is-for" data-page="7">3 · Setup: what it is for</a>
+<a href="#p-4-setup-limits" data-page="8">4 · Setup: limits</a>
+<a href="#p-5-setup-rules-and-data" data-page="9">5 · Setup: rules and data</a>
+<a href="#p-6-setup-how-the-agents-work" data-page="10">6 · Setup: how the agents work</a>
+<a href="#p-7-adopt-the-definition" data-page="11">7 · Adopt the definition</a>
+<a href="#p-8-plan-the-build" data-page="12">8 · Plan the build</a>
+<a href="#p-9-the-build" data-page="13">9 · The build</a>
+<a href="#p-10-try-the-game" data-page="14">10 · Try the game</a>
+<a href="#p-stuck-resume-and-troubleshooting" data-page="15">Stuck? Resume and troubleshooting</a>
+<a href="#p-your-own-project" data-page="16">Your own project</a></nav></aside>
+  <main id="main"><section class="page" id="p-start" data-page="0"><h2>Start</h2><p>In this tutorial you use ARPD to have AI agents build a small Spades card game with a window: you plus three computer players, one of them your partner. The game also records every bid and card played in a CSV file you can open in a spreadsheet. You act as the researcher in charge (ARPD calls you the <strong>PI</strong>): you describe what you want, settle the decisions that are yours, approve a plan, and the agents build and test it.</p>
+<p><strong>The goal is a first demonstration:</strong> a game window you can point and click at. When ARPD reaches that point it stops and asks you to try it. That is a good place to pause and review.</p>
+<p><strong>This is a deliberately simple example.</strong> As you go, think about a question of your own and the tool it would need; <a href="#p-your-own-project">Your own project</a> at the end gives the same steps at a high level.</p>
+<p><strong>Time:</strong> about 1 hour. <strong>Agent use:</strong> about $7.50 in credits.</p>
+<p><strong>You can stop and restart at any point.</strong> ARPD saves everything in the project's files, not in the conversation. To pick up again, open Claude Code in the same folder and type <code>/arpd-checkin</code>.</p>
+<p>There is also an HTML version of this tutorial (<code>TUTORIAL.html</code>) with search and one stage per page: download it and open it in your browser.</p><nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-install-and-start" data-page="1"><h2>Install and start</h2><p>These are the README's <em>Start here</em> steps.</p>
+<h3 id="1-what-you-need">1. What you need</h3>
+<ul><li>A Claude <strong>Pro, Max, Team or Enterprise</strong> plan, or a <strong>Claude Console (API)</strong> account. The free Claude plan does not include Claude Code.</li><li>Windows 10 or later, macOS 13 or later, or a recent Linux.</li><li>About 1 hour for the tutorial, much of it the agents working while you wait, and about $7.50 in agent credits.</li></ul>
+<h3 id="2-install-git">2. Install Git</h3>
+<ul><li><strong>Windows:</strong> download and install Git for Windows from &lt;https://git-scm.com/downloads/win&gt; (the default options are fine). Claude Code also uses the Git Bash it includes.</li><li><strong>macOS:</strong> open Terminal and run <code>git --version</code>. If Git is missing, macOS offers to install the command-line tools; accept.</li><li><strong>Linux:</strong> install <code>git</code> with your package manager.</li></ul>
+<p>Then tell Git your name and email (any values you like; they label your own commits):</p>
+<div class="copy"><pre><code>git config --global user.name &quot;Your Name&quot;</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div>
+<div class="copy"><pre><code>git config --global user.email &quot;you@example.com&quot;</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div>
+<h3 id="3-install-claude-code">3. Install Claude Code</h3>
+<p>Use Anthropic's installer. Commands from &lt;https://code.claude.com/docs/en/setup&gt;:</p>
+<ul><li><strong>macOS / Linux</strong> (Terminal):</li></ul>
+<p>``<code>bash curl -fsSL https://claude.ai/install.sh | bash </code>``</p>
+<ul><li><strong>Windows</strong> (PowerShell):</li></ul>
+<p>``<code>powershell irm https://claude.ai/install.ps1 | iex </code>``</p>
+<p>Open a <strong>new</strong> terminal window and check that it worked:</p>
+<div class="copy"><pre><code>claude --version</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div>
+<p>If <code>claude</code> is not found, see &lt;https://code.claude.com/docs/en/troubleshoot-install&gt;.</p>
+<h3 id="4-check-python-and-its-window-toolkit">4. Check Python and its window toolkit</h3>
+<p>The tutorial builds a small windowed game in Python with Tkinter, which comes with most Python installations.</p>
+<ul><li><strong>Windows</strong> (PowerShell): run <code>py --version</code>, then <code>py -m tkinter</code>.</li><li><strong>macOS / Linux</strong>: run <code>python3 --version</code>, then <code>python3 -m tkinter</code>.</li></ul>
+<p>The second command should open a small test window; close it. If Python is missing, install it from &lt;https://www.python.org/downloads/&gt;. Some Linux and Homebrew Pythons ship without Tkinter; add it with your package manager (for example <code>python3-tk</code> on Ubuntu, <code>python-tk</code> on Homebrew).</p>
+<p><em>Without Python (untested):</em> you can still follow the tutorial, but in your first message to ARPD replace "Use Python with its built-in Tkinter" with a language you have (for example R). The game will then be built differently, and the run commands later in the tutorial will not apply. ARPD's own checks then run as read-throughs instead (<a href="arpd/docs/NO-PYTHON.md">arpd/docs/NO-PYTHON.md</a>).</p>
+<h3 id="5-get-arpd">5. Get ARPD</h3>
+<p>Clone the repository into a new folder named <code>spades-demo</code> and go into it:</p>
+<div class="copy"><pre><code>git clone https://github.com/djgriffin13/arpd.git spades-demo</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div>
+<div class="copy"><pre><code>cd spades-demo</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div>
+<p>If you have a ZIP download instead, unzip it, rename the folder <code>spades-demo</code> if you like, and open a terminal in that folder. ARPD works the same either way.</p>
+<h3 id="6-start-claude-code">6. Start Claude Code</h3>
+<p>In that folder, run:</p>
+<div class="copy"><pre><code>claude</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div>
+<p>The first time, Claude Code opens your browser to log in. When it asks whether you trust the files in this folder, answer <strong>Yes</strong>. You now see Claude Code's prompt.</p>
+<h3 id="7-open-the-tutorial">7. Open the tutorial</h3>
+<p>Open <strong><a href="https://github.com/djgriffin13/arpd/blob/main/TUTORIAL.md">TUTORIAL.md</a></strong> in your web browser and keep it open beside the terminal. Read it there, not in the folder: early in the tutorial, ARPD turns this folder into your project and moves its own files, including this README and the tutorial, into a backup folder beside it.</p><nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-before-you-begin" data-page="2"><h2>Before you begin</h2><ol><li>Finish <strong>Start here</strong> in the <a href="README.md">README</a>: Git, Claude Code and Python installed, and ARPD cloned into a folder named <code>spades-demo</code>.</li><li>In a terminal, in that folder, start Claude Code with Sonnet at low effort. That is enough for this demo, and quicker and cheaper:</li></ol>
+<div class="copy"><pre><code>claude --model sonnet --effort low</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div>
+<ol><li>Keep this tutorial open in your browser, not in the folder: early in setup, ARPD turns the folder into your project and moves its own files, including this one, into a backup folder beside it.</li></ol><nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-how-to-answer" data-page="3"><h2>How to answer</h2><p><strong>ARPD is not scripted.</strong> It asks its questions in a different order each time, words them differently, and may skip some. Don't follow the cards below in order: <strong>find the card that matches the question you see</strong>, and use its reply. Use the search box (HTML version) or your browser's find (Ctrl+F / Cmd+F).</p>
+<p><strong>What you will see.</strong> When ARPD needs you, its message ends with a block between two lines, marked ❓, 🔘 or ✋, with the question and, often, lettered options. When it ends with <strong>⏳ WORKING</strong>, nothing is needed from you: wait. A progress line such as <strong>SETUP</strong> ✅ Intake → 🔵 Objectives → ⚪ Constraints … shows where you are.</p>
+<p><strong>How each stage below is laid out:</strong> a short background, then the <strong>typical questions, in the usual order</strong>, then a list of <strong>other questions you may see</strong>, which you can filter. Click a question to see other ways ARPD may word it and a reply you can copy.</p>
+<p><strong>Quick ways to answer:</strong></p>
+<ul><li><strong>Suggested reply.</strong> Claude Code often shows a greyed-out suggested reply in the prompt. Press <strong>Tab</strong> or <strong>→</strong> to take it, then <strong>Enter</strong>. For this demo it is often good enough.</li><li><strong>A letter.</strong> For a lettered choice, the letter of the option marked <em>(recommended)</em> is usually right for the demo.</li><li><strong>"Do whatever you recommend."</strong> If you don't know, or it doesn't matter for the demo, say so. For a real project this is not good practice (the decisions are yours for a reason), but it is fine here.</li><li><strong>"Yes."</strong> When ARPD asks whether it has understood you correctly ("Is that what you mean?"), reply yes unless it is clearly wrong. You are welcome to answer any question however you like.</li></ul>
+<p><strong>Three answers commit you:</strong> adopting the project definition, approving the plan, and starting the build. For those, read what ARPD shows you and say yes only if it matches what you asked for; otherwise say what is wrong. They are what keep you in charge.</p>
+<p><strong>Permission prompts.</strong> Claude Code asks before it edits files or runs commands. For edits and commands inside your <code>spades-demo</code> folder, choose <strong>Yes</strong> (or the option that allows them for the session). Say <strong>No</strong> to anything outside the folder you did not expect, and ask ARPD why.</p><nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-why-a-card-game" data-page="4"><h2>Why a card game?</h2><p>The game is a toy, but it has the shape of a real research instrument:</p>
+<ul><li><strong>Exact rules</strong> that the software must implement correctly, and that only you can settle when they are unclear.</li><li><strong>Artificial agents</strong> (the computer players) whose behaviour you specify, so it can be checked.</li><li><strong>A team task.</strong> Spades is a partnership game: partners commit to a joint goal (the team's bid) and must coordinate without talking, under incomplete information: a small version of the coordination problems studied in organizational research.</li><li><strong>Behavioural data:</strong> every decision is recorded, with how long you took to make it.</li></ul>
+<p>From here, the step to interaction between several people is short: networked play so that four people play as two teams; human–AI teams in which the computer partner's strategy is the experimental condition; a chat channel between partners; or new measures in the play log. Each is another round of the same steps with ARPD.</p><nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-1-start-setup" data-page="5"><h2>1 · Start setup</h2><p>Setup is an interview in phases (Intake, Objectives, Constraints, Design, Development), with a summary at the end of each, then a <strong>Project Definition Report</strong> for you to adopt. Nothing is built during setup. It takes about 20 minutes.</p>
+<p>Type:</p>
+<div class="copy"><pre><code>/arpd-setup</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div>
+<p>ARPD looks at the folder and asks what you would like to accomplish. Paste this whole brief:</p>
+<h3>Typical questions, in the usual order</h3><div class="cards"><details class="card" open><summary><span class="ttl">The brief: paste this whole text</span></summary><div class="body"><p class="lbl paste">Reply</p><div class="copy"><pre><code>I want a simple Spades card game with a window (GUI) that I can play on this computer: me plus
+three computer players. The player opposite me is my partner. Use Python with its built-in Tkinter
+and no other packages. Keep it simple: no networking, no card images (text like &quot;Q♥&quot; is fine), no
+saving or resuming games, no clever AI. A later version could be networked; not now.
+
+Rules: standard four-player partnership Spades.
+- 52 cards, 13 each, aces high. The first dealer is random; then the deal passes clockwise.
+- Bidding starts left of the dealer and goes clockwise, one round, no passing. Each player bids
+  0-13; a bid of 0 is nil. No blind nil. A team&#x27;s bid is the sum of the partners&#x27; bids.
+- The player left of the dealer leads first. Players must follow suit if they can; otherwise they
+  may play any card. The highest spade wins the trick, or else the highest card of the suit led.
+  The winner leads next.
+- Spades may not be led until a spade has been played on another suit, unless the leader holds only
+  spades.
+- A team that makes its bid scores 10 x bid, plus 1 per extra trick (a &quot;bag&quot;); a team that falls
+  short scores -10 x bid. Nil scores +100 if that player takes no tricks, -100 if they take any; the
+  partner&#x27;s bid is scored on its own, and a nil bidder&#x27;s tricks don&#x27;t count toward it but always count
+  as bags, whether or not the team makes its bid. Every 10 bags costs 100 points; extra bags carry
+  over.
+- The first team to 500 wins. If both reach 500 on the same hand, the higher score wins. If the
+  scores are tied, play another hand.
+
+Computer players use exactly these rules, nothing more. They choose only from the cards they may
+legally play. Card order for &quot;lowest&quot; and &quot;highest&quot;: non-spades by rank (on equal rank, clubs &lt;
+diamonds &lt; hearts), then spades by rank. A card &quot;would win&quot; if it beats every card played to the
+trick so far. &quot;Above 10&quot; means J, Q, K or A. The bid count adds up its three parts.
+- Bid: count 1 per ace, 1 per king with at least one other card of its suit, and 1 per spade beyond
+  the third. If the count is 0 and the hand has no spade above 10, bid nil; otherwise bid the count,
+  at least 1.
+- Lead: the highest card of its longest non-spade suit (on equal length: clubs, then diamonds, then
+  hearts); if it may lead only spades, its lowest spade.
+- Not leading: if its partner is winning the trick, play its lowest card; otherwise its lowest card
+  that would win; if none would win, its lowest card.
+- If it bid nil: lead its lowest card; otherwise play its highest card that would not win, or, if
+  every card would win, its highest card. Its partner plays normally.
+
+Aim for a first demonstration: as soon as there is a window I can click through, stop and ask me
+to try it, before refining or polishing anything.
+
+In the window: my hand as clickable cards, with only legal cards active; the four cards on the
+table; each player&#x27;s bid and tricks; both teams&#x27; scores and bags; computer plays shown with a short
+pause; buttons to bid 0-13; a summary after each hand; a new-game button at the end.
+
+Play log: record every bid and every card played, and save it as a CSV file in a &quot;data&quot; folder,
+one file per game, named by the date and time the game started. Write the finished hands at the
+end of each hand, so a game stopped part-way keeps them. One row per bid or card, with these columns:
+- game_id: the same for every row of one game
+- hand: 1, 2, 3, ...
+- trick: 1-13 for cards; blank for bids
+- seat: S, W, N or E (I am S, my partner N)
+- player: human or computer
+- team: NS or EW
+- action: bid or play
+- value: the bid (0-13), or the card as rank and suit letters, such as QH or 10S
+- legal_options: how many legal choices that player had
+- think_seconds: for my actions, seconds from when I could act to my click; blank for computers
+- trick_winner: on the last card of each trick, the seat that won it; otherwise blank
+- timestamp: date and time of the action
+The log holds only my own play on this computer, with no names.
+
+Tests: the rules, the scoring, each computer rule, the play log (a hand gives 4 bid rows and 52
+card rows, with the columns above), and a game played by four computer players to the end, which
+fails if no team has won within 200 hands. No test may open the window or wait for a click:
+test the game logic without the window.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-2-setup-about-you-and-the-project" data-page="6"><h2>2 · Setup: about you and the project</h2><p><strong>Intake</strong> is the first phase of the interview. ARPD works out who you are, what you want to build, where the project will live, and what role it should play. Your brief already answers most of it, so expect only a handful of questions, about 5 minutes.</p>
+<p>Two things happen here that are worth knowing about:</p>
+<ul><li><strong>ARPD turns this folder into your project.</strong> It shows you a preview (a "dry run") of what moves, then moves its own files and the old git history into a backup folder beside this one. Nothing is deleted. Choose <em>here, in this folder</em>: choosing a new folder means reopening Claude Code there.</li><li><strong>ARPD's role.</strong> You choose how far ARPD questions your design. For this demo, it simply builds what you specified.</li></ul>
+<p>Phase 2 ends with a summary of what ARPD has understood; confirm it if it matches the brief.</p>
+<h3>Typical questions, in the usual order</h3><div class="cards"><details class="card"><summary><span class="num">1</span><span class="ttl">(placeholder) Where should the project live?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Where should the project live?</li><li>Which folder should hold the project?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Here, in this folder.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div><p class="note">Placeholder: real questions come from the study.</p></div></details><details class="card"><summary><span class="num">2</span><span class="ttl">(placeholder) Convert this folder as shown?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Convert this folder as shown?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>A</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<h3>Other questions you may see</h3><input type="search" class="filter" placeholder="Filter these questions…" aria-label="Filter other questions"><div class="cards other"><details class="card"><summary><span class="ttl">(placeholder) a less common question</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Rare wording?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Do whatever you recommend.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-3-setup-what-it-is-for" data-page="7"><h2>3 · Setup: what it is for</h2><p><strong>Objectives</strong> is about purpose: what the game is for, what it must do, what it will not do, and what would convince you that it works. ARPD turns your answers into the requirements and the acceptance checks the agents must meet later. Because this demo has no research question, ARPD skips the theory questions it would ask on a research project. A few questions, about 3 minutes.</p>
+<h3>Typical questions, in the usual order</h3><div class="cards"><details class="card"><summary><span class="num">1</span><span class="ttl">(placeholder) Where should the project live?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Where should the project live?</li><li>Which folder should hold the project?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Here, in this folder.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div><p class="note">Placeholder: real questions come from the study.</p></div></details><details class="card"><summary><span class="num">2</span><span class="ttl">(placeholder) Convert this folder as shown?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Convert this folder as shown?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>A</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<h3>Other questions you may see</h3><input type="search" class="filter" placeholder="Filter these questions…" aria-label="Filter other questions"><div class="cards other"><details class="card"><summary><span class="ttl">(placeholder) a less common question</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Rare wording?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Do whatever you recommend.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-4-setup-limits" data-page="8"><h2>4 · Setup: limits</h2><p><strong>Constraints</strong> collects the limits the work must respect: the computer it runs on, the language and packages, whether it must work offline, and how much agent use (cost) is acceptable. ARPD sorts them into <em>musts</em> and <em>preferences</em>. It also checks your rules for contradictions; if it finds gaps, it usually saves them for the next phase. Usually one or two questions and a summary, about 3 minutes.</p>
+<h3>Typical questions, in the usual order</h3><div class="cards"><details class="card"><summary><span class="num">1</span><span class="ttl">(placeholder) Where should the project live?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Where should the project live?</li><li>Which folder should hold the project?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Here, in this folder.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div><p class="note">Placeholder: real questions come from the study.</p></div></details><details class="card"><summary><span class="num">2</span><span class="ttl">(placeholder) Convert this folder as shown?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Convert this folder as shown?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>A</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<h3>Other questions you may see</h3><input type="search" class="filter" placeholder="Filter these questions…" aria-label="Filter other questions"><div class="cards other"><details class="card"><summary><span class="ttl">(placeholder) a less common question</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Rare wording?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Do whatever you recommend.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-5-setup-rules-and-data" data-page="9"><h2>5 · Setup: rules and data</h2><p><strong>Design</strong> settles how the game is built and what its data mean. ARPD proposes a simple design (game logic kept apart from the window, so tests can run without opening it) and then asks about anything in the rules or the play log that your brief leaves open: an edge case in the scoring, what a column of the log holds, the format of the timestamps. This is the phase where the questions vary most from run to run, so expect to use the list of other questions below. About 5 minutes.</p>
+<blockquote><strong>Look here:</strong> game rules and the meaning of the data are <em>your</em> decisions, not the agents'. When your brief leaves something open, ARPD asks rather than guesses, and records your answer as a ruling. In a real study this is where measurement validity is decided. For the demo, the reply "Do whatever you recommend, consistent with traditional Spades." is fine.</blockquote>
+<h3>Typical questions, in the usual order</h3><div class="cards"><details class="card"><summary><span class="num">1</span><span class="ttl">(placeholder) Where should the project live?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Where should the project live?</li><li>Which folder should hold the project?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Here, in this folder.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div><p class="note">Placeholder: real questions come from the study.</p></div></details><details class="card"><summary><span class="num">2</span><span class="ttl">(placeholder) Convert this folder as shown?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Convert this folder as shown?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>A</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<h3>Other questions you may see</h3><input type="search" class="filter" placeholder="Filter these questions…" aria-label="Filter other questions"><div class="cards other"><details class="card"><summary><span class="ttl">(placeholder) a less common question</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Rare wording?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Do whatever you recommend.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-6-setup-how-the-agents-work" data-page="10"><h2>6 · Setup: how the agents work</h2><p><strong>Development</strong> sets up the team: how the agents are organized (for example, one agent builds and a fresh reviewer checks each change), how much they may do on their own, when they stop for you, and which features come first. <strong>For the demo, choose the options that let the agents work most independently:</strong> the simplest team, the most hands-off arrangement, and the whole game as the first priority. A few questions and a summary, about 4 minutes.</p>
+<h3>Typical questions, in the usual order</h3><div class="cards"><details class="card"><summary><span class="num">1</span><span class="ttl">(placeholder) Where should the project live?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Where should the project live?</li><li>Which folder should hold the project?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Here, in this folder.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div><p class="note">Placeholder: real questions come from the study.</p></div></details><details class="card"><summary><span class="num">2</span><span class="ttl">(placeholder) Convert this folder as shown?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Convert this folder as shown?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>A</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<h3>Other questions you may see</h3><input type="search" class="filter" placeholder="Filter these questions…" aria-label="Filter other questions"><div class="cards other"><details class="card"><summary><span class="ttl">(placeholder) a less common question</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Rare wording?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Do whatever you recommend.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-7-adopt-the-definition" data-page="11"><h2>7 · Adopt the definition</h2><p>ARPD now writes the <strong>Project Definition Report</strong> (<code>reports/setup/PROJECT-DEFINITION.md</code>): one document with everything you agreed, the requirements with their acceptance checks, and any open items. It runs its own check on the report, summarizes it, and asks you to adopt it. <strong>Adopting is one of the three answers that commit you</strong>, so look at the report first. After adoption, ARPD writes the project's governing documents (the team charter <code>CLAUDE.md</code>, <code>REQUIREMENTS.md</code>, <code>DECISIONS.md</code> and others) and may ask to include its logging and agent-role files. About 5 minutes, mostly ARPD writing.</p>
+<blockquote><strong>Look here:</strong> open <code>reports/setup/PROJECT-DEFINITION.md</code> in any text editor. Check that the game rules and the computer players' rules are recorded as yours, and that nothing you did not ask for has crept in.</blockquote>
+<h3>Typical questions, in the usual order</h3><div class="cards"><details class="card"><summary><span class="num">1</span><span class="ttl">(placeholder) Where should the project live?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Where should the project live?</li><li>Which folder should hold the project?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Here, in this folder.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div><p class="note">Placeholder: real questions come from the study.</p></div></details><details class="card"><summary><span class="num">2</span><span class="ttl">(placeholder) Convert this folder as shown?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Convert this folder as shown?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>A</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<h3>Other questions you may see</h3><input type="search" class="filter" placeholder="Filter these questions…" aria-label="Filter other questions"><div class="cards other"><details class="card"><summary><span class="ttl">(placeholder) a less common question</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Rare wording?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Do whatever you recommend.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<p><strong>Check that setup worked.</strong> When ARPD says setup is complete, paste:</p>
+<div class="copy"><pre><code>Run the setup check and show me the result as a short checklist.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div>
+<p>You should see ✅ lines (governing documents present, the adoption recorded, and so on) ending in <code>OVERALL: PASS</code>.</p><nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-8-plan-the-build" data-page="12"><h2>8 · Plan the build</h2><p>Planning turns the adopted definition into a concrete plan. ARPD reviews where the project stands, asks what you want this piece of work to achieve, sizes it (usually two <em>sprints</em> here: the game logic with its tests, then the window), and writes a versioned plan under <code>reports/planning/</code>. You approve that exact version, then say whether to start now. <strong>Approving the plan and starting the build are the other two answers that commit you.</strong> Approval alone starts nothing. About 5 minutes. If ARPD offers to start planning at the end of setup, accept; otherwise type <code>/arpd-plan</code>.</p>
+<p><strong>For the demo, plan the whole first version at once and let the agents carry on between sprints without stopping.</strong> The aim is the first clickable demonstration.</p>
+<h3>Typical questions, in the usual order</h3><div class="cards"><details class="card"><summary><span class="num">1</span><span class="ttl">(placeholder) Where should the project live?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Where should the project live?</li><li>Which folder should hold the project?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Here, in this folder.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div><p class="note">Placeholder: real questions come from the study.</p></div></details><details class="card"><summary><span class="num">2</span><span class="ttl">(placeholder) Convert this folder as shown?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Convert this folder as shown?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>A</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<h3>Other questions you may see</h3><input type="search" class="filter" placeholder="Filter these questions…" aria-label="Filter other questions"><div class="cards other"><details class="card"><summary><span class="ttl">(placeholder) a less common question</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Rare wording?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Do whatever you recommend.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<p><strong>Before the build starts, ARPD may ask you to type <code>/compact</code></strong> (or to start a new session) so that the agents start with a clean context. Do it, then paste the prompt it gives you. With Sonnet, clearing the context here is a good idea anyway: type <code>/clear</code>, then <code>/arpd-plan</code> and say <code>continue</code>; ARPD reads where things stand from the project's files.</p><nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-9-the-build" data-page="13"><h2>9 · The build</h2><p>The agents now write the game and its tests, and a separate reviewer agent checks the work. This is the longest part (about 20–40 minutes). You mostly wait.</p>
+<p><strong>What is normal:</strong></p>
+<ul><li>Tool activity scrolling by, and test runs.</li><li><strong>⏳ WORKING</strong> or <em>"Waiting for 1 background agent to finish"</em>: a reviewer is checking the work. Do nothing; ARPD continues when it finishes.</li><li>A question in the middle of the build about a rule detail. Answer it (see the cards below).</li><li><strong>The context fills up.</strong> On a long build Claude Code may compact the conversation automatically, or ARPD may ask you to. Afterwards, type <code>continue</code>.</li></ul>
+<p><strong>At any time</strong> you can type <code>/arpd-checkin</code> to see what is done, what is in progress, and what (if anything) needs you.</p>
+<h3>Typical questions, in the usual order</h3><div class="cards"><details class="card"><summary><span class="num">1</span><span class="ttl">(placeholder) Where should the project live?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Where should the project live?</li><li>Which folder should hold the project?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Here, in this folder.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div><p class="note">Placeholder: real questions come from the study.</p></div></details><details class="card"><summary><span class="num">2</span><span class="ttl">(placeholder) Convert this folder as shown?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Convert this folder as shown?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>A</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<h3>Other questions you may see</h3><input type="search" class="filter" placeholder="Filter these questions…" aria-label="Filter other questions"><div class="cards other"><details class="card"><summary><span class="ttl">(placeholder) a less common question</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Rare wording?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Do whatever you recommend.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-10-try-the-game" data-page="14"><h2>10 · Try the game</h2><p>When the first clickable version exists, ARPD stops and asks you to try it. It also writes a short walkthrough checklist (<code>reports/WALKTHROUGH-M1.md</code>).</p>
+<ol><li>Open a <strong>second</strong> terminal in the same folder and start the game with the command ARPD gives you (usually <code>python -m spades</code>, or <code>py -m spades</code> on Windows).</li><li><strong>Play one hand.</strong> A full game to 500 is optional; the tests already play whole games.</li><li>Open the newest CSV file in the <code>data</code> folder in a spreadsheet. Each row is one bid or card, with your think time on your own rows. What could you study with it? What would you add?</li><li>Tell ARPD what you saw, in plain words: either that it works, or what looks wrong. For example:</li></ol>
+<div class="copy"><pre><code>It works: I played a hand and the CSV opened with one row per bid and card.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div>
+<div class="copy"><pre><code>My partner played a spade when it could have followed suit.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div>
+<p>That is the normal loop: you report, the agents fix and test, and you check. "Built and reviewed" by the agents still leaves your own check: only you can say the first version is done.</p>
+<h3>Typical questions, in the usual order</h3><div class="cards"><details class="card"><summary><span class="num">1</span><span class="ttl">(placeholder) Where should the project live?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Where should the project live?</li><li>Which folder should hold the project?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Here, in this folder.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div><p class="note">Placeholder: real questions come from the study.</p></div></details><details class="card"><summary><span class="num">2</span><span class="ttl">(placeholder) Convert this folder as shown?</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Convert this folder as shown?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>A</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<h3>Other questions you may see</h3><input type="search" class="filter" placeholder="Filter these questions…" aria-label="Filter other questions"><div class="cards other"><details class="card"><summary><span class="ttl">(placeholder) a less common question</span></summary><div class="body"><p class="lbl">ARPD may word it as</p><ul class="asked"><li>Rare wording?</li></ul><p class="lbl paste">Reply</p><div class="copy"><pre><code>Do whatever you recommend.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div></div></details></div>
+<nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-stuck-resume-and-troubleshooting" data-page="15"><h2>Stuck? Resume and troubleshooting</h2><p><strong>If ARPD seems to have stopped,</strong> work down this list:</p>
+<ol><li><strong>Is something running?</strong> Tool output, a spinner, ⏳ WORKING or "Waiting for … background agent": wait.</li><li><strong>Did it ask you something?</strong> Look for the ❓ 🔘 ✋ block at the end of its last message and find the matching card.</li><li><strong>It stopped in the middle of work, with no question:</strong> type <code>continue</code>.</li><li><strong>That didn't work:</strong> type:</li></ol>
+<div class="copy"><pre><code>Continue the current sprint under the approved plan.</code></pre><button type="button" class="copybtn" aria-label="Copy">Copy</button></div>
+<ol><li><strong>Not sure where things stand:</strong> type <code>/arpd-checkin</code>. It shows a checklist of what is done, in progress and waiting, and the exact next prompt.</li><li><strong>The session is unusable</strong> (closed, crashed, or you hit a usage limit): open Claude Code again in the same folder (<code>claude --model sonnet --effort low</code>), type <code>/arpd-checkin</code>, and follow its next step.</li></ol>
+<div class="tablewrap"><table><thead><tr><th>Problem</th><th>What to do</th></tr></thead><tbody><tr><td><code>claude</code> is not found</td><td>Open a new terminal window. See the README, step 3</td></tr><tr><td>The game window does not open</td><td>Run the Tkinter check from the README, step 4</td></tr><tr><td>A command is blocked by Claude Code's safety check</td><td>ARPD gives you a one-line command starting with <code>!</code>; paste it and press Enter</td></tr><tr><td>Nothing happens for 10 minutes or more</td><td>Close any game window that has opened. If still stuck, press <strong>Esc</strong> and type <code>A command seems to be hanging, possibly a test that opened the game window. Stop it and continue.</code></td></tr><tr><td>You hit a usage limit</td><td>Wait for it to reset, then <code>claude</code> and <code>/arpd-checkin</code></td></tr><tr><td>ARPD asks something you don't understand</td><td>Ask it: <code>What does that mean, and what do you recommend?</code></td></tr></tbody></table></div><nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section>
+<section class="page" id="p-your-own-project" data-page="16"><h2>Your own project</h2><p>The same steps work for a tool of your own: an experiment platform, a simulation, a survey or measurement tool, a data pipeline, or an extension of this game.</p>
+<ol><li><strong>Start from a fresh copy.</strong> Clone ARPD into a new folder named for your project (README, Start here, step 5), open Claude Code there, and type <code>/arpd-setup</code>.</li><li><strong>Describe what you want in your own words:</strong> the question, the tool you think you need, who will use it, and what data it handles. A rough idea is fine; setup draws out the rest. Mention any existing notes, code or data, and say early if the tool will collect data from people.</li><li><strong>Choose ARPD's role.</strong> <em>A</em> builds what you specify. <em>C</em> also reviews how well the design fits your theory or research question. <em>D</em> helps you work out what to build and develop the science behind it with you.</li><li><strong>Work through the phases.</strong> Settle what is yours: the rules of the task, what each recorded value means, and what would convince you the tool works. On a real project, answer these yourself rather than delegating them.</li><li><strong>Read and adopt the Project Definition Report.</strong> Nothing is built before this.</li><li><strong>Plan a small first piece</strong> with <code>/arpd-plan</code>, aimed at a first demonstration you can try. Approve the exact version, then begin.</li><li><strong>Check in and review.</strong> <code>/arpd-checkin</code> shows where things stand. Try each demonstration yourself. <code>/arpd-amend</code> changes a ruling or the charter. Plan the next piece with <code>/arpd-plan</code>.</li></ol>
+<p><strong>Start small.</strong> A first demonstration you can try within a session teaches you more than a long specification. For example, turn this game into a small experiment: give the computer partner two strategies, assign one per game as the condition, and compare the play logs.</p>
+<p><strong>Afterwards, look at:</strong> <code>CLAUDE.md</code> (the team charter the agents work under), <code>DECISIONS.md</code> (your rulings, word for word), <code>REQUIREMENTS.md</code> (each requirement and its evidence), <code>reports/</code> (the setup record, the approved plan and the sprint close-outs) and <code>arpd/docs/GUIDE.md</code> (the full guide).</p><nav class="pager"><button type="button" class="prev">← Previous</button><button type="button" class="next">Next →</button></nav></section></main>
+</div>
+<script>
+(function(){
+  var pages=[].slice.call(document.querySelectorAll('.page')), links=[].slice.call(document.querySelectorAll('#nav a'));
+  var cur=0, showAll=false, TROUBLE=15;
+  function store(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  function load(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function show(n){cur=Math.max(0,Math.min(pages.length-1,n));
+    pages.forEach(function(p,i){p.classList.toggle('hidden',!showAll&&i!==cur)});
+    links.forEach(function(a,i){a.classList.toggle('on',i===cur)});
+    store('arpd-tut-page',cur)}
+  links.forEach(function(a,i){a.addEventListener('click',function(e){if(!showAll){e.preventDefault();show(i);window.scrollTo(0,0)}})});
+  pages.forEach(function(p,i){p.querySelector('.prev').disabled=i===0;p.querySelector('.next').disabled=i===pages.length-1;
+    p.querySelector('.prev').addEventListener('click',function(){show(i-1);window.scrollTo(0,0)});
+    p.querySelector('.next').addEventListener('click',function(){show(i+1);window.scrollTo(0,0)})});
+  document.getElementById('all').addEventListener('click',function(){showAll=!showAll;this.textContent=showAll?'One page at a time':'Show all';show(cur)});
+  document.getElementById('stuck').addEventListener('click',function(){showAll=false;document.getElementById('all').textContent='Show all';show(TROUBLE);window.scrollTo(0,0)});
+  document.addEventListener('click',function(e){var b=e.target.closest('.copybtn');if(!b)return;
+    var t=b.parentNode.querySelector('code').textContent;
+    function ok(){b.textContent='Copied';b.classList.add('done');setTimeout(function(){b.textContent='Copy';b.classList.remove('done')},1400)}
+    if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok,fallback)}else{fallback()}
+    function fallback(){var r=document.createRange();r.selectNodeContents(b.parentNode.querySelector('code'));var s=window.getSelection();s.removeAllRanges();s.addRange(r);
+      try{document.execCommand('copy');ok()}catch(err){b.textContent='Press Ctrl+C'}}});
+  // search: matches cards and paragraphs across all pages
+  var blocks=[].slice.call(document.querySelectorAll('.page > *:not(h2):not(.pager), details.card, details.rare'));
+  var q=document.getElementById('search'), count=document.getElementById('count');
+  function clearMarks(){[].slice.call(document.querySelectorAll('mark')).forEach(function(m){m.replaceWith(document.createTextNode(m.textContent))});document.normalize()}
+  function markIn(el,term){var w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null),nodes=[],n;while(n=w.nextNode())nodes.push(n);
+    nodes.forEach(function(t){var i=t.data.toLowerCase().indexOf(term);if(i<0||t.parentNode.closest('button'))return;
+      var m=document.createElement('mark'),after=t.splitText(i);after.splitText(term.length);m.textContent=after.data;after.replaceWith(m)})}
+  q.addEventListener('input',function(){clearMarks();var term=q.value.trim().toLowerCase();
+    if(!term){blocks.forEach(function(b){b.classList.remove('hidden')});count.textContent='';show(cur);return}
+    var hits=0;pages.forEach(function(p){p.classList.remove('hidden')});
+    blocks.forEach(function(b){var m=b.textContent.toLowerCase().indexOf(term)>=0;
+      if(b.matches('details.rare')){b.classList.toggle('hidden',!m);if(m)b.open=true;return}
+      if(b.closest('details.rare')&&!b.matches('details.card'))return;
+      b.classList.toggle('hidden',!m);if(m){hits++;if(b.matches('details'))b.open=true;markIn(b,term)}});
+    pages.forEach(function(p){var any=[].slice.call(p.querySelectorAll('.page > *:not(h2):not(.pager), details.card')).some(function(b){return !b.classList.contains('hidden')});p.classList.toggle('hidden',!any)});
+    count.textContent=hits+' match'+(hits===1?'':'es')});
+  document.addEventListener('click',function(e){var a=e.target.closest('a[href^="#p-"]');if(!a||a.closest('#nav'))return;var i=pages.findIndex(function(p){return '#'+p.id===a.getAttribute('href')});if(i>=0&&!showAll){e.preventDefault();show(i);window.scrollTo(0,0)}});
+  document.addEventListener('input',function(e){if(!e.target.classList.contains('filter'))return;var t=e.target.value.trim().toLowerCase();
+    [].slice.call(e.target.nextElementSibling.querySelectorAll('details.card')).forEach(function(c){c.classList.toggle('hidden',!!t&&c.textContent.toLowerCase().indexOf(t)<0)})});
+  var saved=parseInt(load('arpd-tut-page'),10);show(isNaN(saved)?0:saved);
+  if(location.hash){var i=pages.findIndex(function(p){return '#'+p.id===location.hash});if(i>=0)show(i)}
+})();
+</script>
+</body>
+</html>
