@@ -27,7 +27,8 @@ card game, see [Why a card game?](#why-a-card-game) under Background. For the wh
 see the diagram in [About ARPD](#about-arpd).
 
 The tutorial is also available as a searchable web page:
-[TUTORIAL.html](https://djgriffin13.github.io/arpd/TUTORIAL.html). Next: **Install and launch**.
+[TUTORIAL.html](https://djgriffin13.github.io/arpd/TUTORIAL.html). Next: **Install and launch**,
+which ends with setting Claude Code to Sonnet at low effort for this demonstration.
 
 **Contents**
 
@@ -61,6 +62,7 @@ The tutorial is also available as a searchable web page:
   - [Changing your mind](#changing-your-mind)
   - [Problems with the game](#problems-with-the-game)
   - [Starting over](#starting-over)
+  - [Choosing a model and effort](#choosing-a-model-and-effort)
   - [Usage limits and cost](#usage-limits-and-cost)
   - [Other AI tools](#other-ai-tools)
   - [No Python](#no-python)
@@ -70,14 +72,19 @@ The tutorial is also available as a searchable web page:
 Follow **Start here** in the [README](https://github.com/djgriffin13/arpd/blob/main/README.md) to install Git, Claude Code and Python, and to
 clone ARPD into a folder named `spades-demo`. On the web page, the same steps follow here.
 
-### For this tutorial
+### Set the model for this tutorial
 
-Start Claude Code with Sonnet at low effort, which is enough for this demo and is faster and
-cheaper. In your `spades-demo` folder, type this instead of plain `claude`:
+For this tutorial, run Claude Code with **Sonnet at low effort**. It is fast, inexpensive and
+enough for a small demonstration. **This setting is for the tutorial only;** for your own projects,
+see [Choosing a model and effort](#choosing-a-model-and-effort).
+
+In your `spades-demo` folder, start Claude Code this way instead of plain `claude`:
 
 ```text
 claude --model sonnet --effort low
 ```
+
+If Claude Code is already running, type `/model` to pick Sonnet and `/effort` to pick low instead.
 
 Keep this tutorial open in your browser rather than in the folder. Early in setup, ARPD turns the
 folder into your project and moves its own files, including this one, into a backup folder.
@@ -1201,9 +1208,9 @@ ARPD sometimes asks for this before the build, so the agents start with a clean 
 </details>
 
 **Before the build, ARPD may ask you to type `/compact`** or start a new session, so the agents
-begin with a clean context. Do that, then paste the prompt it gives you. With Sonnet it's worth
-clearing the conversation here even if ARPD doesn't ask: type `/clear`, then `/arpd-checkin`, and
-follow the next step it gives you.
+begin with a clean context. Do that, then paste the prompt it gives you. It's worth clearing the
+conversation here even if ARPD doesn't ask: type `/clear`, then `/arpd-checkin`, and follow the next
+step it gives you.
 
 ## Build
 
@@ -1587,7 +1594,8 @@ Continue the current sprint under the approved plan.
 5. **Not sure where things stand:** type `/arpd-checkin`. It lists what's done, in progress and
    waiting, and gives you the exact next prompt.
 6. **The session is gone** (closed, crashed, or out of usage): start Claude Code again in the same
-   folder with `claude --model sonnet --effort low`, type `/arpd-checkin`, and follow its next step.
+   folder (for this tutorial, `claude --model sonnet --effort low`), type `/arpd-checkin`, and follow
+   its next step.
 
 ## Installing and launching
 
@@ -1654,14 +1662,33 @@ A command seems to be hanging, possibly a test that opened the game window. Stop
 - **Keep your project but redo a stage.** Type `/arpd-checkin` to see where things stand. To revisit
   a decision, use `/arpd-amend`; to redo a piece of work, plan it again with `/arpd-plan`.
 
+## Choosing a model and effort
+
+Claude Code lets you choose the model and how much effort it puts into each step.
+
+- **For your own projects,** Sonnet or Opus at medium or high effort is usually a good choice. Opus
+  and higher effort cost more, but they think more carefully, which matters when the agents are
+  building a research instrument you will rely on.
+- **For a demonstration like this tutorial,** Sonnet at low effort works well and keeps it quick and
+  inexpensive.
+
+To set them when you start, for example:
+
+```text
+claude --model sonnet --effort medium
+```
+
+In a session that's already running, type `/model` or `/effort` and pick from the list.
+
 ## Usage limits and cost
 
 - **What it costs.** The whole tutorial used about $7.50 of agent credit in our runs with Sonnet at low
-  effort. Larger models or higher effort cost more.
+  effort. Larger models and higher effort cost more; see
+  [Choosing a model and effort](#choosing-a-model-and-effort).
 - **Hitting a usage limit.** Claude Code tells you when you reach one. Nothing is lost: wait for it to
   reset, then start Claude Code in the same folder and type `/arpd-checkin`.
-- **Keeping it low.** Use Sonnet at low effort, as in Install and launch, and say "keep agent use low"
-  when ARPD asks about cost. Clearing the conversation between setup and the build (`/clear`, then
+- **Keeping agent use down.** Say "keep agent use low" when ARPD asks about cost, so it chooses lighter
+  ways of working. Clearing the conversation between setup and the build (`/clear`, then
   `/arpd-checkin`) also helps.
 
 ## Other AI tools
