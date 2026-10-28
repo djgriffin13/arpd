@@ -90,13 +90,15 @@ people play as two teams; human–AI teams in which the computer partner's strat
 experimental condition; a chat channel between partners; or new measures in the play log. Each is
 another round of the same steps with ARPD.
 
-## 1 · Start setup
+## Setup 1 · Intake
 
-Setup is an interview in phases (Intake, Objectives, Constraints, Design, Development), with a
-summary at the end of each, then a **Project Definition Report** for you to adopt. Nothing is built
-during setup. It takes about 20 minutes.
+*You'll see:* **SETUP**  🔵 Intake → ⚪ Objectives → ⚪ Constraints → ⚪ Design → ⚪ Development → ⚪ Definition Report
 
-Type:
+Setup is an interview in phases, in this order: **Intake, Objectives, Constraints, Design,
+Development**, each ending with a summary you confirm, then the **Definition Report** you adopt. The
+next six pages follow those phases. Nothing is built during setup. It takes about 20–30 minutes.
+
+**Start setup.** Type:
 
 ```text
 /arpd-setup
@@ -197,8 +199,6 @@ test the game logic without the window.
 
 If ARPD asks later what you want, or whether there is existing work, reply: "The brief in my first message covers it; there is no existing work."
 
-## 2 · Setup: about you and the project
-
 **Intake** is the first phase of the interview. ARPD works out who you are, what you want to build,
 where the project will live, and what role it should play. Your brief already answers most of it, so
 expect only a handful of questions, about 5 minutes.
@@ -211,13 +211,13 @@ Two things happen here that are worth knowing about:
 - **ARPD's role.** You choose how far ARPD questions your design. For this demo, it simply builds
   what you specified.
 
-Phase 2 ends with a summary of what ARPD has understood; confirm it if it matches the brief.
+Intake ends with a summary of what ARPD has understood; confirm it if it matches the brief.
 
 ### Typical questions, in the usual order
 
 #### 1. Where should the project live?
 
-*ARPD may word it as:* "Where should the project live?"
+*ARPD may word it as:* "Where should the project live?" / "Where should the Spades project live?"
 
 **Reply:**
 
@@ -303,9 +303,17 @@ A
 
 Every phase ends with a summary. Skim it: if it matches the brief, say yes. A yes only confirms the summary; it adopts nothing.
 
+<details><summary>Example from a real run</summary>
+
+![Is this summary of Intake right?](docs/tutorial/x-intake-05.png)
+
+</details>
+
 ### Other questions you may see
 
 #### Who will play or use it?
+
+*ARPD may word it as:* "Who will play this game, and who will run it?"
 
 **Reply:**
 
@@ -323,7 +331,9 @@ Only me, on this computer.
 The brief in my first message covers it; there is no existing work.
 ```
 
-## 3 · Setup: what it is for
+## Setup 2 · Objectives
+
+*You'll see:* **SETUP**  ✅ Intake → 🔵 Objectives → ⚪ Constraints → ⚪ Design → ⚪ Development → ⚪ Definition Report
 
 **Objectives** is about purpose: what the game is for, what it must do, what it will not do, and
 what would convince you that it works. ARPD turns your answers into the requirements and the
@@ -357,6 +367,12 @@ Just play it and study my own play.
 ```text
 I can play a hand in the window, the computer players follow the stated rules, and the play log opens in a spreadsheet with one row per bid and card. Tests check the rules, the scoring, each computer rule, the play log, and a full all-computer game to 500.
 ```
+
+<details><summary>Example from a real run</summary>
+
+![What would convince you that the game works?](docs/tutorial/x-objectives-02.png)
+
+</details>
 
 #### 3. Is this summary of Objectives right?
 
@@ -394,6 +410,12 @@ Every phase ends with a summary. Skim it: if it matches the brief, say yes. A ye
 The columns in my first message define the log. Add nothing else.
 ```
 
+<details><summary>Example from a real run</summary>
+
+![What should the log contain, or how should hand results appear?](docs/tutorial/x-objectives-04.png)
+
+</details>
+
 #### Do you want a win-versus-computers check, or other extra tests?
 
 *ARPD may word it as:* "Do you want a win-versus-computers check as part of the tests?" / "Beyond those automated tests, what would make you say "this works"?"
@@ -404,7 +426,15 @@ The columns in my first message define the log. Add nothing else.
 No, the tests in my brief are enough.
 ```
 
-## 4 · Setup: limits
+<details><summary>Example from a real run</summary>
+
+![Do you want a win-versus-computers check, or other extra tests?](docs/tutorial/x-objectives-05.png)
+
+</details>
+
+## Setup 3 · Constraints
+
+*You'll see:* **SETUP**  ✅ Intake → ✅ Objectives → 🔵 Constraints → ⚪ Design → ⚪ Development → ⚪ Definition Report
 
 **Constraints** collects the limits the work must respect: the computer it runs on, the language
 and packages, whether it must work offline, and how much agent use (cost) is acceptable. ARPD sorts
@@ -450,11 +480,17 @@ A
 
 Every phase ends with a summary. Skim it: if it matches the brief, say yes. A yes only confirms the summary; it adopts nothing.
 
+<details><summary>Example from a real run</summary>
+
+![Is this summary of Constraints right?](docs/tutorial/x-constraints-02.png)
+
+</details>
+
 ### Other questions you may see
 
 #### When a team misses its bid, what happens to the nil bidder's tricks?
 
-*ARPD may word it as:* "When a nil bidder takes tricks, or a team misses its bid, does each bag from those tricks score a point?"
+*ARPD may word it as:* "When a team misses its bid, do the nil bidder's tricks still count as bags" / "When a team misses its bid and its nil bidder took tricks, how should those tricks score as bags?"
 
 **Reply:**
 
@@ -464,7 +500,15 @@ As my brief says: a nil bidder's tricks always count as bags and score 1 point e
 
 ARPD checks your rules for contradictions in this phase and asks when two rules seem to disagree.
 
-## 5 · Setup: rules and data
+<details><summary>Example from a real run</summary>
+
+![When a team misses its bid, what happens to the nil bidder's tricks?](docs/tutorial/x-constraints-03.png)
+
+</details>
+
+## Setup 4 · Design
+
+*You'll see:* **SETUP**  ✅ Intake → ✅ Objectives → ✅ Constraints → 🔵 Design → ⚪ Development → ⚪ Definition Report
 
 **Design** settles how the game is built and what its data mean. ARPD proposes a simple design
 (game logic kept apart from the window, so tests can run without opening it) and then asks about
@@ -519,6 +563,12 @@ A
 
 Choose the option that continues to Development. This is often the only Design question.
 
+<details><summary>Example from a real run</summary>
+
+![Are you ready to move on from the design?](docs/tutorial/x-design-02.png)
+
+</details>
+
 #### 3. Is this summary of Design right?
 
 *ARPD may word it as:* "Is this summary of Design right, and is the design ready to move to Development?" / "Is this summary of Design right, and are you ready to move on?"
@@ -537,11 +587,17 @@ A
 
 Every phase ends with a summary. Skim it: if it matches the brief, say yes. A yes only confirms the summary; it adopts nothing.
 
+<details><summary>Example from a real run</summary>
+
+![Is this summary of Design right?](docs/tutorial/x-design-03.png)
+
+</details>
+
 ### Other questions you may see
 
 #### When does think time start and stop? (or: how precise should think_seconds be?)
 
-*ARPD may word it as:* "Sometimes you will have exactly one legal card to play"
+*ARPD may word it as:* "How precise should think_seconds be in the log?" / "When does think time start and stop?"
 
 **Reply:**
 
@@ -550,6 +606,12 @@ From when my bid buttons or legal cards become active to my click, in seconds to
 ```
 
 This is about what a recorded number means: in a real study, where measurement validity is decided. ARPD may ask, or propose an answer for you to accept.
+
+<details><summary>Example from a real run</summary>
+
+![When does think time start and stop? (or: how precise should think_seconds be?)](docs/tutorial/x-design-04.png)
+
+</details>
 
 #### What happens when both partners on a team bid nil?
 
@@ -563,6 +625,12 @@ Score each nil on its own: +100 or -100 for each partner. The team's bid is 0, s
 
 ARPD may ask, or settle this itself with the traditional rule and list it for you to accept.
 
+<details><summary>Example from a real run</summary>
+
+![What happens when both partners on a team bid nil?](docs/tutorial/x-design-05.png)
+
+</details>
+
 #### After the fourth card, what should the table do?
 
 *ARPD may word it as:* "After the fourth card, what should the table do?"
@@ -572,6 +640,12 @@ ARPD may ask, or settle this itself with the traditional rule and list it for yo
 ```text
 Use your recommendation: keep the trick on the table for a moment, then clear it.
 ```
+
+<details><summary>Example from a real run</summary>
+
+![After the fourth card, what should the table do?](docs/tutorial/x-design-06.png)
+
+</details>
 
 #### Which part of the design would you like to explore or change?
 
@@ -584,6 +658,12 @@ None. Continue to Development.
 ```
 
 This follows if you chose to revise the design; if you didn't mean to, just continue.
+
+<details><summary>Example from a real run</summary>
+
+![Which part of the design would you like to explore or change?](docs/tutorial/x-design-07.png)
+
+</details>
 
 #### Another question about one rule detail
 
@@ -613,6 +693,12 @@ Game rules are your decision, so ARPD asks instead of guessing, often with an ex
 As my brief says: every bag scores 1 point, including a nil bidder's tricks.
 ```
 
+<details><summary>Example from a real run</summary>
+
+![How should a nil bidder's tricks be scored? (do they also score +1 as bags?)](docs/tutorial/x-design-10.png)
+
+</details>
+
 #### When may spades be led? Does a spade led by someone holding only spades break spades?
 
 *ARPD may word it as:* "Should a spade led by a player who holds only spades break spades?" / "When may a spade be led?"
@@ -622,6 +708,12 @@ As my brief says: every bag scores 1 point, including a nil bidder's tricks.
 ```text
 As my brief says: a spade led by a player who holds only spades breaks spades.
 ```
+
+<details><summary>Example from a real run</summary>
+
+![When may spades be led? Does a spade led by someone holding only spades break spades?](docs/tutorial/x-design-12.png)
+
+</details>
 
 #### Which way does clockwise go / what is the seat order?
 
@@ -633,6 +725,12 @@ As my brief says: a spade led by a player who holds only spades breaks spades.
 Yes: S, W, N, E clockwise.
 ```
 
+<details><summary>Example from a real run</summary>
+
+![Which way does clockwise go / what is the seat order?](docs/tutorial/x-design-13.png)
+
+</details>
+
 #### Should the game still wait when you have only one legal card?
 
 *ARPD may word it as:* "Sometimes you will have exactly one legal card to play"
@@ -642,6 +740,12 @@ Yes: S, W, N, E clockwise.
 ```text
 As my brief says: still wait for my click.
 ```
+
+<details><summary>Example from a real run</summary>
+
+![Should the game still wait when you have only one legal card?](docs/tutorial/x-design-14.png)
+
+</details>
 
 #### Timestamps: time zone and format
 
@@ -653,6 +757,12 @@ As my brief says: still wait for my click.
 As my brief says: this computer's local time, to the second.
 ```
 
+<details><summary>Example from a real run</summary>
+
+![Timestamps: time zone and format](docs/tutorial/x-design-15.png)
+
+</details>
+
 #### How should a quit game be told apart from a finished one?
 
 *ARPD may word it as:* "How should a quit game be told apart from a finished one?"
@@ -662,6 +772,12 @@ As my brief says: this computer's local time, to the second.
 ```text
 As my brief says: a game stopped part-way just ends after its last finished hand.
 ```
+
+<details><summary>Example from a real run</summary>
+
+![How should a quit game be told apart from a finished one?](docs/tutorial/x-design-16.png)
+
+</details>
 
 #### Which program shape / layout should the build use?
 
@@ -673,6 +789,12 @@ As my brief says: a game stopped part-way just ends after its last finished hand
 Use your recommendation: the simplest design that keeps the rules testable without the window.
 ```
 
+<details><summary>Example from a real run</summary>
+
+![Which program shape / layout should the build use?](docs/tutorial/x-design-17.png)
+
+</details>
+
 #### Do you want any change to this design?
 
 *ARPD may word it as:* "Do you want any change to this design or to the small details above?"
@@ -683,7 +805,15 @@ Use your recommendation: the simplest design that keeps the rules testable witho
 No changes.
 ```
 
-## 6 · Setup: how the agents work
+<details><summary>Example from a real run</summary>
+
+![Do you want any change to this design?](docs/tutorial/x-design-18.png)
+
+</details>
+
+## Setup 5 · Development
+
+*You'll see:* **SETUP**  ✅ Intake → ✅ Objectives → ✅ Constraints → ✅ Design → 🔵 Development → ⚪ Definition Report
 
 **Development** sets up the team: how the agents are organized (for example, one agent builds and a
 fresh reviewer checks each change), how much they may do on their own, when they stop for you, and
@@ -720,6 +850,12 @@ A: one agent builds and a fresh reviewer agent checks each change. The simplest 
 ```text
 No, nothing more.
 ```
+
+<details><summary>Example from a real run</summary>
+
+![Is there anything more you want to set about how the agents run?](docs/tutorial/x-development-02.png)
+
+</details>
 
 #### 3. A working package: review depth, how far the agents may go alone, which features first
 
@@ -763,6 +899,12 @@ A
 
 Every phase ends with a summary. Skim it: if it matches the brief, say yes. A yes only confirms the summary; it adopts nothing.
 
+<details><summary>Example from a real run</summary>
+
+![Is this summary of Development right?](docs/tutorial/x-development-04.png)
+
+</details>
+
 ### Other questions you may see
 
 #### Where should the later networked version go? (P1 to P5)
@@ -775,6 +917,12 @@ Every phase ends with a summary. Skim it: if it matches the brief, say yes. A ye
 P5: just an idea for later.
 ```
 
+<details><summary>Example from a real run</summary>
+
+![Where should the later networked version go? (P1 to P5)](docs/tutorial/x-development-05.png)
+
+</details>
+
 #### How should the work move from one sprint to the next?
 
 *ARPD may word it as:* "How should the team move from one sprint to the next?" / "How should the work move from one sprint to the next?"
@@ -785,7 +933,15 @@ P5: just an idea for later.
 Continue to the next sprint after each review, unless something needs my decision.
 ```
 
-## 7 · Adopt the definition
+<details><summary>Example from a real run</summary>
+
+![How should the work move from one sprint to the next?](docs/tutorial/x-development-06.png)
+
+</details>
+
+## Setup 6 · Definition Report
+
+*You'll see:* **SETUP**  ✅ Intake → ✅ Objectives → ✅ Constraints → ✅ Design → ✅ Development → 🔵 Definition Report
 
 ARPD now writes the **Project Definition Report** (`reports/setup/PROJECT-DEFINITION.md`): one
 document with everything you agreed, the requirements with their acceptance checks, and any open
@@ -893,6 +1049,12 @@ A
 Do whatever you recommend, consistent with traditional Spades.
 ```
 
+<details><summary>Example from a real run</summary>
+
+![A late rule question before adoption](docs/tutorial/x-report-05.png)
+
+</details>
+
 #### Which do you mean for an open item?
 
 *ARPD may word it as:* "Which do you mean for O-01 and O-02, given that D-05 and D-06 are accepted?"
@@ -903,6 +1065,12 @@ Do whatever you recommend, consistent with traditional Spades.
 Use your recommendation.
 ```
 
+<details><summary>Example from a real run</summary>
+
+![Which do you mean for an open item?](docs/tutorial/x-report-06.png)
+
+</details>
+
 **Check that setup worked.** When ARPD says setup is complete, paste:
 
 ```text
@@ -912,7 +1080,11 @@ Run the setup check and show me the result as a short checklist.
 You should see ✅ lines (governing documents present, the adoption recorded, and so on) ending in
 `OVERALL: PASS`.
 
-## 8 · Plan the build
+## Plan
+
+*You'll see:* **PLAN**  ✅ Review → 🔵 Goal → ⚪ Scope → ⚪ Draft → ⚪ Approval → ⚪ Handoff
+
+Planning runs through its own steps, **Review, Goal, Scope, Draft, Approval, Handoff**, and each card below is labelled with the step it belongs to. ARPD often reviews where the project stands without asking anything, and may skip Goal when the adopted report already says what to build.
 
 Planning turns the adopted definition into a concrete plan. ARPD reviews where the project stands,
 asks what you want this piece of work to achieve, sizes it (usually two *sprints* here: the game
@@ -926,7 +1098,7 @@ without stopping.** The aim is the first clickable demonstration.
 
 ### Typical questions, in the usual order
 
-#### 1. What would you like to build or accomplish next?
+#### 1. What would you like to build or accomplish next? *(Goal)*
 
 *ARPD may word it as:* "Do you know what you would like to build or accomplish next?"
 
@@ -938,7 +1110,13 @@ The first playable version: the whole game as defined, with its tests. Stop at t
 
 Sometimes ARPD takes the goal from the adopted report and skips this question.
 
-#### 2. Plan the next sprint only, or several sprints together?
+<details><summary>Example from a real run</summary>
+
+![What would you like to build or accomplish next?](docs/tutorial/x-planning-01.png)
+
+</details>
+
+#### 2. Plan the next sprint only, or several sprints together? *(Scope)*
 
 *ARPD may word it as:* "Would you like to plan the next sprint only, or map out several sprints as one coordinated effort?" / "How much should I plan now?"
 
@@ -954,7 +1132,7 @@ Several sprints as one plan: the whole first version.
 
 </details>
 
-#### 3. How should the team move from one sprint to the next?
+#### 3. How should the team move from one sprint to the next? *(Scope)*
 
 *ARPD may word it as:* "How should the team move from one sprint to the next?" / "How should the work move from one sprint to the next?"
 
@@ -970,7 +1148,7 @@ Continue to the next sprint after each independent review, unless something need
 
 </details>
 
-#### 4. What would you like to do with the draft plan?
+#### 4. What would you like to do with the draft plan? *(Draft)*
 
 *ARPD may word it as:* "How would you like to go on with PLAN-… vN?" / "What would you like to do with PLAN-… vN?" / "How would you like to proceed with PLAN-… vN?" / "The draft is yours to examine, edit or have reviewed. Nothing is approved until you say so. What next?"
 
@@ -988,7 +1166,13 @@ A
 
 The plan is saved under reports/planning/. A fresh-agent review is optional; skip it for the demo.
 
-#### 5. Approve the plan?
+<details><summary>Example from a real run</summary>
+
+![What would you like to do with the draft plan?](docs/tutorial/x-planning-04.png)
+
+</details>
+
+#### 5. Approve the plan? *(Approval)*
 
 *ARPD may word it as:* "Approve reports/planning/PLAN-….md vN"
 
@@ -1006,7 +1190,7 @@ One of the three answers that commit you. Approval alone starts nothing.
 
 </details>
 
-#### 6. Begin implementation now or later?
+#### 6. Begin implementation now or later? *(Handoff)*
 
 *ARPD may word it as:* "Would you like to begin implementation now or later?"
 
@@ -1032,7 +1216,7 @@ The third answer that commits you: this starts the build. The letters differ bet
 
 ### Other questions you may see
 
-#### Does this scope (or this series of sprints) match what you want?
+#### Does this scope (or this series of sprints) match what you want? *(Scope)*
 
 *ARPD may word it as:* "Does this scope match what you want for the first sprint?" / "Does this scope match what you want for the first plan?" / "Does this scope match what you want?"
 
@@ -1042,7 +1226,15 @@ The third answer that commits you: this starts the build. The letters differ bet
 Yes.
 ```
 
-#### Is there a deadline or timeline?
+<details><summary>Example from a real run</summary>
+
+![Does this scope (or this series of sprints) match what you want?](docs/tutorial/x-planning-07.png)
+
+</details>
+
+#### Is there a deadline or timeline? *(Draft)*
+
+*ARPD may word it as:* "Is there a deadline or timeline for the game?"
 
 **Reply:**
 
@@ -1050,7 +1242,13 @@ Yes.
 None.
 ```
 
-#### How do you want to answer the decisions the plan raised?
+<details><summary>Example from a real run</summary>
+
+![Is there a deadline or timeline?](docs/tutorial/x-planning-08.png)
+
+</details>
+
+#### How do you want to answer the decisions the plan raised? *(Draft)*
 
 *ARPD may word it as:* "How do you want to answer the four decisions?" / "Settle #3 and #1 as I recommend?"
 
@@ -1060,7 +1258,13 @@ None.
 Do whatever you recommend, consistent with traditional Spades.
 ```
 
-#### What does "continue" mean here? (an authorization question)
+<details><summary>Example from a real run</summary>
+
+![How do you want to answer the decisions the plan raised?](docs/tutorial/x-planning-08.png)
+
+</details>
+
+#### What does "continue" mean here? (an authorization question) *(Handoff)*
 
 *ARPD may word it as:* "What does "continue" mean here?" / "This is an authorization. Choosing A starts the series."
 
@@ -1070,7 +1274,13 @@ Do whatever you recommend, consistent with traditional Spades.
 Start now: the whole series, continuing between sprints.
 ```
 
-#### Type /compact (or start a new session), then paste this prompt
+<details><summary>Example from a real run</summary>
+
+![What does "continue" mean here? (an authorization question)](docs/tutorial/x-planning-09.png)
+
+</details>
+
+#### Type /compact (or start a new session), then paste this prompt *(Handoff)*
 
 *ARPD may word it as:* "Type /compact, then paste the prompt below"
 
@@ -1093,7 +1303,7 @@ the agents start with a clean context. Do it, then paste the prompt it gives you
 clearing the context here is a good idea anyway: type `/clear`, then `/arpd-plan` and say
 `continue`; ARPD reads where things stand from the project's files.
 
-## 9 · The build
+## Build
 
 The agents now write the game and its tests, and a separate reviewer agent checks the work. This
 is the longest part (about 20–40 minutes). You mostly wait.
@@ -1119,7 +1329,7 @@ anything) needs you.
 
 #### 1. A rule question in the middle of the build
 
-*ARPD may word it as:* "Before the play log gets built: what should legal_options hold on a bid row?" / "Does each of a nil bidder's tricks score +1 point, as well as counting toward the 10-bag penalty?"
+*ARPD may word it as:* "When a nil bidder takes tricks, or a team misses its bid, does each bag from those tricks score a point?" / "Before the play log gets built: what should legal_options hold on a bid row?"
 
 **Reply:**
 
@@ -1128,6 +1338,12 @@ Do whatever you recommend, consistent with traditional Spades.
 ```
 
 The build pauses only for decisions that are yours. Answer, and it carries on.
+
+<details><summary>Example from a real run</summary>
+
+![A rule question in the middle of the build](docs/tutorial/x-build-01.png)
+
+</details>
 
 #### 2. Nothing seems to be happening
 
@@ -1141,7 +1357,7 @@ continue
 
 If a tool or a reviewer agent is still running (⏳ WORKING, "Waiting for … background agent"), wait instead. See Stuck? Resume.
 
-## 10 · Try the game
+## Try the game
 
 When the first clickable version exists, ARPD stops and asks you to try it. This first demonstration
 is often a deliberately partial game: in the study runs it sometimes came before the scores, the
@@ -1178,7 +1394,7 @@ What a study build looked like (each run designs its own window, so yours will d
 
 #### Please try the window and tell me what you found
 
-*ARPD may word it as:* "Please try the window and tell me what you found: did the suit symbols show" / "Please run python main.py, play at least one hand, and tell me what you saw" / "Please try the first window and tell the team what you found"
+*ARPD may word it as:* "Please try the window and tell me what you found: did the suit symbols show" / "Please try the game and the walkthrough. Then send your changes, and tell me how many decimals you want for think_seconds, or "keep it as measured"." / "Please run python main.py, play at least one hand, and tell me what you saw" / "Please try the first window and tell the team what you found"
 
 **If it works:**
 
