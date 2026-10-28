@@ -76,10 +76,12 @@ The second command should open a small test window; close it. If Python is missi
 from <https://www.python.org/downloads/>. Some Linux and Homebrew Pythons ship without Tkinter; add
 it with your package manager (for example `python3-tk` on Ubuntu, `python-tk` on Homebrew).
 
-*Without Python (untested):* you can still follow the tutorial, but in your first message to ARPD
-replace "Use Python with its built-in Tkinter" with a language you have (for example R). The game
-will then be built differently, and the run commands later in the tutorial will not apply. ARPD's
-own checks then run as read-throughs instead ([arpd/docs/NO-PYTHON.md](arpd/docs/NO-PYTHON.md)).
+*Without Python:* ARPD itself doesn't need Python; only its diagnostic tools do (the activity log
+that times the agents' work, and the automatic document checks). Without it, ARPD skips the log,
+checks its documents by reading them, and tells you so
+([arpd/docs/NO-PYTHON.md](arpd/docs/NO-PYTHON.md)). The game can be written in any language: in your
+first message to ARPD, replace "Use Python with its built-in Tkinter" with a language you have (for
+example R). The run commands later in the tutorial will then differ.
 
 ### 5. Get ARPD
 

@@ -6,6 +6,10 @@ In this tutorial you use ARPD to have AI agents build a small Spades card game: 
 you play with three computer players, one of them your partner. The game also saves every bid and
 card to a CSV file you can open in a spreadsheet.
 
+The agents run in **Claude Code**, which works *agentically*: rather than only answering in a chat
+window, it reads and writes files, runs code and checks the results in your project folder, within
+the permissions you give it.
+
 You take the role ARPD calls the **PI**, the researcher in charge. You describe what you want, settle
 the questions that are yours to settle, and approve the plan; the agents write and test the code. The
 goal is a first demonstration, a game window you can click through. When the agents reach it, ARPD
@@ -54,8 +58,8 @@ which ends with setting Claude Code to Sonnet at low effort for this demonstrati
 - **Next steps**
   - [Next steps](#next-steps)
   - [Extend the game](#extend-the-game)
-  - [Run ARPD on your own idea](#run-arpd-on-your-own-idea)
   - [Updating the process](#updating-the-process)
+  - [Run ARPD on your own idea](#run-arpd-on-your-own-idea)
 - **Background**
   - [Why a card game?](#why-a-card-game)
   - [About ARPD](#about-arpd)
@@ -1269,6 +1273,13 @@ If a tool or a reviewer agent is still running (⏳ WORKING, "Waiting for … ba
 
 ## Try the game
 
+> **Congratulations.** In about an hour, mostly by answering questions and approving plans, you have
+> directed a team of AI agents to build a working research tool. People play it as a real game, with
+> a partner to cooperate with and opponents to beat, and it records their decisions: every bid, every
+> card and how long they took to choose, in a file ready for analysis. That is data on strategic
+> decision making under uncertainty, from an instrument you specified and own. Tools like this have
+> usually meant hiring a programmer or weeks of your own coding.
+
 When a first clickable version exists, ARPD stops and asks you to try it. Expect it to be partial:
 in our runs the scores, the hand summary or the play log sometimes came later, in the next sprint.
 That's the point of stopping early: you see something real before the agents build the rest.
@@ -1339,10 +1350,10 @@ Once the first version works, there are three ways to go on:
 - **[Extend the game](#extend-the-game).** Turn it into a research tool: an experimental condition,
   people playing together, communication between partners, or new measures. Each is another round of
   planning and building.
-- **[Run ARPD on your own idea](#run-arpd-on-your-own-idea).** Start a project of your own from a
-  fresh copy of ARPD, this time taking your time over each answer.
 - **[Update the process](#updating-the-process).** Change how closely you review, how far the agents
   go on their own, or the rules of the project, and keep ARPD itself up to date.
+- **[Run ARPD on your own idea](#run-arpd-on-your-own-idea).** Start a project of your own from a
+  fresh copy of ARPD, this time taking your time over each answer.
 
 At any point, `/arpd-checkin` shows where things stand and what needs you.
 
@@ -1381,40 +1392,6 @@ the strategy at the start of each game, and record which one was used in the pla
 To change something already decided, such as a game rule or what the agents may do on their own, see
 [Updating the process](#updating-the-process).
 
-## Run ARPD on your own idea
-
-The same steps work for a tool of your own: an experiment platform, a simulation, a survey or
-measurement tool, or a data pipeline.
-
-> **This time, take your time.** In the tutorial you could accept ARPD's suggestions with little
-> thought. On your own project, the interview is where the research gets defined: what the tool
-> measures, what its data mean, and what would convince you it works. Read each summary and the
-> blueprint carefully, question readings that don't match what you meant, and audit your own
-> answers before you approve anything. The agents build exactly what you agree to.
-
-1. **Start from a fresh copy.** Clone ARPD into a new folder named for your project (README, *Start
-   here*, step 5), open Claude Code there, and type `/arpd-setup`.
-2. **Describe what you want in your own words:** the question, the tool you think you need, who will
-   use it, and what data it handles. A rough idea is enough; setup draws out the rest. Mention any
-   notes, code or data you already have, and say early if the tool will collect data from people.
-3. **Choose ARPD's role.** *A* builds what you specify. *C* also checks how well the design fits your
-   theory or research question. *D* helps you work out what to build and develops the science behind
-   it with you.
-4. **Work through the phases** and settle what's yours: the rules of the task, what each recorded
-   value means, and what would convince you the tool works. On a real project, answer these
-   yourself.
-5. **Read the project blueprint and adopt it.** Nothing is built before that.
-6. **Plan a small first piece** with `/arpd-plan`, aiming for a first demonstration you can try.
-7. **Check in, try each demonstration yourself, and plan the next piece.**
-
-A first demonstration you can try within a session teaches you more than a long specification, so
-start small.
-
-**Files worth a look in any ARPD project:** `CLAUDE.md` (the team charter the agents work under),
-`DECISIONS.md` (your rulings, word for word), `REQUIREMENTS.md` (each requirement and its evidence),
-`reports/` (the blueprint, the approved plans and the sprint records) and `arpd/docs/GUIDE.md` (the
-full guide).
-
 ## Updating the process
 
 The way the agents work is set during setup, but none of it is fixed. You can change it whenever
@@ -1450,6 +1427,40 @@ python arpd/tools/install.py update . --kit <path to the new ARPD folder>
 
 This refreshes ARPD's own files and skills; it never changes your governing documents, code or
 data. (Without Python, use `sh arpd/tools/install.sh update . --kit <path>` instead.)
+
+## Run ARPD on your own idea
+
+The same steps work for a tool of your own: an experiment platform, a simulation, a survey or
+measurement tool, or a data pipeline.
+
+> **This time, take your time.** In the tutorial you could accept ARPD's suggestions with little
+> thought. On your own project, the interview is where the research gets defined: what the tool
+> measures, what its data mean, and what would convince you it works. Read each summary and the
+> blueprint carefully, question readings that don't match what you meant, and audit your own
+> answers before you approve anything. The agents build exactly what you agree to.
+
+1. **Start from a fresh copy.** Clone ARPD into a new folder named for your project (README, *Start
+   here*, step 5), open Claude Code there, and type `/arpd-setup`.
+2. **Describe what you want in your own words:** the question, the tool you think you need, who will
+   use it, and what data it handles. A rough idea is enough; setup draws out the rest. Mention any
+   notes, code or data you already have, and say early if the tool will collect data from people.
+3. **Choose ARPD's role.** *A* builds what you specify. *C* also checks how well the design fits your
+   theory or research question. *D* helps you work out what to build and develops the science behind
+   it with you.
+4. **Work through the phases** and settle what's yours: the rules of the task, what each recorded
+   value means, and what would convince you the tool works. On a real project, answer these
+   yourself.
+5. **Read the project blueprint and adopt it.** Nothing is built before that.
+6. **Plan a small first piece** with `/arpd-plan`, aiming for a first demonstration you can try.
+7. **Check in, try each demonstration yourself, and plan the next piece.**
+
+A first demonstration you can try within a session teaches you more than a long specification, so
+start small.
+
+**Files worth a look in any ARPD project:** `CLAUDE.md` (the team charter the agents work under),
+`DECISIONS.md` (your rulings, word for word), `REQUIREMENTS.md` (each requirement and its evidence),
+`reports/` (the blueprint, the approved plans and the sprint records) and `arpd/docs/GUIDE.md` (the
+full guide).
 
 ## Why a card game?
 
@@ -1526,6 +1537,12 @@ agents tend to produce work that is incomplete or inconsistent, or that passes i
 measuring the wrong thing, and the researchers who most need the help are the least able to spot it.
 
 ### How it works
+
+Most people meet AI in *chat mode*: you send a message and read the reply. Coding agents such as
+Claude Code work in *agentic mode*: given a goal, they read and edit files, run commands and tests,
+look at what happened, and keep going until the task is done or they need you. That is what lets
+them build software, and also why it matters who decides what. ARPD gives that agentic work a
+structure.
 
 ARPD treats the researcher as the leader of a small team of agents, and borrows from research on
 teams: team charters (Mathieu & Rapp, 2009), team processes (Marks et al., 2001) and team leadership
@@ -1620,12 +1637,24 @@ Continue the current sprint under the approved plan.
 
 ## Prompts and blocked commands
 
-- **Permission prompts.** Claude Code asks before it edits files or runs commands. Inside your
-  `spades-demo` folder, choose **Yes**, or the option that allows them for the rest of the session.
+Because Claude Code acts on your computer rather than only answering questions, it has safeguards.
+It asks before it edits files or runs commands, and it watches for actions that could cause harm,
+such as deleting files, reaching outside the project, or anything resembling misuse. Now and then
+these safeguards block an ordinary command too. How often you're asked depends on your Claude Code
+settings and your computer, so some people will see many prompts and others few.
+
+- **Permission prompts.** Inside your `spades-demo` folder, choose **Yes**, or the option that allows
+  that kind of action for the rest of the session, which cuts down repeat prompts.
 - **A request outside the folder.** If it asks about files or folders you didn't expect, choose
   **No** and ask ARPD why.
-- **A command is blocked by Claude Code's safety check.** ARPD gives you a one-line command starting
-  with `!`. Paste it at the prompt and press Enter; it runs in your terminal, under your control.
+- **A command blocked by a safety check.** ARPD gives you a one-line command starting with `!`. Paste
+  it at the prompt and press Enter; it runs in your terminal, under your control.
+- **The same block keeps coming back.** Ask ARPD to record a project rule that steers the agents
+  away from that approach, for example `/arpd-amend Never delete files; move them to an archive
+  folder instead.` The rule goes into the team charter, `CLAUDE.md`, which the agents read at the
+  start of every session.
+- **Suggested replies.** Claude Code sometimes shows a greyed-out suggested reply in the prompt. Press
+  **Tab** or **→** to accept it, then **Enter**.
 - **You want to stop something.** Press **Esc** to interrupt, then tell ARPD what you want instead.
   Nothing it has already saved is lost.
 
@@ -1673,6 +1702,9 @@ Claude Code lets you choose the model and how much effort it puts into each step
 - **For your own projects,** Sonnet or Opus at medium or high effort is usually a good choice. Opus
   and higher effort cost more, but they think more carefully, which matters when the agents are
   building a research instrument you will rely on.
+- **If you plan and build in separate sessions,** give planning the more capable setting. Setup and
+  planning are where the judgement lies, and a well-specified plan can usually be built at a lower
+  setting, unless the build itself is unusually intricate.
 - **For a demonstration like this tutorial,** Sonnet at low effort works well and keeps it quick and
   inexpensive.
 
@@ -1697,42 +1729,44 @@ In a session that's already running, type `/model` or `/effort` and pick from th
 
 ## Other AI tools
 
-ARPD is developed and tested with **Claude Code**, and this tutorial assumes it. Its instructions are
-plain text files, though, so other coding agents that can read files, edit them and run commands in a
-folder (for example OpenAI's Codex, Google's Gemini CLI, or an editor such as Cursor, with models
-such as GPT, Gemini or DeepSeek) should be able to follow them. We have not tested them.
+AI models are used in two broad ways. In **chat mode** you send a prompt and get a response back, as
+on the ChatGPT, Claude or DeepSeek websites. In **agentic mode** the model works inside a tool that
+lets it read and write files, run code, and act on its own toward a goal, checking in with you along
+the way. ARPD needs agentic mode: its agents write the project's documents and code themselves, and
+run the tests.
 
-What differs:
+ARPD is developed and tested with **Claude Code**, and this tutorial assumes it. Its instructions
+are plain text files, so other agentic coding tools should be able to follow them, for example
+OpenAI's Codex, Google's Gemini CLI, GitHub Copilot's agent mode, or an editor such as Cursor, with
+whichever model they use. We haven't tested them. What differs:
 
-- **Starting setup.** The `/arpd-setup`, `/arpd-plan`, `/arpd-checkin` and `/arpd-amend` commands are
-  Claude Code skills. In another tool, ask the agent to read and follow the skill file instead:
+- **Starting setup.** The `/arpd-…` commands are Claude Code skills. In another tool, ask the agent
+  to read and follow the skill file instead:
 
 ```text
 Read .claude/skills/arpd-setup/SKILL.md and follow it exactly.
 ```
 
-- **Instructions on start-up.** Claude Code reads `CLAUDE.md` automatically. Many other tools read
+- **Instructions on start-up.** Claude Code reads `CLAUDE.md` automatically; many other tools read
   `AGENTS.md`, which ARPD also provides and which points to the same charter.
-- **Event logging.** ARPD's activity log uses Claude Code hooks, so it won't run elsewhere. Nothing
-  else depends on it.
+- **ARPD's activity log** relies on Claude Code's hooks, so it won't run elsewhere. Nothing else
+  depends on it.
 - **Approvals and permissions** look different in each tool. The three approvals (the blueprint, the
   plan, the start of the build) still come from you, in your own words.
 
-A chat window without access to your files, such as the ChatGPT or DeepSeek website, can't run ARPD:
-it needs an agent that works directly in the project folder.
-
 ## No Python
 
-ARPD's own small tools are written in Python, but ARPD works without it, with a few things lost:
+**You don't need Python to use ARPD.** ARPD includes a few diagnostic tools that do need it: an
+activity log that times the agents' work and lets you compare how they are functioning, and
+automatic checks of the blueprint and the governing documents. Without Python, ARPD skips the log
+and checks those documents by reading them instead, and tells you so. Everything else (the
+interview, the blueprint, planning, building, check-ins and amendments) works the same. Setup
+prepares the folder with a shell script instead; on Windows that needs Git Bash, which comes with Git
+for Windows.
 
-- **Setup still prepares the folder,** using a shell script instead (`sh arpd/tools/install.sh`). On
-  Windows this needs Git Bash, which comes with Git for Windows.
-- **The automatic checks are replaced by read-throughs:** ARPD checks the blueprint and the governing
-  documents by reading them, which is less thorough. It tells you when it does this.
-- **There is no activity log.** Everything else (the interview, the blueprint, planning, check-ins and
-  amendments) works the same.
+**The game can be written in any language.** This tutorial suggests Python only because it is common
+and includes a window toolkit. To use another language, change one sentence of the brief, "Use
+Python with its built-in Tkinter and no other packages", to the language you'd rather use, for
+example "Use R". The steps are the same; only the command that starts the game will differ.
 
-The game itself is a separate matter: this tutorial builds it in Python. Without Python, change one
-sentence of the brief, "Use Python with its built-in Tkinter", to a language you have, for example
-"Use R", and expect the run commands later on to differ. That route is untested. Details are in
-[NO-PYTHON.md](https://github.com/djgriffin13/arpd/blob/main/arpd/docs/NO-PYTHON.md).
+Details are in [NO-PYTHON.md](https://github.com/djgriffin13/arpd/blob/main/arpd/docs/NO-PYTHON.md).
