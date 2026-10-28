@@ -22,13 +22,13 @@ up again by opening Claude Code in the same folder and typing `/arpd-checkin`.
 > Accepting every recommendation unread is how agent-built research tools go wrong.
 
 The example is deliberately simple. As you go, you might think about a tool your own research could
-use; the last page, [Your own project](#your-own-project), describes how to start one. The tutorial is
+use; the [Next steps](#next-steps) page describes how to start one. The tutorial is
 also available as a searchable web page:
 [TUTORIAL.html](https://djgriffin13.github.io/arpd/TUTORIAL.html).
 
 ## Before you begin
 
-1. Follow **Start here** in the [README](README.md) to install Git, Claude Code and Python, and to
+1. Follow **Start here** in the [README](https://github.com/djgriffin13/arpd/blob/main/README.md) to install Git, Claude Code and Python, and to
    clone ARPD into a folder named `spades-demo`.
 2. Open a terminal in that folder and start Claude Code with Sonnet at low effort. That is enough for
    this demo, and it is faster and cheaper:
@@ -1291,6 +1291,85 @@ This is the first demonstration, and a good place to pause and look. "Go on" let
 
 </details>
 
+## Next steps
+
+**Finish the first version.** When you tell ARPD the demonstration works, the agents carry on with
+the rest of the plan (the scores, the hand summary, the play log) and stop again when that's done.
+ARPD also writes a short checklist, `reports/WALKTHROUGH-M1.md`, for you to go through. Only your
+check, not the agents', marks the first version as done.
+
+### Find a new direction
+
+Once the game works, look at it as a research tool and ask what you could learn with it. A few
+directions it could take:
+
+- **An experimental condition.** Give the computer partner two strategies, assign one per game, and
+  compare the play logs.
+- **People playing together.** Networked play, so four people play as two teams.
+- **Communication.** A chat channel between partners, logged alongside the play.
+- **New measures.** Hesitation before a bid, how often a partner's lead is followed, or how bids
+  change after a failed contract.
+- **A different kind of partner,** such as a computer partner driven by a language model.
+
+For each, ask the questions setup asked you: what is it for, what would convince you it works, and
+what does each new piece of data mean? Those answers are yours to give, and they are what ARPD will
+ask about.
+
+### Plan it and run it
+
+Each new direction is another round of the same loop:
+
+1. **Plan it.** Type `/arpd-plan` and describe the goal in a sentence or two (an example follows).
+2. **Approve and start.** ARPD reviews where the project stands, sizes the work, drafts a plan, and
+   asks you to approve that version and say when to start.
+3. **Let the agents build it,** as in the Build stage. They stop for any decision that's yours.
+4. **Try it,** and tell ARPD what you see.
+
+For example, after typing `/arpd-plan`:
+
+```text
+Add a second strategy for the computer partner that always leads trumps when it can. Let me choose
+the strategy at the start of each game, and record which one was used in the play log.
+```
+
+To change something already decided (a game rule, a requirement, or what the agents may do on their
+own), use `/arpd-amend`, for example:
+
+```text
+From now on, a team loses 100 points for every 5 bags instead of every 10.
+```
+
+ARPD records your words as a ruling and updates the governing documents. At any point,
+`/arpd-checkin` shows where things stand and what needs you.
+
+### Start your own project
+
+The same steps work for a tool of your own: an experiment platform, a simulation, a survey or
+measurement tool, or a data pipeline.
+
+1. **Start from a fresh copy.** Clone ARPD into a new folder named for your project (README, *Start
+   here*, step 5), open Claude Code there, and type `/arpd-setup`.
+2. **Describe what you want in your own words:** the question, the tool you think you need, who will
+   use it, and what data it handles. A rough idea is enough; setup draws out the rest. Mention any
+   notes, code or data you already have, and say early if the tool will collect data from people.
+3. **Choose ARPD's role.** *A* builds what you specify. *C* also checks how well the design fits your
+   theory or research question. *D* helps you work out what to build and develops the science behind
+   it with you.
+4. **Work through the phases** and settle what's yours: the rules of the task, what each recorded
+   value means, and what would convince you the tool works. On a real project, answer these
+   yourself.
+5. **Read the project blueprint and adopt it.** Nothing is built before that.
+6. **Plan a small first piece** with `/arpd-plan`, aiming for a first demonstration you can try.
+7. **Check in, try each demonstration yourself, and plan the next piece.**
+
+A first demonstration you can try within a session teaches you more than a long specification, so
+start small.
+
+**Files worth a look in any ARPD project:** `CLAUDE.md` (the team charter the agents work under),
+`DECISIONS.md` (your rulings, word for word), `REQUIREMENTS.md` (each requirement and its evidence),
+`reports/` (the blueprint, the approved plans and the sprint records) and `arpd/docs/GUIDE.md` (the
+full guide).
+
 ## Stuck? Resume and troubleshooting
 
 **If ARPD seems to have stopped,** go down this list:
@@ -1320,33 +1399,79 @@ Continue the current sprint under the approved plan.
 | You've hit a usage limit | Wait for it to reset, then run `claude` and `/arpd-checkin` |
 | ARPD asks something you don't understand | Ask: `What does that mean, and what do you recommend?` |
 
-## Your own project
+## About ARPD
 
-The same steps work for a tool of your own: an experiment platform, a simulation, a survey or
-measurement tool, a data pipeline, or an extension of this game.
+ARPD stands for **Agentic Research Paradigm Development**. It is a framework and toolkit for
+researchers who want AI coding agents to build the research tools their questions need, while the
+researcher keeps authority over the science.
 
-1. **Start from a fresh copy.** Clone ARPD into a new folder named for your project (README, *Start
-   here*, step 5), open Claude Code there, and type `/arpd-setup`.
-2. **Describe what you want in your own words:** the question, the tool you think you need, who will
-   use it, and what data it handles. A rough idea is enough; setup draws out the rest. Mention any
-   notes, code or data you already have, and say early if the tool will collect data from people.
-3. **Choose ARPD's role.** *A* builds what you specify. *C* also checks how well the design fits your
-   theory or research question. *D* helps you work out what to build, and develops the science behind
-   it with you.
-4. **Work through the phases.** Settle what's yours: the rules of the task, what each recorded value
-   means, and what would convince you the tool works. On a real project, answer these yourself.
-5. **Read the project blueprint and adopt it.** Nothing is built before that.
-6. **Plan a small first piece** with `/arpd-plan`, aiming for a first demonstration you can try.
-   Approve the plan, then start.
-7. **Check in and review.** `/arpd-checkin` shows where things stand. Try each demonstration
-   yourself. Use `/arpd-amend` to change a ruling or the charter, and `/arpd-plan` for the next
-   piece.
+### Why it exists
 
-**Start small.** A first demonstration you can try within a session teaches you more than a long
-specification. For example, turn this game into a small experiment: give the computer partner two
-strategies, assign one per game as the condition, and compare the play logs.
+The questions researchers can ask are bounded by the tools they have to study them. Methods shape
+theory (Gigerenzer, 1991; Greenwald, 2012), and new research paradigms open questions that older
+ones could not reach. But building, validating and maintaining a new paradigm (an experiment
+platform, a measurement system, a computational model) is slow, costly and risky, and the cost
+usually falls on individual researchers. In March's (1991) terms, building a new paradigm is
+exploration, with uncertain and distant returns, while using an established one is exploitation,
+with predictable and immediate ones. So researchers often stay with tools whose limits they know
+well.
 
-**Files worth a look afterwards:** `CLAUDE.md` (the team charter the agents work under),
-`DECISIONS.md` (your rulings, word for word), `REQUIREMENTS.md` (each requirement and its evidence),
-`reports/` (the blueprint, the approved plan and the sprint records) and `arpd/docs/GUIDE.md` (the
-full guide).
+AI coding agents can lower the cost of that exploration. A researcher can now direct agents to build
+and revise an instrument they could not build alone or afford to commission. Left unguided, though,
+agents tend to produce work that is incomplete or inconsistent, or that passes its own checks while
+measuring the wrong thing, and the researchers who most need the help are the least able to spot it.
+
+### How it works
+
+ARPD treats the researcher as the leader of a small team of agents, and borrows from research on
+teams: team charters (Mathieu & Rapp, 2009), team processes (Marks et al., 2001) and team leadership
+(Morgeson et al., 2010). In practice that means:
+
+- **A charter and governing documents** that set out the goals, the design, who decides what, and how
+  work is checked, adapted to each project during setup.
+- **Decision authority by subject.** Agents handle the engineering. The rules of the task, what the
+  data mean, and the scope stay with the researcher, and ARPD stops to ask about them.
+- **Approvals at the points that matter:** the blueprint, each plan, and the start of the build.
+- **Independent checking.** A reviewer agent that did not write the code checks each change, tests run
+  without anyone present, and each requirement is marked as implemented, verified or validated.
+- **A record you can audit:** your rulings in your own words, versioned plans, and sprint records.
+
+### What's in the kit
+
+- **Four Claude Code skills:** `/arpd-setup` (the interview and the blueprint), `/arpd-plan`,
+  `/arpd-checkin` and `/arpd-amend`.
+- **A charter, templates and modules** that setup adapts to each project.
+- **Small tools** that check the governing documents and the blueprint, and log events.
+
+### Where it stands
+
+ARPD is a release candidate. Its workflow has been exercised in scripted test runs, including the
+25 runs behind this tutorial, six of which built this game up to a clickable demonstration, and in
+walkthroughs by its authors. It has not yet been evaluated with researchers who did not build it,
+and its benefits are proposed rather than demonstrated. The next step is a study with organizational
+researchers using it on their own questions. Known limits are listed in
+[LIMITATIONS.md](https://github.com/djgriffin13/arpd/blob/main/docs/LIMITATIONS.md).
+
+### Learn more
+
+- [README](https://github.com/djgriffin13/arpd/blob/main/README.md): what ARPD is, and how to install it.
+- [GUIDE.md](https://github.com/djgriffin13/arpd/blob/main/arpd/docs/GUIDE.md): the full guide for researchers.
+- [DESIGN-RATIONALE.md](https://github.com/djgriffin13/arpd/blob/main/docs/DESIGN-RATIONALE.md): each mechanism and the research it draws on.
+- [LIMITATIONS.md](https://github.com/djgriffin13/arpd/blob/main/docs/LIMITATIONS.md): what ARPD does and doesn't establish.
+- [CITATION.cff](https://github.com/djgriffin13/arpd/blob/main/CITATION.cff): how to cite ARPD.
+
+**References**
+
+- Gigerenzer, G. (1991). From tools to theories: A heuristic of discovery in cognitive psychology.
+  *Psychological Review, 98*(2), 254–267.
+- Greenwald, A. G. (2012). There is nothing so theoretical as a good method. *Perspectives on
+  Psychological Science, 7*(2), 99–108.
+- March, J. G. (1991). Exploration and exploitation in organizational learning. *Organization
+  Science, 2*(1), 71–87.
+- Marks, M. A., Mathieu, J. E., & Zaccaro, S. J. (2001). A temporally based framework and taxonomy of
+  team processes. *Academy of Management Review, 26*(3), 356–376.
+- Mathieu, J. E., & Rapp, T. L. (2009). Laying the foundation for successful team performance
+  trajectories: The roles of team charters and performance strategies. *Journal of Applied
+  Psychology, 94*(1), 90–103.
+- Morgeson, F. P., DeRue, D. S., & Karam, E. P. (2010). Leadership in teams: A functional approach to
+  understanding leadership structures and processes. *Journal of Management, 36*(1), 5–39.
