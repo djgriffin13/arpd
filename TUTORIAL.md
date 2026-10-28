@@ -178,8 +178,8 @@ The log holds only my own play on this computer, with no names.
 
 Details, so you don't need to ask:
 - Seats go S, W, N, E clockwise; "left of the dealer" is the next seat clockwise.
-- Every bag scores 1 point, including a nil bidder's tricks. A team that misses its bid gets -10 x bid
-  and no bags from that hand. Every full 10 bags costs 100, even several times in one hand.
+- Every bag scores 1 point, including a nil bidder's tricks. Every full 10 bags costs 100, even
+  several times in one hand.
 - A spade led by a player who holds only spades breaks spades.
 - Computer plays pause about 1 second (no pause in tests). With only one legal card, still wait for
   my click.
@@ -450,6 +450,20 @@ A
 
 Every phase ends with a summary. Skim it: if it matches the brief, say yes. A yes only confirms the summary; it adopts nothing.
 
+### Other questions you may see
+
+#### When a team misses its bid, what happens to the nil bidder's tricks?
+
+*ARPD may word it as:* "When a nil bidder takes tricks, or a team misses its bid, does each bag from those tricks score a point?"
+
+**Reply:**
+
+```text
+As my brief says: a nil bidder's tricks always count as bags and score 1 point each, whether or not the team makes its bid.
+```
+
+ARPD checks your rules for contradictions in this phase and asks when two rules seem to disagree.
+
 ## 5 · Setup: rules and data
 
 **Design** settles how the game is built and what its data mean. ARPD proposes a simple design
@@ -457,10 +471,10 @@ Every phase ends with a summary. Skim it: if it matches the brief, say yes. A ye
 anything in the rules or the play log that your brief leaves open.
 
 The brief's *Details* paragraph settles nearly everything ARPD asked about here in our test runs:
-seat order, bag scoring, the pause, timestamps and file names. **Two things are left out on purpose,
-so that you can expect them:** what happens when both partners bid nil (a game rule), and when think
-time starts and stops (what a recorded number means). Both are yours to decide, so ARPD stops and
-asks. Their answers are the first two cards below. About 5 minutes.
+seat order, bag scoring, the pause, timestamps and file names. So Design is now usually short: in our
+runs with this brief, often just "Are you ready to move on?", sometimes a short list of play-log
+defaults to accept. When ARPD does ask about a rule or what a recorded number means, that is because
+those are yours to decide. About 2 minutes.
 
 > **Look here:** game rules and the meaning of the data are *your* decisions, not the agents'. When
 > your brief leaves something open, ARPD asks rather than guesses, and records your answer as a
@@ -469,33 +483,9 @@ asks. Their answers are the first two cards below. About 5 minutes.
 
 ### Typical questions, in the usual order
 
-#### 1. What happens when both partners on a team bid nil?
+#### 1. Do you accept these readings / defaults? (a short numbered list)
 
-*ARPD may word it as:* "What should happen when both players on a team bid nil?"
-
-**Reply:**
-
-```text
-Score each nil on its own: +100 or -100 for each partner. The team's bid is 0, so there are no 10 x bid points, and all their tricks count as bags.
-```
-
-Left out of the brief on purpose. How the game is scored is your decision, so ARPD stops and asks rather than picking a rule itself. It may ask this on its own, or include it in a list of readings for you to accept; either way, this is the answer.
-
-#### 2. When does think time start and stop?
-
-*ARPD may word it as:* "Sometimes you will have exactly one legal card to play"
-
-**Reply:**
-
-```text
-From when my bid buttons or legal cards become active to my click, in seconds to two decimals.
-```
-
-Also left out on purpose: this is about what a recorded number means. In a real study this is where measurement validity is decided (does think time include the computers' pause? the animation?), and ARPD treats it as yours to decide, never the agents'.
-
-#### 3. Do you accept these readings / defaults? (a numbered list)
-
-*ARPD may word it as:* "Do these seven scoring readings match your rules?" / "Do these eight log details match what you want?" / "Do you accept these six log defaults?" / "Are these eight log details right?"
+*ARPD may word it as:* "Do these seven scoring readings match your rules?" / "Do these eight log details match what you want?" / "Do you accept these six log defaults?" / "Are these eight log details right?" / "Do these log conventions suit how you'll study your play?" / "Do these five defaults work for the log?" / "Do you accept this design?"
 
 **Reply:**
 
@@ -509,15 +499,15 @@ Yes, accept them all as proposed.
 A
 ```
 
-ARPD lists how it will read anything still open and asks you to accept them in one go. With the details in the brief this list is short; check that it matches the brief.
+ARPD lists how it will read anything the brief still leaves open (often small play-log details) and asks you to accept them in one go. Check that the list matches the brief. With the brief's Details paragraph, it may not appear at all.
 
 <details><summary>Example from a real run</summary>
 
-![Do you accept these readings / defaults? (a numbered list)](docs/tutorial/q-09-readings.png)
+![Do you accept these readings / defaults? (a short numbered list)](docs/tutorial/q-09-readings.png)
 
 </details>
 
-#### 4. Are you ready to move on from the design?
+#### 2. Are you ready to move on from the design?
 
 *ARPD may word it as:* "Are you ready to move on from the design to how the agents will build it, or would you like to explore or revise any part first?" / "Are you ready to move on from the design to how the agents will build it, or would you like to explore or revise any part of the design first?"
 
@@ -527,9 +517,9 @@ ARPD lists how it will read anything still open and asks you to accept them in o
 A
 ```
 
-Choose the option that continues to Development.
+Choose the option that continues to Development. This is often the only Design question.
 
-#### 5. Is this summary of Design right?
+#### 3. Is this summary of Design right?
 
 *ARPD may word it as:* "Is this summary of Design right, and is the design ready to move to Development?" / "Is this summary of Design right, and are you ready to move on?"
 
@@ -548,6 +538,52 @@ A
 Every phase ends with a summary. Skim it: if it matches the brief, say yes. A yes only confirms the summary; it adopts nothing.
 
 ### Other questions you may see
+
+#### When does think time start and stop? (or: how precise should think_seconds be?)
+
+*ARPD may word it as:* "Sometimes you will have exactly one legal card to play"
+
+**Reply:**
+
+```text
+From when my bid buttons or legal cards become active to my click, in seconds to two decimals.
+```
+
+This is about what a recorded number means: in a real study, where measurement validity is decided. ARPD may ask, or propose an answer for you to accept.
+
+#### What happens when both partners on a team bid nil?
+
+*ARPD may word it as:* "What should happen when both players on a team bid nil?"
+
+**Reply:**
+
+```text
+Score each nil on its own: +100 or -100 for each partner. The team's bid is 0, so there are no 10 x bid points, and all their tricks count as bags.
+```
+
+ARPD may ask, or settle this itself with the traditional rule and list it for you to accept.
+
+#### After the fourth card, what should the table do?
+
+*ARPD may word it as:* "After the fourth card, what should the table do?"
+
+**Reply:**
+
+```text
+Use your recommendation: keep the trick on the table for a moment, then clear it.
+```
+
+#### Which part of the design would you like to explore or change?
+
+*ARPD may word it as:* "Which part of the design would you like to explore or change, and what do you have in mind?"
+
+**Reply:**
+
+```text
+None. Continue to Development.
+```
+
+This follows if you chose to revise the design; if you didn't mean to, just continue.
 
 #### Another question about one rule detail
 
@@ -996,14 +1032,22 @@ The third answer that commits you: this starts the build. The letters differ bet
 
 ### Other questions you may see
 
-#### Does this scope match what you want?
+#### Does this scope (or this series of sprints) match what you want?
 
-*ARPD may word it as:* "Does this scope match what you want for the first sprint?" / "Does this scope match what you want for the first plan?"
+*ARPD may word it as:* "Does this scope match what you want for the first sprint?" / "Does this scope match what you want for the first plan?" / "Does this scope match what you want?"
 
 **Reply:**
 
 ```text
 Yes.
+```
+
+#### Is there a deadline or timeline?
+
+**Reply:**
+
+```text
+None.
 ```
 
 #### How do you want to answer the decisions the plan raised?
