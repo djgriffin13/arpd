@@ -22,23 +22,59 @@ up again by opening Claude Code in the same folder and typing `/arpd-checkin`.
 > Accepting every recommendation unread is how agent-built research tools go wrong.
 
 The example is deliberately simple. As you go, you might think about a tool your own research could
-use; the [Next steps](#next-steps) page describes how to start one. The tutorial is
-also available as a searchable web page:
-[TUTORIAL.html](https://djgriffin13.github.io/arpd/TUTORIAL.html).
+use; [Next steps](#next-steps) describes how to start one. If you're wondering why the example is a
+card game, see [Why a card game?](#why-a-card-game) under Background. For the whole process on one page,
+see the diagram in [About ARPD](#about-arpd).
 
-## Before you begin
+The tutorial is also available as a searchable web page:
+[TUTORIAL.html](https://djgriffin13.github.io/arpd/TUTORIAL.html). Next: **Install and launch**.
 
-1. Follow **Start here** in the [README](https://github.com/djgriffin13/arpd/blob/main/README.md) to install Git, Claude Code and Python, and to
-   clone ARPD into a folder named `spades-demo`.
-2. Open a terminal in that folder and start Claude Code with Sonnet at low effort. That is enough for
-   this demo, and it is faster and cheaper:
+**Contents**
+
+- **Getting started**
+  - [Install and launch](#install-and-launch)
+  - [How to answer](#how-to-answer)
+- **Setup interview**
+  - [Setup interview](#setup-interview)
+  - [Setup 1 · Intake](#setup-1--intake)
+  - [Setup 2 · Objectives](#setup-2--objectives)
+  - [Setup 3 · Constraints](#setup-3--constraints)
+  - [Setup 4 · Design](#setup-4--design)
+  - [Setup 5 · Development](#setup-5--development)
+  - [Setup 6 · Blueprint](#setup-6--blueprint)
+- **Build the game**
+  - [Plan](#plan)
+  - [Build](#build)
+  - [Try the game](#try-the-game)
+- [Next steps](#next-steps)
+- **Background**
+  - [Why a card game?](#why-a-card-game)
+  - [About ARPD](#about-arpd)
+- **Help**
+  - [Stuck or interrupted](#stuck-or-interrupted)
+  - [Installing and launching](#installing-and-launching)
+  - [Prompts and blocked commands](#prompts-and-blocked-commands)
+  - [Changing your mind](#changing-your-mind)
+  - [Problems with the game](#problems-with-the-game)
+  - [Starting over](#starting-over)
+  - [Usage limits and cost](#usage-limits-and-cost)
+
+## Install and launch
+
+Follow **Start here** in the [README](https://github.com/djgriffin13/arpd/blob/main/README.md) to install Git, Claude Code and Python, and to
+clone ARPD into a folder named `spades-demo`. On the web page, the same steps follow here.
+
+### For this tutorial
+
+Start Claude Code with Sonnet at low effort, which is enough for this demo and is faster and
+cheaper. In your `spades-demo` folder, type this instead of plain `claude`:
 
 ```text
 claude --model sonnet --effort low
 ```
 
-3. Keep this tutorial open in your browser rather than in the folder. Early in setup, ARPD turns the
-   folder into your project and moves its own files, including this one, into a backup folder.
+Keep this tutorial open in your browser rather than in the folder. Early in setup, ARPD turns the
+folder into your project and moves its own files, including this one, into a backup folder.
 
 ## How to answer
 
@@ -78,63 +114,29 @@ Claude Code also asks permission before it edits files or runs commands. Inside 
 folder, choose **Yes**, or the option that allows them for the rest of the session. If it asks about
 anything outside that folder that you didn't expect, choose **No** and ask ARPD why.
 
-## Why a card game?
+## Setup interview
 
-The game is stylized, but games are an established way to study coordination and teamwork under
-controlled conditions. A recent review catalogued 103 testbeds, many of them games, used across 235
-empirical studies of human–agent teams (Chung et al., 2026). Organizational researchers have long
-used simple laboratory tasks the same way: Weber and Camerer (2003) studied culture clash with small
-laboratory "firms" that built up their own way of working on a shared task and were then merged.
+Setup is an interview in five phases: **Intake, Objectives, Constraints, Design and Development**.
+Each ends with a summary for you to confirm. Then ARPD writes the **project blueprint**, one document
+with everything you agreed, for you to adopt. Nothing gets built during setup, which takes 20 to 30
+minutes.
 
-Card games in particular have served as research environments. Spades itself has been used to build
-computer players that imitate how people play (Baier et al., 2019). The cooperative card game Hanabi
-became a standard test of teamwork under hidden information (Bard et al., 2020), and in a study of
-human–AI teams playing it, people preferred a rule-based computer partner to a learned one even
-though their scores did not differ (Siu et al., 2021). In Codenames, an AI assistant helped players'
-individual thinking but got in the way of the team building a shared understanding (Sidji et al.,
-2024). Spades is not Hanabi: its partnerships compete against each other rather than all playing
-together. But it shares the features that matter here:
+A progress line at the end of ARPD's messages shows which phase you're in, for example:
 
-- **Exact rules** the software must follow, which only you can settle when they're unclear.
-- **Artificial agents**, the computer players, whose behaviour you specify, so it can be checked.
-- **A team task.** Partners commit to a joint goal, the team's bid, and must coordinate without
-  talking, each seeing only their own cards.
-- **Behavioural data:** every decision is recorded, along with how long you took to make it.
+**SETUP**  ✅ Intake → ✅ Objectives → 🔵 Constraints → ⚪ Design → ⚪ Development → ⚪ Blueprint
 
-From here it's a short step to studying people together: networked play with four people in two
-teams, human–AI teams where the computer partner's strategy is the experimental condition, a chat
-channel between partners, or new measures in the play log. Each would be another round of the same
-steps with ARPD. Building this game shows the process working on one bounded project; it isn't
-evidence that ARPD suits every research tool.
+The next six pages follow the phases in order:
 
-**References**
-
-- Baier, H., Sattaur, A., Powley, E. J., Devlin, S., Rollason, J., & Cowling, P. I. (2019). Emulating
-  human play in a leading mobile card game. *IEEE Transactions on Games, 11*(4).
-  https://doi.org/10.1109/TG.2018.2835764
-- Bard, N., Foerster, J. N., Chandar, S., Burch, N., Lanctot, M., Song, H. F., … Bowling, M. (2020).
-  The Hanabi challenge: A new frontier for AI research. *Artificial Intelligence, 280*, 103216.
-  https://doi.org/10.1016/j.artint.2019.103216
-- Chung, H., Holder, T., Shah, J. A., & Yang, X. J. (2026). A systematic review and taxonomy of
-  human–agent teaming testbeds. *Human Factors*. https://doi.org/10.1177/00187208251376898 (online
-  2025)
-- Sidji, M., Smith, W., & Rogerson, M. J. (2024). Human-AI collaboration in cooperative games: A study
-  of playing Codenames with an LLM assistant. *Proceedings of the ACM on Human-Computer Interaction,
-  8*(CHI PLAY), Article 316. https://doi.org/10.1145/3677081
-- Siu, H. C., Peña, J., Chen, E., Zhou, Y., Lopez, V., Palko, K., Chang, K., & Allen, R. (2021).
-  Evaluation of human-AI teams for learned and rule-based agents in Hanabi. *Advances in Neural
-  Information Processing Systems, 34*, 16183–16195.
-- Weber, R. A., & Camerer, C. F. (2003). Cultural conflict and merger failure: An experimental
-  approach. *Management Science, 49*(4), 400–415. https://doi.org/10.1287/mnsc.49.4.400.14430
+1. [Intake](#setup-1--intake): who you are, what you want to build, and where it will live.
+2. [Objectives](#setup-2--objectives): what the game is for and what would convince you it works.
+3. [Constraints](#setup-3--constraints): the limits the work must respect.
+4. [Design](#setup-4--design): how it's built and what its data mean.
+5. [Development](#setup-5--development): how the agents will work.
+6. [Blueprint](#setup-6--blueprint): the document you adopt, and what happens next.
 
 ## Setup 1 · Intake
 
 *You'll see:* **SETUP**  🔵 Intake → ⚪ Objectives → ⚪ Constraints → ⚪ Design → ⚪ Development → ⚪ Blueprint
-
-Setup is an interview in five phases: **Intake, Objectives, Constraints, Design and
-Development**. Each ends with a summary for you to confirm. Then ARPD writes the **project
-blueprint** for you to adopt. The next six pages follow these steps. Nothing gets built during
-setup, which takes 20 to 30 minutes.
 
 **To start,** type:
 
@@ -1370,34 +1372,54 @@ start small.
 `reports/` (the blueprint, the approved plans and the sprint records) and `arpd/docs/GUIDE.md` (the
 full guide).
 
-## Stuck? Resume and troubleshooting
+## Why a card game?
 
-**If ARPD seems to have stopped,** go down this list:
+The game is stylized, but games are an established way to study coordination and teamwork under
+controlled conditions. A recent review catalogued 103 testbeds, many of them games, used across 235
+empirical studies of human–agent teams (Chung et al., 2026). Organizational researchers have long
+used simple laboratory tasks the same way: Weber and Camerer (2003) studied culture clash with small
+laboratory "firms" that built up their own way of working on a shared task and were then merged.
 
-1. **Is something still running?** Tool output, a spinner, ⏳ WORKING or "Waiting for … background
-   agent" mean wait.
-2. **Did it ask you something?** Look for a ❓ 🔘 ✋ block at the end of its last message and find the
-   matching card.
-3. **It stopped mid-task without a question:** type `continue`.
-4. **Still stuck:** type
+Card games in particular have served as research environments. Spades itself has been used to build
+computer players that imitate how people play (Baier et al., 2019). The cooperative card game Hanabi
+became a standard test of teamwork under hidden information (Bard et al., 2020), and in a study of
+human–AI teams playing it, people preferred a rule-based computer partner to a learned one even
+though their scores did not differ (Siu et al., 2021). In Codenames, an AI assistant helped players'
+individual thinking but got in the way of the team building a shared understanding (Sidji et al.,
+2024). Spades is not Hanabi: its partnerships compete against each other rather than all playing
+together. But it shares the features that matter here:
 
-```text
-Continue the current sprint under the approved plan.
-```
+- **Exact rules** the software must follow, which only you can settle when they're unclear.
+- **Artificial agents**, the computer players, whose behaviour you specify, so it can be checked.
+- **A team task.** Partners commit to a joint goal, the team's bid, and must coordinate without
+  talking, each seeing only their own cards.
+- **Behavioural data:** every decision is recorded, along with how long you took to make it.
 
-5. **Not sure where things stand:** type `/arpd-checkin`. It lists what's done, in progress and
-   waiting, and gives you the exact next prompt.
-6. **The session is gone** (closed, crashed, or out of usage): start Claude Code again in the same
-   folder with `claude --model sonnet --effort low`, type `/arpd-checkin`, and follow its next step.
+From here it's a short step to studying people together: networked play with four people in two
+teams, human–AI teams where the computer partner's strategy is the experimental condition, a chat
+channel between partners, or new measures in the play log. Each would be another round of the same
+steps with ARPD. Building this game shows the process working on one bounded project; it isn't
+evidence that ARPD suits every research tool.
 
-| Problem | What to do |
-|---|---|
-| `claude` isn't found | Open a new terminal window; see the README, step 3 |
-| The game window doesn't open | Run the Tkinter check in the README, step 4 |
-| Claude Code's safety check blocks a command | ARPD gives you a one-line command starting with `!`; paste it and press Enter |
-| Nothing happens for 10 minutes or more | Close any game window that has opened. If it's still stuck, press **Esc** and type `A command seems to be hanging, possibly a test that opened the game window. Stop it and continue.` |
-| You've hit a usage limit | Wait for it to reset, then run `claude` and `/arpd-checkin` |
-| ARPD asks something you don't understand | Ask: `What does that mean, and what do you recommend?` |
+**References**
+
+- Baier, H., Sattaur, A., Powley, E. J., Devlin, S., Rollason, J., & Cowling, P. I. (2019). Emulating
+  human play in a leading mobile card game. *IEEE Transactions on Games, 11*(4).
+  https://doi.org/10.1109/TG.2018.2835764
+- Bard, N., Foerster, J. N., Chandar, S., Burch, N., Lanctot, M., Song, H. F., … Bowling, M. (2020).
+  The Hanabi challenge: A new frontier for AI research. *Artificial Intelligence, 280*, 103216.
+  https://doi.org/10.1016/j.artint.2019.103216
+- Chung, H., Holder, T., Shah, J. A., & Yang, X. J. (2026). A systematic review and taxonomy of
+  human–agent teaming testbeds. *Human Factors*. https://doi.org/10.1177/00187208251376898 (online
+  2025)
+- Sidji, M., Smith, W., & Rogerson, M. J. (2024). Human-AI collaboration in cooperative games: A study
+  of playing Codenames with an LLM assistant. *Proceedings of the ACM on Human-Computer Interaction,
+  8*(CHI PLAY), Article 316. https://doi.org/10.1145/3677081
+- Siu, H. C., Peña, J., Chen, E., Zhou, Y., Lopez, V., Palko, K., Chang, K., & Allen, R. (2021).
+  Evaluation of human-AI teams for learned and rule-based agents in Hanabi. *Advances in Neural
+  Information Processing Systems, 34*, 16183–16195.
+- Weber, R. A., & Camerer, C. F. (2003). Cultural conflict and merger failure: An experimental
+  approach. *Management Science, 49*(4), 400–415. https://doi.org/10.1287/mnsc.49.4.400.14430
 
 ## About ARPD
 
@@ -1435,6 +1457,10 @@ teams: team charters (Mathieu & Rapp, 2009), team processes (Marks et al., 2001)
 - **Independent checking.** A reviewer agent that did not write the code checks each change, tests run
   without anyone present, and each requirement is marked as implemented, verified or validated.
 - **A record you can audit:** your rulings in your own words, versioned plans, and sprint records.
+
+The whole process on one page (click to enlarge on the web page):
+
+![The ARPD process: setup, sprint planning, execution, and steering and upkeep](docs/images/arpd-process.png)
 
 ### What's in the kit
 
@@ -1475,3 +1501,98 @@ researchers using it on their own questions. Known limits are listed in
   Psychology, 94*(1), 90–103.
 - Morgeson, F. P., DeRue, D. S., & Karam, E. P. (2010). Leadership in teams: A functional approach to
   understanding leadership structures and processes. *Journal of Management, 36*(1), 5–39.
+
+## Stuck or interrupted
+
+**If ARPD seems to have stopped,** go down this list:
+
+1. **Is something still running?** Tool output, a spinner, ⏳ WORKING or "Waiting for … background
+   agent" mean wait.
+2. **Did it ask you something?** Look for a ❓ 🔘 ✋ block at the end of its last message and find the
+   matching card.
+3. **It stopped mid-task without a question:** type `continue`.
+4. **Still stuck:** type
+
+```text
+Continue the current sprint under the approved plan.
+```
+
+5. **Not sure where things stand:** type `/arpd-checkin`. It lists what's done, in progress and
+   waiting, and gives you the exact next prompt.
+6. **The session is gone** (closed, crashed, or out of usage): start Claude Code again in the same
+   folder with `claude --model sonnet --effort low`, type `/arpd-checkin`, and follow its next step.
+
+## Installing and launching
+
+- **`claude` isn't found.** Open a new terminal window after installing; the installer only updates
+  new ones. If it still isn't found, see Anthropic's
+  [installation troubleshooting](https://code.claude.com/docs/en/troubleshoot-install).
+- **Claude Code won't let you in.** It needs a paid Claude plan (Pro, Max, Team or Enterprise) or a
+  Claude Console account; the free plan doesn't include it.
+- **Git complains about your name or email.** Run the two `git config` commands in the README's
+  Start here, step 2.
+- **The Tkinter test window doesn't open.** Your Python was installed without it. On Linux, install
+  `python3-tk`; with Homebrew on a Mac, `python-tk`; elsewhere, reinstall Python from python.org.
+- **You downloaded a ZIP instead of cloning.** That's fine: unzip it, open a terminal in that folder,
+  and carry on. ARPD handles both.
+- **Your folder is in OneDrive, Dropbox or a path with spaces.** Syncing can lock files while the
+  agents work. If you see odd file errors, move the folder somewhere local, such as your Documents
+  folder outside any synced area.
+
+## Prompts and blocked commands
+
+- **Permission prompts.** Claude Code asks before it edits files or runs commands. Inside your
+  `spades-demo` folder, choose **Yes**, or the option that allows them for the rest of the session.
+- **A request outside the folder.** If it asks about files or folders you didn't expect, choose
+  **No** and ask ARPD why.
+- **A command is blocked by Claude Code's safety check.** ARPD gives you a one-line command starting
+  with `!`. Paste it at the prompt and press Enter; it runs in your terminal, under your control.
+- **You want to stop something.** Press **Esc** to interrupt, then tell ARPD what you want instead.
+  Nothing it has already saved is lost.
+
+## Changing your mind
+
+- **During the interview.** Just say so, for example "Actually, I'd like the game to go to 300
+  points." ARPD updates its notes, and a phase summary can be corrected before you confirm it.
+- **Before adopting the blueprint or approving a plan.** Say what's wrong instead of approving. ARPD
+  revises it and asks again.
+- **After adoption.** Use `/arpd-amend` and state the change, for example "From now on, a team loses
+  100 points for every 5 bags." ARPD records your words as a ruling and updates the documents.
+- **During the build.** Press **Esc**, then say what you want changed. For anything bigger than a fix,
+  ARPD will suggest planning it as a new piece of work with `/arpd-plan`.
+
+## Problems with the game
+
+- **The window doesn't open.** Run the Tkinter check from the README, step 4. If that works, tell
+  ARPD the exact error message.
+- **Nothing happens for 10 minutes or more during the build.** A test may have opened the game window
+  and be waiting for a click. Close any game window, and if it's still stuck, press **Esc** and type:
+
+```text
+A command seems to be hanging, possibly a test that opened the game window. Stop it and continue.
+```
+
+- **Card symbols show as boxes.** Ask ARPD to show suits as letters (S, H, D, C) instead.
+- **The game breaks a rule, or scores something wrong.** Tell ARPD what you saw, as precisely as you
+  can, for example "My partner played a spade when it could have followed suit." It will find the
+  cause, add a test, and fix it.
+
+## Starting over
+
+- **Undo the conversion.** Setup moves ARPD's own files and the old git history into a backup folder
+  beside your project (named `spades-demo-pre-arpd-backup-…`). Its `RESTORE.md` explains how to put
+  everything back.
+- **Start from scratch.** Delete the `spades-demo` folder and its backup, then clone ARPD again
+  (README, Start here, step 5). Nothing else on your computer is changed.
+- **Keep your project but redo a stage.** Type `/arpd-checkin` to see where things stand. To revisit
+  a decision, use `/arpd-amend`; to redo a piece of work, plan it again with `/arpd-plan`.
+
+## Usage limits and cost
+
+- **What it costs.** The whole tutorial used about $7.50 of agent credit in our runs with Sonnet at low
+  effort. Larger models or higher effort cost more.
+- **Hitting a usage limit.** Claude Code tells you when you reach one. Nothing is lost: wait for it to
+  reset, then start Claude Code in the same folder and type `/arpd-checkin`.
+- **Keeping it low.** Use Sonnet at low effort, as in Install and launch, and say "keep agent use low"
+  when ARPD asks about cost. Clearing the conversation between setup and the build (`/clear`, then
+  `/arpd-checkin`) also helps.
