@@ -19,9 +19,15 @@ stops and asks you to try it.
 
 The full process, step by step, is in the diagram at the top of [About ARPD](#about-arpd).
 
-The walkthrough takes about an hour and uses roughly $7.50 of agent credit. You can stop at any
-point: ARPD keeps its state in the project's files rather than in the conversation, so you can pick
-up again by opening Claude Code in the same folder and typing `/arpd-checkin`.
+**How long it takes.** In our internal test runs, getting from `/arpd-setup` to a playable game took
+46 to 71 minutes, much of it with the agents working while nothing was needed from you. Those runs
+used about $5 to $11 of usage at API prices, around $7.50 in a typical run; on a Pro or Max plan the
+same usage counts against your plan's limits instead. The runs were scripted, with each reply sent as
+soon as ARPD asked, so expect to take longer if you read each step closely, as we hope you will.
+
+You can stop at any point. ARPD keeps its state in the project's files rather than in the
+conversation, so you can pick up again by opening Claude Code in the same folder and typing
+`/arpd-checkin`.
 
 > **A note to new users.** This walkthrough is designed so you can see ARPD work from start to
 > finish with as little effort as possible, mostly by copying suggested replies. That is not how
@@ -30,8 +36,8 @@ up again by opening Claude Code in the same folder and typing `/arpd-checkin`.
 > Accepting every recommendation unread is how agent-built research tools go wrong.
 
 The example is deliberately simple. As you go, you might think about a tool your own research could
-use; [Run ARPD on your own idea](#run-arpd-on-your-own-idea) describes how to start one. If you're wondering why the example is a
-card game, see [Why a card game?](#why-a-card-game) under Background.
+use; [Run ARPD on your own idea](#run-arpd-on-your-own-idea) describes how to start one. If you're
+wondering why the example is a card game, see [Why a card game?](#why-a-card-game) under Background.
 
 The tutorial is also available as a searchable web page:
 [TUTORIAL.html](https://djgriffin13.github.io/arpd/TUTORIAL.html). Next: **Install and launch**,
@@ -77,8 +83,9 @@ which ends with setting Claude Code to Sonnet at low effort for this demonstrati
 
 ## Install and launch
 
-Follow **Start here** in the [README](https://github.com/djgriffin13/arpd/blob/main/README.md) to install Git, Claude Code and Python, and to
-clone ARPD into a folder named `spades-demo`. On the web page, the same steps follow here.
+Follow **Start here** in the [README](https://github.com/djgriffin13/arpd/blob/main/README.md) to
+install Git, Claude Code and Python, and to clone ARPD into a folder named `spades-demo`. (The web
+version of this tutorial repeats those steps below.)
 
 ### Set the model for this tutorial
 
@@ -124,8 +131,8 @@ For this demo, a few shortcuts work well:
 
 You can always answer in your own words instead. On your own projects, treat ARPD as a collaborator
 rather than an autopilot: read its summaries, push back when a recommendation doesn't fit your
-research, and keep the decisions about rules, measures and data for yourself. ARPD is designed to
-stop and ask about exactly those, which only helps if you answer them.
+research, and keep the decisions about rules, measures and data for yourself. ARPD is built to stop
+and ask about exactly those decisions, and that only helps if you think them through.
 
 Three steps need your explicit approval: adopting the project blueprint, approving the plan, and
 starting the build. At each one, read what ARPD shows you, and agree only if it matches what you
@@ -139,8 +146,11 @@ anything outside that folder that you didn't expect, choose **No** and ask ARPD 
 
 Setup is an interview in five phases: **Intake, Objectives, Constraints, Design and Development**.
 Each ends with a summary for you to confirm. Then ARPD writes the **project blueprint**, one document
-with everything you agreed, for you to adopt. Nothing gets built during setup, which takes 20 to 30
-minutes.
+with everything you agreed, for you to adopt. Nothing is built during setup.
+
+Internal testing suggests setup can be done in about 20 to 30 minutes. The times given for each phase
+below come from the same scripted test runs, so treat them as rough guides; reading closely and
+answering in your own words takes longer.
 
 A progress line at the end of ARPD's messages shows which phase you're in, for example:
 
@@ -261,16 +271,16 @@ test the game logic without the window.
 If ARPD later asks again what you want, or about existing work, reply: "My first message covers it; there is no existing work."
 
 **Intake** covers who you are, what you want to build, where the project will live, and what role
-ARPD should play. Your brief already answers most of this, so expect only a handful of questions,
-about 5 minutes.
+ARPD should play. Your brief already answers most of this, so expect only a handful of questions
+(about 5 minutes in our runs).
 
 Two things here are worth knowing:
 
 - **ARPD turns this folder into your project.** It first shows a preview (a "dry run") of what will
   move, then moves its own files and the old git history into a backup folder beside it. Nothing
   is deleted. Choose *here, in this folder*; a new folder would mean reopening Claude Code there.
-- **ARPD's role.** You choose how much ARPD questions your design. For this demo, it simply builds
-  what you specified.
+- **ARPD's role.** You choose how much ARPD questions your design and your science. For this demo,
+  choose the role in which it simply builds what you specify.
 
 Intake ends with a summary of what ARPD understood. Confirm it if it matches the brief.
 
@@ -395,7 +405,7 @@ Only me, on this computer.
 **Objectives** is about purpose: what the game is for, what it must and won't do, and what would
 convince you it works. Your answers become the requirements and the checks the agents must pass.
 Since this demo has no research question, ARPD skips the theory questions it would ask on a research
-project. A few questions, about 3 minutes.
+project. Expect a few questions (about 3 minutes in our runs).
 
 ### Typical questions, in the usual order
 
@@ -495,8 +505,8 @@ No, the tests in my brief are enough.
 
 **Constraints** collects the limits the work must respect: the computer, the language and packages,
 working offline, and how much agent use you'll accept. ARPD sorts them into *musts* and
-*preferences*, and checks your rules for contradictions. Usually one or two questions and a summary,
-about 3 minutes.
+*preferences*, and checks your rules for contradictions. There are usually one or two questions and a
+summary (about 3 minutes in our runs).
 
 ### Typical questions, in the usual order
 
@@ -569,7 +579,8 @@ In this phase ARPD checks your rules for contradictions, and asks when two of th
 **Design** settles how the game is built and what its data mean. ARPD proposes a simple design, with
 the game logic kept apart from the window so the tests can run without opening it, and asks about
 anything the brief leaves open. Because the brief's *Details* paragraph covers most of that, this
-phase is usually short: often just "Are you ready to move on?". About 2 minutes.
+phase is usually short, often a single question asking whether you're ready to move on (about 2
+minutes in our runs).
 
 > **Worth noticing:** game rules and what the data mean are *your* decisions, not the agents'. When
 > something is open, ARPD asks rather than guessing, and records your answer as a ruling. In a real
@@ -688,7 +699,7 @@ ARPD may ask, or apply the traditional rule and list it for you to accept.
 **If the brief already answers it:**
 
 ```text
-My first message settles that: <the rule from the brief>.
+My first message settles that; please use the rule there.
 ```
 
 **If it doesn't:**
@@ -712,8 +723,8 @@ The brief's Details paragraph covers seat order, bag scoring, leading spades, th
 **Development** sets up the team: how the agents are organized (for example, one agent builds and a
 fresh reviewer checks each change), how much they may do on their own, when they stop for you, and
 what comes first. **For the demo, give the agents as much independence as ARPD offers:** the
-simplest team, the most hands-off arrangement, and the whole game as the top priority. A few
-questions and a summary, about 4 minutes.
+simplest team, the most hands-off arrangement, and the whole game as the top priority. Expect a few
+questions and a summary (about 4 minutes in our runs).
 
 ### Typical questions, in the usual order
 
@@ -844,7 +855,7 @@ agents will work, and anything still open. ARPD checks it, summarizes it, and as
 Adopting the blueprint is the first of your three approvals, so look it over first. Until you adopt
 it, everything from the interview is only notes and proposals. Once you do, ARPD writes the
 project's governing documents from it: the team charter `CLAUDE.md`, `REQUIREMENTS.md`,
-`DECISIONS.md` and others. About 5 minutes, mostly ARPD writing.
+`DECISIONS.md` and others. In our runs this step took about 5 minutes, mostly ARPD writing.
 
 > **Worth noticing:** open `reports/setup/PROJECT-BLUEPRINT.md` in any text editor. Your game rules
 > and the computer players' rules should be recorded as yours, with nothing added that you didn't
@@ -981,14 +992,14 @@ With the blueprint adopted, ARPD turns it into working software in three steps, 
 page:
 
 1. **[Plan](#plan).** You give the goal for this piece of work, ARPD drafts a versioned plan, and you
-   approve it and say when to start. About 5 minutes.
+   approve it and say when to start (about 5 minutes in our runs).
 2. **[Build](#build).** The agents write the game and its tests, and a separate reviewer agent checks
-   their work. You mostly wait; ARPD stops only for decisions that are yours. In our runs, 10 to 30
-   minutes.
+   their work. You mostly wait; ARPD stops only for decisions that are yours. In our runs this took
+   10 to 30 minutes.
 3. **[Try the game](#try-the-game).** At the first clickable version ARPD stops and asks you to try
    it. You play a hand and say what works and what doesn't.
 
-From typing `/arpd-setup` to a clickable game took 46 to 71 minutes in our runs.
+In our internal test runs, getting from `/arpd-setup` to a clickable game took 46 to 71 minutes.
 
 ## Plan
 
@@ -998,7 +1009,7 @@ Planning turns the blueprint into a concrete plan. ARPD moves through its own st
 Scope, Draft, Approval, Handoff**. Each card below is tagged with its step. ARPD usually reviews where
 things stand without asking anything, and may skip Goal when the blueprint already says what to
 build. It then sizes the work (usually a few *sprints*: game logic and tests first, then the window)
-and writes a versioned plan under `reports/planning/`. About 5 minutes.
+and writes a versioned plan under `reports/planning/`. In our runs, planning took about 5 minutes.
 
 Approving the plan and starting the build are your other two approvals, and they're separate:
 approving a plan starts nothing. If ARPD offers to start planning at the end of setup, accept;
@@ -1222,9 +1233,8 @@ step it gives you.
 
 ## Build
 
-The agents now write the game and its tests, and a separate reviewer agent checks their work. In
-our runs, this first stretch took 10 to 30 minutes, and setup to a clickable game took 46 to 71
-minutes in all. You mostly wait.
+The agents now write the game and its tests, and a separate reviewer agent checks their work. You
+mostly wait; in our test runs this stretch took 10 to 30 minutes.
 
 **What's normal:**
 
@@ -1269,16 +1279,16 @@ The build only stops for decisions that are yours. Answer, and it carries on.
 continue
 ```
 
-If a tool or a reviewer agent is still running (⏳ WORKING, "Waiting for … background agent"), wait instead. See the Stuck? page.
+If a tool or a reviewer agent is still running (⏳ WORKING, "Waiting for … background agent"), wait instead. See Stuck or interrupted, under Help.
 
 ## Try the game
 
-> **Congratulations.** In about an hour, mostly by answering questions and approving plans, you have
-> directed a team of AI agents to build a working research tool. People play it as a real game, with
-> a partner to cooperate with and opponents to beat, and it records their decisions: every bid, every
-> card and how long they took to choose, in a file ready for analysis. That is data on strategic
-> decision making under uncertainty, from an instrument you specified and own. Tools like this have
-> usually meant hiring a programmer or weeks of your own coding.
+> **Congratulations.** Mostly by answering questions and approving plans, you have directed a team of
+> AI agents to build the first version of a research tool. People play it as a real game, with a
+> partner to cooperate with and opponents to beat, and it records their decisions: every bid and every
+> card, and how long the human player took over each choice, in a file ready for analysis. That is
+> data on strategic decision making under uncertainty, from an instrument you specified and own. A
+> tool like this would usually have meant hiring a programmer or spending weeks on your own code.
 
 When a first clickable version exists, ARPD stops and asks you to try it. Expect it to be partial:
 in our runs the scores, the hand summary or the play log sometimes came later, in the next sprint.
@@ -1338,8 +1348,8 @@ This is the first demonstration, and a good place to pause and look. "Go on" let
 
 ### Finishing the first version
 
-When you tell ARPD the demonstration works, the agents carry on with
-the rest of the plan (the scores, the hand summary, the play log) and stop again when that's done.
+When you tell ARPD the demonstration works, the agents carry on with the rest of the plan (the
+scores, the hand summary, the play log) and stop again when that's done.
 ARPD also writes a short checklist, `reports/WALKTHROUGH-M1.md`, for you to go through. Only your
 check, not the agents', marks the first version as done.
 
@@ -1437,7 +1447,8 @@ measurement tool, or a data pipeline.
 > thought. On your own project, the interview is where the research gets defined: what the tool
 > measures, what its data mean, and what would convince you it works. Read each summary and the
 > blueprint carefully, question readings that don't match what you meant, and audit your own
-> answers before you approve anything. The agents build exactly what you agree to.
+> answers before you approve anything. The agents build what you agree to, so the agreement is
+> worth getting right.
 
 1. **Start from a fresh copy.** Clone ARPD into a new folder named for your project (README, *Start
    here*, step 5), open Claude Code there, and type `/arpd-setup`.
@@ -1454,8 +1465,8 @@ measurement tool, or a data pipeline.
 6. **Plan a small first piece** with `/arpd-plan`, aiming for a first demonstration you can try.
 7. **Check in, try each demonstration yourself, and plan the next piece.**
 
-A first demonstration you can try within a session teaches you more than a long specification, so
-start small.
+Start small. A first version you can try within one session will usually teach you more than a
+long specification.
 
 **Files worth a look in any ARPD project:** `CLAUDE.md` (the team charter the agents work under),
 `DECISIONS.md` (your rulings, word for word), `REQUIREMENTS.md` (each requirement and its evidence),
@@ -1465,49 +1476,51 @@ full guide).
 ## Why a card game?
 
 The game is stylized, but games are an established way to study coordination and teamwork under
-controlled conditions. A recent review catalogued 103 testbeds, many of them games, used across 235
-empirical studies of human–agent teams (Chung et al., 2026). Organizational researchers have long
+controlled conditions. A recent review catalogued 103 testbeds used across 235 empirical studies of
+human–agent teams (Chung et al., 2026). Organizational researchers have long
 used simple laboratory tasks the same way: Weber and Camerer (2003) studied culture clash with small
 laboratory "firms" that built up their own way of working on a shared task and were then merged.
 
 Card games in particular have served as research environments. Spades itself has been used to build
 computer players that imitate how people play (Baier et al., 2019). The cooperative card game Hanabi
-became a standard test of teamwork under hidden information (Bard et al., 2020), and in a study of
-human–AI teams playing it, people preferred a rule-based computer partner to a learned one even
-though their scores did not differ (Siu et al., 2021). In Codenames, an AI assistant helped players'
-individual thinking but got in the way of the team building a shared understanding (Sidji et al.,
-2024). Spades is not Hanabi: its partnerships compete against each other rather than all playing
+was proposed as a benchmark for cooperation under hidden information (Bard et al., 2020) and has
+since been widely used; in one study of human–AI teams playing it, people preferred a rule-based
+computer partner to a learned one even though their scores did not differ significantly (Siu et al.,
+2021). In Codenames, an AI assistant that supported the clue-givers enhanced players' convergent and
+divergent thinking but interfered with the formation of team mental models (Sidji et al., 2024). Spades is not Hanabi: its partnerships compete against each other rather than all playing
 together. But it shares the features that matter here:
 
 - **Exact rules** the software must follow, which only you can settle when they're unclear.
-- **Artificial agents**, the computer players, whose behaviour you specify, so it can be checked.
+- **Artificial agents**, the computer players, whose behavior you specify, so it can be checked.
 - **A team task.** Partners commit to a joint goal, the team's bid, and must coordinate without
   talking, each seeing only their own cards.
-- **Behavioural data:** every decision is recorded, along with how long you took to make it.
+- **Behavioral data:** every decision is recorded, along with how long you took over each of yours.
 
-From here it's a short step to studying people together: networked play with four people in two
-teams, human–AI teams where the computer partner's strategy is the experimental condition, a chat
-channel between partners, or new measures in the play log. Each would be another round of the same
-steps with ARPD. Building this game shows the process working on one bounded project; it isn't
+The same game could later be extended to study people together: networked play with four people in
+two teams, human–AI teams where the computer partner's strategy is the experimental condition, a
+chat channel between partners, or new measures in the play log. Each would be another round of the
+same steps with ARPD. Building this game shows the process working on one bounded project; it isn't
 evidence that ARPD suits every research tool.
 
 **References**
 
 - Baier, H., Sattaur, A., Powley, E. J., Devlin, S., Rollason, J., & Cowling, P. I. (2019). Emulating
-  human play in a leading mobile card game. *IEEE Transactions on Games, 11*(4).
+  human play in a leading mobile card game. *IEEE Transactions on Games, 11*(4), 386–395.
   https://doi.org/10.1109/TG.2018.2835764
-- Bard, N., Foerster, J. N., Chandar, S., Burch, N., Lanctot, M., Song, H. F., … Bowling, M. (2020).
-  The Hanabi challenge: A new frontier for AI research. *Artificial Intelligence, 280*, 103216.
-  https://doi.org/10.1016/j.artint.2019.103216
+- Bard, N., Foerster, J. N., Chandar, S., Burch, N., Lanctot, M., Song, H. F., Parisotto, E., Dumoulin,
+  V., Moitra, S., Hughes, E., Dunning, I., Mourad, S., Larochelle, H., Bellemare, M. G., & Bowling, M.
+  (2020). The Hanabi challenge: A new frontier for AI research. *Artificial Intelligence, 280*,
+  103216. https://doi.org/10.1016/j.artint.2019.103216
 - Chung, H., Holder, T., Shah, J. A., & Yang, X. J. (2026). A systematic review and taxonomy of
-  human–agent teaming testbeds. *Human Factors*. https://doi.org/10.1177/00187208251376898 (online
-  2025)
+  human–agent teaming testbeds. *Human Factors, 68*(2), 197–238.
+  https://doi.org/10.1177/00187208251376898
 - Sidji, M., Smith, W., & Rogerson, M. J. (2024). Human-AI collaboration in cooperative games: A study
   of playing Codenames with an LLM assistant. *Proceedings of the ACM on Human-Computer Interaction,
   8*(CHI PLAY), Article 316. https://doi.org/10.1145/3677081
 - Siu, H. C., Peña, J., Chen, E., Zhou, Y., Lopez, V., Palko, K., Chang, K., & Allen, R. (2021).
   Evaluation of human-AI teams for learned and rule-based agents in Hanabi. *Advances in Neural
   Information Processing Systems, 34*, 16183–16195.
+  https://proceedings.neurips.cc/paper/2021/hash/86e8f7ab32cfd12577bc2619bc635690-Abstract.html
 - Weber, R. A., & Camerer, C. F. (2003). Cultural conflict and merger failure: An experimental
   approach. *Management Science, 49*(4), 400–415. https://doi.org/10.1287/mnsc.49.4.400.14430
 
@@ -1566,9 +1579,10 @@ teams: team charters (Mathieu & Rapp, 2009), team processes (Marks et al., 2001)
 
 ### Where it stands
 
-ARPD is a release candidate. Its workflow has been exercised in scripted test runs, including the
-25 runs behind this tutorial, six of which built this game up to a clickable demonstration, and in
-walkthroughs by its authors. It has not yet been evaluated with researchers who did not build it,
+ARPD is a release candidate. Its workflow has been exercised in scripted test runs and in
+walkthroughs by its authors. The scripted runs include the 25 used to prepare this tutorial, in which
+an automated stand-in for the researcher answered ARPD's questions; six of them continued until this
+game reached a clickable first version. It has not yet been evaluated with researchers who did not build it,
 and its benefits are proposed rather than demonstrated. The next step is a study with organizational
 researchers using it on their own questions. Known limits are listed in
 [LIMITATIONS.md](https://github.com/djgriffin13/arpd/blob/main/docs/LIMITATIONS.md).
@@ -1584,18 +1598,19 @@ researchers using it on their own questions. Known limits are listed in
 **References**
 
 - Gigerenzer, G. (1991). From tools to theories: A heuristic of discovery in cognitive psychology.
-  *Psychological Review, 98*(2), 254–267.
+  *Psychological Review, 98*(2), 254–267. https://doi.org/10.1037/0033-295X.98.2.254
 - Greenwald, A. G. (2012). There is nothing so theoretical as a good method. *Perspectives on
-  Psychological Science, 7*(2), 99–108.
+  Psychological Science, 7*(2), 99–108. https://doi.org/10.1177/1745691611434210
 - March, J. G. (1991). Exploration and exploitation in organizational learning. *Organization
-  Science, 2*(1), 71–87.
+  Science, 2*(1), 71–87. https://doi.org/10.1287/orsc.2.1.71
 - Marks, M. A., Mathieu, J. E., & Zaccaro, S. J. (2001). A temporally based framework and taxonomy of
-  team processes. *Academy of Management Review, 26*(3), 356–376.
+  team processes. *Academy of Management Review, 26*(3), 356–376. https://doi.org/10.2307/259182
 - Mathieu, J. E., & Rapp, T. L. (2009). Laying the foundation for successful team performance
   trajectories: The roles of team charters and performance strategies. *Journal of Applied
-  Psychology, 94*(1), 90–103.
+  Psychology, 94*(1), 90–103. https://doi.org/10.1037/a0013257
 - Morgeson, F. P., DeRue, D. S., & Karam, E. P. (2010). Leadership in teams: A functional approach to
   understanding leadership structures and processes. *Journal of Management, 36*(1), 5–39.
+  https://doi.org/10.1177/0149206309347376
 
 ## Stuck or interrupted
 
@@ -1700,11 +1715,11 @@ A command seems to be hanging, possibly a test that opened the game window. Stop
 Claude Code lets you choose the model and how much effort it puts into each step.
 
 - **For your own projects,** Sonnet or Opus at medium or high effort is usually a good choice. Opus
-  and higher effort cost more, but they think more carefully, which matters when the agents are
+  and higher effort cost more, but they reason more carefully, which matters when the agents are
   building a research instrument you will rely on.
 - **If you plan and build in separate sessions,** give planning the more capable setting. Setup and
-  planning are where the judgement lies, and a well-specified plan can usually be built at a lower
-  setting, unless the build itself is unusually intricate.
+  planning are where most of the judgment lies, and a well-specified plan can usually be built at a
+  lower setting, unless the build itself is unusually intricate.
 - **For a demonstration like this tutorial,** Sonnet at low effort works well and keeps it quick and
   inexpensive.
 
@@ -1718,9 +1733,11 @@ In a session that's already running, type `/model` or `/effort` and pick from th
 
 ## Usage limits and cost
 
-- **What it costs.** The whole tutorial used about $7.50 of agent credit in our runs with Sonnet at low
-  effort. Larger models and higher effort cost more; see
-  [Choosing a model and effort](#choosing-a-model-and-effort).
+- **What it costs.** In our internal test runs with Sonnet at low effort, getting to a playable game
+  used about $5 to $11 of usage at API prices, around $7.50 in a typical run. On a Pro or Max plan,
+  that usage counts against your plan's limits rather than being billed separately. Your figure will
+  depend on your answers and on how much the agents need to fix. Larger models and higher effort cost
+  more; see [Choosing a model and effort](#choosing-a-model-and-effort).
 - **Hitting a usage limit.** Claude Code tells you when you reach one. Nothing is lost: wait for it to
   reset, then start Claude Code in the same folder and type `/arpd-checkin`.
 - **Keeping agent use down.** Say "keep agent use low" when ARPD asks about cost, so it chooses lighter
@@ -1757,8 +1774,8 @@ Read .claude/skills/arpd-setup/SKILL.md and follow it exactly.
 ## No Python
 
 **You don't need Python to use ARPD.** ARPD includes a few diagnostic tools that do need it: an
-activity log that times the agents' work and lets you compare how they are functioning, and
-automatic checks of the blueprint and the governing documents. Without Python, ARPD skips the log
+activity log that records what the agents did and how long it took, and automatic checks of the
+blueprint and the governing documents. Without Python, ARPD skips the log
 and checks those documents by reading them instead, and tells you so. Everything else (the
 interview, the blueprint, planning, building, check-ins and amendments) works the same. Setup
 prepares the folder with a shell script instead; on Windows that needs Git Bash, which comes with Git

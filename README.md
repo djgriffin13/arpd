@@ -9,8 +9,9 @@ a team charter, document templates and four Claude Code skills (`/arpd-setup`, `
 Science* special issue "AI-Enabled Frontiers in Organizational Science." This is a release
 candidate ([RELEASE-NOTES.md](RELEASE-NOTES.md)).
 
-**To try it:** follow **Start here** below (about 15 minutes), then **[TUTORIAL.md](TUTORIAL.md)**,
-which walks you prompt by prompt through using ARPD to build a small Spades card game.
+**To try it:** follow **Start here** below (usually 15 minutes or so, longer if you need to install
+Git or Python), then **[TUTORIAL.md](TUTORIAL.md)**, which walks you prompt by prompt through using
+ARPD to build a small Spades card game.
 
 ## Start here
 
@@ -18,9 +19,11 @@ which walks you prompt by prompt through using ARPD to build a small Spades card
 
 - A Claude **Pro, Max, Team or Enterprise** plan, or a **Claude Console (API)** account. The free
   Claude plan does not include Claude Code.
-- Windows 10 or later, macOS 13 or later, or a recent Linux.
-- About 1 hour for the tutorial, much of it the agents working while you wait, and about $7.50 in
-  agent credits.
+- Windows 10 (version 1809) or later, macOS 13 or later, or a recent Linux.
+- Time and usage for the tutorial. In our internal test runs, getting to a playable game took 46 to
+  71 minutes, much of it the agents working while you wait, and used about $5 to $11 of usage at API
+  prices (around $7.50 in a typical run). On a Pro or Max plan, that usage counts against your
+  plan's limits rather than being billed separately. Reading each step closely takes longer.
 
 ### 2. Install Git
 
