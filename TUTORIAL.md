@@ -15,9 +15,9 @@ The walkthrough takes about an hour and uses roughly $7.50 of agent credit. You 
 point: ARPD keeps its state in the project's files rather than in the conversation, so you can pick
 up again by opening Claude Code in the same folder and typing `/arpd-checkin`.
 
-> **A note for reviewers.** This walkthrough is designed so you can see ARPD work from start to
-> finish with as little effort as possible, mostly by copying suggested replies. That is not how we
-> intend ARPD to be used. On a real project, the value lies in working with it: reading what it
+> **A note on how to use ARPD.** This walkthrough is designed so you can see ARPD work from start to
+> finish with as little effort as possible, mostly by copying suggested replies. That is not how
+> ARPD is meant to be used. On a real project, the value lies in working with it: reading what it
 > proposes, questioning how it has interpreted you, and making the research decisions yourself.
 > Accepting every recommendation unread is how agent-built research tools go wrong.
 
@@ -544,16 +544,13 @@ In this phase ARPD checks your rules for contradictions, and asks when two of th
 *You'll see:* **SETUP**  ✅ Intake → ✅ Objectives → ✅ Constraints → 🔵 Design → ⚪ Development → ⚪ Blueprint
 
 **Design** settles how the game is built and what its data mean. ARPD proposes a simple design, with
-the game logic kept apart from the window so the tests can run without opening it. Then it asks
-about anything in the rules or the play log that your brief leaves open.
-
-The *Details* paragraph in the brief settles almost everything ARPD asked about here in our test
-runs. So Design is usually short, often just "Are you ready to move on?", sometimes with a short
-list of play-log defaults to accept. About 2 minutes.
+the game logic kept apart from the window so the tests can run without opening it, and asks about
+anything the brief leaves open. Because the brief's *Details* paragraph covers most of that, this
+phase is usually short: often just "Are you ready to move on?". About 2 minutes.
 
 > **Worth noticing:** game rules and what the data mean are *your* decisions, not the agents'. When
-> the brief leaves one open, ARPD asks rather than guessing, and records your answer as a ruling. In
-> a real study, this is where you decide what your measures actually measure.
+> something is open, ARPD asks rather than guessing, and records your answer as a ruling. In a real
+> study, this is where you decide what your measures actually measure.
 
 ### Typical questions, in the usual order
 
@@ -661,183 +658,27 @@ ARPD may ask, or apply the traditional rule and list it for you to accept.
 
 </details>
 
-#### After the fourth card, what should the table do?
-
-*ARPD may word it as:* "After the fourth card, what should the table do?"
-
-**Reply:**
-
-```text
-Use your recommendation: keep the trick on the table for a moment, then clear it.
-```
-
-<details><summary>Example from a real run</summary>
-
-![After the fourth card, what should the table do?](docs/tutorial/x-design-06.png)
-
-</details>
-
-#### Which part of the design would you like to explore or change?
-
-*ARPD may word it as:* "Which part of the design would you like to explore or change, and what do you have in mind?"
-
-**Reply:**
-
-```text
-None. Continue to Development.
-```
-
-This comes up if you chose to revise the design. If you didn't mean to, just continue.
-
-<details><summary>Example from a real run</summary>
-
-![Which part of the design would you like to explore or change?](docs/tutorial/x-design-07.png)
-
-</details>
-
-#### Another question about one rule detail
+#### Any other question about a rule or a detail of the game
 
 *ARPD may word it as:* "After a computer's nil has failed, how should it play the rest of that hand?" / "When may a spade be led?" / "When a leader with only spades leads a spade, do spades count as broken afterwards?" / "After you've tried python -m spades, how does it look and feel, and what should change before the final sprint"
 
-**Reply:**
+**If the brief already answers it:**
+
+```text
+My first message settles that: <the rule from the brief>.
+```
+
+**If it doesn't:**
 
 ```text
 Do whatever you recommend, consistent with traditional Spades.
 ```
 
-Game rules are yours to decide, so ARPD asks rather than guessing, often with an example and options. Pick the one that matches how you play, or use the reply above.
+The brief's Details paragraph covers seat order, bag scoring, leading spades, the pause, timestamps and quit games, so these rarely come up. When one does, ARPD is checking a rule with you rather than guessing.
 
 <details><summary>Example from a real run</summary>
 
-![Another question about one rule detail](docs/tutorial/q-10-rule.png)
-
-</details>
-
-#### How should a nil bidder's tricks be scored? (do they also score +1 as bags?)
-
-*ARPD may word it as:* "How should a nil bidder's tricks be scored?" / "You wrote that a nil bidder's tricks "always count as bags". Does each of those tricks also score +1 point, like any other bag?"
-
-**Reply:**
-
-```text
-As my brief says: every bag scores 1 point, including a nil bidder's tricks.
-```
-
-<details><summary>Example from a real run</summary>
-
-![How should a nil bidder's tricks be scored? (do they also score +1 as bags?)](docs/tutorial/x-design-10.png)
-
-</details>
-
-#### When may spades be led? Does a spade led by someone holding only spades break spades?
-
-*ARPD may word it as:* "Should a spade led by a player who holds only spades break spades?" / "When may a spade be led?"
-
-**Reply:**
-
-```text
-As my brief says: a spade led by a player who holds only spades breaks spades.
-```
-
-<details><summary>Example from a real run</summary>
-
-![When may spades be led? Does a spade led by someone holding only spades break spades?](docs/tutorial/x-design-12.png)
-
-</details>
-
-#### Which way does clockwise go / what is the seat order?
-
-*ARPD may word it as:* "Which way does clockwise go around the table?"
-
-**Reply:**
-
-```text
-Yes: S, W, N, E clockwise.
-```
-
-<details><summary>Example from a real run</summary>
-
-![Which way does clockwise go / what is the seat order?](docs/tutorial/x-design-13.png)
-
-</details>
-
-#### Should the game still wait when you have only one legal card?
-
-*ARPD may word it as:* "Sometimes you will have exactly one legal card to play"
-
-**Reply:**
-
-```text
-As my brief says: still wait for my click.
-```
-
-<details><summary>Example from a real run</summary>
-
-![Should the game still wait when you have only one legal card?](docs/tutorial/x-design-14.png)
-
-</details>
-
-#### Timestamps: time zone and format
-
-*ARPD may word it as:* "Which time zone should the timestamps and file names use?" / "How should the timestamp column be written in the play log?"
-
-**Reply:**
-
-```text
-As my brief says: this computer's local time, to the second.
-```
-
-<details><summary>Example from a real run</summary>
-
-![Timestamps: time zone and format](docs/tutorial/x-design-15.png)
-
-</details>
-
-#### How should a quit game be told apart from a finished one?
-
-*ARPD may word it as:* "How should a quit game be told apart from a finished one?"
-
-**Reply:**
-
-```text
-As my brief says: a game stopped part-way just ends after its last finished hand.
-```
-
-<details><summary>Example from a real run</summary>
-
-![How should a quit game be told apart from a finished one?](docs/tutorial/x-design-16.png)
-
-</details>
-
-#### Which program shape / layout should the build use?
-
-*ARPD may word it as:* "Is this layout and flow right?" / "Which program shape should the build use?"
-
-**Reply:**
-
-```text
-Use your recommendation: the simplest design that keeps the rules testable without the window.
-```
-
-<details><summary>Example from a real run</summary>
-
-![Which program shape / layout should the build use?](docs/tutorial/x-design-17.png)
-
-</details>
-
-#### Do you want any change to this design?
-
-*ARPD may word it as:* "Do you want any change to this design or to the small details above?"
-
-**Reply:**
-
-```text
-No changes.
-```
-
-<details><summary>Example from a real run</summary>
-
-![Do you want any change to this design?](docs/tutorial/x-design-18.png)
+![Any other question about a rule or a detail of the game](docs/tutorial/q-10-rule.png)
 
 </details>
 

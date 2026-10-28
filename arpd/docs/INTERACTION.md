@@ -51,6 +51,10 @@ nothing is needed from them:
 
 `⏳ **WORKING** — nothing needed from you. <what is running, in a few words>; I'll report when it finishes.`
 
+Use this line only while something is actually running. When you are waiting for the PI (to answer,
+to try the tool, to approve), nothing is running: end with a labelled block that asks for exactly
+that, never with ⏳ **WORKING**.
+
 Rules:
 
 - **The block is last.** Nothing follows the closing divider: no extra request ("when you answer,

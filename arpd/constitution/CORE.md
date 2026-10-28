@@ -305,7 +305,8 @@ Each requirement moves through these states. The evidence for each state is reco
 - **Show whose turn it is.** End every turn so the PI can tell at a glance: a labelled block
   (❓ question, 🔘 choice, ✋ approval) when the PI must answer, or the line
   `⏳ **WORKING** — nothing needed from you. <what is running>; I'll report when it finishes.` when
-  agents keep working (`arpd/docs/INTERACTION.md` §2).
+  agents keep working (`arpd/docs/INTERACTION.md` §2). Never use the WORKING line while waiting for
+  the PI, for example to try a demonstration: that is a question, so it ends with a block.
 - **Report what matters.** Researcher-facing reports focus on material decisions and exceptions.
   Routine coordination may stay out of the PI's attention, never out of the record.
 - **Decision packs** carry consult-route items to the PI, in the form §6 describes. "Accept all" is

@@ -6,8 +6,8 @@ bce2fc82c83ac2beb8e665396df858dac0a164db CLAUDE.md
 6496979b70a3ae3cd218f14d71a0f7dd39d19658 LICENSE
 4e5fd9265fe3dbb23d070b9edeff4ac539885ef6 README.md
 f6f0c506e1d2a505665d7bbbe95a8cb9a52213d3 RELEASE-NOTES.md
-90efa4cb363ddd39dfa45e94a9f37c3c7200870a TUTORIAL.html
-b606f178dafcd9f7579b0e0bf15c9d65710b7869 TUTORIAL.md
+49e3d20eca0c23cfd4cc1b5177707efe5e372de5 TUTORIAL.html
+e6a1dbb56386818f235e6da63b993d98294a6808 TUTORIAL.md
 b87b52c2532156049438d0c1ef2c752cf7538e26 docs/DESIGN-RATIONALE.md
 727d48574065f69a5770dafa446cb2cffc30589b docs/LIMITATIONS.md
 887c4ac8b04dfd74cda2c348221c045a4391e8b1 docs/REFERENCES.md
@@ -42,16 +42,6 @@ ccd07e70d29b842ebf56275de841e48f37828273 docs/tutorial/x-constraints-03.png
 2d98fb9eef37e5a37d1e64005acc899130a0dd03 docs/tutorial/x-design-03.png
 30b1aac6623c09da65bcf414fb8900b0520940d0 docs/tutorial/x-design-04.png
 9037dce4910e7b5a180beab110b93b89e9f2670f docs/tutorial/x-design-05.png
-7d1b4c469e5585ffcadc789270dc2273094c1eea docs/tutorial/x-design-06.png
-24d9925f3eaa4e2c235aeaae3cb25a76d4d29d60 docs/tutorial/x-design-07.png
-d039b54a21a46c97a88a6cb4e593be6d46fccabb docs/tutorial/x-design-10.png
-37b8df585cc8e74623413eb102871d404bdbd0ee docs/tutorial/x-design-12.png
-d90e8b94c3703f294a5c897370fbc8a585b12cd6 docs/tutorial/x-design-13.png
-48fcdb88834e448b6b5f8d24f87876a4ce76c10d docs/tutorial/x-design-14.png
-30189a2e839d35e9631e90ec3739778e2ce17e1d docs/tutorial/x-design-15.png
-7e4d2676a7f63a686daef02fddff9e8101e05cf4 docs/tutorial/x-design-16.png
-2d81e83a8334ebff36545a8ea7a517fb8adbf0c4 docs/tutorial/x-design-17.png
-afcf79deaf705a8e9cdfbd76d53993a58f475522 docs/tutorial/x-design-18.png
 15a4f5aa838463d7d9082a8084b35238ad6948e4 docs/tutorial/x-development-02.png
 2695bb239380e495e525f964ede78e7dc0c8abc7 docs/tutorial/x-development-04.png
 013548a17a872cb0163b7d959f38dcbd70bd4b83 docs/tutorial/x-development-05.png
