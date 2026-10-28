@@ -6,8 +6,8 @@ f88dbd0c3c74a9a0f2e74943198787b51b09dbf9 CLAUDE.md
 6496979b70a3ae3cd218f14d71a0f7dd39d19658 LICENSE
 f2b1eda5f8dc0ad28f629717137c3fc69b62f33a README.md
 a6885d2a99cff64bcde1d295a27c9f12de9560cb RELEASE-NOTES.md
-addb8bac463dcde9add958f84dbf6421f022887c TUTORIAL.html
-4cfc63a6cfb486552bd17ead3bf686b58c1d9eb0 TUTORIAL.md
+073265ebddab4b27df03506ce32ca9ad5ec1b191 TUTORIAL.html
+46725f00ff1daa322d4269d8bf806b9e6c2f27eb TUTORIAL.md
 8e4395f5f6006517fde6d646cfce2556e0a6290a docs/DESIGN-RATIONALE.md
 0c33a9607892d609318854808cbfbf0299363b50 docs/LIMITATIONS.md
 887c4ac8b04dfd74cda2c348221c045a4391e8b1 docs/REFERENCES.md
@@ -57,6 +57,7 @@ cd8deae2a63fe0b9d991d21cf7b8f9fe6cd7e2b6 docs/tutorial/x-development-04.png
 944d75e69080cf6906ef33c0aa6891b590e576a1 docs/tutorial/x-development-05.png
 f817d82c4cbe679476bc129cf0f67cc55b3272cd docs/tutorial/x-development-06.png
 f378595eb51e4d2ebc432063b610dc3ac2cc1fa4 docs/tutorial/x-intake-05.png
+cf18ff39f74b86311f845660e838778df897dd9c docs/tutorial/x-intake-06.png
 9fe99655edede987f2e1cf0c6c1801f252e5f4a9 docs/tutorial/x-objectives-02.png
 1b4a115d1bf9998cd2420be5d3d3428c90b6d94d docs/tutorial/x-objectives-04.png
 da85f8f26acda0572e12b1b324497f38e7bdbf2c docs/tutorial/x-objectives-05.png
@@ -65,5 +66,6 @@ f507d18663933195de250c523289b47a94978ec0 docs/tutorial/x-planning-04.png
 19a5f817612cc9c14df46568d04a42e02b135e19 docs/tutorial/x-planning-07.png
 7fa142460c130fd0fbfe8dc0391943ed968bb1ef docs/tutorial/x-planning-08.png
 4fc157ab4c0823df4f3236076b7dabc17126b729 docs/tutorial/x-planning-09.png
+e90d8ce78fe0eaf8c2f7df6d21c9dbd520b80fd0 docs/tutorial/x-planning-10.png
 6965264dc8413bb794cf5fcb1cee9813d5226f3f docs/tutorial/x-report-05.png
 ea821e924a5743a29ee8696280fbddd424fbbf6c docs/tutorial/x-report-06.png

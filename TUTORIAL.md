@@ -321,15 +321,11 @@ Every phase ends with a summary. Skim it: if it matches the brief, say yes. A ye
 Only me, on this computer.
 ```
 
-#### Is there existing work, or what would you like to accomplish? (asked again)
+<details><summary>Example from a real run</summary>
 
-*ARPD may word it as:* "What would you like to accomplish: what tool or platform do you have in mind, and what is it for?" / "What would you like to accomplish?"
+![Who will play or use it?](docs/tutorial/x-intake-06.png)
 
-**Reply:**
-
-```text
-The brief in my first message covers it; there is no existing work.
-```
+</details>
 
 ## Setup 2 · Objectives
 
@@ -1297,6 +1293,12 @@ continue
 ```
 
 ARPD sometimes asks for this before the build so the agents start with a clean context.
+
+<details><summary>Example from a real run</summary>
+
+![Type /compact (or start a new session), then paste this prompt](docs/tutorial/x-planning-10.png)
+
+</details>
 
 **Before the build starts, ARPD may ask you to type `/compact`** (or to start a new session) so that
 the agents start with a clean context. Do it, then paste the prompt it gives you. With Sonnet,
