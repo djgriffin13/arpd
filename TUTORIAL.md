@@ -11,6 +11,10 @@ the questions that are yours to settle, and approve the plan; the agents write a
 goal is a first demonstration, a game window you can click through. When the agents reach it, ARPD
 stops and asks you to try it.
 
+![ARPD in four stages](docs/images/arpd-overview.png)
+
+The full process, step by step, is in the diagram at the top of [About ARPD](#about-arpd).
+
 The walkthrough takes about an hour and uses roughly $7.50 of agent credit. You can stop at any
 point: ARPD keeps its state in the project's files rather than in the conversation, so you can pick
 up again by opening Claude Code in the same folder and typing `/arpd-checkin`.
@@ -23,8 +27,7 @@ up again by opening Claude Code in the same folder and typing `/arpd-checkin`.
 
 The example is deliberately simple. As you go, you might think about a tool your own research could
 use; [Run ARPD on your own idea](#run-arpd-on-your-own-idea) describes how to start one. If you're wondering why the example is a
-card game, see [Why a card game?](#why-a-card-game) under Background. For the whole process on one page,
-see the diagram in [About ARPD](#about-arpd).
+card game, see [Why a card game?](#why-a-card-game) under Background.
 
 The tutorial is also available as a searchable web page:
 [TUTORIAL.html](https://djgriffin13.github.io/arpd/TUTORIAL.html). Next: **Install and launch**,
@@ -50,6 +53,7 @@ which ends with setting Claude Code to Sonnet at low effort for this demonstrati
   - [Try the game](#try-the-game)
 - **Next steps**
   - [Next steps](#next-steps)
+  - [Extend the game](#extend-the-game)
   - [Run ARPD on your own idea](#run-arpd-on-your-own-idea)
   - [Updating the process](#updating-the-process)
 - **Background**
@@ -1321,14 +1325,28 @@ This is the first demonstration, and a good place to pause and look. "Go on" let
 
 </details>
 
-## Next steps
+### Finishing the first version
 
-**Finish the first version.** When you tell ARPD the demonstration works, the agents carry on with
+When you tell ARPD the demonstration works, the agents carry on with
 the rest of the plan (the scores, the hand summary, the play log) and stop again when that's done.
 ARPD also writes a short checklist, `reports/WALKTHROUGH-M1.md`, for you to go through. Only your
 check, not the agents', marks the first version as done.
 
-### Find a new direction
+## Next steps
+
+Once the first version works, there are three ways to go on:
+
+- **[Extend the game](#extend-the-game).** Turn it into a research tool: an experimental condition,
+  people playing together, communication between partners, or new measures. Each is another round of
+  planning and building.
+- **[Run ARPD on your own idea](#run-arpd-on-your-own-idea).** Start a project of your own from a
+  fresh copy of ARPD, this time taking your time over each answer.
+- **[Update the process](#updating-the-process).** Change how closely you review, how far the agents
+  go on their own, or the rules of the project, and keep ARPD itself up to date.
+
+At any point, `/arpd-checkin` shows where things stand and what needs you.
+
+## Extend the game
 
 Once the game works, look at it as a research tool and ask what you could learn with it. A few
 directions it could take:
@@ -1345,9 +1363,7 @@ For each, ask the questions setup asked you: what is it for, what would convince
 what does each new piece of data mean? Those answers are yours to give, and they are what ARPD will
 ask about.
 
-### Plan it and run it
-
-Each new direction is another round of the same loop:
+**Plan it and run it.** Each new direction is another round of the same loop:
 
 1. **Plan it.** Type `/arpd-plan` and describe the goal in a sentence or two (an example follows).
 2. **Approve and start.** ARPD reviews where the project stands, sizes the work, drafts a plan, and
@@ -1362,18 +1378,7 @@ Add a second strategy for the computer partner that always leads trumps when it 
 the strategy at the start of each game, and record which one was used in the play log.
 ```
 
-To change something already decided (a game rule, a requirement, or what the agents may do on their
-own), use `/arpd-amend`, for example:
-
-```text
-From now on, a team loses 100 points for every 5 bags instead of every 10.
-```
-
-ARPD records your words as a ruling and updates the governing documents. At any point,
-`/arpd-checkin` shows where things stand and what needs you.
-
-To bring ARPD to a question of your own, see [Run ARPD on your own idea](#run-arpd-on-your-own-idea).
-To change how the agents work as your project grows, see
+To change something already decided, such as a game rule or what the agents may do on their own, see
 [Updating the process](#updating-the-process).
 
 ## Run ARPD on your own idea
@@ -1499,7 +1504,10 @@ evidence that ARPD suits every research tool.
 
 ARPD stands for **Agentic Research Paradigm Development**. It is a framework and toolkit for
 researchers who want AI coding agents to build the research tools their questions need, while the
-researcher keeps authority over the science.
+researcher keeps authority over the science. The whole process on one page (on the web page, click to
+enlarge):
+
+![The ARPD process: setup, sprint planning, execution, and steering and upkeep](docs/images/arpd-process.png)
 
 ### Why it exists
 
@@ -1531,10 +1539,6 @@ teams: team charters (Mathieu & Rapp, 2009), team processes (Marks et al., 2001)
 - **Independent checking.** A reviewer agent that did not write the code checks each change, tests run
   without anyone present, and each requirement is marked as implemented, verified or validated.
 - **A record you can audit:** your rulings in your own words, versioned plans, and sprint records.
-
-The whole process on one page (click to enlarge on the web page):
-
-![The ARPD process: setup, sprint planning, execution, and steering and upkeep](docs/images/arpd-process.png)
 
 ### What's in the kit
 
