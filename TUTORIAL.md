@@ -1,3 +1,5 @@
+<img src="docs/images/arpd-icon.png" alt="ARPD" width="110" align="right">
+
 # ARPD tutorial: build a Spades game
 
 In this tutorial you use ARPD to have AI agents build a small Spades card game with a window: you
@@ -100,7 +102,12 @@ Type:
 /arpd-setup
 ```
 
-ARPD looks at the folder and asks what you would like to accomplish. Paste this whole brief:
+ARPD looks at the folder and asks what you would like to accomplish. It looks like this (an example
+from a real run; every ARPD question ends with a block like this one):
+
+![ARPD's opening question](docs/tutorial/q-01-opening.png)
+
+Paste this whole brief as your answer:
 
 ### Typical questions, in the usual order
 
@@ -207,6 +214,12 @@ Here, in this folder.
 
 Choose this folder (usually option A). A new folder means reopening Claude Code there.
 
+<details><summary>Example from a real run</summary>
+
+![Where should the project live?](docs/tutorial/q-02-location.png)
+
+</details>
+
 #### 2. Convert this folder as shown? (after the dry run)
 
 *ARPD may word it as:* "Convert this folder as shown?" / "Convert this folder as the dry run shows?" / "Convert this folder as shown above?"
@@ -218,6 +231,12 @@ Yes, convert as shown.
 ```
 
 The dry run lists what moves to the backup folder. Nothing is deleted.
+
+<details><summary>Example from a real run</summary>
+
+![Convert this folder as shown? (after the dry run)](docs/tutorial/q-03-convert.png)
+
+</details>
 
 #### 3. What role would you like me to play? (A to F)
 
@@ -231,6 +250,12 @@ A
 
 A: ARPD builds what you specified and raises only problems that would stop it working.
 
+<details><summary>Example from a real run</summary>
+
+![What role would you like me to play? (A to F)](docs/tutorial/q-04-role.png)
+
+</details>
+
 #### 4. How comfortable are you with code, and how involved do you want to be?
 
 *ARPD may word it as:* "How comfortable are you with code: do you write it, run scripts others wrote, or prefer not to touch it?" / "How comfortable are you with code?" / "How comfortable are you with code, and how involved do you want to be in technical decisions"
@@ -240,6 +265,12 @@ A: ARPD builds what you specified and raises only problems that would stop it wo
 ```text
 I can run scripts but prefer not to write code. Ask me about the game rules, not technical details.
 ```
+
+<details><summary>Example from a real run</summary>
+
+![How comfortable are you with code, and how involved do you want to be?](docs/tutorial/q-05-coding.png)
+
+</details>
 
 #### 5. Is this summary of Intake right?
 
@@ -298,6 +329,12 @@ skips the theory questions it would ask on a research project. A few questions, 
 Just play it and study my own play.
 ```
 
+<details><summary>Example from a real run</summary>
+
+![What will you use the play log (or the game) for?](docs/tutorial/q-06-log-use.png)
+
+</details>
+
 #### 2. What would convince you that the game works?
 
 *ARPD may word it as:* "When the game is finished, what would convince you that it works?" / "When the game is built, what would convince you that it works?" / "What would convince you that the game works?"
@@ -325,6 +362,12 @@ A
 ```
 
 Every phase ends with a summary. Skim it: if it matches the brief, say yes. A yes only confirms the summary; it adopts nothing.
+
+<details><summary>Example from a real run</summary>
+
+![Is this summary of Objectives right?](docs/tutorial/q-07-summary.png)
+
+</details>
 
 ### Other questions you may see
 
@@ -369,6 +412,12 @@ My own computer, offline. Python with Tkinter only, no extra packages. Keep agen
 ```
 
 ARPD sorts these into musts and preferences, and may list its own defaults for you to correct.
+
+<details><summary>Example from a real run</summary>
+
+![Any other limits? (other computers, Python version, cost)](docs/tutorial/q-08-limits.png)
+
+</details>
 
 #### 2. Is this summary of Constraints right?
 
@@ -421,6 +470,12 @@ A
 
 The most common Design question: ARPD lists how it will read the details your brief leaves open (scoring edge cases, log columns, the pause, timestamps) and asks you to accept them in one go.
 
+<details><summary>Example from a real run</summary>
+
+![Do you accept these readings / defaults? (a numbered list)](docs/tutorial/q-09-readings.png)
+
+</details>
+
 #### 2. A single question about one rule detail
 
 *ARPD may word it as:* "After a computer's nil has failed, how should it play the rest of that hand?" / "When may a spade be led?" / "When a leader with only spades leads a spade, do spades count as broken afterwards?" / "After you've tried python -m spades, how does it look and feel, and what should change before the final sprint"
@@ -432,6 +487,12 @@ Do whatever you recommend, consistent with traditional Spades.
 ```
 
 Game rules are your decision, so ARPD asks instead of guessing, often with an example and options A/B. Pick the option that matches how you play, or use the reply above. Specific examples are in the list below.
+
+<details><summary>Example from a real run</summary>
+
+![A single question about one rule detail](docs/tutorial/q-10-rule.png)
+
+</details>
 
 #### 3. Are you ready to move on from the design?
 
@@ -577,6 +638,12 @@ A
 
 A: one agent builds and a fresh reviewer agent checks each change. The simplest and cheapest.
 
+<details><summary>Example from a real run</summary>
+
+![How should the agents work on this project? (A to D)](docs/tutorial/q-11-agents.png)
+
+</details>
+
 #### 2. Is there anything more you want to set about how the agents run?
 
 *ARPD may word it as:* "Is there anything more you want to set about how the agents run?" / "Is there anything more you want to set about how the agents run, beyond your first-demonstration rule?"
@@ -604,6 +671,12 @@ A
 ```
 
 For the demo, choose the arrangement that lets the agents work most independently. Game rules and the meaning of the data stay yours whatever you choose.
+
+<details><summary>Example from a real run</summary>
+
+![A working package: review depth, how far the agents may go alone, which features first](docs/tutorial/q-12-package.png)
+
+</details>
 
 #### 4. Is this summary of Development right?
 
@@ -679,6 +752,12 @@ A
 
 Look at reports/setup/PROJECT-DEFINITION.md first. This choice does not adopt anything yet.
 
+<details><summary>Example from a real run</summary>
+
+![How do you want to handle the report (or its proposals)?](docs/tutorial/q-13-report.png)
+
+</details>
+
 #### 2. Adopt the Project Definition Report?
 
 *ARPD may word it as:* "Adopt reports/setup/PROJECT-DEFINITION.md vN?"
@@ -691,6 +770,12 @@ Yes, I adopt this version of the Project Definition Report, and I accept every p
 
 One of the three answers that commit you: say yes only if the report matches what you asked for. ARPD may list a few proposals (often readings of what a log column means) that are accepted only if you name them. If it asks you to name them, copy their IDs from its message; never from this page. If you leave them out, they stay open and block the part of the build that needs them.
 
+<details><summary>Example from a real run</summary>
+
+![Adopt the Project Definition Report?](docs/tutorial/q-14-adopt.png)
+
+</details>
+
 #### 3. Include ARPD's logging and agent-role files?
 
 *ARPD may word it as:* "Approve including the event-logging and agent-role files in this project?"
@@ -700,6 +785,12 @@ One of the three answers that commit you: say yes only if the report matches wha
 ```text
 Yes, include both.
 ```
+
+<details><summary>Example from a real run</summary>
+
+![Include ARPD's logging and agent-role files?](docs/tutorial/q-15-files.png)
+
+</details>
 
 #### 4. Setup is complete. What next?
 
@@ -716,6 +807,12 @@ Plan the first piece of work now.
 ```text
 A
 ```
+
+<details><summary>Example from a real run</summary>
+
+![Setup is complete. What next?](docs/tutorial/q-16-next.png)
+
+</details>
 
 ### Other questions you may see
 
@@ -784,6 +881,12 @@ Sometimes ARPD takes the goal from the adopted report and skips this question.
 Several sprints as one plan: the whole first version.
 ```
 
+<details><summary>Example from a real run</summary>
+
+![Plan the next sprint only, or several sprints together?](docs/tutorial/q-17-sprints.png)
+
+</details>
+
 #### 3. How should the team move from one sprint to the next?
 
 *ARPD may word it as:* "How should the team move from one sprint to the next?" / "How should the work move from one sprint to the next?"
@@ -793,6 +896,12 @@ Several sprints as one plan: the whole first version.
 ```text
 Continue to the next sprint after each independent review, unless something needs my decision.
 ```
+
+<details><summary>Example from a real run</summary>
+
+![How should the team move from one sprint to the next?](docs/tutorial/q-18-transition.png)
+
+</details>
 
 #### 4. What would you like to do with the draft plan?
 
@@ -824,6 +933,12 @@ Yes, I approve this version of the plan.
 
 One of the three answers that commit you. Approval alone starts nothing.
 
+<details><summary>Example from a real run</summary>
+
+![Approve the plan?](docs/tutorial/q-19-approve-plan.png)
+
+</details>
+
 #### 6. Begin implementation now or later?
 
 *ARPD may word it as:* "Would you like to begin implementation now or later?"
@@ -841,6 +956,12 @@ B
 ```
 
 The third answer that commits you: this starts the build. The letters differ between runs, so check which option starts the whole series. If you choose later, ARPD gives you a prompt to paste when you are ready.
+
+<details><summary>Example from a real run</summary>
+
+![Begin implementation now or later?](docs/tutorial/q-20-begin.png)
+
+</details>
 
 ### Other questions you may see
 
@@ -911,6 +1032,11 @@ is the longest part (about 20–40 minutes). You mostly wait.
 - **The context fills up.** On a long build Claude Code may compact the conversation automatically,
   or ARPD may ask you to. Afterwards, type `continue`.
 
+**What to expect, from the study runs:** in all five study builds, the first sprint ran as one long
+stretch of 8 to 30 minutes, with tests and an independent review, and ended with ARPD asking you to
+try the window. Setup to clickable game took 46 to 71 minutes in total. Only one build stopped
+part-way, for a single rule question.
+
 **At any time** you can type `/arpd-checkin` to see what is done, what is in progress, and what (if
 anything) needs you.
 
@@ -942,14 +1068,18 @@ If a tool or a reviewer agent is still running (⏳ WORKING, "Waiting for … ba
 
 ## 10 · Try the game
 
-When the first clickable version exists, ARPD stops and asks you to try it. It also writes a short
-walkthrough checklist (`reports/WALKTHROUGH-M1.md`).
+When the first clickable version exists, ARPD stops and asks you to try it. This first demonstration
+is often a deliberately partial game: in the study runs it sometimes came before the scores, the
+hand summary or the play log, which follow in the next sprint. That is the point of stopping early:
+you see something real before the agents build everything.
 
 1. Open a **second** terminal in the same folder and start the game with the command ARPD gives you
-   (usually `python -m spades`, or `py -m spades` on Windows).
-2. **Play one hand.** A full game to 500 is optional; the tests already play whole games.
-3. Open the newest CSV file in the `data` folder in a spreadsheet. Each row is one bid or card,
-   with your think time on your own rows. What could you study with it? What would you add?
+   (in the study: `python -m spades`, `python main.py` or `python play.py`; on Windows `py` instead
+   of `python`).
+2. **Play one hand.** Bid, then click your cards; only the cards you may legally play are active.
+3. If the play log is already built, open the newest CSV file in the `data` folder in a spreadsheet.
+   Each row is one bid or card, with your think time on your own rows. What could you study with it?
+   What would you add?
 4. Tell ARPD what you saw, in plain words: either that it works, or what looks wrong. For example:
 
 ```text
@@ -963,6 +1093,12 @@ My partner played a spade when it could have followed suit.
 That is the normal loop: you report, the agents fix and test, and you check. "Built and reviewed"
 by the agents still leaves your own check: only you can say the first version is done.
 
+What a study build looked like (each run designs its own window, so yours will differ):
+
+![The first clickable window: your turn to bid](docs/tutorial/game-start.png)
+
+![Mid-hand: the cards you may legally play are dark, the rest grey](docs/tutorial/game-midhand.png)
+
 ### Typical questions, in the usual order
 
 #### Please try the window and tell me what you found
@@ -972,7 +1108,7 @@ by the agents still leaves your own check: only you can say the first version is
 **If it works:**
 
 ```text
-It works: I played a hand and it followed the rules. Go on.
+It works: I played a hand and it followed the rules. Use your recommendation on any open points, and go on.
 ```
 
 **If something looks wrong, say what, for example:**
@@ -982,6 +1118,12 @@ My partner played a spade when it could have followed suit.
 ```
 
 This is the first demonstration: a good place to pause and review. "Go on" lets the agents continue to the next sprint (scores, the full game, the play log).
+
+<details><summary>Example from a real run</summary>
+
+![Please try the window and tell me what you found](docs/tutorial/q-21-try.png)
+
+</details>
 
 ## Stuck? Resume and troubleshooting
 

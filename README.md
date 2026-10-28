@@ -1,3 +1,5 @@
+<img src="docs/images/arpd-icon.png" alt="ARPD" width="140" align="right">
+
 # ARPD: Agentic Research Paradigm Development
 
 ARPD lets a researcher who is not a software developer direct a team of AI coding agents (in Claude
