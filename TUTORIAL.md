@@ -15,7 +15,7 @@ The walkthrough takes about an hour and uses roughly $7.50 of agent credit. You 
 point: ARPD keeps its state in the project's files rather than in the conversation, so you can pick
 up again by opening Claude Code in the same folder and typing `/arpd-checkin`.
 
-> **A note on how to use ARPD.** This walkthrough is designed so you can see ARPD work from start to
+> **A note to new users.** This walkthrough is designed so you can see ARPD work from start to
 > finish with as little effort as possible, mostly by copying suggested replies. That is not how
 > ARPD is meant to be used. On a real project, the value lies in working with it: reading what it
 > proposes, questioning how it has interpreted you, and making the research decisions yourself.
