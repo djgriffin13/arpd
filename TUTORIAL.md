@@ -22,7 +22,7 @@ up again by opening Claude Code in the same folder and typing `/arpd-checkin`.
 > Accepting every recommendation unread is how agent-built research tools go wrong.
 
 The example is deliberately simple. As you go, you might think about a tool your own research could
-use; [Next steps](#next-steps) describes how to start one. If you're wondering why the example is a
+use; [Run ARPD on your own idea](#run-arpd-on-your-own-idea) describes how to start one. If you're wondering why the example is a
 card game, see [Why a card game?](#why-a-card-game) under Background. For the whole process on one page,
 see the diagram in [About ARPD](#about-arpd).
 
@@ -43,10 +43,14 @@ The tutorial is also available as a searchable web page:
   - [Setup 5 · Development](#setup-5--development)
   - [Setup 6 · Blueprint](#setup-6--blueprint)
 - **Build the game**
+  - [Build the game](#build-the-game)
   - [Plan](#plan)
   - [Build](#build)
   - [Try the game](#try-the-game)
-- [Next steps](#next-steps)
+- **Next steps**
+  - [Next steps](#next-steps)
+  - [Run ARPD on your own idea](#run-arpd-on-your-own-idea)
+  - [Updating the process](#updating-the-process)
 - **Background**
   - [Why a card game?](#why-a-card-game)
   - [About ARPD](#about-arpd)
@@ -58,6 +62,8 @@ The tutorial is also available as a searchable web page:
   - [Problems with the game](#problems-with-the-game)
   - [Starting over](#starting-over)
   - [Usage limits and cost](#usage-limits-and-cost)
+  - [Other AI tools](#other-ai-tools)
+  - [No Python](#no-python)
 
 ## Install and launch
 
@@ -954,6 +960,21 @@ Run the setup check and show me the result as a short checklist.
 You should see a list of ✅ lines (governing documents present, the adoption recorded, and so on)
 ending in `OVERALL: PASS`.
 
+## Build the game
+
+With the blueprint adopted, ARPD turns it into working software in three steps, each on its own
+page:
+
+1. **[Plan](#plan).** You give the goal for this piece of work, ARPD drafts a versioned plan, and you
+   approve it and say when to start. About 5 minutes.
+2. **[Build](#build).** The agents write the game and its tests, and a separate reviewer agent checks
+   their work. You mostly wait; ARPD stops only for decisions that are yours. In our runs, 10 to 30
+   minutes.
+3. **[Try the game](#try-the-game).** At the first clickable version ARPD stops and asks you to try
+   it. You play a hand and say what works and what doesn't.
+
+From typing `/arpd-setup` to a clickable game took 46 to 71 minutes in our runs.
+
 ## Plan
 
 *You'll see:* **PLAN**  ✅ Review → 🔵 Goal → ⚪ Scope → ⚪ Draft → ⚪ Approval → ⚪ Handoff
@@ -1344,10 +1365,20 @@ From now on, a team loses 100 points for every 5 bags instead of every 10.
 ARPD records your words as a ruling and updates the governing documents. At any point,
 `/arpd-checkin` shows where things stand and what needs you.
 
-### Start your own project
+To bring ARPD to a question of your own, see [Run ARPD on your own idea](#run-arpd-on-your-own-idea).
+To change how the agents work as your project grows, see
+[Updating the process](#updating-the-process).
+
+## Run ARPD on your own idea
 
 The same steps work for a tool of your own: an experiment platform, a simulation, a survey or
 measurement tool, or a data pipeline.
+
+> **This time, take your time.** In the tutorial you could accept ARPD's suggestions with little
+> thought. On your own project, the interview is where the research gets defined: what the tool
+> measures, what its data mean, and what would convince you it works. Read each summary and the
+> blueprint carefully, question readings that don't match what you meant, and audit your own
+> answers before you approve anything. The agents build exactly what you agree to.
 
 1. **Start from a fresh copy.** Clone ARPD into a new folder named for your project (README, *Start
    here*, step 5), open Claude Code there, and type `/arpd-setup`.
@@ -1371,6 +1402,42 @@ start small.
 `DECISIONS.md` (your rulings, word for word), `REQUIREMENTS.md` (each requirement and its evidence),
 `reports/` (the blueprint, the approved plans and the sprint records) and `arpd/docs/GUIDE.md` (the
 full guide).
+
+## Updating the process
+
+The way the agents work is set during setup, but none of it is fixed. You can change it whenever
+the project needs it, in plain words, with `/arpd-amend`. ARPD records each change as a ruling in
+your words and updates the governing documents.
+
+**How closely you review.** Ask for more or less oversight, for example:
+
+```text
+From now on, I want to review each sprint's full record before the next one starts.
+```
+
+**How far the agents go on their own.** Widen or narrow what they may decide without you, or how
+they move from one sprint to the next:
+
+```text
+The agents may choose test designs and file layout on their own, but must ask me before changing
+anything in the play log.
+```
+
+**The rules of the project.** Change a requirement, a game rule, a milestone, or the team charter
+itself. A change to what the data mean is always yours to make, and ARPD will ask you to confirm it.
+
+**When you check in.** `/arpd-checkin` works at any time. You can also ask for a check-in at every
+sprint boundary, or only when something needs you.
+
+**Keeping ARPD itself up to date.** When a newer version of ARPD is released, clone it into a
+separate folder and run, from your project folder:
+
+```text
+python arpd/tools/install.py update . --kit <path to the new ARPD folder>
+```
+
+This refreshes ARPD's own files and skills; it never changes your governing documents, code or
+data. (Without Python, use `sh arpd/tools/install.sh update . --kit <path>` instead.)
 
 ## Why a card game?
 
@@ -1596,3 +1663,45 @@ A command seems to be hanging, possibly a test that opened the game window. Stop
 - **Keeping it low.** Use Sonnet at low effort, as in Install and launch, and say "keep agent use low"
   when ARPD asks about cost. Clearing the conversation between setup and the build (`/clear`, then
   `/arpd-checkin`) also helps.
+
+## Other AI tools
+
+ARPD is developed and tested with **Claude Code**, and this tutorial assumes it. Its instructions are
+plain text files, though, so other coding agents that can read files, edit them and run commands in a
+folder (for example OpenAI's Codex, Google's Gemini CLI, or an editor such as Cursor, with models
+such as GPT, Gemini or DeepSeek) should be able to follow them. We have not tested them.
+
+What differs:
+
+- **Starting setup.** The `/arpd-setup`, `/arpd-plan`, `/arpd-checkin` and `/arpd-amend` commands are
+  Claude Code skills. In another tool, ask the agent to read and follow the skill file instead:
+
+```text
+Read .claude/skills/arpd-setup/SKILL.md and follow it exactly.
+```
+
+- **Instructions on start-up.** Claude Code reads `CLAUDE.md` automatically. Many other tools read
+  `AGENTS.md`, which ARPD also provides and which points to the same charter.
+- **Event logging.** ARPD's activity log uses Claude Code hooks, so it won't run elsewhere. Nothing
+  else depends on it.
+- **Approvals and permissions** look different in each tool. The three approvals (the blueprint, the
+  plan, the start of the build) still come from you, in your own words.
+
+A chat window without access to your files, such as the ChatGPT or DeepSeek website, can't run ARPD:
+it needs an agent that works directly in the project folder.
+
+## No Python
+
+ARPD's own small tools are written in Python, but ARPD works without it, with a few things lost:
+
+- **Setup still prepares the folder,** using a shell script instead (`sh arpd/tools/install.sh`). On
+  Windows this needs Git Bash, which comes with Git for Windows.
+- **The automatic checks are replaced by read-throughs:** ARPD checks the blueprint and the governing
+  documents by reading them, which is less thorough. It tells you when it does this.
+- **There is no activity log.** Everything else (the interview, the blueprint, planning, check-ins and
+  amendments) works the same.
+
+The game itself is a separate matter: this tutorial builds it in Python. Without Python, change one
+sentence of the brief, "Use Python with its built-in Tkinter", to a language you have, for example
+"Use R", and expect the run commands later on to differ. That route is untested. Details are in
+[NO-PYTHON.md](https://github.com/djgriffin13/arpd/blob/main/arpd/docs/NO-PYTHON.md).
