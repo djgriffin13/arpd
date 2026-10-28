@@ -55,7 +55,7 @@ implications. Record why each was chosen.
 
 ## Architecture decisions
 
-The material design decisions, from the adopted Project Definition Report (§6), in the same
+The material design decisions, from the adopted Project Blueprint (§6), in the same
 columns. Only rows that are **Adopted** (by R-NN), **Delegated** (SA-NN, with its bounds) or
 **Provisional** (with what would confirm it, and its *Waiting on the PI* row) appear here, each
 labelled in *Status*. Rejected alternatives stay in *Alternatives considered*, with the reason. A

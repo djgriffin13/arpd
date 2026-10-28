@@ -18,7 +18,7 @@ scientific decision. See [README.md](README.md).
   old history move to a backup folder beside the project, with a `RESTORE.md`; nothing is deleted.
   Existing repositories can be set up in place instead, with their history and remote kept.
 - **A research-aware interview in phases** (Intake, Objectives, Constraints, Design, Development),
-  each ending in a summary you confirm, then a Project Definition Report you adopt. Only then are the
+  each ending in a summary you confirm, then a Project Blueprint you adopt. Only then are the
   governing documents written.
 - **Goal-first planning** (`/arpd-plan`): your goal, the effort sized, a versioned plan, approval of
   an exact version, then begin now or later. Work starts only when you say so.

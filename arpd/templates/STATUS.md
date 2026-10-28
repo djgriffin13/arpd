@@ -27,7 +27,7 @@ memory. If `arpd/logs/` is absent (a fresh clone or another machine), say so, an
 
 ## Readiness
 
-Four lines, each with one value, then the adopted setup report. Setup, planning and execution are
+Four lines, each with one value, then the adopted blueprint. Setup, planning and execution are
 separate: a project can be set up with no sprint planned, and an approved plan does not start work
 (`CLAUDE.md` §8). A passing governance check is not readiness to execute. `START-HERE.md` gives the
 PI the same next step.
@@ -36,7 +36,7 @@ PI the same next step.
 - **Planning:** {{not started | draft (PLAN-YYYY-MM-DD, vN) | approved (PLAN-YYYY-MM-DD, vN, R-NN)}}
 - **Execution:** {{not started | authorized (R-NN or SA-NN, scope) | authorized (R-NN), not started: waiting for <"/compact" | a fresh session | the owed agent roles> | in progress (S0N) | complete}}
 - **Next step:** {{finish setup | run /arpd-plan | review plan | begin implementation | check in | amend}}
-- **Adopted report:** `reports/setup/PROJECT-DEFINITION.md` v{{N}} (R-{{NN}}, commit {{SHA of the adoption-first commit}})
+- **Adopted blueprint:** `reports/setup/PROJECT-BLUEPRINT.md` v{{N}} (R-{{NN}}, commit {{SHA of the adoption-first commit}})
 
 ## 1. Read first
 

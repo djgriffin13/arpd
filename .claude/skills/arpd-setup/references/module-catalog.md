@@ -9,7 +9,7 @@ scientific help the PI asked for (the role's scientific axis). Never select one 
 product-only work, the team-arrangement module may be the only one, plus human-subjects data when
 real data about people are collected. A science module's candidate invariants are proposed only
 when the science is in scope (`interview-guide.md`, *Roles*), or when correctness depends
-on its semantics. Say in report §12 which modules were selected, and why, and summarize the rules
+on its semantics. Say in blueprint §12 which modules were selected, and why, and summarize the rules
 each one adds, so the PI sees what the charter will contain.
 
 | Module | File (`arpd/constitution/modules/`) | Status | Recommend when | Candidate invariants to propose (in scientific language) |

@@ -75,14 +75,14 @@ program".
    later, and which it would rule out.
 7. **The PI's choice**, when the decision is material. Use a `CHOICE FOR YOU (select one)`, with the
    recommendation marked. Include an option to hear more before deciding. The PI's pick is recorded
-   with their words. It is a preference until the report is adopted.
+   with their words. It is a preference until the blueprint is adopted.
 8. **Record** the selected option and the rejected alternatives with their reasons:
    - in the notes, *Architecture alternatives explored*;
-   - then in the report §8, with the columns Decision | Alternatives considered | Recommendation |
+   - then in the blueprint §8, with the columns Decision | Alternatives considered | Recommendation |
      Rationale | Status | Consequences;
    - after adoption, in `ARCHITECTURE.md`, *Architecture decisions*.
 
-A recommendation is **not an adopted design**. Its report status is one of:
+A recommendation is **not an adopted design**. Its blueprint status is one of:
 
 - **Adopted-on-adoption:** the PI chose it;
 - **Proposed:** your recommendation, not yet chosen;
@@ -201,7 +201,7 @@ maintenance.
 
 ## Defaults that apply to every platform
 
-These are routine. State them in the report §6 or §7; do not ask about them.
+These are routine. State them in the blueprint §6 or §7; do not ask about them.
 
 - Git from day one, with small commits that explain *why*.
 - One command runs the project's tests (`generation-checklist.md`, *The project's test command*).

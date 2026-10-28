@@ -14,8 +14,8 @@ manual test) is kept with the development records, outside this repository.
   all rest on the model following the skills. When words are ambiguous, the skills record the
   narrower reading or ask.
 - **Form checkers, not quality checkers.** A developer turn checker checks a turn's
-  shape: a labelled block last, choice options in the text, a progress line. The report checker
-  (`arpd/tools/check_report.py`) checks a report's form: sections, acceptance criteria and status per
+  shape: a labelled block last, choice options in the text, a progress line. The blueprint checker
+  (`arpd/tools/check_report.py`) checks a blueprint's form: sections, acceptance criteria and status per
   requirement, a gate per open item, no adoption claimed by a draft. Neither judges whether the
   requirements, criteria or alternatives are good. The progress line is still sometimes omitted.
 - **Architecture recommendations rest on the model's knowledge** unless documentation was checked.
@@ -66,7 +66,7 @@ manual test) is kept with the development records, outside this repository.
 ## Resuming and continuation
 
 - Resuming an interrupted setup has been tested at a few points (just after adoption; before
-  adoption from the notes, in three phases, with a draft report and with notes from an older kit).
+  adoption from the notes, in three phases, with a draft blueprint and with notes from an older kit).
   Other interruption points, and resuming an interrupted plan review, are untested.
 - In install mode without consent to save notes in the repository, they are kept beside it, in
   `../.arpd-setup-notes/<name>/`, which the stub `CLAUDE.md` names; a later session resumes from there.

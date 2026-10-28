@@ -59,7 +59,7 @@ whole picture at a glance (✅ done, 🔵 in progress, ⚪ to come, ⚠️ block
 
 ```text
 **Progress**
-✅ Setup: report adopted (R-01)
+✅ Setup: blueprint adopted (R-01)
 ✅ Plan: PLAN-2026-10-27 v1 approved (R-02)
 ✅ S01, the game without the window: closed, review PASS
 🔵 S02, the window: in progress, 2 of 4 work packages done

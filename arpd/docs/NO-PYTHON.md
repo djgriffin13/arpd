@@ -1,7 +1,7 @@
 # Running ARPD without Python
 
 ARPD's tools are Python (standard library only). Everything ARPD is for still works without Python:
-the setup interview, preparing the project folder, the Project Definition Report and its adoption,
+the setup interview, preparing the project folder, the Project Blueprint and its adoption,
 the governing documents, planning, check-ins and amendments. What is lost is automation: the event
 log and its hooks, the two checkers (replaced below by a read-through, which is weaker), and ARPD's
 own test suite. This file says what to do instead of each `python arpd/tools/...` command. It is
@@ -54,13 +54,13 @@ including the backup folder a conversion moves the kit's files and old git histo
 
 ## 4. The report read-through (instead of `check_report.py`)
 
-Before showing each version of `reports/setup/PROJECT-DEFINITION.md`, read it against these rules
+Before showing each version of `reports/setup/PROJECT-BLUEPRINT.md`, read it against these rules
 and fix every breach; at adoption, read the header again for the adopted form. Record the result
-in the notes' §9 and in the report's *Completeness check* as "Structure checked by reading (no
+in the notes' §9 and in the blueprint's *Completeness check* as "Structure checked by reading (no
 Python), vN: <breaches fixed, or none found>". Never write that `check_report.py` passed.
 
 1. **Header:** a `Version: vN` line and a `Status:` line. A draft says `Draft vN` (same N), carries
-   the DRAFT banner, and never says "Adopted by R-NN" in the header. An adopted report says `Adopted
+   the DRAFT banner, and never says "Adopted by R-NN" in the header. An adopted blueprint says `Adopted
    by R-NN (vN)` with the Version line's N.
 2. **Sections 1–14,** in order, each with content or "Not applicable: <reason>"; no `{{...}}` left
    outside comments.

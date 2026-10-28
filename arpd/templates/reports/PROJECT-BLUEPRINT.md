@@ -1,4 +1,4 @@
-# Project Definition Report: {{project working name}}
+# Project Blueprint: {{project working name}}
 
 > **DRAFT. Not adopted. Nothing here is a requirement, decision or authorization until the PI adopts
 > it.** The PI adopts an identified version, in their own words, by ruling R-NN (`DECISIONS.md`).
@@ -7,7 +7,7 @@
 
 **Status:** Draft v{{N}}
 
-<!-- Guidance (remove every guidance comment when filling the report).
+<!-- Guidance (remove every guidance comment when filling the blueprint).
 - Proportionality first: short and sharp for a simple tool, deep for an estimator. A section that
   does not apply is one line, "Not applicable: <reason>". Bullets are prompts, not fields.
 - The full specification the PI reviews, from the notes: testable requirements, not restated

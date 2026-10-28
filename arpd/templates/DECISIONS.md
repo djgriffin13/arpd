@@ -34,7 +34,7 @@ decided.
 - **Affects:** the requirements and work that depend on the decision.
 - **Needed by:** the gate: the point where the dependent work cannot go on without it (before
   planning, before implementing <what>, before deployment, or a named sprint or plan). Open items
-  from the Project Definition Report arrive here at adoption with their gate.
+  from the Project Blueprint arrive here at adoption with their gate.
 - **Can continue meanwhile:** the work that does not depend on it. A pending decision blocks only
   the work that depends on it (`arpd/docs/INTERACTION.md`, *Dependency screen*).
 
@@ -98,14 +98,14 @@ Every sprint boundary still gets its close-out, independent review and checks (C
 
 ## Rulings
 
-### R-01, {{DATE}}: adoption of the Project Definition Report and the governing documents
+### R-01, {{DATE}}: adoption of the Project Blueprint and the governing documents
 
-> "{{The PI's words adopting the report version, from the setup session}}"
+> "{{The PI's words adopting the blueprint version, from the setup session}}"
 
 - **Given:** in the setup session
-- **Adopts:** `reports/setup/PROJECT-DEFINITION.md` v{{N}}. The report is committed with this ruling, in
+- **Adopts:** `reports/setup/PROJECT-BLUEPRINT.md` v{{N}}. The blueprint is committed with this ruling, in
   the adoption-first commit; a ruling cannot name its own commit, so `STATUS.md` records the SHA.
-- **Reading:** the report's Adopted-on-adoption items are adopted, with any proposals this ruling
+- **Reading:** the blueprint's Adopted-on-adoption items are adopted, with any proposals this ruling
   accepts ({{IDs, and how: "choice A" or named}}); its Delegated, Provisional, Open and Excluded items
   are recorded as such (open items O-NN become *Waiting on the PI* #N: {{mapping}}), and other
   Proposed items are not adopted. CLAUDE.md v1.0 and

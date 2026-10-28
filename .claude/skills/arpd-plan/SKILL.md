@@ -58,13 +58,13 @@ Read before you start:
    including *Architecture decisions* (note which are Provisional or Delegated); `DECISIONS.md`
    *Waiting on the PI*, with each row's gate (*Needed by*); `STATUS.md` (Readiness, §5, §6, §8); the
    current or last sprint record and its evidence; existing `plans/` and open decision packs;
-   `START-HERE.md` (orientation only); the adopted `reports/setup/PROJECT-DEFINITION.md` and the
+   `START-HERE.md` (orientation only); the adopted `reports/setup/PROJECT-BLUEPRINT.md` and the
    notes in `reports/planning/` and `reports/setup/` (`docs/discovery/` in an older project)
    (context only, never authority: where they differ from
    a governing document, the governing document wins). Do not re-ask a preference that is already
    recorded, and never re-ask the project's scope: the minimum usable version and every
    requirement's priority (P1–P5, with its feasibility and correctness-critical flags; required /
-   desired / future in a project set up before v0.7) come from the adopted report and
+   desired / future in a project set up before v0.7) come from the adopted blueprint and
    `REQUIREMENTS.md`.
 3. **A draft in progress?** A `reports/planning/PLAN-*.md` is approved only if its current Version
    line is the version an existing approval ruling names (*Approves:* line). Otherwise it is a

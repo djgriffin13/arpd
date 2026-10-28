@@ -16,7 +16,7 @@ item is for: an item that feeds nothing in this project is N.A., not asked.
   questions, model commitments, equations, edge cases, validation and performance in depth; several
   design decisions; perhaps parallel streams.
 
-The interview is adaptive; the resulting report is thorough.
+The interview is adaptive; the resulting blueprint is thorough.
 
 ---
 
@@ -106,7 +106,7 @@ Or describe another role.
 ```
 
 Print all six options with exactly these letters, in this order, every time: the letters are the
-role codes recorded in the notes, the report and the charter, so never reorder, re-letter or drop
+role codes recorded in the notes, the blueprint and the charter, so never reorder, re-letter or drop
 one (mark the recommended one instead). Recommend one when the opening answer points to it, with the
 reason. Record the role on two axes:
 
@@ -168,13 +168,13 @@ one at a time, until the items are filled.
 
 | ID | Required item | Feeds |
 |---|---|---|
-| OB-01 | The research domain: phenomena, constructs or problems the tool is about | `PARADIGM-SPEC.md` §1; report §2 |
+| OB-01 | The research domain: phenomena, constructs or problems the tool is about | `PARADIGM-SPEC.md` §1; blueprint §2 |
 | OB-02 | Research questions: specific ones, or, for a general platform, illustrative ones it must support | The capabilities; the claims the tool may support |
 | OB-03 | Objectives: what the PI wants to achieve with the tool, in their words | Milestones; the roadmap |
 | OB-04 | Capabilities and features: what users must be able to do | Functional requirements |
-| OB-05 | The links: research purpose → capability → requirement | Traceability (report §2); priorities later |
+| OB-05 | The links: research purpose → capability → requirement | Traceability (blueprint §2); priorities later |
 | OB-06 | How the outputs will be used: exploration, teaching, publication, operations, decisions | Validation, reproducibility, provenance and versioning requirements |
-| OB-07 | What would convince the PI it works | Acceptance criteria; report §10 |
+| OB-07 | What would convince the PI it works | Acceptance criteria; blueprint §10 |
 | OB-08 | What the tool will not do (exclusions): ask, unless the PI named them; a policy on something else is not an exclusion | Scope boundary; `PARADIGM-SPEC.md` §8 |
 
 - **Questions are not requirements.** A research question says why a capability matters; a
@@ -282,7 +282,7 @@ an invariant that is really an assumption becomes a Model commitment. Nothing is
 the PI's words; a declined recommendation is recorded with the PI's reason. If the PI keeps a
 flagged commitment as it is (for example as a fixed rule of the model), it keeps the class the PI
 chose, its row says "kept by the PI after the commitments review: '<the PI's words>'", and the
-report's §3 and *Completeness check* name the consequence (what the tool can no longer find out);
+blueprint's §3 and *Completeness check* name the consequence (what the tool can no longer find out);
 it is never silently reclassified either way.
 
 **Constraints summary:** every constraint by class, stated ones with the PI's words and inferred ones
@@ -319,10 +319,10 @@ be a stated default inside the first design question, `SKILL.md`, *Fast lane*):
 | DS-03 | Platform and delivery: where it runs, how users get it and its updates | Architecture decision |
 | DS-04 | Language, frameworks, dependencies, licences | Architecture decision; costs |
 | DS-05 | Data storage and persistence | Architecture; recovery |
-| DS-06 | Data semantics (*Data and persistence*, below) | Data contracts (report §9) |
+| DS-06 | Data semantics (*Data and persistence*, below) | Data contracts (blueprint §9) |
 | DS-07 | Inputs, exports, connectivity and interfaces to other systems | Interface contracts |
 | DS-08 | Nonfunctional targets, where relevant: performance, reliability, reproducibility | Nonfunctional requirements |
-| DS-09 | Every material decision: alternatives, recommendation, the PI's choice or a gate | Report §8; `ARCHITECTURE.md` |
+| DS-09 | Every material decision: alternatives, recommendation, the PI's choice or a gate | Blueprint §8; `ARCHITECTURE.md` |
 
 **Design closeout = the readiness gate.** The phase summary (the design in plain words, each
 decision with its status, what is provisional and how it will be settled) ends with the closeout
@@ -417,7 +417,7 @@ standard ones").
 
 | ID | Required item | Feeds |
 |---|---|---|
-| DV-05 | Team arrangement and workspace (asked first, as a choice) | Report §12; charter |
+| DV-05 | Team arrangement and workspace (asked first, as a choice) | Blueprint §12; charter |
 | DV-01 | The PI's rules and preferences for the agents' work (the open follow-up) | The rules summary; SA-01 |
 | DV-02 | The minimum usable version: the simplest version the PI could actually use. It keeps every requirement the PI already called firm, required or a must; list those before asking, and never move one out without the PI's words. Not asked for a very small project (the whole tool is the minimum, Inferred) | P1; milestone M1 |
 | DV-03 | What the first release is: a proof of concept, a research-useful version, or a validated release | Exit evidence of M1; verification depth |
@@ -459,7 +459,7 @@ say that two flags can be added to any item:
   anything that depends on it.
 
 Give a one-line example from this project for P1 and P4 when it helps. **Every later time** you
-ask the PI to place, confirm or change a priority (in this phase, in the report review, in
+ask the PI to place, confirm or change a priority (in this phase, in the blueprint review, in
 `/arpd-plan`), put the scale in the question itself, in one line, for example: "Where should the
 drag-and-drop window go (on a five-point scale: P1 critical to the first working version, P2 needed next, P3 committed for later, P4 if time allows, P5 an idea)?" Never ask for a P-level without
 it. The record keeps this mapping:
@@ -517,7 +517,7 @@ Roles and coordination: `arpd/constitution/modules/team/team-arrangement.md`.
   every boundary, and pauses for a new scientific, scope or PI-reserved decision. It takes effect only
   through the PI's words when execution is authorized (`/arpd-plan`).
 
-### Authority and governance (report §12)
+### Authority and governance (blueprint §12)
 
 Draft SA-01 from what you heard, in plain words with this project's examples, and ask the PI only to
 confirm or adjust it. Its fields are the `arpd/templates/DECISIONS.md` SA-01 entry; the profiles are
@@ -531,7 +531,7 @@ one line). In particular:
   exceeded scope or resource limits, a contested interpretation.
 - **Review, cadence, limits:** review follows the PI's review depth (`arpd/docs/INTERACTION.md` §1).
   Sprint plans are approved by the PI, changes independently reviewed, milestones closed with the
-  PI's walkthrough; anything outside the adopted report needs a ruling. [The team does not run
+  PI's walkthrough; anything outside the adopted blueprint needs a ruling. [The team does not run
   while the PI is away]; note any time, compute or cost limits.
 
 **Modules:** select only those this project needs (`module-catalog.md`), and say why; human-subjects
@@ -560,7 +560,7 @@ proposed until the PI accepts it. Push back selectively: explain the consequence
 safeguard that protects correctness, data or the PI's authority; accept routine preferences without
 ceremony. Core ARPD rules are not removed in setup (a change goes through `/arpd-amend` later).
 
-### Open decisions and gates (report §13)
+### Open decisions and gates (blueprint §13)
 
 For every unresolved item, record what it affects, its **gate** (before planning: before any plan
 that includes the work it affects; before implementing <a named feature>; or before deployment), what can continue meanwhile, and your
@@ -647,7 +647,7 @@ research question names it (OB-05).
 
 ---
 
-## Definition Report phase
+## Blueprint phase
 
 Follow `generation-checklist.md`, Part A (draft, completeness check, presentation, review,
 adoption), then Part B (generation), then `SKILL.md`, *Closeout and handoff*.

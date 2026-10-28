@@ -145,10 +145,10 @@ The full guide travels with every project: [arpd/docs/GUIDE.md](arpd/docs/GUIDE.
 |---|---|
 | **Team charter** (`arpd/constitution/CORE.md` → the project's `CLAUDE.md`) | Authority by subject; data semantics reserved to the PI; rulings recorded verbatim; decision routes by scientific consequence and delegated authority; requirement states (*Implemented*, *Verified*, *Validated*); sprints with auditable close-outs; a learning loop |
 | **Paradigm specification** (`arpd/templates/PARADIGM-SPEC.md`) | Research question → constructs → operationalizations → invariants → claims → validation evidence, to the depth the project needs |
-| **Setup** (`/arpd-setup`) | A research-aware interview in phases (Intake, Objectives, Constraints, Design, Development), each with required answers and a summary the PI confirms, ending in a Project Definition Report the PI adopts; only then the governing documents. In place by default |
+| **Setup** (`/arpd-setup`) | A research-aware interview in phases (Intake, Objectives, Constraints, Design, Development), each with required answers and a summary the PI confirms, ending in a Project Blueprint the PI adopts; only then the governing documents. In place by default |
 | **Planning** (`/arpd-plan`) | The PI's goal first; the effort sized (task, feature, sprint, series, feasibility investigation); a versioned draft, approval of an exact version, then begin now or later |
 | **Check-in and amendment** (`/arpd-checkin`, `/arpd-amend`) | Where things stand and what needs the PI; rulings, standing authorizations and charter changes |
-| **Tools** (`arpd/tools/`) | Project creation and updates (`install.py`), governance and report checkers, event logging and summary |
+| **Tools** (`arpd/tools/`) | Project creation and updates (`install.py`), governance and blueprint checkers, event logging and summary |
 | **Modules** (`arpd/constitution/modules/`) | Built: computational model, team arrangement. Five untested drafts |
 
 ## A project's layout
@@ -156,7 +156,7 @@ The full guide travels with every project: [arpd/docs/GUIDE.md](arpd/docs/GUIDE.
 | Path | Contents |
 |---|---|
 | `CLAUDE.md`, `AGENTS.md`, `START-HERE.md`, `PARADIGM-SPEC.md`, `REQUIREMENTS.md`, `ARCHITECTURE.md`, `MASTER_PLAN.md`, `DECISIONS.md`, `STATUS.md` | The governing documents, at the root. `START-HERE.md` holds the next step and the project's map |
-| `reports/` | `setup/NOTES.md` and `setup/PROJECT-DEFINITION.md`; later `planning/` and `sprints/` |
+| `reports/` | `setup/NOTES.md` and `setup/PROJECT-BLUEPRINT.md`; later `planning/` and `sprints/` |
 | `plans/` | Task plans, created with the first one |
 | `.claude/` | The `arpd-*` skills, the logging hooks and the agent roles |
 | `arpd/` | Everything else from the kit, including the guide and the event log (`arpd/logs/`) |
@@ -183,8 +183,8 @@ copied into every project; `arpd/README.md` repeats the permission below.
 **Documents generated for your project.** The files that ARPD's setup and skills write for your own
 project are yours. This covers your team charter (`CLAUDE.md`), `PARADIGM-SPEC.md`,
 `REQUIREMENTS.md`, `MASTER_PLAN.md`, `DECISIONS.md`, `ARCHITECTURE.md`, `STATUS.md`,
-`START-HERE.md`, the setup notes (`reports/setup/NOTES.md`), the Project Definition Report
-(`reports/setup/PROJECT-DEFINITION.md`), your plans, sprint records and other reports, and your
+`START-HERE.md`, the setup notes (`reports/setup/NOTES.md`), the Project Blueprint
+(`reports/setup/PROJECT-BLUEPRINT.md`), your plans, sprint records and other reports, and your
 research instrument. You may use, modify, distribute or keep them private, under any terms, without
 having to credit ARPD. They are covered even where they are adapted from ARPD's templates.
 

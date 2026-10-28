@@ -74,7 +74,7 @@ How an invariant differs from a requirement and an acceptance criterion: `REQUIR
 What the model assumes, with its epistemic status, kept apart from the invariants above (what the code
 must never violate) and the open questions below (what the project investigates). A hypothesis the
 project studies is an open question or an outcome the tool measures, never an invariant or a fixed
-rule. From report §3 and the commitments review.
+rule. From blueprint §3 and the commitments review.
 
 | ID | Commitment or assumption | Epistemic status | Source | Configurable? | Reframing decided |
 |---|---|---|---|---|---|

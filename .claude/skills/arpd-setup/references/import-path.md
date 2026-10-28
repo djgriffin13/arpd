@@ -127,18 +127,18 @@ the repository, and rerun with `--yes` only on the PI's yes.
 
 ## Working files
 
-The notes and the draft report are the only writes before adoption, both non-governing; writing
+The notes and the draft blueprint are the only writes before adoption, both non-governing; writing
 them authorizes nothing.
 
 - **Convert, new and import:** the notes go into the project when it is prepared, committed alone
-  ("Setup notes (non-governing)"); later updates and the draft report stay uncommitted until
+  ("Setup notes (non-governing)"); later updates and the draft blueprint stay uncommitted until
   adoption.
 - **Install:** the PI's repository may be shared or public. Before `install.py` runs, ask once
   (`CHOICE FOR YOU (select one)`) for consent to save both files in `reports/setup/`, and record
   the answer in the notes' *Folder and consent*. With consent: there, uncommitted until adoption.
   Without: in `<parent of the target>/.arpd-setup-notes/<target name>/` (`NOTES.md` and the draft;
   never the session scratchpad), passed to `install.py install --notes` so the stub `CLAUDE.md`
-  names it (if a `CLAUDE.md` exists, give the PI the printed line); at adoption the adopted report
+  names it (if a `CLAUDE.md` exists, give the PI the printed line); at adoption the adopted blueprint
   is written into the target, and the notes only if the PI asks.
 
 ## Existing repository review
@@ -154,14 +154,14 @@ holding the PI's code), setup is about the
    shows, what the tests establish, and what the PI confirms: a passing unit test is not parameter
    recovery, construct validity or a reproduced published result.
 2. **Never overwrite a valid existing decision.** A documented choice, an established output format
-   or a calculation the PI wants kept is a **retained** capability in report §5, with a regression
+   or a calculation the PI wants kept is a **retained** capability in blueprint §5, with a regression
    criterion ("the existing outputs are reproduced exactly on the existing test data"). Changing one
    is a decision for the PI, raised explicitly. Existing decisions are preserved, not immune from
    criticism: a concern about one is raised as a labelled observation.
 3. **Investigate only what the change touches;** Development's minimum usable version and priorities
    apply to the change.
 4. **Compatibility and migration** (formats, callers, tests, dependencies, whether old outputs must
-   stay producible) each become a requirement, a decision or a gated open item; the report's §7, §8
+   stay producible) each become a requirement, a decision or a gated open item; the blueprint's §7, §8
    and §11 give the modification plan (direction only).
 
 ## Numbering: never hard-code IDs
@@ -178,7 +178,7 @@ only.
 
 **Nothing governing is written before adoption.** Steps 1–5 only read; steps 6–7 write, after it.
 
-1. **Inventory,** in the project folder, during Intake or Objectives and **before the report is
+1. **Inventory,** in the project folder, during Intake or Objectives and **before the blueprint is
    drafted**: structure, languages, test commands. Do not open data-like
    files (the inventory lists them) without the PI's permission for that use, and never copy them
    into a scratch folder. Run the existing tests (`<command>; echo "exit=$?"`); keep each command, working directory, printed exit code and
@@ -197,7 +197,7 @@ only.
    (proposed as a Part B project rule) or a *conflict*.
 5. **Interview** (the phases, with the review above). The PI confirms each inferred spec item
    with scientific meaning; where code and intent differ, record a defect or assumption, never
-   quietly align them. Conflicts and additions go in report §12–13 for the PI to rule on.
+   quietly align them. Conflicts and additions go in blueprint §12–13 for the PI to rule on.
 6. **Move the prior instruction files** to `docs/prior-instructions/<original-name>` in a move-only
    commit (`generation-checklist.md`, *Commit order*). The charter is the new `CLAUDE.md`.
 7. **Generate** (`generation-checklist.md`); where a prior file of the same name exists, write the
@@ -216,7 +216,7 @@ Worked case: the March example, from its own repository (`/arpd-setup import <it
    output verbatim, outside the project. Do this **before any commit of your own** (adoption
    included), so the baseline shows the starter exactly as received.
 2. **Interview, confirming rather than re-asking.** Read the written science to the PI in plain
-   language to confirm; the report keeps its IDs. Ask for the research question in the PI's own
+   language to confirm; the blueprint keeps its IDs. Ask for the research question in the PI's own
    words, and ask the authority boundaries (what to bring back, time and cost limits); never carry
    the starter's SA-01 defaults over without asking.
    - An item marked *"(draft wording, awaiting the PI's words)"* gets the PI's own words or stays
@@ -245,7 +245,7 @@ Worked case: the March example, from its own repository (`/arpd-setup import <it
    - `DECISIONS.md`: fill the placeholder or use the next free R; the new SA; DECs for the import
      (source and commit from `arpd/VERSION`) and the removal, citing
      `reports/setup/IMPORT-BASELINE.md`.
-   - **Inherited adopted decisions** stay adopted ("Adopted (inherited, R-NN)" in the report). If
+   - **Inherited adopted decisions** stay adopted ("Adopted (inherited, R-NN)" in the blueprint). If
      the PI's words would reverse one, say so and what it would block, and ask once. Revisiting one
      is a reopening (a new DEC quoting the original rationale).
    - **Inherited pending decisions ruled on** (the DECISIONS template's format, ISO dates):
@@ -272,7 +272,7 @@ A relaunched session resumes; so does one after a lost session or an error. The 
 is authorized. Check `git log --oneline -15`, `git status --short`, `reports/setup/NOTES.md` (or the
 notes beside an unprepared folder, `<parent>/.arpd-setup-notes/<folder name>/NOTES.md`: then the
 folder is still a kit clone, and *Start* steps 5–8 follow once a tool is in view) and
-`reports/setup/PROJECT-DEFINITION.md` (tracked or not; install mode without consent: the path the
+`reports/setup/PROJECT-BLUEPRINT.md` (tracked or not; install mode without consent: the path the
 stub `CLAUDE.md` names), any move- or remove-only commits, the commit "Record adoption ruling R-NN (setup in
 progress)", and which checklist files exist. Then:
 

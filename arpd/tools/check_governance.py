@@ -123,11 +123,13 @@ The checks:
    a requirement in the table (not Retired) with no details entry ("### REQ-...:") holding
    "Acceptance criteria" with at least one bullet is ADVISORY. Without that section (the older
    format) the step passes and says it was not compared.
-11. Adopted report traced (advisory): for each given ruling whose Adopts line names a file and version
-   (e.g. "`reports/setup/PROJECT-DEFINITION.md` v2", or the legacy "`reports/PROJECT-DEFINITION.md` v2"),
-   that file exists and its Status line reads
+11. Adopted blueprint traced (advisory): for each given ruling whose Adopts line names a file and version
+   (e.g. "`reports/setup/PROJECT-BLUEPRINT.md` v2", or, in a project set up before the rename,
+   "`reports/setup/PROJECT-DEFINITION.md` v2" or the legacy "`reports/PROJECT-DEFINITION.md` v2"),
+   that file exists (a named reports/setup/PROJECT-BLUEPRINT.md that does not exist is read from the
+   older reports/setup/PROJECT-DEFINITION.md beside it, if that exists) and its Status line reads
    "Adopted by R-NN (vN)" with the same ruling and version; otherwise ADVISORY. With no Adopts line
-   (the older format) the step passes and says it was not compared. The report's content is not
+   (the older format) the step passes and says it was not compared. The blueprint's content is not
    compared with the governing documents.
 
 A file the checks read that is not UTF-8 (for example saved as UTF-16) is a FAIL in the step that read
@@ -281,9 +283,18 @@ def check_adoption():
     step("Charter adopted; templates filled", status, notes)
 
 
+def _older_blueprint(path):
+    """path, or, when it names a PROJECT-BLUEPRINT.md that does not exist, the older PROJECT-DEFINITION.md
+    beside it if that exists (a project set up before the rename)."""
+    if os.path.basename(path) != "PROJECT-BLUEPRINT.md" or os.path.isfile(os.path.join(ROOT, path)):
+        return path
+    older = path[:-len("PROJECT-BLUEPRINT.md")] + "PROJECT-DEFINITION.md"
+    return older if os.path.isfile(os.path.join(ROOT, older)) else path
+
+
 def check_adopted_report():
-    """Advisory: the report a ruling's Adopts line names exists and its Status names that ruling and version."""
-    name = "Adopted report traced (advisory)"
+    """Advisory: the blueprint a ruling's Adopts line names exists and its Status names that ruling and version."""
+    name = "Adopted blueprint traced (advisory)"
     known, _, sections = decision_index()
     traced = [(r, _entry_line(body, "Adopts")) for r, body in sorted(sections.items()) if r.startswith("R-")]
     traced = [(r, line) for r, line in traced if line]
@@ -305,6 +316,7 @@ def check_adopted_report():
             notes.append("%s: its Adopts line names %s but no version (vN)" % (rid, path))
             continue
         want = "Adopted by %s (v%s)" % (rid, v.group(1))
+        path = _older_blueprint(path)
         if not os.path.isfile(os.path.join(ROOT, path)):
             notes.append("%s, named by %s's Adopts line, does not exist" % (path, rid))
             continue
@@ -1151,7 +1163,7 @@ def check_readiness():
 STEPS = (
     (check_exists, "Governing documents exist"),
     (check_adoption, "Charter adopted; templates filled"),
-    (check_adopted_report, "Adopted report traced (advisory)"),
+    (check_adopted_report, "Adopted blueprint traced (advisory)"),
     (check_links, "Intra-repo links resolve"),
     (check_requirements, "Requirements: states, evidence, traceability"),
     (check_requirement_details, "Requirement details: acceptance criteria (advisory)"),
@@ -1197,7 +1209,7 @@ def main():
             "whether a plan approval or start direction was the PI's own words",
             "STATUS readiness flags beyond the Execution line (setup, planning, next step) and START-HERE.md are not checked against the records",
             "installation checks look at files, not at whether the hooks actually fired",
-            "that the adopted report's content matches the governing documents (only its ruling and version are "
+            "that the adopted blueprint's content matches the governing documents (only its ruling and version are "
             "traced)",
             "the code itself: run the project's tests separately"]:
         print("    - " + d)

@@ -40,8 +40,8 @@ by the lead agent, and only on recorded evidence. *Validated* also needs the PI'
 |---|---|---|---|---|
 | REQ-CORE-01 |  | OP-01 | Planned |  |
 
-<!-- The setup skill writes the requirements that the adopted Project Definition Report
-(reports/setup/PROJECT-DEFINITION.md, sections 3 and 4) sends here under its status table, with the same
+<!-- The setup skill writes the requirements that the adopted Project Blueprint
+(reports/setup/PROJECT-BLUEPRINT.md, sections 3 and 4) sends here under its status table, with the same
 IDs. Each is phrased as what the PI would observe, e.g. "A participant can play a
 full game against the partner agent and the game log records every action with its timestamp", not
 as an implementation task. -->
@@ -52,7 +52,7 @@ One entry per requirement in the table above, with the same ID. The table holds 
 section holds what each requirement must satisfy. A change to an entry is recorded as a decision,
 like a change to the requirement's wording.
 
-<!-- Format for every entry (the setup skill copies it from the adopted report):
+<!-- Format for every entry (the setup skill copies it from the adopted blueprint):
 ### REQ-AREA-NN: short name
 - **Acceptance criteria:**
   - an observable check an independent tester could run

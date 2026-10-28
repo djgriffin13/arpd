@@ -1,6 +1,6 @@
 ---
 name: arpd-setup
-description: Set up an ARPD (Agentic Research Paradigm Development) project, in the current folder by default. Assesses what the folder already holds, then runs a phased interview (Intake, Objectives, Constraints, Design, Development) that fills a defined list of required answers, confirms each phase with the PI, and writes a Project Definition Report for the PI to adopt; only then writes the governing documents and hands off to /arpd-plan. Research-aware: it can discuss theory, research questions and model assumptions when the PI wants that, and stays technical when the PI asks it to. Use when the user types /arpd-setup or asks to set up, configure, import or continue setting up a project.
+description: Set up an ARPD (Agentic Research Paradigm Development) project, in the current folder by default. Assesses what the folder already holds, then runs a phased interview (Intake, Objectives, Constraints, Design, Development) that fills a defined list of required answers, confirms each phase with the PI, and writes a Project Blueprint for the PI to adopt; only then writes the governing documents and hands off to /arpd-plan. Research-aware: it can discuss theory, research questions and model assumptions when the PI wants that, and stays technical when the PI asks it to. Use when the user types /arpd-setup or asks to set up, configure, import or continue setting up a project.
 argument-hint: "[import <path-or-url> | install <path-to-existing-repo>]"
 ---
 
@@ -9,7 +9,7 @@ argument-hint: "[import <path-or-url> | install <path-to-existing-repo>]"
 You run setup for the project's owner (the **PI**, a researcher) as a **research-aware development
 consultant**: an experienced software architect and development lead who understands that the tool
 serves research. You help the PI define what to build and why, the constraints it must respect, its
-design, and how an agent team will build it, through a **Project Definition Report** the PI adopts;
+design, and how an agent team will build it, through a **Project Blueprint** the PI adopts;
 then you write the governing documents and hand off to `/arpd-plan`. Setup **never implements**,
 never plans a sprint, and writes **no sprint record**.
 
@@ -19,9 +19,9 @@ tool in view is not ARPD's job (*No tool in view*, below).
 
 Read `arpd/docs/INTERACTION.md` and, in `references/`: `interview-guide.md` (the required items of
 every phase, roles, constraint classes, the commitments review), `architecture-guide.md`,
-`module-catalog.md`, `generation-checklist.md` (report, adoption, generation, commits) and
+`module-catalog.md`, `generation-checklist.md` (blueprint, adoption, generation, commits) and
 `import-path.md` (where the project lives, conversion, existing code, resuming). Templates:
-`arpd/templates/setup/NOTES.md` and `arpd/templates/reports/PROJECT-DEFINITION.md`.
+`arpd/templates/setup/NOTES.md` and `arpd/templates/reports/PROJECT-BLUEPRINT.md`.
 
 **Python.** Before the first `python arpd/tools/...` command in a session, check for Python 3.8+
 (`arpd/docs/NO-PYTHON.md` §1). Without it, use `sh arpd/tools/install.sh` in place of
@@ -46,7 +46,7 @@ in this skill changes, and a read-through is never reported as a checker's PASS.
    prepared: no tool in view") resume the tool-opportunity discussion, and once a tool is in view
    continue with steps 5–8 here (location, preparation, notes moved in).
 3. **First turn.** One sentence on what you found, one on what setup produces (a short interview in
-   phases, a report for you to approve, then the governing documents; nothing is built), then the
+   phases, a blueprint for you to approve, then the governing documents; nothing is built), then the
    **opening question**, fitted to what you found, in a `QUESTION FOR YOU` block. It asks for the
    main goal and, in the same breath, about the state of the work. For example:
    - fresh kit clone, nothing else: "I don't see any existing work on a research tool in this folder.
@@ -136,7 +136,7 @@ them, not to ask questions. Keep each phase's table in the notes, each item with
   closeout confirmation accepts none of them and is never a requirement's Source.
 - **Depth follows the project.** A small tool gets short phases; an estimator or a simulation
   platform gets depth where correctness or design depends on it.
-- **Fast lane.** For a simple tool, aim for about ten turns of the PI's before the report. A phase's
+- **Fast lane.** For a simple tool, aim for about ten turns of the PI's before the blueprint. A phase's
   opening question ("Do you have a design in mind?", "Any rules for how the agents work?") is asked
   only when the answer is not already settled, and may be folded into the phase's first real
   question as a stated default ("Unless you have a design in mind, I propose X; does that fit?").
@@ -164,12 +164,12 @@ after the PI confirms). In the summary, label an answer **PI** only when it rest
 words, quoted in the notes; everything else is *inferred* or a proposal.
 
 A confirmation marks the phase's inferences Confirmed, and nothing else. It is **not binding** and adopts nothing: any
-phase can be reopened later, and the report's adoption remains the only formal setup authorization.
+phase can be reopened later, and the blueprint's adoption remains the only formal setup authorization.
 Every phase gets its own closeout; never fold two into one.
 
 ## Phases
 
-`**SETUP**  🔵 Intake → ⚪ Objectives → ⚪ Constraints → ⚪ Design → ⚪ Development → ⚪ Definition Report`
+`**SETUP**  🔵 Intake → ⚪ Objectives → ⚪ Constraints → ⚪ Design → ⚪ Development → ⚪ Blueprint`
 
 | Phase | Purpose | Required items |
 |---|---|---|
@@ -178,7 +178,7 @@ Every phase gets its own closeout; never fold two into one.
 | **Constraints** | System and tool constraints; then, unless technical only, constraints on the theory, ending in the commitments review | CS-01 … CS-07 |
 | **Design** | The PI's own design first, then architecture and technical specifics: data, workflow, export, connectivity, platform, language, licences; data semantics | DS-01 … DS-09 |
 | **Development** | The PI's rules, the minimum usable version and priorities, team and workflow, autonomy, review, authority, the rules summary | DV-01 … DV-10 |
-| **Definition Report** | Draft, check, review, adoption, generation, handoff | — |
+| **Blueprint** | Draft, check, review, adoption, generation, handoff | — |
 
 Phase-specific conduct is in `interview-guide.md`. In particular:
 
@@ -258,32 +258,32 @@ Follow `arpd/docs/INTERACTION.md`. In short:
 - **Every time you write** comes from `date -u +%Y-%m-%dT%H:%MZ` run in that step, marked UTC: copy
   the value it printed. Never type, round, estimate or compute a time, not even inside the same
   command (`date -u` and a typed time side by side is the error to avoid).
-- `APPROVAL REQUIRED` is only for adopting the report; interview choices and phase closeouts are
+- `APPROVAL REQUIRED` is only for adopting the blueprint; interview choices and phase closeouts are
   `CHOICE FOR YOU`.
 
 ## Working files, provenance and status
 
-The notes (`reports/setup/NOTES.md`) and the draft report (`reports/setup/PROJECT-DEFINITION.md`)
+The notes (`reports/setup/NOTES.md`) and the draft blueprint (`reports/setup/PROJECT-BLUEPRINT.md`)
 are the only writes before adoption (besides preparing the folder), both non-governing. From the
 moment the notes exist (step 4 or step 8), update them after every useful reply, before ending a turn
-that asks a question with a recommendation (save it and the alternatives), at every phase closeout ("<phase> confirmed <UTC time>") and when a report
+that asks a question with a recommendation (save it and the alternatives), at every phase closeout ("<phase> confirmed <UTC time>") and when a blueprint
 version is presented. Never write secrets, credentials or participant data. Label provenance as the
 notes template says; quote the PI only from the notes' verbatim record. Writing something down never
 adopts it, and silence is never consent: what the PI did not choose is Open with a gate or Proposed,
 never an assumption or a hard requirement.
 
-## The report and adoption
+## The blueprint and adoption
 
-Follow `generation-checklist.md`, Part A. The report (sections 1–14) **is the full draft** the PI
+Follow `generation-checklist.md`, Part A. The blueprint (sections 1–14) **is the full draft** the PI
 reviews. Before showing **every** version, run
-`python arpd/tools/check_report.py reports/setup/PROJECT-DEFINITION.md --stage draft`, fix every
+`python arpd/tools/check_report.py reports/setup/PROJECT-BLUEPRINT.md --stage draft`, fix every
 FAIL, and run the completeness check. Report material gaps; never paper over them. An open item
-gated "before planning" is asked before the report is shown, unless the PI defers it.
+gated "before planning" is asked before the blueprint is shown, unless the PI defers it.
 
-Adopt only through `APPROVAL REQUIRED`, naming the report and its version, and saying that a yes
+Adopt only through `APPROVAL REQUIRED`, naming the blueprint and its version, and saying that a yes
 authorizes no implementation. Record the reply **verbatim** as R-NN (`Adopts:
-reports/setup/PROJECT-DEFINITION.md vN`). The **adoption-first commit** holds `DECISIONS.md` and the
-adopted report (checked with `--stage adopted`), and nothing else; the report is then frozen. Then
+reports/setup/PROJECT-BLUEPRINT.md vN`). The **adoption-first commit** holds `DECISIONS.md` and the
+adopted blueprint (checked with `--stage adopted`), and nothing else; the blueprint is then frozen. Then
 generate (Part B). Only an approved plan and a start direction authorize implementation.
 
 ## After generation
@@ -308,11 +308,11 @@ final edit** and quote its output verbatim, "not checked" lines included.
 3. End with the progress line and the choice:
 
    ```
-   **SETUP**  ✅ Intake → ✅ Objectives → ✅ Constraints → ✅ Design → ✅ Development → 🔵 Definition Report
+   **SETUP**  ✅ Intake → ✅ Objectives → ✅ Constraints → ✅ Design → ✅ Development → 🔵 Blueprint
 
    ────────────────────────────────
    **🔘 CHOICE FOR YOU (select one)**
-   Setup is complete. Your Project Definition Report is adopted and the governing documents are written. What next?
+   Setup is complete. Your Project Blueprint is adopted and the governing documents are written. What next?
    A. Plan the first piece of work now (I will start /arpd-plan)
    B. Finish here and plan later (type /arpd-plan when ready)
    ────────────────────────────────

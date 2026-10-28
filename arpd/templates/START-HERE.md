@@ -17,8 +17,8 @@ updates "## Map"; anyone updates "## Map" in the same commit as the change it de
 - `MASTER_PLAN.md`: milestones, order of work, backlog, defects, risks.
 - `DECISIONS.md`: the PI's rulings, verbatim, and the project's decisions; *Waiting on the PI*.
 - `STATUS.md`: right now: readiness, the current sprint, what is in flight, how to pick up.
-- `reports/setup/PROJECT-DEFINITION.md` v{{N}} (commit {{SHA of the adoption-first commit}}): the
-  report the PI adopted at setup (R-{{NN}}), the record of what was adopted.
+- `reports/setup/PROJECT-BLUEPRINT.md` v{{N}} (commit {{SHA of the adoption-first commit}}): the
+  blueprint the PI adopted at setup (R-{{NN}}), the record of what was adopted.
 
 **An invariant** (`PARADIGM-SPEC.md`) must always hold, whatever is built. **A requirement**
 (`REQUIREMENTS.md`) is something the instrument must do. **An acceptance criterion** is the test
@@ -48,7 +48,7 @@ only.}}
 - `PARADIGM-SPEC.md`, `REQUIREMENTS.md`, `ARCHITECTURE.md`, `MASTER_PLAN.md`, `DECISIONS.md`,
   `STATUS.md`: the governing documents (above)
 - `START-HERE.md`: this file
-- `reports/`: `setup/` (the adopted report, the setup notes{{, the import baseline}}), decision
+- `reports/`: `setup/` (the adopted blueprint, the setup notes{{, the import baseline}}), decision
   packs, walkthroughs
 - `reports/sprints/`: one record per sprint (pending: created when the first sprint starts)
 - `plans/`: one plan per scoped piece of work (pending: created with the first task plan)

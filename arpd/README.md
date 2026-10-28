@@ -7,7 +7,7 @@ imported or installed:
 - `constitution/`: the charter template (`CORE.md`) and the modules;
 - `templates/`: the governing-document, report, plan and setup-notes templates, including
   `START-HERE.md`;
-- `tools/`: the governance and report checkers, plan numbering, the event logger and summarizer,
+- `tools/`: the governance and blueprint checkers, plan numbering, the event logger and summarizer,
   the hook script, `install.py`, and its no-Python twin `install.sh`;
 - `docs/`: `GUIDE.md` (the user's guide), `EVENTS.md` (what the event log records),
   `INTERACTION.md` (how the agents talk to you) and `NO-PYTHON.md` (running without Python);
@@ -30,7 +30,7 @@ substantial portions of it, keeps that copyright and permission notice with it.
 **Documents generated for your project.** The files that ARPD's setup and skills write for your own
 project are yours. This covers your team charter (`CLAUDE.md`), `AGENTS.md`, `PARADIGM-SPEC.md`,
 `REQUIREMENTS.md`, `MASTER_PLAN.md`, `DECISIONS.md`, `ARCHITECTURE.md`, `STATUS.md`,
-`START-HERE.md`, `reports/setup/NOTES.md`, `reports/setup/PROJECT-DEFINITION.md`, your plans,
+`START-HERE.md`, `reports/setup/NOTES.md`, `reports/setup/PROJECT-BLUEPRINT.md`, your plans,
 sprint records and reports, and your research instrument. You may use, modify, distribute or keep
 them private, under any terms, without having to credit ARPD. They are covered even where they are
 adapted from ARPD's templates.

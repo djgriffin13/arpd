@@ -85,7 +85,7 @@ When setup needs another folder, it prints the exact commands (`cd "<folder>"`, 
 | `CLAUDE.md` | The team charter every agent follows. `AGENTS.md` points other tools to it |
 | `START-HERE.md` | One screen: what each file is for, the map of the project (its *Map* section), and your next step with its exact prompt |
 | `PARADIGM-SPEC.md`, `REQUIREMENTS.md`, `ARCHITECTURE.md`, `MASTER_PLAN.md`, `DECISIONS.md`, `STATUS.md` | The other governing documents |
-| `reports/setup/` | `NOTES.md` (the interview's working notes), `PROJECT-DEFINITION.md` (the report you adopted) and, when existing code was brought in, `IMPORT-BASELINE.md` |
+| `reports/setup/` | `NOTES.md` (the interview's working notes), `PROJECT-BLUEPRINT.md` (the blueprint you adopted) and, when existing code was brought in, `IMPORT-BASELINE.md` |
 | `reports/planning/`, `reports/sprints/`, `plans/` | Plan drafts, sprint records and task plans, as they are created |
 | `.claude/` | The skills, and (once approved) the logging hooks and the agent roles |
 | `arpd/` | Everything else from the kit: templates, tools, this guide, and the event log in `arpd/logs/` |
@@ -94,7 +94,7 @@ Your own code and documents sit beside these. The project's test command is plai
 
 **Which instructions apply when.** Before setup, the kit's short `CLAUDE.md` (or the "setup in
 progress" stub) says only that setup comes first. During setup, the `/arpd-setup` skill governs the
-interview and keeps the working notes. Once you adopt the Project Definition Report, setup writes
+interview and keeps the working notes. Once you adopt the Project Blueprint, setup writes
 your project's charter as `CLAUDE.md`; from then on it governs planning and implementation.
 Claude Code's documentation describes `CLAUDE.md` as loaded when a session starts, with no
 mid-session reload except `/compact`, and newly installed agent roles as waiting for a new session.
@@ -109,7 +109,7 @@ start a fresh session, with the exact prompt.
 **Six visible phases.** A progress line at the top of each turn shows where you are:
 
 ```
-**SETUP**  🔵 Intake → ⚪ Objectives → ⚪ Constraints → ⚪ Design → ⚪ Development → ⚪ Definition Report
+**SETUP**  🔵 Intake → ⚪ Objectives → ⚪ Constraints → ⚪ Design → ⚪ Development → ⚪ Blueprint
 ```
 
 Each phase has a list of things setup needs to know (shown under the progress line). Setup fills
@@ -143,12 +143,12 @@ answer can fill several. Expect about 30–90 minutes, depending on the project.
   the priority of everything else; how much the agents do on their own, review and check-ins; and
   the list of rules the agents will follow, each marked as ARPD's, yours, derived from the project,
   or recommended.
-- **Definition Report:** the agent writes the report and checks it for gaps; you adopt it.
+- **Blueprint:** the agent writes the blueprint and checks it for gaps; you adopt it.
 
 **Every phase ends with a summary for you to confirm.** You can confirm it, correct it, or go back
 to an earlier phase. A confirmation means "you have understood me"; it is not an approval of
 anything, and any phase can be reopened later. The only formal approval in setup is adopting the
-report.
+blueprint.
 
 **Priorities.** Each feature or research question gets one: **P1 Core** (in the minimum usable
 version), **P2 Next**, **P3 Planned** (committed, for a later milestone), **P4 Wanted** (only if time
@@ -187,7 +187,7 @@ question is a choice: plan the first piece of work now, or finish and plan later
 
 ## 4. What you adopt
 
-**The Project Definition Report** (`reports/setup/PROJECT-DEFINITION.md`) is the full
+**The Project Blueprint** (`reports/setup/PROJECT-BLUEPRINT.md`) is the full
 specification: the intake summary, research context and objectives (traced to the capabilities
 and requirements they need), constraints and model commitments, scope and priorities, numbered
 requirements (`REQ-<AREA>-NN`, nonfunctional ones `REQ-NFR-NN`) with acceptance criteria,
@@ -200,17 +200,17 @@ Each item has a status:
 
 | Status | Meaning |
 |---|---|
-| Adopted-on-adoption | You stated or accepted it; adopted with the report |
+| Adopted-on-adoption | You stated or accepted it; adopted with the blueprint |
 | Proposed | The lead's recommendation; not adopted unless you accept it |
 | Provisional | A working assumption, with a gate |
 | Delegated | Within a standing authorization's bounds |
 | Open | A decision with a gate; it goes to *Waiting on the PI* in `DECISIONS.md` |
 | Excluded | Out of scope |
 
-Revise the report as often as you like; each revision is a new version. Only when you adopt a
+Revise the blueprint as often as you like; each revision is a new version. Only when you adopt a
 version, in your own words, under `APPROVAL REQUIRED`, is anything governing written. Your words are
 recorded verbatim as ruling R-01, naming the version. **Adoption authorizes the governing documents,
-not development.** After adoption the report is kept as the record; the governing documents carry
+not development.** After adoption the blueprint is kept as the record; the governing documents carry
 its content and win where they differ.
 
 **Your own words authorize.** No fixed phrase is needed. The lead records your words verbatim as a
@@ -353,10 +353,10 @@ lost session is treated as unreviewed.
 say the earlier session was lost. (If it was lost before the folder was prepared, simply start
 again.)
 
-- **Before you adopted the report:** nothing generated is authorized. The session shows what the
+- **Before you adopted the blueprint:** nothing generated is authorized. The session shows what the
   notes gathered and continues from the next open item, without re-asking settled ones; phases you
   already confirmed stay confirmed. A draft
-  report is shown again as the draft it is. Without notes, earlier answers count only if you
+  blueprint is shown again as the draft it is. Without notes, earlier answers count only if you
   confirm them.
 - **After you adopted it:** your ruling and the version it names are the authority. Setup continues
   from the first missing file, without renumbering or rewriting completed work.
@@ -371,7 +371,7 @@ treated as a start.
 ## 10. The import baseline
 
 When you bring existing code into the project (import, install, or a converted folder that holds your code), setup runs the project's own tests (and its
-governance check, if it has one) before changing anything. After you adopt the report, it records
+governance check, if it has one) before changing anything. After you adopt the blueprint, it records
 the results **verbatim** in `reports/setup/IMPORT-BASELINE.md`: the source and commit, each
 command with its working directory, exit code and output, and what was not run. It is written once,
 then frozen. Failures are recorded as they are. The import decision and the first sprint cite it.

@@ -24,7 +24,7 @@ documents it points to.
 - **PI (the researcher):** {{PI_NAME}}. The PI holds the research question, the scientific
   decisions and final acceptance.
 - **What we are building:** {{INSTRUMENT_ONE_LINE}}
-- **The agents' role** (chosen at setup, report §1): {{AGENT_ROLE}}. On the scientific side this means
+- **The agents' role** (chosen at setup, blueprint §1): {{AGENT_ROLE}}. On the scientific side this means
   {{SCIENTIFIC_AXIS_MEANING}}. Under every role the team flags contradictions and circular
   assumptions (a model that would build in the answer it is meant to find), and specifies
   correctness-critical semantics. Beyond that: under *technical only*, it raises no other theory
@@ -57,7 +57,7 @@ persuasive.
 | Execution of one scoped piece of work | the approved plan in `plans/` | Its owner |
 | Nothing (setup working notes; nothing in them is adopted) | `reports/setup/NOTES.md` | The lead agent |
 | Nothing until approved (sprint-plan drafts; an approved version binds only through the ruling that cites it) | `reports/planning/` | The lead agent drafts; the PI approves a version by ruling |
-| Nothing (the setup report; once adopted, its record. The governing documents carry its content and win where they differ, with the difference recorded) | `reports/setup/PROJECT-DEFINITION.md` | The lead agent drafts; the PI adopts it (R-01) |
+| Nothing (the setup blueprint; once adopted, its record. The governing documents carry its content and win where they differ, with the difference recorded) | `reports/setup/PROJECT-BLUEPRINT.md` | The lead agent drafts; the PI adopts it (R-01) |
 | Nothing (navigation only) | `START-HERE.md` map (its `## Map` section) | Anyone, in the same commit as the change |
 | Nothing (informative) | the rest of `START-HERE.md`, `docs/`, `reports/`, everything else | Anyone |
 
@@ -293,7 +293,7 @@ Each requirement moves through these states. The evidence for each state is reco
   gets its close-out, independent review, checks and plan update. Each sprint's Part 1 records its
   approved plan, its execution authority and its transition policy, and is committed with `STATUS.md`
   when the sprint starts.
-- **This project's sprint autonomy** (set at setup, report §12): {{SPRINT_AUTONOMY}}. It is the
+- **This project's sprint autonomy** (set at setup, blueprint §12): {{SPRINT_AUTONOMY}}. It is the
   default `/arpd-plan` starts from; "several sprints" still takes effect only through an SA in the
   PI's words when execution is authorized, and "one task at a time" means the team stops after each
   planned task for the PI.

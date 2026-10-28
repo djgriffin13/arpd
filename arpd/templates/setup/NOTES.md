@@ -2,8 +2,8 @@
 
 > **Working notes — not governing; nothing here is adopted, approved or authorized.**
 > These notes record the setup interview as it goes, so that it can resume after an interruption.
-> Rulings, requirements and the charter exist only once the PI adopts the Project Definition Report
-> (`reports/setup/PROJECT-DEFINITION.md`) by ruling (`DECISIONS.md`). An item here becomes binding only
+> Rulings, requirements and the charter exist only once the PI adopts the Project Blueprint
+> (`reports/setup/PROJECT-BLUEPRINT.md`) by ruling (`DECISIONS.md`). An item here becomes binding only
 > through that adoption, never by being written here. A phase confirmation is not adoption.
 
 **Never write here:** credentials, secrets, participant data, private datasets, or content from
@@ -63,7 +63,7 @@ Internal routing; the PI is not asked to pick a category.
 
 ## 3. Phase tracker
 
-Visible phases: Intake → Objectives → Constraints → Design → Development → Definition Report.
+Visible phases: Intake → Objectives → Constraints → Design → Development → Blueprint.
 **Current phase:** {{phase}}.
 **Pending question:** {{none / the question as asked, its recommendation and the alternatives shown}}
 **Phase closeouts:** {{e.g. Intake confirmed 2026-10-20T14:05Z ("yes, continue"); Objectives
@@ -153,8 +153,8 @@ PI accepts each in words.
 
 ## 5. Candidate requirements
 
-Candidates only. They become requirements only when the PI adopts the report. Priorities are set in
-Development; until then "not yet placed". Status is the one the item will carry in the report.
+Candidates only. They become requirements only when the PI adopts the blueprint. Priorities are set in
+Development; until then "not yet placed". Status is the one the item will carry in the blueprint.
 
 | Candidate ID | Requirement | Serves (OB / research question) | Priority (P1–P5) | Feasibility | Correctness-critical | Source (labelled) | Status | Acceptance criteria noted |
 |---|---|---|---|---|---|---|---|---|
@@ -180,9 +180,9 @@ arrangement, and data-semantics policy (or "none named"); then the rules list as
 | Rule | Provenance (Core ARPD / PI / Project-derived / Agent-recommended) | Status | PI's words |
 |---|---|---|---|
 
-## 9. Report version and state
+## 9. Blueprint version and state
 
-- **Report:** `reports/setup/PROJECT-DEFINITION.md`, {{not started / Draft vN, presented <UTC time> / revision
+- **Blueprint:** `reports/setup/PROJECT-BLUEPRINT.md`, {{not started / Draft vN, presented <UTC time> / revision
   requested: <what> / adopted by R-NN (vN)}}
 - **Completeness check:** {{not run / run for vN: gaps <list or "none">}}. Before showing any
   version, check for: a required item still Open without a gate; ambiguous functionality;
@@ -193,12 +193,12 @@ arrangement, and data-semantics policy (or "none named"); then the rules list as
   verified; requirements without meaningful acceptance criteria; a requirement ranked above one it
   depends on; a correctness-critical item at P4 or P5 without the PI's words; conflicts with the
   exclusions; missing PI decisions (the team arrangement and cadence included); a needed module
-  missing from §12; earlier PI preferences missing from report §12; a research question with no
+  missing from §12; earlier PI preferences missing from blueprint §12; a research question with no
   capability, or a P1 requirement serving nothing; anything marked adopted too early; an unanswered
   item recorded as an assumption or requirement; contradictions between sections (an item Open in
   one and resolved in another; a decision both Delegated and Open; a stale completeness check);
   lead-invented details (a field, a limit, a name, a "no network" rule) without a "Lead's" label. The
-  report's *Completeness check: gaps found* gives the result.
+  blueprint's *Completeness check: gaps found* gives the result.
 - **Pending approvals:** {{e.g. adoption of vN}}
 - **Resumed:** {{none / <UTC time>: what was found, what was redone}}
 

@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Check a Project Definition Report (reports/setup/PROJECT-DEFINITION.md; in projects set up before
-v0.6, reports/PROJECT-DEFINITION.md) against its contract, in either layout.
+"""Check a Project Blueprint (reports/setup/PROJECT-BLUEPRINT.md) against its contract, in either layout.
 
-    python arpd/tools/check_report.py <report.md> [--stage draft|adopted]      (from the project root)
+    python arpd/tools/check_report.py <blueprint.md> [--stage draft|adopted]      (from the project root)
+
+Older projects. A project set up before the rename keeps its file as reports/setup/PROJECT-DEFINITION.md
+(before v0.6, reports/PROJECT-DEFINITION.md). When the named reports/setup/PROJECT-BLUEPRINT.md does not
+exist but reports/setup/PROJECT-DEFINITION.md beside it does, that older file is checked, and the
+checker says so.
 
 Each check is reported PASS, FAIL or WARN with what it rests on. HTML comments are ignored.
 
-Layouts. A report is the v0.7 layout (14 sections) if it has a "## 14." heading or its "## 3."
+Layouts. A blueprint is the v0.7 layout (14 sections) if it has a "## 14." heading or its "## 3."
 heading mentions constraints (v0.7 section 3 is "Constraints and model commitments"); otherwise it is
 the v0.5 layout (13 sections). The layout is reported first and sets the section numbers below:
 
@@ -43,12 +47,12 @@ The checks, with the v0.5 section numbers (v0.7 messages use the v0.7 numbers):
       "Closed:" or "Excluded:", or, in a table, a Status cell of Adopted, Delegated, Resolved, Closed
       or Excluded, or a Gate cell of Resolved, Closed or Excluded; the words elsewhere in an item do
       not close it. An open item gated before planning WARNs unless it says "deferred by the PI"
-      (setup asks such items before showing the report);
+      (setup asks such items before showing the blueprint);
   (g) section 13 says that adoption does not authorize implementation (a sentence with not / no /
       never and "implement");
   (h) a "Completeness check" subsection is present (WARN if absent).
 
-v0.7 only (a v0.5 report is checked exactly as above):
+v0.7 only (a v0.5 blueprint is checked exactly as above):
   (c) Priority is P1 Core (in the minimum usable version), P2 Next, P3 Planned, P4 Wanted or P5 Idea:
       "P1" to "P5", optionally followed by the level name in any form (P1 Core, P1 (Core), P2: Next;
       a name contradicting its number WARNs), or "open (O-NN)". The v0.5 values FAIL with the mapping
@@ -57,8 +61,8 @@ v0.7 only (a v0.5 report is checked exactly as above):
       "to investigate: <what> (<gate>)" (no gate WARNs; anything else FAILs). Correctness-critical is
       optional: "yes: <why>" (yes without a reason WARNs) or "no" (anything else FAILs);
   (i) priorities respect dependencies: a requirement whose Dependencies name a requirement of this
-      report with a lower priority (a higher P number) FAILs, since it cannot be scheduled before what
-      it depends on (open priorities are skipped); a dependency ID not in the report WARNs;
+      blueprint with a lower priority (a higher P number) FAILs, since it cannot be scheduled before what
+      it depends on (open priorities are skipped); a dependency ID not in the blueprint WARNs;
   (j) a correctness-critical requirement at P4 or P5 WARNs: such requirements are rarely optional.
   (k) section 3 (v0.7): a row classed Must hold (an invariant) whose epistemic-status cell says it is a
       hypothesis FAILs (circularity), unless the row says it was "kept by the PI" after the review.
@@ -66,11 +70,12 @@ v0.7 only (a v0.5 report is checked exactly as above):
   planning <a later milestone, sprint or release>" names that later stage and is not asked first.
 
 Exit code 0 if no check FAILs (WARN does not fail), 1 otherwise, 2 for a usage or read error.
-It checks structure and authority only: not whether the requirements are right, the report is
+It checks structure and authority only: not whether the requirements are right, the blueprint is
 complete, or the prose is good. It rewards no length and, beyond (g), no particular wording.
 Standard library only; Python 3.8+.
 """
 import argparse
+import os
 import re
 import sys
 
@@ -86,7 +91,7 @@ BULLET = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+\S")
 REQ_HEAD = re.compile(r"^(#{1,6})\s+\**(REQ-[A-Z0-9]+-\d+)\b\**\s*:?\s*(.*)$")
 SECTION_HEAD = re.compile(r"^##\s+\**(\d+)\.")
 # A gate is "before" plus at least one word naming a stage (before planning, before implementing X, before any
-# release, before the roadmap beyond M1, ...). The report chooses the stage's wording; a determiner alone is not one.
+# release, before the roadmap beyond M1, ...). The blueprint chooses the stage's wording; a determiner alone is not one.
 DETERMINER = r"(?:the|a|an|any|each|every|all|some|its|this|that)\b"
 GATE = re.compile(r"\bbefore\s+(?:%s\s*)*(?!%s)[A-Za-z0-9][\w-]*" % (DETERMINER, DETERMINER), re.I)
 GATE_HINT = "before <stage>: before planning, before implementing <what>, before deployment, ..."
@@ -111,7 +116,7 @@ PI_ACCEPTED = re.compile(r"\bPI\s+accepted\b\W{0,3}" + QUOTE, re.I)
 LEAD_ONLY = re.compile(r"\b(?:lead|derived|derivation|recommend\w*|inferred)\b", re.I)
 INHERITED = re.compile(r"adopted\s*\(\s*inherited\b", re.I)
 INHERITED_OK = re.compile(r"adopted\s*\(\s*inherited\s*[,;:]?\s*R-\d+\s*\)", re.I)
-# Section 12: an open item gated "before planning" is asked before the report is shown, unless the PI deferred it.
+# Section 12: an open item gated "before planning" is asked before the blueprint is shown, unless the PI deferred it.
 BEFORE_PLANNING = re.compile(r"\bbefore\s+(?:%s\s*)*(?:planning|plan)\b(?!\s+(?:(?:of|for)\s+)?(?:%s\s*)*"
                              r"(?:(?:next|later|following|second|third)\s+)?(?:milestone|M\d|S\d|sprint|release|v\d|phase))"
                              % (DETERMINER, DETERMINER), re.I)
@@ -201,7 +206,7 @@ def not_applicable(body):
 
 
 def layout_of(text):
-    """'v0.7' if the report has a "## 14." heading or its "## 3." heading mentions constraints, else 'v0.5'."""
+    """'v0.7' if the blueprint has a "## 14." heading or its "## 3." heading mentions constraints, else 'v0.5'."""
     text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
     for line in text.split("\n"):
         line = line.rstrip("\r")
@@ -297,7 +302,7 @@ def status_problem(status, stage, source):
 
 
 def check(text, stage="draft"):
-    """[(status, check, evidence)] for one report's text."""
+    """[(status, check, evidence)] for one blueprint's text."""
     text = re.sub(r"<!--.*?-->", "", text.replace("﻿", ""), flags=re.S)
     lines = [l.rstrip("\r") for l in text.split("\n")]
     layout = layout_of(text)
@@ -319,7 +324,7 @@ def check(text, stage="draft"):
     if not sline:
         problems.append("no 'Status' line in the header")
     banner = [l for l in header if re.search(r"\bDRAFT\b", l) and l is not sline]
-    # Only the header can claim the report's own adoption; elsewhere "adopted by R-NN" cites an existing
+    # Only the header can claim the blueprint's own adoption; elsewhere "adopted by R-NN" cites an existing
     # ledger entry (an import listing the starter's decisions, for example).
     adopted_claims = [l for l in header if re.search(r"adopted\s+by\s+R-\d+", l, re.I)]
     if stage == "draft":
@@ -336,11 +341,11 @@ def check(text, stage="draft"):
     else:
         am = re.search(r"adopted\s+by\s+(R-\d+)\s*\(\s*v(\d+)\s*\)", sline or "", re.I)
         if sline and not am:
-            problems.append("an adopted report's Status must say 'Adopted by R-NN (vN)': " + short(sline))
+            problems.append("an adopted blueprint's Status must say 'Adopted by R-NN (vN)': " + short(sline))
         elif am and vm and am.group(2) != vm.group(1):
             problems.append("Status adopts v%s but the Version line is v%s" % (am.group(2), vm.group(1)))
         if banner:
-            out.append(("WARN", name, "an adopted report still carries a DRAFT banner: " + short(banner[0])))
+            out.append(("WARN", name, "an adopted blueprint still carries a DRAFT banner: " + short(banner[0])))
     out += [("FAIL", name, p) for p in problems] or [("PASS", name, short(sline or ""))]
 
     # (b) sections
@@ -550,7 +555,7 @@ def v07_priority_problems(rid, prio, warns):
     if OPEN_PRIORITY.match(prio):
         return []
     if re.match(r"(%s)\b" % "|".join(PRIORITIES), prio):
-        return ["%s: Priority '%s' is the v0.5 scale; a v0.7 report uses P1 Core, P2 Next, P3 Planned, P4 Wanted, "
+        return ["%s: Priority '%s' is the v0.5 scale; a v0.7 blueprint uses P1 Core, P2 Next, P3 Planned, P4 Wanted, "
                 "P5 Idea (%s)" % (rid, short(prio, 30), OLD_PRIORITY_HINT)]
     return ["%s: Priority '%s' is not P1 Core / P2 Next / P3 Planned / P4 Wanted / P5 Idea, or open (O-NN) when the "
             "PI left it open" % (rid, short(prio, 30))]
@@ -595,7 +600,7 @@ def dependency_checks(reqs):
                 deps.append(d)
         for dep in deps:
             if dep not in levels:
-                warns.append("%s depends on %s, which is not in this report (a requirement defined elsewhere? "
+                warns.append("%s depends on %s, which is not in this blueprint (a requirement defined elsewhere? "
                              "check the ID)" % (rid, dep))
                 continue
             links += 1
@@ -603,7 +608,7 @@ def dependency_checks(reqs):
             if a is not None and b is not None and b > a:
                 problems.append("%s (P%d) depends on %s (P%d): a requirement cannot be scheduled before what it "
                                 "depends on; raise %s or lower %s" % (rid, a, dep, b, dep, rid))
-    out += [("FAIL", name, p) for p in problems] or [("PASS", name, "%d dependency link(s) within the report" % links)]
+    out += [("FAIL", name, p) for p in problems] or [("PASS", name, "%d dependency link(s) within the blueprint" % links)]
     out += [("WARN", name, w) for w in warns]
     name = "(j) correctness-critical requirements"
     critical, warns = 0, []
@@ -620,6 +625,19 @@ def dependency_checks(reqs):
     return out
 
 
+# The blueprint's file name, and the name it had in projects set up before the rename.
+BLUEPRINT_NAME, OLDER_NAME = "PROJECT-BLUEPRINT.md", "PROJECT-DEFINITION.md"
+
+
+def older_name(path):
+    """path, or, when it names a PROJECT-BLUEPRINT.md that does not exist, the older PROJECT-DEFINITION.md
+    beside it if that exists (a project set up before the rename)."""
+    if os.path.basename(path) != BLUEPRINT_NAME or os.path.exists(path):
+        return path
+    older = os.path.join(os.path.dirname(path), OLDER_NAME)
+    return older if os.path.isfile(older) else path
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("file")
@@ -629,10 +647,14 @@ def main(argv=None):
         sys.stdout.reconfigure(errors="replace")
     except AttributeError:
         pass
+    path = older_name(args.file)
+    if path != args.file:
+        print("%s does not exist; checking the older blueprint file %s (a project set up before the "
+              "rename)\n" % (args.file, path))
     try:
-        text = read_text(args.file)
+        text = read_text(path)
     except OSError as exc:
-        print("cannot read %s: %s" % (args.file, exc))
+        print("cannot read %s: %s" % (path, exc))
         return 2
     results = check(text, args.stage)
     for status, name, evidence in results:

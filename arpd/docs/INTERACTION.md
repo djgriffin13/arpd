@@ -23,7 +23,7 @@ document and grant no authority. Each skill keeps its own steps and its own prog
 **Review depth** is how much the PI reads and approves, a project default recorded in SA-01 and
 `STATUS.md` §8:
 
-- **Light-touch:** the PI approves the report, plans and consult decisions, and reads sprint
+- **Light-touch:** the PI approves the blueprint, plans and consult decisions, and reads sprint
   close-out summaries.
 - **Standard:** also reviews sprint records.
 - **Comprehensive:** also reviews task plans and reviewer reports.
@@ -72,7 +72,7 @@ Rules:
   at once, without a second confirmation.
 
 ```text
-**SETUP**  ✅ Intake → ✅ Objectives → ✅ Constraints → 🔵 Design → ⚪ Development → ⚪ Definition Report
+**SETUP**  ✅ Intake → ✅ Objectives → ✅ Constraints → 🔵 Design → ⚪ Development → ⚪ Blueprint
 4 confirmed | 1 inferred | 4 open; next: DS-06 Data semantics. Full phase list on request.
 
 ────────────────────────────────
@@ -112,7 +112,7 @@ Show the skill's progress line above the block on every interview turn, as plain
 code fence, like the block itself).
 
 - **Setup:**
-  `**SETUP**  🔵 Intake → ⚪ Objectives → ⚪ Constraints → ⚪ Design → ⚪ Development → ⚪ Definition Report`
+  `**SETUP**  🔵 Intake → ⚪ Objectives → ⚪ Constraints → ⚪ Design → ⚪ Development → ⚪ Blueprint`
   (`SETUP` in bold, two spaces after it; ✅ done, 🔵 current, ⚪ to come). Under it, list the current
   phase's required items: ✅ confirmed, ~ inferred, ⚪ open, 👉 the current focus (deferred and N.A. items are
   not listed). With more than about six, show the counts line instead:
@@ -202,4 +202,4 @@ files), or when the PI asks.
 | → | `->` |
 
 The label words and the option letters stay the same. The setup line in ASCII:
-`SETUP  [>] Intake -> [ ] Objectives -> [ ] Constraints -> [ ] Design -> [ ] Development -> [ ] Definition Report`
+`SETUP  [>] Intake -> [ ] Objectives -> [ ] Constraints -> [ ] Design -> [ ] Development -> [ ] Blueprint`
