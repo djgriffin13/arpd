@@ -176,6 +176,19 @@ end of each hand, so a game stopped part-way keeps them. One row per bid or card
 - timestamp: date and time of the action
 The log holds only my own play on this computer, with no names.
 
+Details, so you don't need to ask:
+- Seats go S, W, N, E clockwise; "left of the dealer" is the next seat clockwise.
+- Every bag scores 1 point, including a nil bidder's tricks. A team that misses its bid gets -10 x bid
+  and no bags from that hand. Every full 10 bags costs 100, even several times in one hand.
+- A spade led by a player who holds only spades breaks spades.
+- Computer plays pause about 1 second (no pause in tests). With only one legal card, still wait for
+  my click.
+- Play log: game_id and the file name use the game's start time (data/spades-YYYYMMDD-HHMMSS.csv);
+  timestamps are this computer's local time to the second; legal_options on a bid row is 14. A game
+  stopped part-way just ends after its last finished hand. Keep the data folder out of git.
+- If the all-computer test can't finish within 200 hands under these rules, tell me; don't change a
+  rule.
+
 Tests: the rules, the scoring, each computer rule, the play log (a hand gives 4 bid rows and 52
 card rows, with the columns above), and a game played by four computer players to the end, which
 fails if no team has won within 200 hands. No test may open the window or wait for a click:
@@ -441,9 +454,13 @@ Every phase ends with a summary. Skim it: if it matches the brief, say yes. A ye
 
 **Design** settles how the game is built and what its data mean. ARPD proposes a simple design
 (game logic kept apart from the window, so tests can run without opening it) and then asks about
-anything in the rules or the play log that your brief leaves open: an edge case in the scoring, what
-a column of the log holds, the format of the timestamps. This is the phase where the questions vary
-most from run to run, so expect to use the list of other questions below. About 5 minutes.
+anything in the rules or the play log that your brief leaves open.
+
+The brief's *Details* paragraph settles nearly everything ARPD asked about here in our test runs:
+seat order, bag scoring, the pause, timestamps and file names. **Two things are left out on purpose,
+so that you can expect them:** what happens when both partners bid nil (a game rule), and when think
+time starts and stops (what a recorded number means). Both are yours to decide, so ARPD stops and
+asks. Their answers are the first two cards below. About 5 minutes.
 
 > **Look here:** game rules and the meaning of the data are *your* decisions, not the agents'. When
 > your brief leaves something open, ARPD asks rather than guesses, and records your answer as a
@@ -452,7 +469,31 @@ most from run to run, so expect to use the list of other questions below. About 
 
 ### Typical questions, in the usual order
 
-#### 1. Do you accept these readings / defaults? (a numbered list)
+#### 1. What happens when both partners on a team bid nil?
+
+*ARPD may word it as:* "What should happen when both players on a team bid nil?"
+
+**Reply:**
+
+```text
+Score each nil on its own: +100 or -100 for each partner. The team's bid is 0, so there are no 10 x bid points, and all their tricks count as bags.
+```
+
+Left out of the brief on purpose. How the game is scored is your decision, so ARPD stops and asks rather than picking a rule itself. It may ask this on its own, or include it in a list of readings for you to accept; either way, this is the answer.
+
+#### 2. When does think time start and stop?
+
+*ARPD may word it as:* "Sometimes you will have exactly one legal card to play"
+
+**Reply:**
+
+```text
+From when my bid buttons or legal cards become active to my click, in seconds to two decimals.
+```
+
+Also left out on purpose: this is about what a recorded number means. In a real study this is where measurement validity is decided (does think time include the computers' pause? the animation?), and ARPD treats it as yours to decide, never the agents'.
+
+#### 3. Do you accept these readings / defaults? (a numbered list)
 
 *ARPD may word it as:* "Do these seven scoring readings match your rules?" / "Do these eight log details match what you want?" / "Do you accept these six log defaults?" / "Are these eight log details right?"
 
@@ -468,7 +509,7 @@ Yes, accept them all as proposed.
 A
 ```
 
-The most common Design question: ARPD lists how it will read the details your brief leaves open (scoring edge cases, log columns, the pause, timestamps) and asks you to accept them in one go.
+ARPD lists how it will read anything still open and asks you to accept them in one go. With the details in the brief this list is short; check that it matches the brief.
 
 <details><summary>Example from a real run</summary>
 
@@ -476,25 +517,7 @@ The most common Design question: ARPD lists how it will read the details your br
 
 </details>
 
-#### 2. A single question about one rule detail
-
-*ARPD may word it as:* "After a computer's nil has failed, how should it play the rest of that hand?" / "When may a spade be led?" / "When a leader with only spades leads a spade, do spades count as broken afterwards?" / "After you've tried python -m spades, how does it look and feel, and what should change before the final sprint"
-
-**Reply:**
-
-```text
-Do whatever you recommend, consistent with traditional Spades.
-```
-
-Game rules are your decision, so ARPD asks instead of guessing, often with an example and options A/B. Pick the option that matches how you play, or use the reply above. Specific examples are in the list below.
-
-<details><summary>Example from a real run</summary>
-
-![A single question about one rule detail](docs/tutorial/q-10-rule.png)
-
-</details>
-
-#### 3. Are you ready to move on from the design?
+#### 4. Are you ready to move on from the design?
 
 *ARPD may word it as:* "Are you ready to move on from the design to how the agents will build it, or would you like to explore or revise any part first?" / "Are you ready to move on from the design to how the agents will build it, or would you like to explore or revise any part of the design first?"
 
@@ -506,7 +529,7 @@ A
 
 Choose the option that continues to Development.
 
-#### 4. Is this summary of Design right?
+#### 5. Is this summary of Design right?
 
 *ARPD may word it as:* "Is this summary of Design right, and is the design ready to move to Development?" / "Is this summary of Design right, and are you ready to move on?"
 
@@ -526,9 +549,9 @@ Every phase ends with a summary. Skim it: if it matches the brief, say yes. A ye
 
 ### Other questions you may see
 
-#### How should a nil bidder's tricks be scored? (do they also score +1 as bags?)
+#### Another question about one rule detail
 
-*ARPD may word it as:* "How should a nil bidder's tricks be scored?" / "You wrote that a nil bidder's tricks "always count as bags". Does each of those tricks also score +1 point, like any other bag?"
+*ARPD may word it as:* "After a computer's nil has failed, how should it play the rest of that hand?" / "When may a spade be led?" / "When a leader with only spades leads a spade, do spades count as broken afterwards?" / "After you've tried python -m spades, how does it look and feel, and what should change before the final sprint"
 
 **Reply:**
 
@@ -536,14 +559,22 @@ Every phase ends with a summary. Skim it: if it matches the brief, say yes. A ye
 Do whatever you recommend, consistent with traditional Spades.
 ```
 
-#### What happens when both players on a team bid nil?
+Game rules are your decision, so ARPD asks instead of guessing, often with an example and options A/B. Pick the option that matches how you play, or use the reply above.
 
-*ARPD may word it as:* "What should happen when both players on a team bid nil?"
+<details><summary>Example from a real run</summary>
+
+![Another question about one rule detail](docs/tutorial/q-10-rule.png)
+
+</details>
+
+#### How should a nil bidder's tricks be scored? (do they also score +1 as bags?)
+
+*ARPD may word it as:* "How should a nil bidder's tricks be scored?" / "You wrote that a nil bidder's tricks "always count as bags". Does each of those tricks also score +1 point, like any other bag?"
 
 **Reply:**
 
 ```text
-Do whatever you recommend, consistent with traditional Spades.
+As my brief says: every bag scores 1 point, including a nil bidder's tricks.
 ```
 
 #### When may spades be led? Does a spade led by someone holding only spades break spades?
@@ -553,7 +584,7 @@ Do whatever you recommend, consistent with traditional Spades.
 **Reply:**
 
 ```text
-Do whatever you recommend, consistent with traditional Spades.
+As my brief says: a spade led by a player who holds only spades breaks spades.
 ```
 
 #### Which way does clockwise go / what is the seat order?
@@ -573,7 +604,7 @@ Yes: S, W, N, E clockwise.
 **Reply:**
 
 ```text
-Use your recommendation.
+As my brief says: still wait for my click.
 ```
 
 #### Timestamps: time zone and format
@@ -583,7 +614,7 @@ Use your recommendation.
 **Reply:**
 
 ```text
-Local time on this computer, to the second.
+As my brief says: this computer's local time, to the second.
 ```
 
 #### How should a quit game be told apart from a finished one?
@@ -593,7 +624,7 @@ Local time on this computer, to the second.
 **Reply:**
 
 ```text
-Use your recommendation.
+As my brief says: a game stopped part-way just ends after its last finished hand.
 ```
 
 #### Which program shape / layout should the build use?
