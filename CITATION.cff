@@ -12,7 +12,7 @@ abstract: >-
 type: software
 authors:
   - name: "The ARPD authors"
-version: 0.7.0-rc.3
+version: 0.7.0-rc.4
 license: MIT
 keywords:
   - organizational research

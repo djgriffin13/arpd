@@ -20,10 +20,13 @@ stops and asks you to try it.
 The full process, step by step, is in the diagram at the top of [About ARPD](#about-arpd).
 
 **How long it takes.** In our internal test runs, getting from `/arpd-setup` to a playable game took
-46 to 71 minutes, much of it with the agents working while nothing was needed from you. Those runs
-used about $5 to $11 of usage at API prices, around $7.50 in a typical run; on a Pro or Max plan the
-same usage counts against your plan's limits instead. The runs were scripted, with each reply sent as
-soon as ARPD asked, so expect to take longer if you read each step closely, as we hope you will.
+about 30 to 70 minutes by the clock (typically about 50), much of it with the agents working while
+nothing was needed from you; the agents' own working time was typically about 40 minutes. A typical
+run used about $6 of usage at API prices ($5 to $11). On a Pro or Max plan the same usage counts
+against your plan's limits instead: by a third-party estimate, about half of one five-hour Pro usage
+window. Most of these runs had a simulated researcher reply as soon as ARPD asked; in the one run
+done by hand, the author's own reading and replying added about 24 minutes. Expect to take longer if
+you read each step closely, as we hope you will.
 
 You can stop at any point. ARPD keeps its state in the project's files rather than in the
 conversation, so you can pick up again by opening Claude Code in the same folder and typing
@@ -39,8 +42,8 @@ The example is deliberately simple. As you go, you might think about a tool your
 use; [Run ARPD on your own idea](#run-arpd-on-your-own-idea) describes how to start one. If you're
 wondering why the example is a card game, see [Why a card game?](#why-a-card-game) under Background.
 
-The tutorial is also available as a searchable web page:
-[TUTORIAL.html](https://djgriffin13.github.io/arpd/TUTORIAL.html). Next: **Install and launch**,
+The tutorial is also available as a searchable web page,
+[TUTORIAL.html](TUTORIAL.html), in the same folder as this file. Next: **Install and launch**,
 which ends with setting Claude Code to Sonnet at low effort for this demonstration.
 
 **Contents**
@@ -83,7 +86,7 @@ which ends with setting Claude Code to Sonnet at low effort for this demonstrati
 
 ## Install and launch
 
-Follow **Start here** in the [README](https://github.com/djgriffin13/arpd/blob/main/README.md) to
+Follow **Start here** in the [README](README.md) to
 install Git, Claude Code and Python, and to clone ARPD into a folder named `spades-demo`. (The web
 version of this tutorial repeats those steps below.)
 
@@ -995,11 +998,12 @@ page:
    approve it and say when to start (about 5 minutes in our runs).
 2. **[Build](#build).** The agents write the game and its tests, and a separate reviewer agent checks
    their work. You mostly wait; ARPD stops only for decisions that are yours. In our runs this took
-   10 to 30 minutes.
+   10 to 35 minutes.
 3. **[Try the game](#try-the-game).** At the first clickable version ARPD stops and asks you to try
    it. You play a hand and say what works and what doesn't.
 
-In our internal test runs, getting from `/arpd-setup` to a clickable game took 46 to 71 minutes.
+In our internal test runs, getting from `/arpd-setup` to a clickable game took about 30 to 70
+minutes by the clock, typically about 50.
 
 ## Plan
 
@@ -1234,7 +1238,7 @@ step it gives you.
 ## Build
 
 The agents now write the game and its tests, and a separate reviewer agent checks their work. You
-mostly wait; in our test runs this stretch took 10 to 30 minutes.
+mostly wait; in our test runs this stretch took 10 to 35 minutes.
 
 **What's normal:**
 
@@ -1579,21 +1583,21 @@ teams: team charters (Mathieu & Rapp, 2009), team processes (Marks et al., 2001)
 
 ### Where it stands
 
-ARPD is a release candidate. Its workflow has been exercised in scripted test runs and in
-walkthroughs by its authors. The scripted runs include the 25 used to prepare this tutorial, in which
-an automated stand-in for the researcher answered ARPD's questions; six of them continued until this
-game reached a clickable first version. It has not yet been evaluated with researchers who did not build it,
-and its benefits are proposed rather than demonstrated. The next step is a study with organizational
+ARPD is a release candidate. It has been used by members of its development team, by two
+researchers outside it, and in 27 logged runs of this tutorial, 25 of them with a simulated
+researcher answering ARPD's questions. All eight runs taken into the build reached a playable game.
+It has not yet been evaluated with researchers outside the author team, and its benefits are
+proposed rather than demonstrated. The next step is a study with organizational
 researchers using it on their own questions. Known limits are listed in
-[LIMITATIONS.md](https://github.com/djgriffin13/arpd/blob/main/docs/LIMITATIONS.md).
+[LIMITATIONS.md](docs/LIMITATIONS.md).
 
 ### Learn more
 
-- [README](https://github.com/djgriffin13/arpd/blob/main/README.md): what ARPD is, and how to install it.
-- [GUIDE.md](https://github.com/djgriffin13/arpd/blob/main/arpd/docs/GUIDE.md): the full guide for researchers.
-- [DESIGN-RATIONALE.md](https://github.com/djgriffin13/arpd/blob/main/docs/DESIGN-RATIONALE.md): each mechanism and the research it draws on.
-- [LIMITATIONS.md](https://github.com/djgriffin13/arpd/blob/main/docs/LIMITATIONS.md): what ARPD does and doesn't establish.
-- [CITATION.cff](https://github.com/djgriffin13/arpd/blob/main/CITATION.cff): how to cite ARPD.
+- [README](README.md): what ARPD is, and how to install it.
+- [GUIDE.md](arpd/docs/GUIDE.md): the full guide for researchers.
+- [DESIGN-RATIONALE.md](docs/DESIGN-RATIONALE.md): each mechanism and the research it draws on.
+- [LIMITATIONS.md](docs/LIMITATIONS.md): what ARPD does and doesn't establish.
+- [CITATION.cff](CITATION.cff): how to cite ARPD.
 
 **References**
 
@@ -1734,8 +1738,11 @@ In a session that's already running, type `/model` or `/effort` and pick from th
 ## Usage limits and cost
 
 - **What it costs.** In our internal test runs with Sonnet at low effort, getting to a playable game
-  used about $5 to $11 of usage at API prices, around $7.50 in a typical run. On a Pro or Max plan,
-  that usage counts against your plan's limits rather than being billed separately. Your figure will
+  used about $5 to $11 of usage at API prices, about $6 in a typical run (setup and planning alone,
+  about $4). On a Pro or Max plan, that usage counts against your plan's limits rather than being
+  billed separately. Anthropic does not publish Pro limits; by a third-party estimate, a typical run
+  to a playable game uses about 4% of a Pro plan's weekly allowance, or about half of one five-hour
+  window. Your figure will
   depend on your answers and on how much the agents need to fix. Larger models and higher effort cost
   more; see [Choosing a model and effort](#choosing-a-model-and-effort).
 - **Hitting a usage limit.** Claude Code tells you when you reach one. Nothing is lost: wait for it to
@@ -1786,4 +1793,4 @@ and includes a window toolkit. To use another language, change one sentence of t
 Python with its built-in Tkinter and no other packages", to the language you'd rather use, for
 example "Use R". The steps are the same; only the command that starts the game will differ.
 
-Details are in [NO-PYTHON.md](https://github.com/djgriffin13/arpd/blob/main/arpd/docs/NO-PYTHON.md).
+Details are in [NO-PYTHON.md](arpd/docs/NO-PYTHON.md).

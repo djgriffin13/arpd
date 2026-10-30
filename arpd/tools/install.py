@@ -78,7 +78,7 @@ import sys
 
 KIT_MARKER = ".arpd-kit"
 PAYLOAD = "arpd"
-FALLBACK_VERSION = "v0.7.0-rc.3"  # used when the kit's RELEASE-NOTES.md names no version
+FALLBACK_VERSION = "v0.7.0-rc.4"  # used when the kit's RELEASE-NOTES.md names no version
 # Kit-development material that convert removes, when the .arpd-kit manifest lists none (older kits).
 DEFAULT_MANIFEST = (".arpd-kit", ".arpd-kit-files", "AGENTS.md", "CITATION.cff", "CLAUDE.md", "LICENSE", "README.md",
                     "RELEASE-NOTES.md", ".gitattributes", ".gitignore", "docs/", "evaluation/", "tests/")

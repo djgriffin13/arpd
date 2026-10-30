@@ -6,9 +6,13 @@ manual test) is kept with the development records, outside this repository.
 
 ## Use with people
 
-- **No workflow has been completed by a researcher.** All workflow evidence comes from developer
-  tests with scripted answers and one manual test of an earlier version. None of it shows that a
-  researcher can use the kit, or how long setup takes ("about 20–60 minutes" is an estimate).
+- **Not yet evaluated with researchers outside the author team.** The workflow has been completed
+  by members of the development team, by two researchers outside it who are co-authors of the
+  accompanying proposal, and in 27 logged runs of the tutorial, 25 of them with a simulated
+  researcher. These show that the tutorial project can be completed (all eight runs taken into the
+  build reached a playable game; setup took a median of about 20 minutes of agent time). They do not
+  show how researchers fare on their own questions, or how the kit handles a user who pushes back or
+  changes scope.
 - **Judgement, not checks.** Telling an interview answer from a ruling, a plan approval or a start;
   recognizing that an implementation choice changes data semantics; and asking the right question
   all rest on the model following the skills. When words are ambiguous, the skills record the

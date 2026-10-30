@@ -10,8 +10,10 @@ Science* special issue "AI-Enabled Frontiers in Organizational Science." This is
 candidate ([RELEASE-NOTES.md](RELEASE-NOTES.md)).
 
 **To try it:** follow **Start here** below (usually 15 minutes or so, longer if you need to install
-Git or Python), then **[TUTORIAL.md](TUTORIAL.md)**, which walks you prompt by prompt through using
-ARPD to build a small Spades card game.
+Git or Python), then the **[Tutorial](TUTORIAL.html)**, which walks you prompt by prompt through using
+ARPD to build a small Spades card game. The tutorial is a web page: open `TUTORIAL.html` from your
+copy of ARPD in your browser. If you are reading this on GitHub, which shows `.html` files as code,
+read the same tutorial as [TUTORIAL.md](TUTORIAL.md) instead.
 
 ## Start here
 
@@ -20,10 +22,12 @@ ARPD to build a small Spades card game.
 - A Claude **Pro, Max, Team or Enterprise** plan, or a **Claude Console (API)** account. The free
   Claude plan does not include Claude Code.
 - Windows 10 (version 1809) or later, macOS 13 or later, or a recent Linux.
-- Time and usage for the tutorial. In our internal test runs, getting to a playable game took 46 to
-  71 minutes, much of it the agents working while you wait, and used about $5 to $11 of usage at API
-  prices (around $7.50 in a typical run). On a Pro or Max plan, that usage counts against your
-  plan's limits rather than being billed separately. Reading each step closely takes longer.
+- Time and usage for the tutorial. In our internal test runs, getting to a playable game took about
+  30 to 70 minutes by the clock (typically about 50), much of it the agents working while you wait.
+  A typical run used about $6 of usage at API prices ($5 to $11). On a Pro or Max plan, that usage
+  counts against your plan's limits rather than being billed separately; by a third-party estimate,
+  a typical run uses about half of one five-hour Pro usage window. Reading each step closely takes
+  longer.
 
 ### 2. Install Git
 
@@ -88,10 +92,12 @@ example R). The run commands later in the tutorial will then differ.
 
 ### 5. Get ARPD
 
-Clone the repository into a new folder named `spades-demo` and go into it:
+Clone the repository into a new folder named `spades-demo` and go into it. Use the address of the
+repository you were given in place of `<repository URL>` (on GitHub, the green **Code** button
+shows it):
 
 ```bash
-git clone https://github.com/djgriffin13/arpd.git spades-demo
+git clone <repository URL> spades-demo
 ```
 
 ```bash
@@ -114,10 +120,12 @@ in this folder, answer **Yes**. You now see Claude Code's prompt.
 
 ### 7. Open the tutorial
 
-Open **[TUTORIAL.md](https://github.com/djgriffin13/arpd/blob/main/TUTORIAL.md)** in your web browser and keep it open
-beside the terminal. Read it there, not in the folder: early in the tutorial, ARPD turns this folder
-into your project and moves its own files, including this README and the tutorial, into a backup
-folder beside it.
+Open the **[Tutorial](TUTORIAL.html)** (`TUTORIAL.html` in this folder) in your web browser and keep
+that tab open beside the terminal. Early in the tutorial, ARPD turns this folder into your project
+and moves its own files, including this README and the tutorial, into a backup folder beside it
+(`spades-demo-pre-arpd-backup-…`). The open tab keeps working; if you close it, open
+`TUTORIAL.html` from the backup folder. (If you were given a web address for the tutorial, you can
+use that instead.)
 
 ## What ARPD is for
 
@@ -176,8 +184,11 @@ in its own repository and is not part of this one.
 ## Evidence and limitations
 
 The kit's tools have automated tests, and its workflows have been exercised in scripted developer
-runs and one manual test; those development records are kept outside this repository. **No
-researcher has yet completed a workflow.** Known limitations are in [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
+runs. ARPD has also been used by members of its development team, by two researchers outside it,
+and in 27 logged runs of the tutorial (25 of them with a simulated researcher answering ARPD's
+questions); all eight runs taken into the build reached a playable game. It has **not yet been
+evaluated with researchers outside the author team**. Known limitations are in
+[docs/LIMITATIONS.md](docs/LIMITATIONS.md).
 
 ## Licence
 
