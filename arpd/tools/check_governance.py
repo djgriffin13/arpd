@@ -80,7 +80,14 @@ The checks:
        nor adoption, it is PENDING;
      - the authorization date is the ISO date next to the cited R-NN / SA-NN, or right after
        "authorized"; several dates with none tied to the authority is MISSING (ambiguous);
-     - a consequential row with no entry in DECISIONS.md is ADVISORY: checked on the row alone.
+     - a consequential row with no entry in DECISIONS.md is ADVISORY: checked on the row alone;
+     - a closed record is never edited, so a decision still pending in it can be settled later in
+       DECISIONS.md. A row that would be PENDING is settled when a later entry names the record
+       (SPRINT-NN) and the decision: its row ID (only an ID with a digit, such as S01-D2) or the
+       Waiting # the row cites ("Waiting #3"; numbers are reused, so never without the record). A
+       DEC-NN entry is then checked as the decision's own entry (above); a ruling (consult) or SA
+       (delegated) that is given settles it. Settled rows are listed ("settled later by R-NN") and
+       do not change the result; with no settling entry the row stays PENDING.
    A ruling or SA counts as given only if its section has a Given line that is not pending-like
    (pending, awaiting, to be given, not yet, placeholder, TBD), or, with no Given line, a dated
    heading (YYYY-MM-DD) with no pending-like word.
@@ -712,6 +719,43 @@ def _verdict(kind, msg, row_late, row_incident, row_auth_pending, e, name, rid):
                        "recorded; cannot check order" % (name, rid, e["given"][0]))
 
 
+_WAITING = r"\bWaiting(?:\s+on\s+the\s+PI)?\s*#\s*(\d+)"
+
+
+def _settled_later(name, rid, row, needed, known, sections, row_incident, authority_pending):
+    """A later DECISIONS.md entry that settles a decision still pending in a closed sprint record.
+
+    The entry must name the record (SPRINT-NN) and the decision: its row ID (an ID with a digit) or
+    the Waiting # the row cites. Returns (kind, msg): "SETTLED" with a note, or the verdict of a
+    DEC-NN entry that names it (FAIL, MISSING, ADVISORY); None if nothing settles it.
+    """
+    record = re.escape(name[:-3] if name.endswith(".md") else name)
+    waits = set(re.findall(_WAITING, " ".join(row.values()), re.I))
+    id_ok = bool(re.search(r"\d", rid))
+    names = []
+    for ident, body in sections.items():
+        if ident == rid or not re.search(r"\b%s\b" % record, body):
+            continue
+        by_id = id_ok and re.search(r"(?<![\w-])%s(?![\w-])" % re.escape(rid), body)
+        by_wait = waits & set(re.findall(_WAITING, body, re.I))
+        if by_id or by_wait:
+            names.append((ident, "" if by_id else ", via Waiting #%s" % sorted(by_wait)[0]))
+    # A DEC-NN entry carries the dates, so it is checked first, as the decision's own entry would be.
+    for ident, via in sorted(names, key=lambda n: not n[0].startswith("DEC-")):
+        if ident.startswith("DEC-"):
+            e = _entry(ident, needed, known, sections)
+            outcome = _verdict("PENDING", None, False, row_incident, authority_pending, e, name, rid)
+            if outcome is None:
+                return "SETTLED", "%s: %s settled later by %s (%s%s); the closed record is not edited" % (
+                    name, rid, e["given"][0], ident, via)
+            if outcome[0] != "PENDING":
+                return outcome[0], "%s (per %s)" % (outcome[1], ident)
+        elif ident in known and re.match(needed, ident):
+            return "SETTLED", "%s: %s settled later by %s%s; the closed record is not edited" % (
+                name, rid, ident, " (" + via[2:] + ")" if via else "")
+    return None
+
+
 def _is_open(text):
     """True if a sprint record has no completed **Closed:** field."""
     if "**Closed:**" not in text:
@@ -728,7 +772,7 @@ def check_sprints():
     if not os.path.isdir(d):
         step("Closed sprints: decision tracking and authorization", "PASS", ["no sprint records yet"])
         return
-    problems, missing, pending, advisories = [], [], [], []
+    problems, missing, pending, advisories, settled = [], [], [], [], []
     known, pending_ids, sections = decision_index()
     for name in sorted(os.listdir(d)):
         if not name.endswith(".md"):
@@ -811,15 +855,19 @@ def check_sprints():
                     kind, msg = "FAIL", "%s: %s authorized after adoption, with no incident recorded" % (name, rid)
             else:
                 kind, msg = "TIMELY", None
-            outcome = _verdict(kind, msg, when == "late", bool(re.search(r"\bI-\d+\b", timing_raw + " " + authority)),
-                               authority_pending, _entry(rid, needed, known, sections), name, rid)
+            row_incident = bool(re.search(r"\bI-\d+\b", timing_raw + " " + authority))
+            outcome = _verdict(kind, msg, when == "late", row_incident, authority_pending,
+                               _entry(rid, needed, known, sections), name, rid)
+            if outcome and outcome[0] == "PENDING":
+                outcome = _settled_later(name, rid, r, needed, known, sections, row_incident,
+                                         authority_pending) or outcome
             if outcome:
-                {"PENDING": pending, "ADVISORY": advisories, "FAIL": problems,
-                 "MISSING": missing}[outcome[0]].append(outcome[1])
+                {"PENDING": pending, "ADVISORY": advisories, "FAIL": problems, "MISSING": missing,
+                 "SETTLED": settled}[outcome[0]].append(outcome[1])
     status = ("FAIL" if problems else "MISSING" if missing else "PENDING" if pending
               else "ADVISORY" if advisories else "PASS")
     step("Closed sprints: decision tracking and authorization", status,
-         problems + missing + pending + advisories)
+         problems + missing + pending + advisories + settled)
 
 
 APPROVAL_ROWS = ("Approved plan", "Execution authorized by", "Transition policy")

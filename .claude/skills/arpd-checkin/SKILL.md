@@ -126,7 +126,8 @@ closing divider. Print every option before any choice widget. The next-step prom
 block.
 
 If the PI answers with a ruling, the lead agent records it **verbatim** in `DECISIONS.md` and logs
-`python arpd/tools/log_event.py ruling --actor lead --ref R-NN`. Any change to a governing document that
+`python arpd/tools/log_event.py ruling --actor lead --ref R-NN`. A ruling that settles a decision left
+pending in a closed sprint record names that record and the row's ID (the record is not edited). Any change to a governing document that
 the ruling asks for goes through `/arpd-amend`; plan approvals and execution starts go through
 `/arpd-plan`. Offer to log the PI's active minutes for this check-in:
 `python arpd/tools/log_event.py pi_time --actor pi --minutes N`.

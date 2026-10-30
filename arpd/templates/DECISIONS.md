@@ -120,6 +120,9 @@ Every sprint boundary still gets its close-out, independent review and checks (C
 - **Given:** directly in session (id) / relayed by (role), confirmed on (date)
 - **Reading:** how it will be applied
 - **Changes:** documents and versions changed, or "none"
+A ruling that settles a decision left pending in a closed sprint record names the record and the
+row's ID in its Reading ("settles S01-D2 of the closed record reports/sprints/SPRINT-01.md; a closed
+record is not edited"), and so does the DEC-NN it creates. The governance check looks for both.
 -->
 
 <!-- keep: format for the approval of a sprint plan (from /arpd-plan):

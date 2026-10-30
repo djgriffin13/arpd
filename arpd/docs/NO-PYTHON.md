@@ -101,7 +101,8 @@ Check, in proportion to what changed:
 4. Each closed sprint record: a decision-tracking table whose every row has a route (routine /
    delegated / consult); each consequential decision cites its authority (SA-NN for delegated,
    R-NN for consult), which exists in `DECISIONS.md` and is not pending, and records whether it was
-   authorized before adoption.
+   authorized before adoption. A row still pending in a closed record is settled when a later
+   ruling (or the DEC-NN it creates) names the record and the row's ID or Waiting #.
 5. Each open sprint record's Part 1: the *Approved plan* and *Execution authorized by* rows cite
    rulings that exist and are not pending, and the plan file and version they name exist.
 6. `START-HERE.md`'s *Map* lists every top-level entry, and every path it lists exists (or is marked

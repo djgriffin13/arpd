@@ -72,7 +72,8 @@ authority it used (`CLAUDE.md` §6).
 - **Routine decisions** are listed together in one row ("routine, in aggregate").
 - **Delegated decisions** are listed individually, with the standing authorization they used.
 - **Consult decisions** show the ruling that authorized them. If they are still pending, they appear
-  in "Waiting on the PI".
+  in "Waiting on the PI". A pending row gets its own ID with a number (S01-D2) and cites its Waiting
+  #; after close the record is not edited, and the later ruling names this record and that ID.
 - **A consequential choice adopted before it was authorized** is an incident. Later ratification is
   recorded as ratification, never as prior authorization.
 
